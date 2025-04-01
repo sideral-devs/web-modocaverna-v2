@@ -25,6 +25,11 @@ export function NewLockedMessageDialog({ onClose }: { onClose: () => void }) {
     descricao: string
   } | null>(null)
 
+  const resetForm = () => {
+    setDate(dayjs().add(1, 'day').toDate())
+    setSavedContent(null)
+    setIsSubmitting(false)
+  }
   async function handleRegister() {
     if (!savedContent) return
     setIsSubmitting(true)
@@ -32,10 +37,8 @@ export function NewLockedMessageDialog({ onClose }: { onClose: () => void }) {
       const res = await api.post('/locked-messages/store', {
         conteudo: savedContent.conteudo,
         descricao: savedContent.descricao,
-        data_abertura: dayjs().format('YYYY-MM-DD[T]HH:mm:ss'),
-        data_fechamento: dayjs(date)
-          .startOf('day')
-          .format('YYYY-MM-DD[T]HH:mm:ss'),
+        data_abertura: dayjs(date).format('YYYY-MM-DD[T]HH:mm:ss'),
+        data_fechamento: dayjs().format('YYYY-MM-DD[T]HH:mm:ss'),
         titulo: savedContent.descricao,
       })
 
@@ -44,31 +47,35 @@ export function NewLockedMessageDialog({ onClose }: { onClose: () => void }) {
       if (savedFile) {
         formData.append('file', savedFile)
       }
-
-      await api
-        .post('/locked-messages/upload/' + sentCard.id, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(() => {
-          toast.success('Carta salva')
-        })
-        .catch(() => {
-          toast.error('Falha ao enviar o arquivo!')
-          api.delete('/locked-messages/destroy/' + sentCard.id).catch(() => {})
-        })
-        .finally(() => {
-          setIsSubmitting(false)
-          queryClient.invalidateQueries({ queryKey: ['locked-messages'] })
-          onClose()
-        })
+      if (formData.get('file') !== null) {
+        await api
+          .post('/locked-messages/upload/' + sentCard.id, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then(() => {
+            toast.success('Carta salva')
+          })
+          .catch(() => {
+            toast.error('Falha ao enviar o arquivo!')
+            api
+              .delete('/locked-messages/destroy/' + sentCard.id)
+              .catch(() => {})
+          })
+      }
+      toast.success('Carta criada com sucesso.')
+      setIsSubmitting(false)
+      queryClient.invalidateQueries({ queryKey: ['locked-messages'] })
+      resetForm()
+      onClose()
     } catch (err) {
       setIsSubmitting(false)
       if (err instanceof AxiosError && err.response?.data?.message) {
         toast.error(err.response.data.message)
       } else {
         toast.error('Algo deu errado. Tente novamente.')
+        resetForm()
         onClose()
       }
     }
@@ -93,7 +100,7 @@ export function NewLockedMessageDialog({ onClose }: { onClose: () => void }) {
           </div>
           <DatePicker
             date={date}
-            // fromDate={dayjs().add(1, 'day').toDate()}
+            fromDate={dayjs().add(1, 'day').toDate()}
             setDate={(arg: Date | undefined) => (arg ? setDate(arg) : null)}
             placeholder="Insira uma data"
             customFormat="DD [de] MMMM"
@@ -111,6 +118,7 @@ export function NewLockedMessageDialog({ onClose }: { onClose: () => void }) {
         className="sticky w-24 justify-self-end mr-6 mb-6"
         onClick={handleRegister}
         loading={isSubmitting}
+        disabled={isSubmitting || !savedContent}
       >
         Salvar
       </Button>

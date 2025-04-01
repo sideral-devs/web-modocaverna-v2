@@ -16,9 +16,7 @@ import {
   ListIcon,
   ListOrderedIcon,
   QuoteIcon,
-  Redo2Icon,
   StrikethroughIcon,
-  Undo2Icon,
 } from 'lucide-react'
 import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import { Button } from '../ui/button'
@@ -165,7 +163,7 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
 
   return (
     <div className="flex w-full items-center gap-2">
-      <div className="flex gap-[0.5rem]">
+      {/* <div className="flex gap-[0.5rem]">
         <MenuBarButton
           onClick={() => editor.chain().focus().undo().run()}
           active={false}
@@ -178,7 +176,7 @@ export function MenuBar({ editor }: { editor: Editor | null }) {
           icon={<Redo2Icon size={20} />}
           disabled={!editor.can().redo()}
         />
-      </div>
+      </div> */}
       <Select value={getTextSelectValue()} onValueChange={handleTextSelect}>
         <SelectTrigger className="pl-2 pr-1 rounded border-0 focus:ring-zinc-600">
           <SelectValue />

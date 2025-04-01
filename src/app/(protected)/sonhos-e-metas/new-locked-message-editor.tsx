@@ -52,7 +52,9 @@ export function NewLockedMessageEditor({
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        history: false,
+      }),
       Typography,
       Highlight,
       TextAlign.configure({
