@@ -57,14 +57,14 @@ export function FinanceChart({
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) - 12}
-                      className="text-xs fill-muted-foreground md:text-base"
+                      className="text-[13px] mb-4 fill-muted-foreground md:text-base"
                     >
                       Total
                     </tspan>
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) + 6}
-                      className="text-xs fill-foreground font-medium md:text-base"
+                      className="text-[13px] fill-foreground font-medium md:text-base"
                     >
                       {formatMoney(balance)}
                     </tspan>

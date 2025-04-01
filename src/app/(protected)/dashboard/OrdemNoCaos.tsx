@@ -14,14 +14,20 @@ const DreamboardCard = dynamic(() => import('./cards/dreamboard'), {
 const FinanceCard = dynamic(() => import('./cards/finance'), {
   loading: () => <Skeleton className="flex w-full h-full min-h-[300px]" />,
 })
+const RemindersCard = dynamic(() => import('./cards/reminders'), {
+  loading: () => <Skeleton className="flex w-full h-full min-h-[300px]" />,
+})
 
 export function OrdemNoCaos({ value }: { value: string }) {
   return (
     <TabsContent value={value}>
-      <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 w-full h-full md:max-h-[676px] gap-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-1 w-full min-h-[336px]  gap-2">
         <DreamboardCard />
-        <FinanceCard />
         <KnowledgeCard />
+      </div>
+      <div className=" grid grid-cols-1 mt-2 md:grid-cols-3 md:grid-rows-1 w-full max-h-[336px]  gap-2">
+        <FinanceCard />
+        <RemindersCard />
         <NotesCard />
       </div>
     </TabsContent>
