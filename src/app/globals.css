@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+    --card: #27272A;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: #ff3333;
+    --primary-foreground: #ffffff;
+    --secondary: #27272A;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: #A0A0A9;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: #3f3f46;
+    --input: #3F3F46;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-medium leading-tight;
+  }
+
+  .prose {
+    @apply text-sm;
+  }
+
+  .prose  {
+
+    h1 {
+      @apply text-2xl font-bold;
+    }
+
+    h2 {
+      @apply text-lg font-bold;
+    }
+  
+    h3 {
+      @apply text-base font-bold;
+    }
+
+    li {
+      @apply pl-1;
+    }
+
+    ul>li {
+      list-style: disc;
+    }
+
+    ol>li {
+      list-style-type: decimal;
+    }
+
+    blockquote {
+      @apply pl-4 my-4 border-l-[3px] border-l-zinc-700;
+    }
+
+    pre {
+      @apply bg-zinc-950 rounded-lg font-mono my-4 p-3;
+    }
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+  }
+
+  .scrollbar-minimal::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-minimal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-minimal::-webkit-scrollbar-thumb {
+    background: #3F3F46;
+    border-radius: 999px;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
+  }
+}
+
+.fc-theme-standard {
+  @apply !border-0;
+}
+
+.fc-scrollgrid, .fc-scrollgrid-liquid, .fc-theme-standard,
+  .fc-timegrid-col, .fc-timegrid-cols {
+  @apply !border-border;
+}
+
+.fc-theme-standard th, .fc-theme-standard td {
+  @apply !border-border;
+}
+
+.fc-timegrid-slot-label {
+  @apply bg-zinc-900;
+}
+
+.fc-timegrid-col {
+  @apply !border-border;
+}
+
+/* .fc-timegrid-slots col {
+  width: 96px !important;
+} */
+
+td.fc-day-today {
+  background: transparent !important;
+}
+
+table.fc-scrollgrid {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #3F3F46;
+    border-radius: 999px;
+  }
+}
