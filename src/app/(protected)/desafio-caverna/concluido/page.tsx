@@ -42,14 +42,14 @@ export default function Page() {
 
   if (!challenge) {
     return (
-      <div className="flex flex-col w-screen min-h-screen items-center justify-center p-8">
+      <div className="flex flex-col w-full h-full items-center justify-center p-8">
         <Loader2Icon className="animate-spin" size={32} />
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col w-screen min-h-screen items-center p-8 pb-16 gap-16 scrollbar-minimal">
+    <div className="flex flex-col w-full h-full items-center p-8 gap-16 scrollbar-minimal">
       <Image src={'/images/logo-icon.svg'} alt="Logo" width={26} height={22} />
       <div className="flex flex-col flex-1 h-full items-center gap-12">
         <h1 className="text-2xl font-semibold text-center max-w-[400px]">

@@ -133,7 +133,22 @@ export default function Page() {
     }
   }, [challenge])
 
-  if (isFetched && !error && !challenge) {
+  if (
+    challenge &&
+    challenge.status_desafio === 'iniciado' &&
+    challenge.hojeInfo &&
+    ((challenge.modalidade === 'cavernoso_40' && challenge.dia_atual === 40) ||
+      (challenge.modalidade === 'express' && challenge.dia_atual === 30) ||
+      (challenge.modalidade === 'cavernoso' && challenge.dia_atual === 60))
+  ) {
+    return redirect('/desafio-caverna/registro-final')
+  }
+
+  if (
+    (isFetched && !error && !challenge) ||
+    challenge?.status_desafio === 'finalizado' ||
+    challenge?.status_desafio === 'abandonado'
+  ) {
     return redirect('/desafio-caverna')
   }
 
@@ -218,8 +233,8 @@ export default function Page() {
         )}
         <HeaderClose />
       </Header>
-      <div className="flex w-full h-[calc(100vh-100px)] max-w-[1512px] max-h-full justify-center">
-        <div className="flex flex-col w-72 lg:w-96 h-full max-h-full flex-1 max-w-80 bg-black border-r overflow-y-auto">
+      <div className="flex flex-1 w-full max-w-[1512px] mx-auto overflow-hidden">
+        <div className="flex flex-col w-72 lg:w-96 h-full border-r bg-black overflow-hidden">
           <div className="flex flex-col p-5 gap-8 border-b">
             <div className="flex flex-col gap-4">
               <h2 className="text-2xl font-semibold">Os Mandamentos Caverna</h2>
@@ -332,7 +347,7 @@ export default function Page() {
             )}
           </div>
         </div>
-        <div className="flex flex-col w-full flex-1 max-h-full overflow-y-auto scrollbar-minimal">
+        <div className="flex flex-col w-full flex-1 max-h-full overflow-y-hidden scrollbar-minimal">
           <div className="flex items-center p-6 gap-6 border-b">
             <div className="flex items-center gap-2 text-emerald-400">
               <BadgeCheckIcon />
@@ -344,9 +359,9 @@ export default function Page() {
               <Skeleton className="w-full h-7" />
             )}
           </div>
-          <div className="flex w-full flex-1 max-h-full">
-            <div className="flex flex-col w-full max-h-full max-w-3xl 2xl:max-w-4xl 3xl:max-w-5xl border-r">
-              <div className="grid grid-cols-5 w-full h-full max-h-[calc(8*160px)] pb-6 gap-0">
+          <div className="flex flex-1 overflow-hidden">
+            <div className="flex flex-col border-r overflow-hidden w-full">
+              <div className="grid grid-cols-5 h-full">
                 {challenge &&
                   challenge.array_dias.map((item, index) => {
                     const date = dayjs(item.data, 'DD-MM-YYYY')
@@ -359,7 +374,7 @@ export default function Page() {
                     return (
                       <div
                         className={cn(
-                          'relative min-h-24 max-h-40 px-4 py-2 border',
+                          'relative min-h-10 max-h-40 px-4 py-2 border',
                           isPast ? 'bg-card' : '',
                         )}
                         key={index}
@@ -386,7 +401,7 @@ export default function Page() {
                   })}
               </div>
             </div>
-            <div className="hidden lg:flex flex-col w-full min-w-48 max-h-full flex-1">
+            <div className="hidden lg:flex flex-col w- max-h-[100%] ">
               <div className="flex flex-col flex-1 p-4 gap-6 overflow-y-auto scrollbar-minimal border-b">
                 <span className="w-fit text-xs font-semibold uppercase px-4 py-2 border rounded-full">
                   Hábitos obrigatórios

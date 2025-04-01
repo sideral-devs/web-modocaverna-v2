@@ -12,10 +12,10 @@ export function FirstStep({ onNext }: { onNext: () => void }) {
           width={219}
           height={401}
         />
-        <div className="flex flex-col relative w-[611px] px-16 py-12 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-[611px] 3xl:px-16 3xl:py-12 px-10 py-8 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2lg">Registre sua entrada na Caverna</h1>
           <div className="w-full flex items-center px-5 py-6 gap-6 bg-[#44430D80]/50 rounded-lg">
-            <AlertOctagonIcon className="text-yellow-400" size={32} />
+            <AlertOctagonIcon className="text-yellow-400" size={16} />
             <p className="text-yellow-400">
               Lembre-se: você jamais sairá pelo mesmo lugar que entrou
             </p>
@@ -25,7 +25,7 @@ export function FirstStep({ onNext }: { onNext: () => void }) {
             mostrando o quanto você evoluiu ao longo desses 40 dias.
           </p>
           <div className="w-full flex items-center px-5 py-6 gap-6 bg-[#3F0808]/50 rounded-lg">
-            <Lock className="text-red-500" size={32} />
+            <Lock className="text-red-500" size={30} />
             <p className="text-red-500">
               Confidencialidade garantida: Fique tranquilo, suas informações
               estarão seguras. Ninguém, além de você, terá acesso ao seu
@@ -42,7 +42,7 @@ export function FirstStep({ onNext }: { onNext: () => void }) {
             width={54}
             height={14}
             alt="balloon"
-            className="absolute -left-[54px]"
+            className="absolute -left-[54px] top-24"
           />
         </div>
       </div>

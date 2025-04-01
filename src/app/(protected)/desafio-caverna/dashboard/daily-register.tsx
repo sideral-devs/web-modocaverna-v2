@@ -86,7 +86,8 @@ export function DailyRegisterDialog({
       toast.success('Avaliação salva!')
       queryClient.invalidateQueries({ queryKey: ['challenge'] })
       setAnswered(true)
-    } catch {
+    } catch (err) {
+      console.log(err)
       toast.error('Não foi possível salvar a avaliação!')
     }
   }

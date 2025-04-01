@@ -31,7 +31,7 @@ export function SixthStep({
     // setFail(selectedOptions.map((val) => `✅ ${val}`))
     setFail(
       values
-        .filter((value) => !staticValues.includes(value))
+        // .filter((value) => !staticValues.includes(value))
         .map((val) => `✅ ${val}`),
     )
     onNext()
@@ -85,7 +85,7 @@ export function SixthStep({
           ref={scrollRef}
         >
           <div className="flex w-fit h-8 items-center justify-center px-3 py-2 bg-emerald-900 text-emerald-300 rounded-full">
-            <span className="text-xs uppercase">Obrigatório</span>
+            <span className="text-xs uppercase">Sugestões</span>
           </div>
           <ul className="flex flex-col flex-1 gap-3">
             {values.map((value) => (
@@ -147,20 +147,22 @@ function ListItem({
     >
       <CheckIcon className="text-emerald-300 stroke-2" size={16} />
       <span className="truncate">{value}</span>
-      {!staticValues.includes(value) && (
-        <XIcon
-          className="text-white absolute left-0 top-0 -translate-y-1/4 p-1 bg-card rounded-full hidden group-hover:block cursor-pointer"
-          size={16}
-          onClick={() => onRemove(value)}
-        />
-      )}{' '}
+      {/* {!staticValues.includes(value) && ( */}
+      <XIcon
+        className="text-white absolute left-0 top-0 -translate-y-1/4 p-1 bg-card rounded-full hidden group-hover:block cursor-pointer"
+        size={16}
+        onClick={() => onRemove(value)}
+      />
+      {/* )}{' '} */}
     </li>
   )
 }
 
 const staticValues = [
-  '15 a 30 minutos de leitura',
-  'Ao menos 30 minutos de exercício físico',
-  'Consumir pelo menos 2 litros de água',
-  'Dedicar ao menos 10 minutos à espiritualidade',
+  'Leitura: De 15 a 30 minuto',
+  'Exercício físico: Pelo menos 30 minutos',
+  'Hidratação: Consumir ao menos 3 litros de água',
+  'Espiritualidade: Dedicar ao menos 10 minutos para oração, meditação ou gratidão.',
+  'Sono de qualidade: Dormir pelo menos 7 horas por noite',
+  'Construção de liberdade: Dedicar ao menos 1 hora do dia para trabalhar na minha independência financeira.',
 ]

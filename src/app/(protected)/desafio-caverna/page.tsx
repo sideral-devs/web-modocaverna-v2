@@ -18,7 +18,22 @@ export default function Page() {
     },
   })
 
-  if (challenge && challenge.status_desafio !== 'abandonado') {
+  if (
+    challenge &&
+    challenge.status_desafio === 'iniciado' &&
+    challenge.hojeInfo &&
+    ((challenge.modalidade === 'cavernoso_40' && challenge.dia_atual === 40) ||
+      (challenge.modalidade === 'express' && challenge.dia_atual === 30) ||
+      (challenge.modalidade === 'cavernoso' && challenge.dia_atual === 60))
+  ) {
+    return redirect('/desafio-caverna/registro-final')
+  }
+
+  if (
+    challenge &&
+    challenge.status_desafio !== 'abandonado' &&
+    challenge.status_desafio !== 'finalizado'
+  ) {
     return redirect('/desafio-caverna/dashboard')
   }
 

@@ -51,12 +51,12 @@ export function ThirdStep({
             height={374}
           />
           <div className="flex flex-col h-full items-center gap-8">
-            <div className="flex flex-col relative w-[611px] px-16 py-12 gap-6 border border-zinc-700 rounded-lg">
-              <h1 className="text-2xl">
+            <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
+              <h1 className="text-xl">
                 Descreva brevemente a sua situação atual. Quais desafios vem
                 enfrentando? O que te trouxe até aqui?
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-zinc-400 text-sm">
                 Por exemplo: “Há 5 dias, estava com alguns amigos e todos
                 falavam sobre suas conquistas. Foi quando percebi que estava
                 ficando para trás e decidi que precisava mudar isso. Hoje, estou
@@ -64,7 +64,7 @@ export function ThirdStep({
                 e não suporto mais minha rotina ou meu trabalho.”
               </p>
               <div className="w-full flex items-center px-5 py-6 gap-6 bg-[#44430D80]/50 rounded-lg">
-                <AlertOctagonIcon className="text-yellow-400" size={32} />
+                <AlertOctagonIcon className="text-yellow-400" size={16} />
                 <p className="text-yellow-400 text-xs">
                   Seja honesto(a) e direto(a). Essa é uma excelente oportunidade
                   de autoanálise.
@@ -95,7 +95,7 @@ export function ThirdStep({
                 )}
               </div>
               <p className="text-xs">
-                Faça um registro, de até 03 fotos, que representem a sua
+                Faça um registro, de até 02 fotos, que representem a sua
                 situação atual. (Opcional)
               </p>
               <div className="flex gap-2">

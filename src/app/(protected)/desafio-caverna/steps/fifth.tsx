@@ -30,7 +30,7 @@ export function FifthStep({
     // setCompromisses(selectedOptions.map((val) => `❌ ${val}`))
     setCompromisses(
       values
-        .filter((value) => !staticValues.includes(value))
+        // .filter((value) => !staticValues.includes(value))
         .map((val) => `❌ ${val}`),
     )
     onNext()
@@ -84,7 +84,7 @@ export function FifthStep({
           ref={scrollRef}
         >
           <div className="flex w-fit h-8 items-center justify-center px-3 py-2 bg-red-900 text-red-400 rounded-full">
-            <span className="text-xs uppercase">Obrigatório</span>
+            <span className="text-xs uppercase">Sugestões</span>
           </div>
           <ul className="flex flex-col flex-1 gap-3">
             {values.map((value) => (
@@ -146,20 +146,22 @@ function ListItem({
     >
       <XIcon className="text-red-500 stroke-2" size={16} />
       <span className="truncate">{value}</span>
-      {!staticValues.includes(value) && (
-        <XIcon
-          className="text-white absolute left-0 top-0 -translate-y-1/4 p-1 bg-card rounded-full hidden group-hover:block cursor-pointer"
-          size={16}
-          onClick={() => onRemove(value)}
-        />
-      )}
+      {/* {!staticValues.includes(value) && ( */}
+      <XIcon
+        className="text-white absolute left-0 top-0 -translate-y-1/4 p-1 bg-card rounded-full hidden group-hover:block cursor-pointer"
+        size={16}
+        onClick={() => onRemove(value)}
+      />
+      {/* )} */}
     </li>
   )
 }
 
 const staticValues = [
-  'Não ir a festas e viagens',
-  'Reduzir consumo de açúcar e fast food',
-  'Limitar redes sociais: 30 min por dia',
-  'Não abrir redes sociais antes de dormir e ao acordar',
+  '⁠Limitar o uso das redes sociais a, no máximo, 60 minutos por dia.',
+  'Não abrir o celular ao acordar ou antes de dormir.',
+  '⁠Reduzir o consumo de açúcar.',
+  '⁠Eliminar fast food, álcool, drogas.',
+  '⁠Eliminar a pornografia.',
+  '⁠Evitar viagens ou festas',
 ]

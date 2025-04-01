@@ -17,7 +17,7 @@ export function FourthStep({
           width={228}
           height={374}
         />
-        <div className="flex flex-col relative w-[611px] px-16 py-12 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">Registre sua entrada na Caverna</h1>
           <p className="text-zinc-400">
             Elimine tudo o que te impede de progredir e implemente novos

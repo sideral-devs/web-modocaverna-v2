@@ -35,7 +35,7 @@ export function CommandmentDialog({
           hideIcon
           className="grid grid-cols-1 md:grid-cols-2 h-[90%] md:h-[481px] max-h-[90%] w-[95%] md:max-w-[1180px] bg-gradient-to-b from-[#1C1C1C] to-[#111111] overflow-x-hidden overflow-y-auto scrollbar-minimal"
         >
-          <div className="flex flex-col py-14 px-6 gap-6">
+          <div className="flex flex-col pt-14 px-6 gap-6">
             <div className="absolute -top-4 right-6 md:right-12">
               <Bookmark className="text-red-700 fill-red-700" size={90} />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">

@@ -51,7 +51,7 @@ export function SecondStep({
             height={374}
           />
           <div className="flex flex-col h-full items-center gap-8">
-            <div className="flex flex-col relative w-[611px] px-16 py-12 gap-6 border border-zinc-700 rounded-lg">
+            <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
               <h1 className="text-xl">
                 O que você deseja alcançar / como você deseja estar ao final dos
                 40 dias do desafio?
@@ -76,7 +76,7 @@ export function SecondStep({
                 width={54}
                 height={14}
                 alt="balloon"
-                className="absolute -left-[54px]"
+                className="absolute -left-[54px] top-16"
               />
             </div>
             <div className="flex flex-col w-full max-w-lg flex-1 gap-4">
@@ -95,7 +95,7 @@ export function SecondStep({
                 )}
               </div>
               <p className="text-xs">
-                Faça um registro, de até 03 fotos, que representem a sua
+                Faça um registro, de até 02 fotos, que representem a sua
                 situação atual. (Opcional)
               </p>
               <div className="flex gap-2">

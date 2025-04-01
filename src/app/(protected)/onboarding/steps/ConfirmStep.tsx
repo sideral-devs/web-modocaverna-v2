@@ -17,7 +17,7 @@ export function ConfirmStep({
           width={204}
           height={401}
         />
-        <div className="flex flex-col relative w-[611px] px-16 py-12 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">Preparei algo especial para você</h1>
           <p className="text-zinc-400">
             Gravei um vídeo curto, de apenas 1 minuto, para te mostrar como

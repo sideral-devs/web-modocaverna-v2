@@ -456,7 +456,7 @@ interface Challenge {
     feitos_percent: number
     contagem: number
   }
-  dia_atual?: boolean
+  dia_atual?: number
   positive_days_count: number
   negative_days_count: number
   neutral_days_count: number

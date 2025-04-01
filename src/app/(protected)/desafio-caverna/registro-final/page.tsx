@@ -29,16 +29,13 @@ export default function Page() {
 
   // Verificar se está em progresso e o último dia foi respondido
   if (challenge) {
-    const arrayDias = challenge.array_dias
-    const lastDay = arrayDias[arrayDias.length - 1]
-
     if (challenge.status_desafio === 'pausado') {
       return redirect('/desafio-caverna/dashboard')
     }
 
-    if (!lastDay?.status || lastDay.status === 'nulo') {
-      return redirect('/desafio-caverna/dashboard')
-    }
+    // if (!lastDay?.status || lastDay.status === 'nulo') {
+    //   return redirect('/desafio-caverna/dashboard')
+    // }
 
     if (challenge.status_desafio === 'concluido') {
       return redirect('/desafio-caverna/concluido')

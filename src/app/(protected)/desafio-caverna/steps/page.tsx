@@ -44,7 +44,11 @@ export default function Page() {
     setCurrentPhase((curr) => curr - 1)
   }
 
-  if (challenge && challenge.status_desafio !== 'abandonado') {
+  if (
+    challenge &&
+    challenge.status_desafio !== 'abandonado' &&
+    challenge.status_desafio !== 'finalizado'
+  ) {
     return redirect('/desafio-caverna/dashboard')
   }
 

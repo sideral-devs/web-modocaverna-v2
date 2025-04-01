@@ -40,6 +40,7 @@ export function ChallengeTourDialog() {
         array_falhar: fail,
         modalidade: 'cavernoso_40',
       })
+
       localStorage.setItem('challenge-storage', '')
       setOpen(false)
       router.replace('/desafio-caverna/dashboard')
