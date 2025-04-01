@@ -255,7 +255,7 @@ export default function Page() {
                     "
                     style={{
                       backgroundImage: `url(${
-                        dayjs(message.data_fechamento).toDate() < new Date()
+                        dayjs(message.data_abertura).toDate() < new Date()
                           ? '/images/locked-messages/bau-aberto.png'
                           : '/images/locked-messages/bau-fechado.png'
                       })`,
@@ -269,7 +269,7 @@ export default function Page() {
                     <div className="flex flex-1 items-center justify-center"></div>
 
                     <BoxCountdown
-                      targetDate={dayjs(message.data_fechamento).toDate()}
+                      targetDate={dayjs(message.data_abertura).toDate()}
                       onClick={() => {
                         setOpenedMessageDialogOpen(true)
                         setCurrentMessage(message)

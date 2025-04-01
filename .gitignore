@@ -42,3 +42,5 @@ next-env.d.ts
 
 # testing 
 /src/app/test/*
+
+next.config.ts

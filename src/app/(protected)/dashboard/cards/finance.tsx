@@ -161,9 +161,9 @@ export default function FinanceCard() {
         </div>
         <span className="flex py-2 px-6 border rounded-full text-xs">Hoje</span>
       </CardHeader>
-      <div className="flex flex-1 max-w-full flex-col md:flex-row items-center p-4 gap-8">
+      <div className="flex max-w-full flex-row  h-full justify-between items-center p-6 gap-2">
         <FinanceChart
-          className="flex-1 max-w-full min-w-0 aspect-auto h-full"
+          className="flex-1 relative right-10 max-w-[45vw] min-w-0 h-full"
           balance={
             totalReceivedAmount +
             totalToReceiveAmount -
@@ -183,11 +183,11 @@ export default function FinanceCard() {
             },
           ]}
         />
-        <div className="grid grid-cols-1 md:hidden lg:grid lg:grid-cols-2 flex-1 w-full gap-4">
+        <div className="flex flex-col relative right-4 max-w-[4vw]  flex-1 gap-4">
           <div className="flex gap-2">
             <div className="min-w-2 min-h-2 w-2 h-2 rounded-[2px] bg-emerald-400" />
-            <div className="flex flex-col gap-3">
-              <p className="text-xs">Recebimentos</p>
+            <div className="flex flex-col gap-2">
+              <p className="text-[13px]">Recebimentos</p>
               <span className="text-zinc-400">
                 {formatMoney(totalReceivedAmount + totalToReceiveAmount)}
               </span>
@@ -196,7 +196,7 @@ export default function FinanceCard() {
           <div className="flex gap-2">
             <div className="min-w-2 min-h-2 w-2 h-2 rounded-[2px] bg-red-500" />
             <div className="flex flex-col gap-3">
-              <p className="text-xs">Pagamentos</p>
+              <p className="text-[13px]">Pagamentos</p>
               <span className="text-zinc-400">
                 {formatMoney(totalPaidAmount + totalToPayAmount)}
               </span>
