@@ -15,7 +15,7 @@ export function InfoStep({ onNext }: { onNext: () => void }) {
           width={269}
           height={405}
         />
-        <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">
             É assim que se fala, {(user ? user.name : 'fulano').split(' ')[0]}!
           </h1>

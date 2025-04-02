@@ -51,7 +51,7 @@ export function ThirdStep({
             height={374}
           />
           <div className="flex flex-col h-full items-center gap-8">
-            <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
+            <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
               <h1 className="text-xl">
                 Descreva brevemente a sua situação atual. Quais desafios vem
                 enfrentando? O que te trouxe até aqui?

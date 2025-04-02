@@ -28,9 +28,9 @@ import { cn } from '@/lib/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { BadgeCheckIcon, ChevronDown, XIcon } from 'lucide-react'
+import { BadgeCheckIcon, ChevronDown, Loader2, XIcon } from 'lucide-react'
 import Image from 'next/image'
-import { redirect, useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ChallengeAbandoned } from './challenge-abandoned'
@@ -42,25 +42,47 @@ dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
 
 export default function Page() {
-  const router = useRouter()
   const [commandmentDialogOpen, setCommandmentDialogOpen] = useState(false)
   const [challengeDialogOpen, setChallengeDialogOpen] = useState(false)
   const [commandment, setCommandment] = useState<DesafioCommandment | null>(
     null,
   )
-
+  const [initialChallenge, setInitialChallenge] = useState<Challenge | null>(
+    null,
+  )
+  const [isAbandonLoading, setIsAbandonLoading] = useState(false)
   const queryClient = useQueryClient()
-  const {
-    data: challenge,
-    isFetched,
-    error,
-  } = useQuery({
+
+  // 1. Recupera dados do localStorage no client-side
+  useEffect(() => {
+    const storedChallenge = localStorage.getItem('new-challenge-data')
+    if (storedChallenge) {
+      try {
+        const parsed = JSON.parse(storedChallenge)
+        if (parsed?.id) {
+          setInitialChallenge(parsed)
+          localStorage.removeItem('new-challenge-data')
+        }
+      } catch {
+        localStorage.removeItem('new-challenge-data')
+      }
+    }
+  }, [])
+
+  // 2. Consulta da API com prioridade para dados locais
+  const { data: apiChallenge, isFetched } = useQuery({
     queryKey: ['challenge'],
     queryFn: async () => {
       const response = await api.get('/desafios/user')
-      return response.data as Challenge
+      return response.data
     },
+    enabled: !initialChallenge, // Só faz fetch se não tiver dados locais
+    staleTime: 0,
+    retry: 1,
   })
+
+  // 3. Merge dos dados (local + API)
+  const challenge = initialChallenge || apiChallenge
 
   const { mutateAsync: startChallengeFn } = useMutation({
     mutationFn: async () => {
@@ -68,7 +90,7 @@ export default function Page() {
     },
     onSuccess: () => {
       toast.success('Desafio iniciado!')
-      queryClient.refetchQueries({ queryKey: ['challenge'] })
+      queryClient.invalidateQueries({ queryKey: ['challenge'] })
     },
   })
 
@@ -78,19 +100,20 @@ export default function Page() {
     const rollback = challenge
     try {
       const commandment = challenge.desafio_commandment.find(
-        (item) => item.id === id,
+        (item: { id: number }) => item.id === id,
       )
       if (!commandment) return
 
       const updated: Challenge = {
         ...challenge,
-        desafio_commandment: challenge.desafio_commandment.map((item) =>
-          item.id === id ? { ...item, completed } : item,
+        desafio_commandment: challenge.desafio_commandment.map(
+          (item: { id: number }) =>
+            item.id === id ? { ...item, completed } : item,
         ),
       }
       queryClient.setQueryData(['challenge'], updated)
       await api.put(`/desafios/commandment/${id}/toggle`)
-      queryClient.refetchQueries({ queryKey: ['challenge'] })
+      queryClient.invalidateQueries({ queryKey: ['challenge'] })
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
       queryClient.setQueryData(['challenge'], rollback)
@@ -99,9 +122,10 @@ export default function Page() {
 
   async function handleLeave() {
     try {
+      setIsAbandonLoading(true)
       await api.put('/desafios/abandon')
       queryClient.invalidateQueries({ queryKey: ['challenge'] })
-      router.replace('/dashboard')
+      window.location.href = '/dashboard' // Hard redirect
     } catch {
       toast.error('Não foi possível fazer isso no momento!')
     }
@@ -133,6 +157,19 @@ export default function Page() {
     }
   }, [challenge])
 
+  // 4. Controle absoluto de redirecionamentos
+  useEffect(() => {
+    if (!isFetched) return
+
+    const shouldRedirect =
+      !challenge ||
+      ['finalizado', 'abandonado'].includes(challenge.status_desafio)
+
+    if (shouldRedirect) {
+      window.location.href = '/desafio-caverna'
+    }
+  }, [challenge, isFetched])
+
   if (
     challenge &&
     challenge.status_desafio === 'iniciado' &&
@@ -144,12 +181,12 @@ export default function Page() {
     return redirect('/desafio-caverna/registro-final')
   }
 
-  if (
-    (isFetched && !error && !challenge) ||
-    challenge?.status_desafio === 'finalizado' ||
-    challenge?.status_desafio === 'abandonado'
-  ) {
-    return redirect('/desafio-caverna')
+  if (!challenge) {
+    return (
+      <div className="flex flex-col w-full h-screen items-center justify-center bg-zinc-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
+      </div>
+    )
   }
 
   return (
@@ -167,7 +204,7 @@ export default function Page() {
         </div>
         <div className="hidden md:flex items-center gap-6">
           <Image src={'/images/logo.svg'} alt="Logo" width={132} height={35} />
-          {challenge && challenge.status_desafio === 'iniciado' && (
+          {challenge && (
             <Dialog>
               <DialogTrigger asChild>
                 <Button
@@ -193,7 +230,17 @@ export default function Page() {
                   <DialogClose asChild>
                     <Button variant="ghost">Cancelar</Button>
                   </DialogClose>
-                  <Button onClick={handleLeave}>Abandonar</Button>
+                  <Button
+                    onClick={handleLeave}
+                    className="w-[120px]"
+                    disabled={isAbandonLoading}
+                  >
+                    {isAbandonLoading ? (
+                      <Loader2 className="animate-spin w-5 h-5" />
+                    ) : (
+                      <span>Abandonar!</span>
+                    )}
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -252,7 +299,8 @@ export default function Page() {
                   <span className="text-xs text-zinc-400">
                     {
                       challenge.desafio_commandment.filter(
-                        (item) => item.completed === true,
+                        (item: { completed: boolean }) =>
+                          item.completed === true,
                       ).length
                     }
                     /{challenge.desafio_commandment.length}
@@ -262,7 +310,7 @@ export default function Page() {
                   <div
                     className="absolute -translate-y-1/2 h-[5px] bg-emerald-400 rounded-full"
                     style={{
-                      width: `${(challenge.desafio_commandment.filter((item) => item.completed === true).length / challenge.desafio_commandment.length) * 100}%`,
+                      width: `${(challenge.desafio_commandment.filter((item: { completed: boolean }) => item.completed === true).length / challenge.desafio_commandment.length) * 100}%`,
                       left: 0,
                     }}
                   />
@@ -279,64 +327,76 @@ export default function Page() {
                 type="single"
                 className="flex flex-col gap-[10px]"
               >
-                {challenge.desafio_commandment.map((item) => (
-                  <AccordionItem
-                    className={cn(
-                      'border p-0 rounded-lg',
-                      item.completed ? 'border-emerald-700' : 'border-border',
-                    )}
-                    value={String(item.id)}
-                    key={item.id}
-                  >
-                    <AccordionTrigger
-                      className={cn('w-full max-w-full p-4')}
-                      noIcon
+                {challenge.desafio_commandment.map(
+                  (item: {
+                    id: number
+                    completed: boolean
+                    commandment: {
+                      number: number
+                      title: string
+                      short_description: string
+                    }
+                  }) => (
+                    <AccordionItem
+                      className={cn(
+                        'border p-0 rounded-lg',
+                        item.completed ? 'border-emerald-700' : 'border-border',
+                      )}
+                      value={String(item.id)}
+                      key={item.id}
                     >
-                      <div className="flex flex-1 max-w-full gap-2">
-                        <span className="w-full flex-1 truncate">
-                          {item.commandment.number}. {item.commandment.title}
-                        </span>
-                        {item.completed && (
-                          <div className="flex items-center justify-center w-4 h-4 border border-emerald-400 rounded-full">
-                            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <AccordionTrigger
+                        className={cn('w-full max-w-full p-4')}
+                        noIcon
+                      >
+                        <div className="flex flex-1 max-w-full gap-2">
+                          <span className="w-full flex-1 truncate">
+                            {item.commandment.number}. {item.commandment.title}
+                          </span>
+                          {item.completed && (
+                            <div className="flex items-center justify-center w-4 h-4 border border-emerald-400 rounded-full">
+                              <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                            </div>
+                          )}
+                          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="p-0">
+                        <div className="flex flex-col max-h-36 px-4 py-2 gap-4 overflow-y-auto scrollbar-minimal">
+                          <p className="text-sm text-zinc-400">
+                            {item.commandment.short_description}
+                          </p>
+                          <Button
+                            size="sm"
+                            className="w-fit min-h-9"
+                            onClick={() => {
+                              setCommandment(
+                                item as unknown as DesafioCommandment,
+                              )
+                              setCommandmentDialogOpen(true)
+                            }}
+                          >
+                            Ver mais
+                          </Button>
+                        </div>
+                        {challenge.status_desafio !== 'pausado' && (
+                          <div className="flex w-full p-3 gap-2 border-t">
+                            <Checkbox
+                              className="rounded-full border-emerald-400 data-[state=checked]:bg-emerald-400"
+                              checked={item.completed}
+                              disabled={challenge.status_desafio === 'pausado'}
+                              onCheckedChange={(val) => {
+                                const checked = val.valueOf() === true || false
+                                handleUpdateCommandmentStatus(item.id, checked)
+                              }}
+                            />
+                            <span>Marcar como concluído</span>
                           </div>
                         )}
-                        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="p-0">
-                      <div className="flex flex-col max-h-36 px-4 py-2 gap-4 overflow-y-auto scrollbar-minimal">
-                        <p className="text-sm text-zinc-400">
-                          {item.commandment.short_description}
-                        </p>
-                        <Button
-                          size="sm"
-                          className="w-fit min-h-9"
-                          onClick={() => {
-                            setCommandment(item)
-                            setCommandmentDialogOpen(true)
-                          }}
-                        >
-                          Ver mais
-                        </Button>
-                      </div>
-                      {challenge.status_desafio !== 'pausado' && (
-                        <div className="flex w-full p-3 gap-2 border-t">
-                          <Checkbox
-                            className="rounded-full border-emerald-400 data-[state=checked]:bg-emerald-400"
-                            checked={item.completed}
-                            disabled={challenge.status_desafio === 'pausado'}
-                            onCheckedChange={(val) => {
-                              const checked = val.valueOf() === true || false
-                              handleUpdateCommandmentStatus(item.id, checked)
-                            }}
-                          />
-                          <span>Marcar como concluído</span>
-                        </div>
-                      )}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ),
+                )}{' '}
               </Accordion>
             ) : (
               <div className="flex flex-col gap-4">
@@ -363,56 +423,75 @@ export default function Page() {
             <div className="flex flex-col border-r overflow-hidden w-full">
               <div className="grid grid-cols-5 h-full">
                 {challenge &&
-                  challenge.array_dias.map((item, index) => {
-                    const date = dayjs(item.data, 'DD-MM-YYYY')
-                    const isPast =
-                      dayjs().isAfter(date.add(1, 'day').startOf('day')) ||
-                      (dayjs().isSame(date, 'date') &&
-                        dayjs().hour() >= 19 &&
-                        challenge.hojeInfo)
+                  challenge.array_dias.map(
+                    (
+                      item: {
+                        data: string
+                        status:
+                          | 'positiveCheck'
+                          | 'negativeCheck'
+                          | 'nulo'
+                          | string
+                      },
+                      index: number,
+                    ) => {
+                      const date = dayjs(item.data, 'DD-MM-YYYY')
+                      const isPast =
+                        dayjs().isAfter(date.add(1, 'day').startOf('day')) ||
+                        (dayjs().isSame(date, 'date') &&
+                          dayjs().hour() >= 19 &&
+                          challenge.hojeInfo)
 
-                    return (
-                      <div
-                        className={cn(
-                          'relative min-h-10 max-h-40 px-4 py-2 border',
-                          isPast ? 'bg-card' : '',
-                        )}
-                        key={index}
-                      >
-                        <span className="text-zinc-400">{index + 1}</span>
-                        <span className="absolute right-4 bottom-2">
-                          {(() => {
-                            switch (item.status) {
-                              case 'positiveCheck':
-                                return (
-                                  <span className="text-emerald-400">+1</span>
-                                )
-                              case 'negativeCheck':
-                                return <span className="text-red-400">-1</span>
-                              case 'nulo':
-                                return isPast ? <span>X</span> : null
-                              default:
-                                return null
-                            }
-                          })()}
-                        </span>
-                      </div>
-                    )
-                  })}
-              </div>
+                      return (
+                        <div
+                          className={cn(
+                            'relative min-h-10 max-h-40 px-4 py-2 border',
+                            isPast ? 'bg-card' : '',
+                          )}
+                          key={index}
+                        >
+                          <span className="text-zinc-400">{index + 1}</span>
+                          <span className="absolute right-4 bottom-2">
+                            {(() => {
+                              switch (item.status) {
+                                case 'positiveCheck':
+                                  return (
+                                    <span className="text-emerald-400">+1</span>
+                                  )
+                                case 'negativeCheck':
+                                  return (
+                                    <span className="text-red-400">-1</span>
+                                  )
+                                case 'nulo':
+                                  return isPast ? <span>X</span> : null
+                                default:
+                                  return null
+                              }
+                            })()}
+                          </span>
+                        </div>
+                      )
+                    },
+                  )}{' '}
+              </div>{' '}
             </div>
-            <div className="hidden lg:flex flex-col w- max-h-[100%] ">
+            <div className="hidden lg:flex flex-col min-w-80 max-h-[100%] ">
               <div className="flex flex-col flex-1 p-4 gap-6 overflow-y-auto scrollbar-minimal border-b">
                 <span className="w-fit text-xs font-semibold uppercase px-4 py-2 border rounded-full">
                   Hábitos obrigatórios
                 </span>
                 <ul className="flex flex-col gap-4">
                   {challenge
-                    ? challenge.array_falhar.map((item, index) => (
-                        <li key={index} className="text-xs text-zinc-400">
-                          {item}
-                        </li>
-                      ))
+                    ? challenge.array_falhar.map(
+                        (item: string, index: number) => (
+                          <li
+                            key={index}
+                            className="text-xs text-zinc-400 break-words"
+                          >
+                            {item}
+                          </li>
+                        ),
+                      )
                     : Array.from({ length: 5 }).map((_, index) => (
                         <Skeleton className="w-full h-4" key={index} />
                       ))}
@@ -424,11 +503,16 @@ export default function Page() {
                 </span>
                 <ul className="flex flex-col gap-4">
                   {challenge
-                    ? challenge.array_comprometimento.map((item, index) => (
-                        <li key={index} className="text-xs text-zinc-400">
-                          {item}
-                        </li>
-                      ))
+                    ? challenge.array_comprometimento.map(
+                        (item: string, index: number) => (
+                          <li
+                            key={index}
+                            className="text-xs text-zinc-400 break-words"
+                          >
+                            {item}
+                          </li>
+                        ),
+                      )
                     : Array.from({ length: 5 }).map((_, index) => (
                         <Skeleton className="w-full h-4" key={index} />
                       ))}
