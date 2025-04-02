@@ -14,7 +14,7 @@ export function DownloadAppStep({ onNext }: { onNext: () => void }) {
           width={271}
           height={403}
         />
-        <div className="flex flex-col relative w-[611px] px-14 py-11 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">O app já está disponível</h1>
           <p className="text-zinc-400">
             Você pode baixar o aplicativo na App Store ou no Google Play e
