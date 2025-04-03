@@ -241,6 +241,21 @@ function ReminderDialog({
     formState: { isSubmitting, errors },
   } = form
 
+  useEffect(() => {
+    if (mode === 'create' && reminder) {
+      // Preenche o formulário no modo edição
+      reset({
+        item: reminder.item,
+        checked: reminder.checked || false,
+      })
+    } else {
+      // Limpa o formulário no modo criação
+      reset({
+        item: '',
+        checked: false,
+      })
+    }
+  }, [mode, reminder, reset])
   async function handleRegister(data: RegisterData) {
     try {
       if (mode === 'edit' && reminder) {
@@ -249,14 +264,12 @@ function ReminderDialog({
           item: data.item,
         })
         toast.success('Lembrete atualizado')
-        reset()
       } else {
         await api.post(`/nao-esquecer/store`, {
           checked: data.checked || false,
           item: data.item,
         })
         toast.success('Lembrete criado')
-        reset()
       }
       queryClient.invalidateQueries({ queryKey: ['reminders'] })
       onClose()
@@ -270,18 +283,17 @@ function ReminderDialog({
     }
   }
 
-  useEffect(() => {
-    if (reminder && mode === 'edit') {
-      form.setValue('item', reminder.item)
-    }
-    if (mode === 'create') {
-      reset({ item: undefined })
-    }
-  }, [reminder])
-
   return (
     <FormProvider {...form}>
-      <DialogContent className="max-h-[85%] bg-zinc-900">
+      <DialogContent
+        className="max-h-[85%] bg-zinc-900"
+        onInteractOutside={() => {
+          reset({ item: '', checked: false })
+        }}
+        onEscapeKeyDown={() => {
+          reset({ item: '', checked: false })
+        }}
+      >
         <form
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleRegister)}
