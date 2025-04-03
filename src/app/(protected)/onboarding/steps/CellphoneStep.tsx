@@ -61,11 +61,12 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex flex-col flex-1 relative items-center p-4 pb-16 gap-12">
+    <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
       <div className="flex items-start gap-16">
         <Image
           src={'/images/lobo/apontando.webp'}
           alt="Capitão Caverna"
+          className="absolute -top-2 -left-72"
           width={222}
           height={402}
         />
@@ -73,7 +74,7 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
           <h1 className="text-2xl">
             Quer saber? Eu posso ser mais do que um simples guia.
           </h1>
-          <p className="text-zinc-400">
+          <p className="text-zinc-400 ">
             Sou uma inteligência artificial e fui treinado para ser o seu
             assistente pessoal no WhatsApp.
           </p>
@@ -94,7 +95,7 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
             width={54}
             height={14}
             alt="balloon"
-            className="absolute -left-[54px]"
+            className="absolute -left-[54px] top-[25%]"
           />
         </div>
       </div>
@@ -103,7 +104,7 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
           <label htmlFor="cellphone" className="text-xs">
             Seu WhatsApp
           </label>
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-full gap-2 mb-[3.2rem]">
             <div className="flex w-full gap-2">
               <Input
                 className="w-16"
@@ -133,15 +134,17 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
               </span>
             )}
           </div>
+          <div className="flex justify-center">
+            <AutoSubmitButton
+              onClick={handleSubmit(handleSaveData)}
+              loading={isSubmitting}
+              className="mt-auto"
+            >
+              Entendido Capitão!
+            </AutoSubmitButton>
+          </div>
         </div>
       </FormProvider>
-      <AutoSubmitButton
-        onClick={handleSubmit(handleSaveData)}
-        loading={isSubmitting}
-        className="mt-auto"
-      >
-        Entendido Capitão!
-      </AutoSubmitButton>
     </div>
   )
 }
