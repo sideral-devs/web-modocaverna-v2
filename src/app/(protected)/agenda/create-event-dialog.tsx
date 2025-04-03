@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -228,12 +227,12 @@ export function CreateEventDialogTrigger({
         >
           <DialogHeader className="flex flex-col items-start p-3 border-b">
             <div className="flex items-center gap-2">
-              <DialogTitle>
+              {/* <DialogTitle>
                 <div className="w-4 h-4 rounded border-2 border-white" />
-              </DialogTitle>
+              </DialogTitle> */}
               <Input
                 placeholder="Título compromisso"
-                className="h-8 p-0 border-0 focus-visible:ring-0 placeholder:text-zinc-500"
+                className="h-8 p-6 border-0 focus-visible:ring-0 placeholder:text-zinc-500"
                 {...register('title')}
               />
               {errors?.title && (

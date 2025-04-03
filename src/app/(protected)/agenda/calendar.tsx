@@ -187,7 +187,7 @@ function CompromissoEvent({
                 ? ' border-yellow-500'
                 : event.categoria === 'Treino'
                   ? ' border-red-500'
-                  : event.categoria === 'pessoal'
+                  : event.categoria === 'Pessoal'
                     ? ' border-green-500'
                     : ' border-zinc-500'
           } cursor-pointer transition-colors
@@ -207,7 +207,7 @@ function CompromissoEvent({
                 ? ' text-yellow-400'
                 : event.categoria === 'Treino'
                   ? ' text-red-400'
-                  : event.categoria === 'pessoal'
+                  : event.categoria === 'Pessoal'
                     ? ' text-green-400'
                     : ' text-zinc-400'
           }`}

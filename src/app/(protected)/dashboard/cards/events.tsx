@@ -26,11 +26,40 @@ export default function EventsCard() {
     },
   })
 
+  const { data: googleEvents } = useQuery<GoogleEventsResponse>({
+    queryKey: ['events-google', `${today}-${today}`],
+    queryFn: async () => {
+      const response = await api.get('/eventos-google/show', {
+        params: {
+          date_field: 'comeca',
+          date_start: today,
+          date_end: today,
+        },
+      })
+
+      return response.data
+    },
+  })
+  const allEvents = useMemo(() => {
+    const local = data?.compromissos || []
+    const google = googleEvents?.events || []
+    // Combine e ordene todos os eventos
+    const combined = [...local, ...google].sort((a, b) =>
+      dayjs(a.comeca).diff(dayjs(b.comeca)),
+    )
+    return combined
+  }, [data, googleEvents])
+
   const nextEvent = useMemo(
-    () => (data ? getNextEvent(data.compromissos) : null),
-    [data],
+    () => (allEvents ? getNextEvent(allEvents) : null),
+    [allEvents],
   )
 
+  // const nextEvent = useMemo(
+  //   () => (data ? getNextEvent(data.compromissos) : null),
+  //   [data],
+  // )
+  console.log('nextEvent', nextEvent)
   const semCompromissos = [
     'Dia livre! Avance no Modo Caverna. 🔥',
     'Nada agendado. Que tal criar um compromisso?',
@@ -49,7 +78,6 @@ export default function EventsCard() {
       )
     }
   }, [])
-
   return (
     <Card className="flex flex-col md:row-span-2 h-fit md:h-full min-h-[300px] bg-gradient-to-b from-[#09373E] to-[#1A1A1A] to-[65%] p-4 gap-5">
       <CardHeader className="justify-between">
@@ -60,7 +88,8 @@ export default function EventsCard() {
           </span>
         </div>
       </CardHeader>
-      {data && data.compromissos.length > 0 ? (
+
+      {allEvents && allEvents.length > 0 ? (
         <>
           {nextEvent && (
             <div className="flex flex-col w-full gap-5 pb-6 md:border-b border-b-cyan-700">
@@ -75,41 +104,68 @@ export default function EventsCard() {
                   {dayjs(nextEvent.comeca, 'YYYY-MM-DD HH:mm').format('H[h]mm')}
                 </span>
                 <div className="flex w-full bg-gradient-to-r from-[#0A414A] to-[#15151a] p-6 border-l border-l-cyan-400 rounded-lg">
-                  <span className="text-sm">{nextEvent.titulo}</span>
+                  <span className="text-sm">
+                    {nextEvent.titulo || nextEvent.summary}
+                  </span>
                 </div>
               </div>
             </div>
           )}
 
           <div className="hidden md:flex flex-col gap-8 overflow-y-auto scrollbar-minimal">
-            {data.compromissos.slice(1).map((event, i) => (
-              <div
-                className="flex items-center gap-4"
-                key={event.compromisso_id + '-' + i}
-              >
-                <span className="text-sm text-zinc-300 w-11">
-                  {dayjs(event.comeca, 'YYYY-MM-DD HH:mm').format('H[h]mm')}
-                </span>
-                <span className="flex items-center gap-2 text-sm text-zinc-300">
-                  <div className="w-3 h-3 border-white border-[1px] rounded" />
-                  {event.titulo}
-                </span>
-              </div>
-            ))}
+            {allEvents
+              .filter((event) => dayjs(event.comeca).isAfter(dayjs()))
+              .slice(nextEvent ? 1 : 0) // Skip next event if it's being shown
+              .map((event, i) => {
+                const eventTime = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
+
+                return (
+                  <div
+                    className="flex items-center gap-4"
+                    key={event.compromisso_id + '-' + i}
+                  >
+                    <span className="text-sm text-zinc-300 w-11">
+                      {eventTime.format('H[h]mm')}
+                    </span>
+                    <span className="flex items-center gap-2 text-sm text-zinc-300">
+                      <div
+                        className={`w-4 h-4 rounded${
+                          event.categoria === 'Compromisso'
+                            ? ' bg-blue-500'
+                            : event.categoria === 'Refeição'
+                              ? ' bg-yellow-500'
+                              : event.categoria === 'Treino'
+                                ? ' bg-red-500'
+                                : event.categoria === 'Pessoal'
+                                  ? ' bg-green-500'
+                                  : (event.event_id?.length ?? 0) > 0
+                                    ? ' bg-orange-400'
+                                    : ' border-zinc-500'
+                        } group-data-[state=closed]:hidden`}
+                      />
+                      {event.titulo}
+                    </span>
+                  </div>
+                )
+              })}
+          </div>
+
+          {allEvents.filter((event) => dayjs(event.comeca).isAfter(dayjs()))
+            .length <= (nextEvent ? 1 : 0) && (
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-2 text-xs  text-slate-400 ">
+              <span className="flex items-center gap-2 text-xs text-slate-400">
                 <span className="w-11">- - - -</span>
                 Sem compromissos para o restante do dia
               </span>
             </div>
-          </div>
+          )}
         </>
       ) : (
         <span className="flex items-center gap-2 text-xs text-gray-400">
-          {/* <span className="w-11">- - - -</span> */}
           {randomText}
         </span>
       )}
+
       <Link className="mt-auto ml-auto" href="/agenda">
         <Button size="sm">Ver agenda</Button>
       </Link>
@@ -117,12 +173,21 @@ export default function EventsCard() {
   )
 }
 
-function getNextEvent(events: Compromisso[]) {
+// @ts-expect-error aqui estou usando o events para os dois tipos de eventos
+function getNextEvent(events) {
+  if (!Array.isArray(events) || events.length === 0) return null
+
   const now = dayjs()
 
-  return (
-    events
-      .filter((event) => dayjs(event.comeca).isAfter(now))
-      .sort((a, b) => dayjs(a.comeca).diff(dayjs(b.comeca)))[0] || null
-  )
+  const futureEvents = events
+    .filter((event) => {
+      if (typeof event !== 'object' || event === null) return false
+      if (!('comeca' in event) || typeof event.comeca !== 'string') return false
+      const eventDate = dayjs(event.comeca)
+      return eventDate.isValid() && eventDate.isAfter(now)
+    })
+    .sort((a, b) => dayjs(a.comeca).diff(dayjs(b.comeca)))
+
+  console.log('futureEvents', futureEvents)
+  return futureEvents.length > 0 ? futureEvents[0] : null
 }

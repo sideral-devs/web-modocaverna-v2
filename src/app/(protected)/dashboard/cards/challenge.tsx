@@ -124,7 +124,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
             </p>
           </div>
           <Link href={'/desafio-caverna/dashboard'} className="mt-2">
-            <Button size="sm">Iniciar Desefio!</Button>
+            <Button size="sm">Iniciar Desafio!</Button>
           </Link>
         </div>
       )

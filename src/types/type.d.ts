@@ -289,6 +289,7 @@ interface EventsDTO {
 }
 
 interface GoogleEvent {
+  compromisso_id?: string
   error?: string
   event_id: string
   user_id: string
