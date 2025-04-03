@@ -36,7 +36,7 @@ export function CentralCaverna({ value }: { value: string }) {
       className="data-[state=active]:flex data-[state=active]:flex-1 data-[state=active]:h-full data-[state=active]:min-h-[600px]"
     >
       {user ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 w-full h-full md:min-h-[676px] gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 w-full h-full md:min-h-[676px] gap-2 2xl:max-h-[676px]">
           <Card className="flex flex-col w-full h-full relative p-[6px] pl-9 pt-11 gap-5 overflow-hidden">
             <h2 className="text-2xl font-semibold">
               Você está há{' '}
