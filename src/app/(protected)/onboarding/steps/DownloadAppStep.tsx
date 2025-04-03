@@ -6,11 +6,12 @@ import Link from 'next/link'
 
 export function DownloadAppStep({ onNext }: { onNext: () => void }) {
   return (
-    <div className="flex flex-col relative flex-1 justify-between items-center p-4 pb-16 gap-24">
+    <div className="flex flex-col relative flex-1 justify-start items-center p-4 pb-16 3xl:gap-24 gap-16">
       <div className="flex items-start gap-16">
         <Image
           src={'/images/lobo/Mostrando_app.webp'}
           alt="Capitão Caverna"
+          className="absolute -top-2 -left-72 "
           width={271}
           height={403}
         />
