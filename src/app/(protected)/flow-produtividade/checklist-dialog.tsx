@@ -71,7 +71,7 @@ export function ChecklistDialog({
                 alt="Capitão Caverna"
               />
               <div className="flex flex-col relative w-full p-6 py-4 gap-2 border border-zinc-700 rounded-lg">
-                <h3 className="text-xl font-semibold">Bora lá!</h3>
+                {/* <h3 className="text-xl font-semibold">Bora lá!</h3> */}
                 <p className="text-zinc-400">
                   Preparar-se para o flow é como abrir as portas para sua melhor
                   versão. O ritual não é obrigatório, mas potencializa foco e
@@ -82,7 +82,7 @@ export function ChecklistDialog({
                   width={54}
                   height={14}
                   alt="balloon"
-                  className="absolute -left-[54px] bottom-16"
+                  className="absolute -left-[54px] top-16 bottom-16"
                   draggable={false}
                 />
               </div>
@@ -216,11 +216,11 @@ function ChecklistItem({
 
   return (
     <div className="flex w-full gap-2">
-      <div className="flex w-14 h-14 items-center justify-center border rounded-2xl text-zinc-400">
+      <div className="flex 3xl:w-14 3xl:h-14 w-11 h-11 items-center justify-center border rounded-2xl text-zinc-400 text-sm">
         {number}
       </div>
       <motion.div
-        className="flex flex-1 items-center justify-between p-5 py-4 rounded-2xl cursor-pointer"
+        className="flex flex-1 items-center justify-between p-5 py-3 rounded-2xl text-sm cursor-pointer"
         initial={{
           backgroundColor: '#18181B',
         }}

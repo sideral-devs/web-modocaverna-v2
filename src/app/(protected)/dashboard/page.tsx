@@ -19,7 +19,7 @@ export default function Page() {
               <TabsTrigger value="central-caverna">Central Caverna</TabsTrigger>
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
               <TabsTrigger value="networking-conhecimento">
-                Networking e Conhecimento
+                Cursos e Networking
               </TabsTrigger>
             </TabsList>
             <CentralCaverna value="central-caverna" />

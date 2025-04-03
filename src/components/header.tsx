@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { ChevronLeft, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { Button } from './ui/button'
 
 export function Header({
@@ -60,9 +60,24 @@ export function HeaderTitle({
 }
 
 export function HeaderClose() {
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && buttonRef.current) {
+        event.preventDefault()
+        buttonRef.current.click()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyPress)
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [])
   return (
     <Link href={'/'}>
       <Button
+        ref={buttonRef}
         variant="outline"
         className="w-12 h-12 rounded-xl border text-primary"
       >
