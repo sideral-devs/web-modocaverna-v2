@@ -21,14 +21,16 @@ const RemindersCard = dynamic(() => import('./cards/reminders'), {
 export function OrdemNoCaos({ value }: { value: string }) {
   return (
     <TabsContent value={value}>
-      <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-1 w-full min-h-[336px]  gap-2">
-        <DreamboardCard />
-        <KnowledgeCard />
-      </div>
-      <div className=" grid grid-cols-1 mt-2 md:grid-cols-3 md:grid-rows-1 w-full max-h-[336px]  gap-2">
-        <FinanceCard />
-        <RemindersCard />
-        <NotesCard />
+      <div className="grid gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-1 w-full min-h-[336px] gap-2">
+          <DreamboardCard />
+          <KnowledgeCard />
+        </div>
+        <div className=" grid grid-cols-1 md:grid-cols-3 md:grid-rows-1 w-full h-[332px] gap-2">
+          <FinanceCard />
+          <RemindersCard />
+          <NotesCard />
+        </div>
       </div>
     </TabsContent>
   )

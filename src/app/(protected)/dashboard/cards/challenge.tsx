@@ -74,7 +74,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
     challenge.status_desafio === 'abandonado'
   ) {
     return (
-      <div className="relative flex flex-row items-center flex-1 justify-center md:justify-normal md:pt-6 gap-4">
+      <div className="relative flex flex-row items-center flex-1 justify-center md:justify-normal md:pt-6 gap-2">
         <div className="flex flex-row relative bottom-10">
           <Image
             src={'/images/empty-states/empty-desafio.png'}

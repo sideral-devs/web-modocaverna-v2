@@ -19,7 +19,7 @@ const EventsCard = dynamic(() => import('./cards/events'), {
 const ChallengeCard = dynamic(() => import('./cards/challenge'), {
   loading: () => <Skeleton className="flex w-full h-full min-h-[300px]" />,
 })
-const RemindersCard = dynamic(() => import('./cards/reminders'), {
+const RitualsCard = dynamic(() => import('./cards/ritual'), {
   loading: () => <Skeleton className="flex w-full h-full min-h-[300px]" />,
 })
 
@@ -36,8 +36,8 @@ export function CentralCaverna({ value }: { value: string }) {
       className="data-[state=active]:flex data-[state=active]:flex-1 data-[state=active]:h-full data-[state=active]:min-h-[600px]"
     >
       {user ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 w-full h-full md:max-h-[676px] gap-1">
-          <Card className="flex flex-col w-full h-full min-h-[300px] relative p-[6px] pl-9 pt-11 gap-5 overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 w-full h-full md:min-h-[676px] gap-2">
+          <Card className="flex flex-col w-full h-full relative p-[6px] pl-9 pt-11 gap-5 overflow-hidden">
             <h2 className="text-2xl font-semibold">
               Você está há{' '}
               <span className="text-primary">
@@ -61,10 +61,10 @@ export function CentralCaverna({ value }: { value: string }) {
               alt="Caverna"
             />
           </Card>
-          <RemindersCard />
+          <RitualsCard />
           <EventsCard />
           <ChallengeCard />
-          <Card className="flex flex-col w-full h-full p-4 gap-5">
+          <Card className="flex flex-col w-full  min-h-[330px] p-4 gap-5">
             <CardHeader>
               <div className="flex w-fit items-center px-3  py-[7px] gap-[6px] border border-cyan-400 rounded-full">
                 <AlarmClock

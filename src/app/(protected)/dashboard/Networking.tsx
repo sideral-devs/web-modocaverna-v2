@@ -7,7 +7,7 @@ import Link from 'next/link'
 export function Networking({ value }: { value: string }) {
   return (
     <TabsContent value={value} className="flex-1">
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
         <Card className="flex flex-col w-full h-full min-h-[600px] md:min-h-80 p-6 gap-6 relative overflow-hidden">
           <CardHeader className="justify-between items-center z-50">
             <div className="flex w-fit px-3 py-2 border border-primary z-50 rounded-full">
