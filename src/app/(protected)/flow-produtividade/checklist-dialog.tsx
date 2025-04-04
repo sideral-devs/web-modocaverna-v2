@@ -164,7 +164,7 @@ export function ChecklistDialog({
                       <ChecklistItem
                         number={6}
                         id={6}
-                        label="Rito da Caverna (Assista e mentaliza)"
+                        label="Rito da Caverna (Assista e mentalize)"
                         selected={checkedItems.includes(6)}
                         onSelect={handleSelect}
                       />
