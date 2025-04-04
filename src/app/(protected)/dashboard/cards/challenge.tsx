@@ -40,6 +40,7 @@ export default function ChallengeCard() {
 }
 function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   const [challengeMessage, setChallengeMessage] = useState('')
+
   const targetDate = useMemo(
     () => dayjs().set('hour', 19).set('minute', 0).set('second', 0).toDate(),
     [],
@@ -110,7 +111,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
             </span>
           </div>
           <Link href="/desafio-caverna" className="mt-auto ml-auto">
-            <Button size="sm">Ver desafio</Button>
+            <Button size="sm">Ver Desafio</Button>
           </Link>
         </div>
       )
@@ -144,7 +145,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
           <CountdownTimer targetDate={targetDate} />
         </div>
         <Link href="/desafio-caverna" className="mt-auto ml-auto">
-          <Button size="sm">Ver desafio</Button>
+          <Button size="sm">Ver Desafio</Button>
         </Link>
       </>
     )
@@ -166,12 +167,16 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
         </div>
         <div className="flex w-full items-center justify-center gap-3">
           <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button className="flex-1 max-w-24 text-red-300 bg-red-800">
+            <Button
+              className="flex-1 max-w-24 text-red-300 bg-red-800"
+            >
               Negativa
             </Button>
           </Link>
           <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button className="flex-1 max-w-24 text-emerald-400 bg-emerald-800">
+            <Button
+              className="flex-1 max-w-24 text-emerald-400 bg-emerald-800"
+            >
               Positiva
             </Button>
           </Link>
@@ -187,18 +192,18 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
       ) : (
         <AlertTriangle size={32} className="text-red-500" />
       )}
-      <h2 className="text-xl font-semibold text-center max-w-64">
+      <h2 className=" font-semibold text-center max-w-64">
         {challenge.hojeInfo === 'positiveCheck'
           ? 'Parabéns, mais um dia vencido'
           : 'Parece que você vacilou hoje'}
       </h2>
       {challenge.hojeInfo === 'negativeCheck' && (
-        <div className="max-w-40 text-center text-zinc-400">
+        <div className="max-w-40 text-center text-sm text-zinc-400">
           Não se preocupe. Amanhã é um novo dia.
         </div>
       )}
       <Link href={'/desafio-caverna/dashboard'} className="mt-2">
-        <Button size="sm">Acessar desafio</Button>
+        <Button size="sm">Acessar Desafio</Button>
       </Link>
     </div>
   )

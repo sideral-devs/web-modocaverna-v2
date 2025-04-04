@@ -30,7 +30,9 @@ export function DailyRegisterDialog({
   const [answered, setAnswered] = useState(false)
   const [positiveChecked, setPositiveChecked] = useState<string[]>([])
   const [negativeChecked, setNegativeChecked] = useState<string[]>([])
-
+  const [isStatus, setIsStatus] = useState<'positiveCheck' | 'negativeCheck'>(
+    'negativeCheck',
+  )
   function handlePositiveCheck(option: string) {
     setPositiveChecked((prevOptions) => {
       if (prevOptions.includes(option)) {
@@ -85,6 +87,7 @@ export function DailyRegisterDialog({
       })
       toast.success('Avaliação salva!')
       queryClient.invalidateQueries({ queryKey: ['challenge'] })
+      setIsStatus(status)
       setAnswered(true)
     } catch (err) {
       console.log(err)
@@ -93,51 +96,51 @@ export function DailyRegisterDialog({
   }
 
   if (answered) {
-    return <AnsweredDialog open={open} setOpen={setOpen} />
+    return <AnsweredDialog open={open} setOpen={setOpen} status={isStatus} />
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="flex flex-col h-[85%] max-h-[900px] max-w-3xl items-center bg-zinc-800 border-zinc-700 p-0 gap-8 overflow-x-hidden">
+      <DialogContent className="flex flex-col h-[85%] max-h-[900px] max-w-3xl items-center bg-zinc-800 border-zinc-700 p-0 3xl:gap-8 gap-4 overflow-x-hidden">
         <DialogHeader className="w-full items-center p-6">
           <DialogTitle className="w-fit px-3 py-2 text-sm border border-white rounded-full uppercase">
             Registro Diário
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col flex-1 w-full gap-8">
+        <div className="flex flex-col flex-1 w-full 3xl:gap-8 gap-4">
           <div
-            className="grid grid-cols-2 w-full px-6 gap-5"
+            className="grid grid-cols-2 w-full px-6 gap-5 "
             style={{ flex: '0 0 60%' }}
           >
-            <div className="flex flex-col px-5 py-4 gap-6 border rounded-lg">
+            <div className="flex flex-col px-5 py-4 gap-6 border rounded-lg 3xl:max-h-[400px] max-h-[350px]">
               <span className="flex w-fit px-3 py-2 text-xs border rounded-full uppercase">
-                Hábitos Obrigatórios
+                NOVOS HÁBITOS
               </span>
-              <div className="flex flex-col gap-4">
+              <div className="flex max-h-[100%] flex-col gap-4 overflow-auto scrollbar-minimal">
                 {challenge.array_falhar.map((item, index) => (
                   <div key={item + index} className="flex items-center gap-3">
                     <Checkbox
                       className="rounded-full border-emerald-400 data-[state=checked]:bg-emerald-400"
                       onCheckedChange={() => handlePositiveCheck(item)}
                     />
-                    <span className="text-zinc-400 truncate">
+                    <span className="text-zinc-400 3xl:text-sm text-xs">
                       {item.replace('✅', '')}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="flex flex-col px-5 py-4 gap-6 border rounded-lg">
+            <div className="flex flex-col px-5 py-4 gap-6 border rounded-lg 3xl:max-h-[400px] max-h-[350px]">
               <span className="flex w-fit px-3 py-2 text-xs border rounded-full uppercase">
-                Comportamentos Proibidos
+                RENÚNCIAS
               </span>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 overflow-auto scrollbar-minimal">
                 {challenge.array_comprometimento.map((item, index) => (
                   <div key={item + index} className="flex items-center gap-3">
                     <CircleCheckbox
                       onCheckedChange={() => handleNegativeCheck(item)}
                     />
-                    <span className="text-zinc-400 truncate">
+                    <span className="text-zinc-400 3xl:text-sm text-xs">
                       {item.replace('❌', '')}
                     </span>
                   </div>
@@ -146,7 +149,7 @@ export function DailyRegisterDialog({
             </div>
           </div>
           <DialogFooter
-            className="flex sm:flex-col w-full items-center sm:justify-center gap-8 border-t"
+            className="flex sm:flex-col w-full items-center sm:justify-center 3xl:gap-8 gap-4 border-t py-4"
             style={{ flex: '1 1 auto' }}
           >
             <div className="flex flex-col items-center gap-3">
@@ -156,7 +159,7 @@ export function DailyRegisterDialog({
                 width={26}
                 height={22}
               />
-              <p className="text-center text-2xl max-w-md">
+              <p className="text-center 3xl:text-2xl text-xl max-w-md">
                 De acordo com as marcações, como você avalia a sua conduta hoje?
               </p>
             </div>
@@ -184,11 +187,13 @@ export function DailyRegisterDialog({
 function AnsweredDialog({
   open,
   setOpen,
+  status,
 }: {
   open: boolean
   setOpen: (arg: boolean) => void
+  status: 'positiveCheck' | 'negativeCheck'
 }) {
-  const { data: challenge } = useQuery({
+  useQuery({
     queryKey: ['challenge'],
     queryFn: async () => {
       const response = await api.get('/desafios/user')
@@ -200,24 +205,17 @@ function AnsweredDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex flex-col max-w-[400px] h-full max-h-[520px] items-center bg-zinc-800 border-zinc-700 p-3 gap-8">
         <div className="flex flex-1 flex-col items-center justify-center gap-6">
-          {challenge &&
-            (challenge.hojeInfo === 'positiveCheck' ? (
-              <CheckCheckIcon size={32} className="text-emerald-400" />
-            ) : (
-              <AlertTriangle size={32} className="text-red-500" />
-            ))}
+          {status === 'positiveCheck' ? (
+            <CheckCheckIcon size={32} className="text-emerald-400" />
+          ) : (
+            <AlertTriangle size={32} className="text-red-500" />
+          )}
           <DialogTitle className="text-2xl font-semibold text-center max-w-64">
-            {challenge ? (
-              challenge.hojeInfo === 'positiveCheck' ? (
-                'Parabéns, mais um dia vencido'
-              ) : (
-                'Parece que você vacilou hoje'
-              )
-            ) : (
-              <span className="opacity-0">Carregando...</span>
-            )}
+            {status === 'positiveCheck'
+              ? 'Parabéns, mais um dia vencido'
+              : 'Parece que você vacilou hoje'}
           </DialogTitle>
-          {challenge && challenge.hojeInfo === 'negativeCheck' && (
+          {status === 'negativeCheck' && (
             <DialogDescription className="max-w-40 text-center">
               Não se preocupe. Amanhã é um novo dia.
             </DialogDescription>

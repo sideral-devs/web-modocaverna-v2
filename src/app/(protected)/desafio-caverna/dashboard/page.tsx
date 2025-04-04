@@ -478,7 +478,7 @@ export default function Page() {
             <div className="hidden lg:flex flex-col min-w-80 max-h-[100%] ">
               <div className="flex flex-col flex-1 p-4 gap-6 overflow-y-auto scrollbar-minimal border-b">
                 <span className="w-fit text-xs font-semibold uppercase px-4 py-2 border rounded-full">
-                  Hábitos obrigatórios
+                  NOVOS HÁBITOS
                 </span>
                 <ul className="flex flex-col gap-4">
                   {challenge
@@ -499,7 +499,7 @@ export default function Page() {
               </div>
               <div className="flex flex-col flex-1 p-4 gap-6 overflow-y-auto scrollbar-minimal">
                 <span className="w-fit text-xs font-semibold uppercase px-4 py-2 border rounded-full">
-                  Comportamentos obrigatórios
+                  RENÚNCIAS
                 </span>
                 <ul className="flex flex-col gap-4">
                   {challenge
