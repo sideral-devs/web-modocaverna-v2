@@ -139,7 +139,7 @@ export default function Page() {
       <section className="flex flex-col items-center w-full bg-gradient-to-b from-black to-zinc-800 to-[75%] gap-4">
         <div className="grid grid-cols-5 flex-1 w-full max-w-8xl p-4 gap-4">
           {currentGoal ? (
-            <div className="flex flex-col col-span-2 md:h-[640px] p-4 gap-8 bg-zinc-800 border-t rounded-2xl shadow-lg">
+            <div className="flex flex-col col-span-2 md:h-[640px] p-4 gap-2 bg-zinc-800 border-t rounded-2xl shadow-lg">
               <div className="flex w-full items-center justify-between">
                 <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
                   <span className="text-[14px] font-semibold">
@@ -169,18 +169,18 @@ export default function Page() {
                   alt="Quote"
                   src={'/icons/quote.svg'}
                 />
-                <p className="px-4 relative left-6 bottom-3 truncate w-[500px]">
+                <p className="px-2 relative left-6 bottom-2 break-words w-[34vw] overflow-y-scroll scrollbar-minimal max-h-[8dvw] lg:w-[28dvw]  ">
                   {currentGoal.objetivos.principal}
                 </p>
               </div>
               <div className="w-full h-[1px] bg-border" />
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4 lg:gap-4">
                 <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
                   <span className="text-[14px] font-semibold">
                     O que preciso fazer?
                   </span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   {currentGoal.objetivos.lista.length > 0 ? (
                     currentGoal.objetivos.lista.map((item, index) => (
                       <EditableObjectiveItem

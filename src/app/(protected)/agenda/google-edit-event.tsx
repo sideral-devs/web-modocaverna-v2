@@ -152,12 +152,13 @@ export function GoogleEditEventDialogTrigger({
       queryClient.refetchQueries({ queryKey: ['events-google'] })
       toast.success('Compromisso excluído')
       queryClient.refetchQueries({ queryKey: ['events'] })
+      queryClient.refetchQueries({ queryKey: ['google-events'] })
       setOpen(false)
     } catch (err) {
       if (err instanceof AxiosError) {
         console.log(err.response?.data)
       }
-      toast.error('Não foi possível excluir o compromisso.')
+      setOpen(false)
     }
   }
 

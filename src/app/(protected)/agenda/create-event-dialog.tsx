@@ -82,7 +82,6 @@ export function CreateEventDialogTrigger({
     watch,
     formState: { errors, isSubmitting },
   } = form
-
   const initialDate = watch('initialDate')
   const endDate = watch('endDate')
 
@@ -91,7 +90,17 @@ export function CreateEventDialogTrigger({
   const selectContentClassName =
     'p-[3px] rounded-lg bg-zinc-800 border-cyan-700'
   const selectItemClassName = 'text-xs data-[state=checked]:bg-zinc-700'
-
+  function manualReset() {
+    setValue('title', '')
+    setValue('description', '')
+    setValue('category', 'Compromisso')
+    setValue('initialDate', new Date())
+    setValue('endDate', new Date())
+    setValue('initialTime', dayjs().format('HH:mm'))
+    setValue('endTime', dayjs().add(30, 'minutes').format('HH:mm'))
+    setValue('repeat', '')
+    setRepeat(0)
+  }
   function setRepeatMode(data: RegisterData) {
     let body = {}
     const repeteIntervaloDias = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
@@ -188,11 +197,12 @@ export function CreateEventDialogTrigger({
           })
         }
       }
+
       toast.success('Compromisso salvo')
-      reset()
+      manualReset()
       setIsOpen(false)
       queryClient.refetchQueries({ queryKey: ['events'] })
-      setIsOpen(false)
+      queryClient.refetchQueries({ queryKey: ['events-google'] })
     } catch (err) {
       if (err instanceof AxiosError) {
         console.log(err.response?.data)
@@ -200,6 +210,21 @@ export function CreateEventDialogTrigger({
       toast.error('Erro ao agendar o compromisso')
     }
   }
+  useEffect(() => {
+    if (!isOpen) {
+      reset({
+        title: '',
+        description: '',
+        category: 'Compromisso',
+        initialDate: new Date(),
+        endDate: new Date(),
+        initialTime: dayjs().format('HH:mm'),
+        endTime: dayjs().add(30, 'minutes').format('HH:mm'),
+        repeat: '',
+      })
+      setRepeat(0)
+    }
+  }, [isOpen, reset])
 
   function setInitialDate(date: Date | undefined) {
     if (!date) return

@@ -73,7 +73,6 @@ export const config = {
       }
     },
     async session({ session, token }) {
-      // console.log('Sessão: ', session)
       return {
         ...session,
         accessToken: String(token.access_token),

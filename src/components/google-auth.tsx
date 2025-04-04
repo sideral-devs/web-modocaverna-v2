@@ -8,20 +8,34 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
 export function GoogleAuth() {
   const session = useSession()
   const queryClient = useQueryClient()
 
   // Query para obter as configurações do usuário
-  const { data: userConfigs } = useQuery({
+  const { data: userConfigs, isFetched } = useQuery<Configuracoes>({
     queryKey: ['configuracoes'],
     queryFn: async () => {
-      const response = await api.get('/configuracoes/show')
-      return response.data
+      const response = await api.get('/configuracoes/find')
+      if (response.status !== 200) {
+        throw new Error('Erro ao buscar configurações')
+      }
+      return response.data.data
     },
-    enabled: session.status === 'authenticated', // Só busca se estiver autenticado
   })
+
   // Mutation para atualizar o token
   const { mutateAsync: updateToken } = useMutation({
     mutationFn: async (token: string) => {
@@ -38,7 +52,6 @@ export function GoogleAuth() {
     },
   })
 
-  // Efeito para sincronizar o token quando necessário
   useEffect(() => {
     if (session.status !== 'authenticated' || !userConfigs) return
     // @ts-expect-error: session.data pode estar indefinido
@@ -70,21 +83,60 @@ export function GoogleAuth() {
     }
   }
 
-  if (session.status === 'loading') return null
+  if (!isFetched) return null
 
   return (
-    <Button
-      className={`h-10 ${userConfigs?.google_oauth ? ' border-l-green-200' : 'border-l-cyan-400'} ${userConfigs?.google_oauth && 'bg-green-700'} `}
-      variant={`${userConfigs?.google_oauth ? 'success' : 'outline'}`}
-      onClick={userConfigs?.google_oauth ? handleSignOut : handleSignIn}
-    >
-      <Image src={'/icons/google.svg'} alt="Google" width={16} height={16} />
+    <>
       {userConfigs?.google_oauth ? (
-        <p className="text-white">Google Calendar Conectado</p>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              className="h-10 border-l-green-200 bg-green-700"
+              variant="success"
+            >
+              <Image
+                src={'/icons/google.svg'}
+                alt="Google"
+                width={16}
+                height={16}
+              />
+              <p className="text-white">Google Calendar Conectado</p>
+              <ChevronRight className="text-cyan-400" size={16} />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Integração Google Calendar</AlertDialogTitle>
+              <AlertDialogDescription>
+                Tem certeza que deseja remover a integração com o Google
+                Calendar? Isso irá desconectar sua conta e remover as permissões
+                de acesso.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSignOut}>
+                Confirmar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       ) : (
-        <p> Integrar ao Google Calendar</p>
+        <Button
+          className="h-10 border-l-cyan-400"
+          variant="outline"
+          onClick={handleSignIn}
+        >
+          <Image
+            src={'/icons/google.svg'}
+            alt="Google"
+            width={16}
+            height={16}
+          />
+          <p>Integrar ao Google Calendar</p>
+          <ChevronRight className="text-cyan-400" size={16} />
+        </Button>
       )}
-      <ChevronRight className="text-cyan-400" size={16} />
-    </Button>
+    </>
   )
 }

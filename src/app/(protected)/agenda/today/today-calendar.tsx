@@ -161,7 +161,6 @@ function GoogleEvent({
     (endMinutes - startMinutes) * PIXELS_PER_MINUTE,
     minHeight,
   )
-  console.log(height)
   const baseLeft = 70
 
   return (
