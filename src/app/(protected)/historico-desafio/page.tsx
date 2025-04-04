@@ -226,7 +226,7 @@ export default function Home() {
             {challenge ? (
               <div className="flex flex-col h-80 p-4 gap-8 border rounded-xl">
                 <span className="flex w-fit sticky py-1 px-2 bg-card text-emerald-400 border border-emerald-400 rounded-full text-xs uppercase">
-                  Hábitos obrigatórios
+                  NOVOS HÁBITOS
                 </span>
                 <ul className="flex flex-col gap-2.5 overflow-y-auto scrollbar-minimal">
                   {challenge.array_falhar.map((habito, index) => (
@@ -240,7 +240,7 @@ export default function Home() {
             {challenge ? (
               <div className="flex flex-col h-80 p-4 gap-8 border rounded-xl">
                 <span className="flex w-fit sticky py-1 px-2 bg-card text-red-500 border border-red-500 rounded-full text-xs uppercase">
-                  Comportamentos proibidos
+                  RENÚNCIAS
                 </span>
                 <ul className="flex flex-col gap-2.5 overflow-y-auto scrollbar-minimal">
                   {challenge.array_comprometimento.map((habito, index) => (

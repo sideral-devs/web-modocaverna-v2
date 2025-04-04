@@ -84,7 +84,7 @@ function FirstStep({
       () => {
         setTimed(true)
       },
-      3 * 60 * 1000,
+      1.5 * 60 * 1000,
     )
 
     return () => clearTimeout(timeout)

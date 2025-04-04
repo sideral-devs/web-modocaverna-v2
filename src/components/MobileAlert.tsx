@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react'
 import { AlertDescription } from '@/components/ui/alert'
 import { X } from 'lucide-react'
-import { Checkbox } from '@/components/ui/checkbox'
 
 export default function MobileAlert() {
   const [showAlert, setShowAlert] = useState(false)
-  const [checked, setChecked] = useState(false)
+  // const [checked, setChecked] = useState(false)
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -23,14 +22,14 @@ export default function MobileAlert() {
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
 
-  function handleCheckboxChange(checked: boolean) {
-    if (checked) {
-      localStorage.setItem('showMobileAlert', 'true')
-    } else {
-      localStorage.setItem('showMobileAlert', 'false')
-    }
-    setChecked(checked)
-  }
+  // function handleCheckboxChange(checked: boolean) {
+  //   if (checked) {
+  //     localStorage.setItem('showMobileAlert', 'true')
+  //   } else {
+  //     localStorage.setItem('showMobileAlert', 'false')
+  //   }
+  //   setChecked(checked)
+  // }
 
   if (!showAlert) return null
 
@@ -54,7 +53,7 @@ export default function MobileAlert() {
             </a>{' '}
             e faça login.
           </p>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Checkbox
               id="terms"
               onClick={() => handleCheckboxChange(!checked)}
@@ -65,7 +64,7 @@ export default function MobileAlert() {
             >
               Não ver essa mensagem novamente.
             </label>
-          </div>
+          </div> */}
         </AlertDescription>
       </div>
       <button
