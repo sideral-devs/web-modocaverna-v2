@@ -77,7 +77,6 @@ export default function Page() {
       await signOut({ redirect: false }).catch(() => {})
       queryClient.invalidateQueries({ queryKey: ['user'] })
       toast.success('Login realizado com sucesso.')
-      console.log('replace')
       router.replace('/dashboard')
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
@@ -89,7 +88,6 @@ export default function Page() {
   }
 
   if (user && !isLoading && !isError && token) {
-    console.log('redirect')
     return redirect('/dashboard')
   }
 

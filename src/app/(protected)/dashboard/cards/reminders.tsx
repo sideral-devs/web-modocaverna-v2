@@ -240,15 +240,18 @@ function ReminderDialog({
     setValue,
     formState: { isSubmitting, errors },
   } = form
-
+  function manualReset() {
+    setValue('item', '')
+    setValue('checked', false)
+  }
   useEffect(() => {
-    if (mode === 'create' && reminder) {
+    if (mode === 'edit' && reminder) {
       // Preenche o formulário no modo edição
       reset({
         item: reminder.item,
         checked: reminder.checked || false,
       })
-    } else {
+    } else if (mode === 'create' || !reminder) {
       // Limpa o formulário no modo criação
       reset({
         item: '',
@@ -271,6 +274,8 @@ function ReminderDialog({
         })
         toast.success('Lembrete criado')
       }
+      manualReset()
+      reset()
       queryClient.invalidateQueries({ queryKey: ['reminders'] })
       onClose()
     } catch (err) {
