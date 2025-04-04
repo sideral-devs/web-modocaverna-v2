@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'localhost',
+        hostname: 'api.modocaverna.com',
       },
       {
         protocol: 'https',
