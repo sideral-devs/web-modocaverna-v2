@@ -1,6 +1,7 @@
 import { GlobalProviders } from '@/components/providers'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import MobileAlert from '@/components/MobileAlert'
 import './globals.css'
 
 const inter = Inter({
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pt_BR">
       <body className={inter.className}>
+        <MobileAlert />
         <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>

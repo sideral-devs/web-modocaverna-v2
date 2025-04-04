@@ -5,7 +5,7 @@ import { VideoPlayer } from '@/components/video-player'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { useQuery } from '@tanstack/react-query'
-import { Bookmark } from 'lucide-react'
+import { Bookmark, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -36,11 +36,18 @@ export function CommandmentDialog({
           className="grid grid-cols-1 md:grid-cols-2 h-[90%] md:h-[481px] max-h-[90%] w-[95%] md:max-w-[1180px] bg-gradient-to-b from-[#1C1C1C] to-[#111111] overflow-x-hidden overflow-y-auto scrollbar-minimal"
         >
           <div className="flex flex-col pt-14 px-6 gap-6">
-            <div className="absolute -top-4 right-6 md:right-12">
+            <div className="absolute -top-4 right-6 z-50 md:right-12">
               <Bookmark className="text-red-700 fill-red-700" size={90} />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
                 {data.number.padStart(2, '0')}
               </span>
+            </div>
+            <div
+              className="absolute top-2 right-2 cursor-pointer z-50 border border-zinc-700 p-3 rounded-sm"
+              onClick={() => setOpen(false)}
+            >
+              <X className="h-4 w-4 cursor-pointer text-red-700" />
+              <span className="sr-only">Close</span>
             </div>
             <div className="flex flex-col gap-6">
               <DialogTitle className="text-4xl font-bold uppercase text-gradient">
