@@ -70,7 +70,7 @@ export function ChecklistDialog({
                 height={109}
                 alt="Capitão Caverna"
               />
-              <div className="flex flex-col relative w-full p-6 py-4 gap-2 border border-zinc-700 rounded-lg">
+              <div className="flex flex-col relative w-full p-6 py-4 gap-2 border border-zin-700 rounded-lg">
                 {/* <h3 className="text-xl font-semibold">Bora lá!</h3> */}
                 <p className="text-zinc-400">
                   Preparar-se para o flow é como abrir as portas para sua melhor
@@ -78,7 +78,7 @@ export function ChecklistDialog({
                   produtividade. Experimente!
                 </p>
                 <Image
-                  src={'/images/triangle-balloon.svg'}
+                  src={'/images/triangle-balloon2.svg'}
                   width={54}
                   height={14}
                   alt="balloon"
@@ -128,11 +128,11 @@ export function ChecklistDialog({
                         onSelect={handleSelect}
                       />
                     </DialogTrigger>
-                    <DialogContent className="flex flex-col items-center px-3 py-6 max-w-2xl gap-4">
+                    <DialogContent className="flex flex-col min-w-[50dvw]  items-center px-3 py-6 max-w-2xl gap-4">
                       <DialogTitle className="flex w-fit px-3 py-2 gap-2 border rounded-full text-[10px] font-semibold uppercase">
                         Quadro dos sonhos
                       </DialogTitle>
-                      <div className="w-full aspect-video">
+                      <div className=" w-full aspect-video rounded-lg overflow-hidden">
                         <DreamboardCard hideLabel />
                       </div>
                     </DialogContent>
