@@ -75,6 +75,8 @@ export default function PomodoroTimer() {
       newPhaseCount = 0
     }
 
+    finishSoundRef.current?.play()
+    setIsRunning(false)
     setPhaseCount(newPhaseCount)
 
     if (currentPhase === 'focus') {
@@ -117,8 +119,20 @@ export default function PomodoroTimer() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
+  function handleStartFocus() {
+    startSoundRef.current?.play()
+    handleStartPause()
+  }
+
+  function handlePause() {
+    stopSoundRef.current?.play()
+    handleStartPause()
+  }
+
   useEffect(() => {
-    if (pomodoro) {
+    if (!pomodoro) return
+
+    if (!isRunning) {
       switch (currentPhase) {
         case 'focus':
           setTimeLeft(Number(pomodoro.minutagem_produtividade))
@@ -127,12 +141,10 @@ export default function PomodoroTimer() {
         case 'shortBreak':
           setTimeLeft(Number(pomodoro.intervalo_curto))
           setShowBreakDialog(true)
-          setIsRunning(false)
           break
         case 'longBreak':
-          setTimeLeft(Number(pomodoro.minutagem_produtividade))
+          setTimeLeft(Number(pomodoro.intervalo_longo))
           setShowBreakDialog(true)
-          setIsRunning(false)
           break
       }
     }
@@ -145,18 +157,7 @@ export default function PomodoroTimer() {
       }
 
       intervalRef.current = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime <= 0) {
-            if (intervalRef.current) {
-              clearInterval(intervalRef.current)
-            }
-
-            safeMoveToNextPhase()
-
-            return 0
-          }
-          return prevTime - 1
-        })
+        setTimeLeft((prevTime) => Math.max(prevTime - 1, 0))
       }, 1000)
     } else {
       if (intervalRef.current) {
@@ -179,6 +180,12 @@ export default function PomodoroTimer() {
     }
   }, [showBreakDialog])
 
+  useEffect(() => {
+    if (timeLeft === 0 && isRunning) {
+      safeMoveToNextPhase()
+    }
+  }, [timeLeft, isRunning])
+
   return (
     <>
       <audio ref={startSoundRef} src="/audio/pomodoro-play.mp3" />
@@ -196,12 +203,12 @@ export default function PomodoroTimer() {
         </span>
         <div className="flex gap-2">
           {isRunning ? (
-            <Button onClick={handleStartPause} className="h-10 ">
+            <Button onClick={handlePause} className="h-10 ">
               <Pause size={20} />
               Pausar
             </Button>
           ) : (
-            <Button onClick={handleStartPause} className="h-10">
+            <Button onClick={handleStartFocus} className="h-10">
               <Play size={20} />
               Iniciar
             </Button>
@@ -273,13 +280,13 @@ export default function PomodoroTimer() {
               variant="outline"
               className="bg-zinc-900"
             >
-              voltar ao Flow
+              Não quero pausa
             </Button>
-            {/* {isRunning ? (
+            {isRunning ? (
               <Button onClick={handleSkipBreak}>Pular</Button>
             ) : (
               <Button onClick={handleStartPause}>Iniciar pausa</Button>
-            )} */}
+            )}
           </div>
         </DialogContent>
       </Dialog>

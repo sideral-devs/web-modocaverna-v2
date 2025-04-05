@@ -114,7 +114,7 @@ export function TodayEventCalendar() {
                 <GoogleEvent
                   event={{
                     ...event,
-                    compromisso_id: event.event_id, // Assigning compromisso_id
+                    compromisso_id: event.event_id,
                     event_id: event.event_id,
                     repete: event.repete,
                     categoria: 'google',
@@ -144,8 +144,6 @@ function GoogleEvent({
   const eventStart = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
   const eventEnd = dayjs(event.termina, 'YYYY-MM-DD HH:mm')
 
-  const dayIndex = eventStart.day()
-
   if (
     eventEnd.isBefore(dayjs(now).startOf('week')) ||
     eventStart.isAfter(dayjs(now).endOf('week'))
@@ -167,7 +165,7 @@ function GoogleEvent({
     <GoogleEditEventDialogTrigger event={event}>
       <div
         className={`
-          absolute flex flex-col py-3 px-4 gap-2 w-32 2xl:w-36 3xl:w-40 
+          absolute flex flex-col py-3 px-4 gap-2 
           ${event.checked ? 'bg-yellow-950' : 'bg-yellow-900'}
           hover:bg-yellow-800 text-white rounded-lg 
           border-l-4 border-yellow-500 cursor-pointer transition-colors
@@ -176,7 +174,9 @@ function GoogleEvent({
         style={{
           top: `${top}px`,
           height: `${height}px`,
-          left: `calc(${baseLeft}px + ${dayIndex * 144}px)`,
+          // left: `calc(${baseLeft}px + ${dayIndex * 144}px)`, // Não precisa calcular posição na visão diária
+          left: baseLeft,
+          right: 4,
         }}
       >
         <span

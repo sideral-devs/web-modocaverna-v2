@@ -85,16 +85,28 @@ export function CalendarEvent({
   const size = diff >= 60 ? 'lg' : diff >= 30 ? 'md' : 'sm'
 
   const color = eventColors[event.categoria]
-  let isAlDay = false
+  let isAllDay = false
   let dayCount = 0
 
   if (!eventStart.isSame(eventEnd, 'day')) {
     if (!allDay) {
       return null
     }
-    isAlDay = true
+    isAllDay = true
     dayCount = eventEnd.diff(eventStart, 'days')
   }
+
+  console.log(event)
+
+  console.log({
+    isAllDay,
+    DAY_WIDTH,
+    dayIndex,
+    top: isAllDay ? 64 : `${top}px`,
+    height: isAllDay ? 44 : `${height}px`,
+    left: isAllDay ? 65 + 4 + DAY_WIDTH * dayIndex : 4,
+    ...(() => (isAllDay ? {} : { right: 4 }))(),
+  })
 
   return (
     <EditEventDialogTrigger event={event}>
@@ -102,16 +114,17 @@ export function CalendarEvent({
         className={cn(
           'flex py-3 px-4 absolute text-white rounded-lg z-10 overflow-y-hidden cursor-pointer',
           size === 'md' ? 'flex-row items-center gap-1' : 'flex-col',
-          isAlDay && '2xl:translate-x-4',
+          isAllDay && '2xl:translate-x-4',
         )}
         style={{
-          top: isAlDay ? 64 : `${top}px`,
-          height: isAlDay ? 44 : `${height}px`,
-          left: isAlDay ? 65 + 4 + DAY_WIDTH * dayIndex : 4,
-          ...(() => (isAlDay ? {} : { right: 4 }))(),
+          top: isAllDay ? 64 : `${top}px`,
+          height: isAllDay ? 44 : `${height}px`,
+          // left: isAllDay ? base 65 + 4 + DAY_WIDTH * dayIndex : 4,
+          left: mode === 'weekly' ? 65 + 4 + DAY_WIDTH * dayIndex : 69,
+          ...(() => (isAllDay ? {} : { right: 4 }))(),
           backgroundColor: color?.bg || eventColors.default.bg,
           ...(() =>
-            isAlDay
+            isAllDay
               ? {
                   width: (() => {
                     const maxLength = (7 - dayIndex) * DAY_WIDTH - 8
@@ -127,7 +140,7 @@ export function CalendarEvent({
           maxWidth: '100%',
         }}
       >
-        {size === 'lg' && !isAlDay && (
+        {size === 'lg' && !isAllDay && (
           <span
             className={`flex w-fit py-1 px-2 rounded-full bg-white text-zinc-500 text-[0.5rem] uppercase mt-3`}
           >
@@ -140,12 +153,18 @@ export function CalendarEvent({
             event.checked && 'line-through opacity-75',
           )}
           style={{
-            marginTop: isAlDay ? 0 : size === 'lg' ? 12 : size === 'sm' ? 4 : 0,
+            marginTop: isAllDay
+              ? 0
+              : size === 'lg'
+                ? 12
+                : size === 'sm'
+                  ? 4
+                  : 0,
           }}
         >
           {event.titulo}
         </p>
-        {!isAlDay && (
+        {!isAllDay && (
           <span
             style={{
               fontSize: size === 'lg' ? 12 : 10,
