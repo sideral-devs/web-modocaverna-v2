@@ -159,7 +159,7 @@ function ListItem({
 }
 
 const staticValues = [
-  'Leitura: De 15 a 30 minuto',
+  'Leitura: De 15 a 30 minutos',
   'Ritual matinal e noturno: Seguir rotina estruturada pela manhã e à noite',
   'Exercício físico: Pelo menos 30 minutos',
   'Hidratação: Consumir ao menos 3 litros de água',

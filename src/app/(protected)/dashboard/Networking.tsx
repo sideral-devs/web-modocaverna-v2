@@ -70,7 +70,7 @@ export function Networking({ value }: { value: string }) {
             </h2>
             <p className="text-zinc-400 text-sm z-10">
               Você não precisa trilhar essa jornada sozinho. Nossa comunidade
-              reúne pessoas que,a assim como você, decidiram sair da
+              reúne pessoas que, assim como você, decidiram sair da
               mediocridade. Compartilhe experiências, aprenda com quem já chegou
               lá e construa sua própria história de superação.
             </p>

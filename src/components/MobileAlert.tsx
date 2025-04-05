@@ -45,11 +45,11 @@ export default function MobileAlert() {
             Para acessar em seu computador, digite{' '}
             <a
               className="text-red-500 underline"
-              href="https://www.modocaverna.com"
+              href="https://app.modocaverna.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              www.modocaverna.com
+              app.modocaverna.com
             </a>{' '}
             e faça login.
           </p>
