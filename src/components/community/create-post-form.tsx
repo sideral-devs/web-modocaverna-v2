@@ -15,20 +15,20 @@ import { Textarea } from '@/components/ui/textarea'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import EmojiPicker, {
+  EmojiClickData,
+  EmojiStyle,
+  SkinTonePickerLocation,
+  SuggestionMode,
+  Theme,
+} from 'emoji-picker-react'
 import { ImageIcon, Smile, XIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Skeleton } from '../ui/skeleton'
-import EmojiPicker, {
-  Theme,
-  EmojiStyle,
-  SkinTonePickerLocation,
-  SuggestionMode,
-  EmojiClickData,
-} from 'emoji-picker-react'
 
-import { emojiCategories, bannedEmojis } from '@/constants/emojiConfig'
+import { bannedEmojis, emojiCategories } from '@/constants/emojiConfig'
 import { AxiosError } from 'axios'
 
 interface CreatePostFormProps {
@@ -102,7 +102,6 @@ export function CreatePostForm({
         queryClient.invalidateQueries({ queryKey: ['replies', replyToId] })
       }
     } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (err instanceof AxiosError && err.response?.data) {
         toast.error(err.response.data.message)
       } else {
@@ -114,7 +113,6 @@ export function CreatePostForm({
   }
 
   const handleImageClick = () => {
-    // Trigger file input click
     fileInputRef.current?.click()
   }
 
@@ -132,7 +130,6 @@ export function CreatePostForm({
     if (file) {
       try {
         setIsUploading(true)
-        // Convert the file to base64
         const base64String = await convertToBase64(file)
         setImage(base64String)
       } catch (error) {
@@ -145,13 +142,11 @@ export function CreatePostForm({
 
   const removeImage = () => {
     setImage(null)
-    // Reset the file input
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
   }
 
-  // Este método seta o emoji em qualquer posição do textarea
   const handleEmojiClick = (emoji: EmojiClickData) => {
     if (!textareaRef.current) return
 
@@ -202,13 +197,13 @@ export function CreatePostForm({
             />
             {image && (
               <div className="relative mt-2 mb-3">
-                <div className="rounded-lg overflow-hidden relative max-w-sm">
+                <div className="rounded-lg overflow-hidden relative w-full">
                   <Image
                     src={image || '/placeholder.svg'}
                     alt="Imagem selecionada"
                     width={400}
                     height={300}
-                    className="object-cover max-h-80 w-auto"
+                    className="object-cover max-h-80 w-full"
                   />
                   <Button
                     type="button"

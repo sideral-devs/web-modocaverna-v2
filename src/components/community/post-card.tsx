@@ -1,24 +1,24 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Card, CardContent } from '@/components/ui/card'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn, formatTimeAgo } from '@/lib/utils'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { Ellipsis, MessageSquareMore, ThumbsUp } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CategoryText } from './category-text'
-import { AxiosError } from 'axios'
-import { useUser } from '@/hooks/queries/use-user'
 
 interface PostCardProps {
   post: Post
@@ -173,7 +173,7 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
                     alt="Imagem enviada"
                     width={400}
                     height={300}
-                    className="w-full h-auto"
+                    className="h-[32rem] w-auto min-w-96 object-cover rounded"
                   />
                 ))}
             </div>

@@ -22,6 +22,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import type { Modifier } from '@dnd-kit/core'
 import {
   DndContext,
   DragEndEvent,
@@ -39,7 +40,6 @@ import { createPortal } from 'react-dom'
 import { toast } from 'sonner'
 import { CreateColumnDialog } from './create-column-dialog'
 import { EditTaskDialog } from './edit-task-dialog'
-import type { Modifier } from '@dnd-kit/core'
 
 export const dynamic = 'force-dynamic'
 
@@ -315,9 +315,7 @@ export function Board() {
   const { mutateAsync: updateTaskFn } = useMutation({
     mutationFn: async (data: Task) => {
       await api.put(`/tarefas/update/${data.tarefa_id}`, {
-        item: data.item,
-        descricao: data.descricao,
-        prioridade: data.prioridade,
+        ...data,
         checked: false,
       })
       queryClient.refetchQueries({ queryKey: ['tasks'] })
