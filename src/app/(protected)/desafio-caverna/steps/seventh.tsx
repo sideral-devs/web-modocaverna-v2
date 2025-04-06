@@ -55,7 +55,7 @@ export function SeventhStep() {
     <div className="flex flex-col relative flex-1 w-[140dvh] justify-between items-start">
       <div className="flex items-start pl-10 3xl:pb-8 pb-4 gap-16">
         <Image
-          src={"/images/lobo/apontando.webp"}
+          src={"/images/lobo/apontando.png"}
           alt="Capitão Caverna"
           width={228}
           height={374}

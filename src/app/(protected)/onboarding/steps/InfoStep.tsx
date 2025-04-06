@@ -11,7 +11,7 @@ export function InfoStep({ onNext }: { onNext: () => void }) {
       <div className="flex  flex-col gap-24">
         <div className="flex  items-start gap-16">
           <Image
-            src={'/images/lobo/apresentando.webp'}
+            src={'/images/lobo/apresentando.png'}
             alt="Capitão Caverna absole"
             className="absolute top-2 -left-72"
             width={269}

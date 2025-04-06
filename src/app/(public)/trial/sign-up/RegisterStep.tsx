@@ -5,6 +5,7 @@ import { api } from '@/lib/api'
 import { cellphoneMask, ddiMask, removeMask } from '@/lib/utils'
 import { useCreateUserStore } from '@/store/create-user'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AxiosError } from 'axios'
 import { ChevronLeft } from 'lucide-react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -58,26 +59,44 @@ export function RegisterStep({
   async function handleSaveData(data: RegisterData) {
     try {
       const telefone = data.DDI + removeMask(data.cellphone)
-      const res = await api.post('/check-email', { email: data.email })
-      const validateNumber = await api.post(
-        `/evolution/check-whatsapp/${telefone}`,
-      )
-      const registeredEmail = res.data as { resp: boolean }
-      const respEvolution = validateNumber.data as { numberExists: boolean }
 
+      const res = await api.post('/check-email', { email: data.email })
+
+      let validateNumber = null
+
+      try {
+        const response = await api.post(`/evolution/check-whatsapp/${telefone}`)
+        validateNumber = response.data
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status !== 500) {
+            throw err
+          }
+        } else {
+          toast.error('Erro inexperado ao atualizar dados do usuário!')
+        }
+      }
+
+      const registeredEmail = res.data as { resp: boolean }
       if (registeredEmail.resp === true) {
         setError('email', { message: 'Esse e-mail já está cadastrado' })
         return
       }
 
-      if (!respEvolution.numberExists) {
-        setError('cellphone', { message: 'Esse número de whatsapp não existe' })
-        return
+      if (validateNumber && validateNumber.status !== 500) {
+        const respEvolution = validateNumber as { numberExists: boolean }
+
+        if (!respEvolution.numberExists) {
+          setError('cellphone', {
+            message: 'Esse número de whatsapp não existe',
+          })
+          return
+        }
       }
 
       setEmailStep({
         email: data.email,
-        cellphone: data.DDI + removeMask(data.cellphone),
+        cellphone: telefone,
       })
       onNext()
     } catch {

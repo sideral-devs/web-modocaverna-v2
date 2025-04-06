@@ -13,7 +13,7 @@ export function ConfirmStep({
       <div className="flex  flex-col gap-6">
         <div className="flex items-start gap-16">
           <Image
-            src={'/images/lobo/bracos-cruzados.webp'}
+            src={'/images/lobo/bracos-cruzados.png'}
             alt="Capitão Caverna"
             className="absolute -top-2 -left-60"
             width={204}

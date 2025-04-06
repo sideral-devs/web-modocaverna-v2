@@ -8,6 +8,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useUser } from '@/hooks/queries/use-user'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 const schema = z.object({
   DDI: z
@@ -47,14 +49,26 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   async function handleSaveData(data: FormData) {
     const telefone = data.DDI + removeMask(data.cellphone)
     setCellphone(telefone)
-    const validateNumber = await api.post(
-      `/evolution/check-whatsapp/${telefone}`,
-    )
-    const respEvolution = validateNumber.data as { numberExists: boolean }
+    let validateNumber = null
+    try {
+      const response = await api.post(`/evolution/check-whatsapp/${telefone}`)
+      validateNumber = response.data
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status !== 500) {
+          throw err
+        }
+      } else {
+        toast.error('Erro inexperado ao atualizar dados do usuário!')
+      }
+    }
+    if (validateNumber && validateNumber.status !== 500) {
+      const respEvolution = validateNumber as { numberExists: boolean }
 
-    if (!respEvolution.numberExists) {
-      setError('cellphone', { message: 'Esse número de whatsapp não existe' })
-      return
+      if (!respEvolution.numberExists) {
+        setError('cellphone', { message: 'Esse número de whatsapp não existe' })
+        return
+      }
     }
 
     onNext()
@@ -64,7 +78,7 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
       <div className="flex items-start gap-16">
         <Image
-          src={'/images/lobo/apontando.webp'}
+          src={'/images/lobo/apontando.png'}
           alt="Capitão Caverna"
           className="absolute -top-2 -left-72"
           width={222}

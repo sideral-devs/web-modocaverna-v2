@@ -147,7 +147,7 @@ export default function Page() {
                         key={item.id}
                         id={item.id}
                         title={item.titulo}
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         type="video"
                         status="desejos"
                         src={item.capa}
@@ -179,7 +179,7 @@ export default function Page() {
                         key={item.id}
                         id={item.id}
                         title={item.titulo}
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         type="video"
                         status="em_andamento"
                         src={item.capa}
@@ -211,7 +211,7 @@ export default function Page() {
                         key={item.id}
                         id={item.id}
                         title={item.titulo}
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         type="video"
                         status={item.status}
                         src={item.capa}
@@ -242,7 +242,7 @@ export default function Page() {
                         key={item.id}
                         id={item.id}
                         title={item.titulo}
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         type="video"
                         status="concluido"
                         src={item.capa}

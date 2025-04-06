@@ -34,7 +34,7 @@ const schema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório' }),
   nickname: z.string().min(1, { message: 'Nome de usuário é obrigatório' }),
   email: z.string().email().min(1, { message: 'Email é obrigatório' }),
-  cellphone: z.string().min(1, { message: 'Celular é obrigatório' }),
+  telefone: z.string().min(1, { message: 'Celular é obrigatório' }),
   birthdate: z
     .string()
     .refine(
@@ -63,26 +63,45 @@ export default function Page() {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors, isSubmitting },
   } = form
 
   async function handleEditUser(data: UserData) {
-    setIsEditing(false)
     try {
       await api.put('/users/update?save=true', {
         name: data.name,
         nickname: data.nickname,
-        telefone: data.cellphone,
+        telefone: data.telefone,
         data_nascimento: data.birthdate
           ? dayjs(data.birthdate, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss')
           : null,
         sexo: data.gender,
       })
-
+      setIsEditing(false)
       toast.success('Dados atualizados!')
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data) {
-        toast.error(err.response.data.message)
+        const responseData = err.response.data
+
+        if (responseData.status === 422 && responseData.error) {
+          const fieldErrors = responseData.error
+
+          Object.entries(fieldErrors).forEach(([field, messages]) => {
+            if (
+              field === 'name' ||
+              field === 'nickname' ||
+              field === 'email' ||
+              field === 'telefone'
+            ) {
+              setError(field as 'name' | 'nickname' | 'email' | 'telefone', {
+                message: (messages as string[])[0],
+              })
+            }
+          })
+        } else {
+          toast.error(responseData.message || 'Erro inesperado ao atualizar.')
+        }
       } else {
         toast.error('Não foi possível atualizar os dados!')
       }
@@ -95,7 +114,7 @@ export default function Page() {
         name: user.name,
         nickname: user.nickname,
         email: user.email,
-        cellphone: user.telefone,
+        telefone: user.telefone,
         birthdate: user.data_nascimento
           ? dayjs(user.data_nascimento).format('DD/MM/YYYY')
           : null,
@@ -245,10 +264,10 @@ export default function Page() {
               <label htmlFor="phone" className="text-xs text-zinc-500">
                 WhatsApp
               </label>
-              <Input {...register('cellphone')} disabled={!isEditing} />
-              {errors.cellphone && (
+              <Input {...register('telefone')} disabled={!isEditing} />
+              {errors.telefone && (
                 <span className="text-red-500 text-xs">
-                  {errors.cellphone.message}
+                  {errors.telefone.message}
                 </span>
               )}
             </div>

@@ -41,9 +41,7 @@ const schema = z.object({
   category: z.enum(Object.keys(categories) as [keyof typeof categories], {
     message: 'Obrigatório',
   }),
-  url: z
-    .string({ required_error: 'Obrigatório' })
-    .min(1, { message: 'Obrigatório' }),
+  url: z.string().nullable(),
   status: z.enum(['pendente', 'em_andamento', 'concluido', 'desejos'], {
     message: 'Obrigatório',
   }),

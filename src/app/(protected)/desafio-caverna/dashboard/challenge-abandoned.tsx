@@ -14,7 +14,7 @@ export function ChallengeAbandoned() {
       <AlertDialogContent className="bg-zinc-800 border-zinc-700 gap-4">
         <div className="flex items-start relative w-full h-full overflow-hidden gap-6">
           <Image
-            src={'/images/lobo/apresentando.webp'}
+            src={'/images/lobo/apresentando.png'}
             alt="Capitão Caverna"
             width={222}
             height={373}

@@ -8,7 +8,7 @@ export function FirstStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col relative flex-1 w-[140dvh]  justify-between items-start 3xl:gap-24">
       <div className="flex items-start pl-10 3xl:pb-16 pb-4 gap-16">
         <Image
-          src={'/images/lobo/bracos-cruzados.webp'}
+          src={'/images/lobo/bracos-cruzados.png'}
           alt="Capitão Caverna"
           width={219}
           height={401}

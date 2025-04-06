@@ -167,16 +167,12 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
         </div>
         <div className="flex w-full items-center justify-center gap-3">
           <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button
-              className="flex-1 max-w-24 text-red-300 bg-red-800"
-            >
+            <Button className="flex-1 max-w-24 text-red-300 bg-red-800">
               Negativa
             </Button>
           </Link>
           <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button
-              className="flex-1 max-w-24 text-emerald-400 bg-emerald-800"
-            >
+            <Button className="flex-1 max-w-24 text-emerald-400 bg-emerald-800">
               Positiva
             </Button>
           </Link>

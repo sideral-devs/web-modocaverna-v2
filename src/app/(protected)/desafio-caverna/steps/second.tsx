@@ -46,7 +46,7 @@ export function SecondStep({
       <div className="flex flex-col w-[140dvh] relative flex-1 items-start">
         <div className="flex flex-1 items-start pl-10 3xl:pb-8 pb-4 gap-16">
           <Image
-            src={'/images/lobo/apontando.webp'}
+            src={'/images/lobo/apontando.png'}
             alt="Capitão Caverna"
             width={228}
             height={374}

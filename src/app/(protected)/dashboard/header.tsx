@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { AlarmClock, MenuIcon, StoreIcon, Trophy } from 'lucide-react'
+import { AlarmClock, MenuIcon, StoreIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogTrigger } from './UpgradeDialog'
@@ -37,7 +37,14 @@ export function CentralHubHeader() {
         </Link>
         <Link href="/indique-e-ganhe">
           <div className="flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-            <Trophy className="text-red-500" size={20} />
+            <div>
+              <Image
+                width={20}
+                height={20}
+                src={'/icons/indique.svg'}
+                alt="Ícone de Post"
+              />
+            </div>
             <span className="text-sm">Indique e Ganhe</span>
           </div>
         </Link>
