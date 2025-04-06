@@ -15,7 +15,7 @@ export function ChallengeStartsTomorrow() {
       <AlertDialogContent className="bg-zinc-800 border-zinc-700 gap-4">
         <div className="flex items-start relative w-full h-full overflow-hidden gap-6">
           <Image
-            src={'/images/lobo/legal.webp'}
+            src={'/images/lobo/legal.png'}
             alt="Capitão Caverna"
             width={200}
             height={340}

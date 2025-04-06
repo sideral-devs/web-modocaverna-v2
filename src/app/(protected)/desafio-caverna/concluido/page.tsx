@@ -57,7 +57,7 @@ export default function Page() {
         </h1>
         <div className="flex w-full gap-8 md:block md:w-auto relative">
           <Image
-            src={'/images/lobo/legal.webp'}
+            src={'/images/lobo/legal.png'}
             alt="Capitão Caverna"
             width={228}
             height={375}

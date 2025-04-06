@@ -79,10 +79,12 @@ export default function Page() {
       toast.success('Login realizado com sucesso.')
       router.replace('/dashboard')
     } catch (err) {
-      if (err instanceof AxiosError && err.response?.data?.message) {
-        toast.error(err.response.data.message)
-      } else {
-        toast.error('Erro ao realizar o login')
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 500 && err.response?.data?.message) {
+          toast.error(err.response.data.message)
+        } else {
+          toast.error('E-mail ou senha incorretos. Por favor, tente novamente.')
+        }
       }
     }
   }

@@ -9,7 +9,7 @@ export function DownloadAppStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col relative flex-1 justify-start items-center p-4 pb-16 3xl:gap-24 gap-16">
       <div className="flex items-start gap-16">
         <Image
-          src={'/images/lobo/Mostrando_app.webp'}
+          src={'/images/lobo/Mostrando_app.png'}
           alt="Capitão Caverna"
           className="absolute -top-2 -left-72 "
           width={271}

@@ -138,7 +138,7 @@ function SecondStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col relative justify-between items-center gap-16">
       <div className="flex items-start gap-6">
         <Image
-          src={'/images/lobo/legal.webp'}
+          src={'/images/lobo/legal.png'}
           alt="Capitão Caverna"
           width={222}
           height={373}

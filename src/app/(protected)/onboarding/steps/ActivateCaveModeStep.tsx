@@ -7,7 +7,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
       <div className="flex flex-col justify-between gap-8">
         <div className="flex items-start gap-16">
           <Image
-            src={'/images/lobo/Bracos_Abertos.webp'}
+            src={'/images/lobo/Bracos_Abertos.png'}
             alt="Capitão Caverna"
             className="absolute -top-2 -left-96"
             width={350}

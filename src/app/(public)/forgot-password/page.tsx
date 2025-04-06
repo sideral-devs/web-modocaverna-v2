@@ -38,7 +38,11 @@ export default function Page() {
       await api.post('/auth/forgot-password', data)
       toast.success('E-mail para redefinição de senha enviado')
     } catch (err) {
-      if (err instanceof AxiosError && err.response?.data) {
+      if (
+        err instanceof AxiosError &&
+        err.response?.data &&
+        err.response?.status === 404
+      ) {
         toast.error(err.response.data.message)
       } else {
         toast.error('Algo deu errado. Tente novamente.')

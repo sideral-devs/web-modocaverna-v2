@@ -8,7 +8,7 @@ export function ConfidentialityStep({ onNext }: { onNext: () => void }) {
       <div className="flex flex-col justify-between gap-[9.4rem]">
         <div className="flex items-start gap-16">
           <Image
-            src={'/images/lobo/legal.webp'}
+            src={'/images/lobo/legal.png'}
             alt="Capitão Caverna"
             className="absolute -top-2 -left-60"
             width={213}
