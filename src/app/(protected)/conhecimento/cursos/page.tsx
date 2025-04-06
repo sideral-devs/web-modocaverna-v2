@@ -149,7 +149,7 @@ export default function Page() {
                         title={item.titulo}
                         type="curso"
                         status="desejos"
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -180,7 +180,7 @@ export default function Page() {
                         title={item.titulo}
                         type="curso"
                         status={item.status}
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -211,7 +211,7 @@ export default function Page() {
                         title={item.titulo}
                         type="curso"
                         status="em_andamento"
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -242,7 +242,7 @@ export default function Page() {
                         title={item.titulo}
                         type="curso"
                         status="concluido"
-                        author={item.link || 'Link'}
+                        author={item.link || ''}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}

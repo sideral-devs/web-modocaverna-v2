@@ -42,8 +42,7 @@ const schema = z.object({
     message: 'Obrigatório',
   }),
   url: z
-    .string({ required_error: 'Obrigatório' })
-    .min(1, { message: 'Obrigatório' }),
+  .string().nullable(),
   status: z.enum(['pendente', 'em_andamento', 'concluido', 'desejos'], {
     message: 'Obrigatório',
   }),

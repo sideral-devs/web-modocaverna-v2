@@ -61,6 +61,7 @@ interface CategorySelectProps {
   valueSelect: readonly Option[]
   onInputChange: (newValue: string) => void
   onChange: (newValue: readonly Option[]) => void
+  onBlur: () => void
   onKeyDown: KeyboardEventHandler
   placeholder?: string
 }
@@ -79,6 +80,7 @@ export function CategorySelect({
   inputValue,
   valueSelect,
   onInputChange,
+  onBlur,
   onChange,
   onKeyDown,
   placeholder = 'Type something and press enter...',
@@ -96,6 +98,7 @@ export function CategorySelect({
       onKeyDown={onKeyDown}
       placeholder={placeholder}
       value={valueSelect}
+      onBlur={onBlur}
     />
   )
 }

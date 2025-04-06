@@ -133,7 +133,7 @@ export function UploadBookNewModalTrigger({
         setValueSelect(categories)
       }
       if (bookData.capa) {
-        setPreview(env.NEXT_PUBLIC_PROD_URL + bookData.capa || null)
+        setPreview(bookData.capa.startsWith('https') ? bookData.capa : env.NEXT_PUBLIC_PROD_URL + bookData.capa)
       }
     }
   }, [bookData, reset])
@@ -162,6 +162,13 @@ export function UploadBookNewModalTrigger({
         event.preventDefault()
     }
   }
+
+  function handleBlur(){
+    if (!inputValue) return
+    setCategoryInSelect(inputValue)
+        setInputValue('')
+  }
+
 
   function setCategoryInSelect(value: string) {
     const exists = valueSelect.some(
@@ -333,7 +340,7 @@ export function UploadBookNewModalTrigger({
                 </div>
                 <div className="flex flex-col w-full gap-3">
                   <label htmlFor="author" className="text-sm font-medium">
-                    Author(a)
+                    Autor(a)
                   </label>
                   <div className="flex flex-col w-full gap-2">
                     <Input
@@ -358,7 +365,8 @@ export function UploadBookNewModalTrigger({
                       onInputChange={(newValue) => setInputValue(newValue)}
                       onChange={(newValue) => onChangeSelect(newValue)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Adicione categorias ao livro..."
+                      onBlur={handleBlur}
+                      placeholder="Pressione Enter para adicionar uma nova categoria..."
                     />
                     {errors.category && (
                       <span className="text-red-400 text-xs">

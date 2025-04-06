@@ -44,8 +44,7 @@ const schema = z.object({
     .max(5, { message: 'Um curso pode possuir no máximo 5 categorias' }),
 
   url: z
-    .string({ required_error: 'Obrigatório' })
-    .min(1, { message: 'Obrigatório' }),
+    .string().nullable(),
 
   status: z.enum(['desejos', 'pendente', 'em_andamento', 'concluido'], {
     message: 'Categoria inválida.',
@@ -138,6 +137,7 @@ export function UploadCourseModalTrigger({
     )
   }
 
+
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return
     switch (event.key) {
@@ -202,6 +202,12 @@ export function UploadCourseModalTrigger({
     document.querySelectorAll("[data-state='open']").forEach((el) => {
       ;(el as HTMLElement).click()
     })
+  }
+
+  function handleBlur(){
+    if (!inputValue) return
+    setCategoryInSelect(inputValue)
+        setInputValue('')
   }
 
   async function handleRegister(data: RegisterData) {
@@ -324,7 +330,8 @@ export function UploadCourseModalTrigger({
                       onInputChange={(newValue) => setInputValue(newValue)}
                       onChange={(newValue) => onChangeSelect(newValue)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Adicione categorias ao curso..."
+                      onBlur={handleBlur}
+                      placeholder="Pressione Enter para adicionar uma nova categoria..."
                     />
                     {errors.category && (
                       <span className="text-red-400 text-xs">
