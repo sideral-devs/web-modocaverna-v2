@@ -133,7 +133,11 @@ export function UploadBookNewModalTrigger({
         setValueSelect(categories)
       }
       if (bookData.capa) {
-        setPreview(bookData.capa.startsWith('https') ? bookData.capa : env.NEXT_PUBLIC_PROD_URL + bookData.capa)
+        setPreview(
+          bookData.capa.startsWith('https')
+            ? bookData.capa
+            : env.NEXT_PUBLIC_PROD_URL + bookData.capa,
+        )
       }
     }
   }, [bookData, reset])
@@ -163,12 +167,11 @@ export function UploadBookNewModalTrigger({
     }
   }
 
-  function handleBlur(){
+  function handleBlur() {
     if (!inputValue) return
     setCategoryInSelect(inputValue)
-        setInputValue('')
+    setInputValue('')
   }
-
 
   function setCategoryInSelect(value: string) {
     const exists = valueSelect.some(
