@@ -78,7 +78,7 @@ export function Moodboard({ className }: GoalsSwiperProps) {
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center justify-between border-b p-3 dark:border-gray-700">
-        <h3 className="text-xs">É Tudo por Vocês</h3>
+        <h3 className="text-xs">Combustível 🔥</h3>
         <button
           onClick={toggleMinimize}
           aria-label={isMinimized ? 'Expandir' : 'Minimizar'}

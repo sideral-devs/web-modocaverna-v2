@@ -151,7 +151,11 @@ export function FinanceDashboard() {
                     <h3
                       className={cn(
                         'text-3xl lg:text-4xl xl:text-5xl',
-                        value >= 0 ? 'text-emerald-400' : 'text-red-500',
+                        value > 0
+                          ? 'text-emerald-400'
+                          : value === 0
+                            ? 'text-white'
+                            : 'text-red-500',
                       )}
                     >
                       {formatMoney(value)}
