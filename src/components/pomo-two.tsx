@@ -280,13 +280,13 @@ export default function PomodoroTimer() {
               variant="outline"
               className="bg-zinc-900"
             >
-              Voltar ao Flow
+              VOLTAR AO FLOW
             </Button>
-            {/* {isRunning ? (
+            {isRunning ? (
               <Button onClick={handleSkipBreak}>Pular</Button>
             ) : (
               <Button onClick={handleStartPause}>Iniciar pausa</Button>
-            )} */}
+            )}
           </div>
         </DialogContent>
       </Dialog>

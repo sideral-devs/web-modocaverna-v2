@@ -292,7 +292,7 @@ export function DreamboardMaker({
           >
             <Image
               src="/icons/sonhos-e-metas/export-image.svg"
-              alt="Download"
+              alt="Download Image"
               width={30}
               height={30}
             />

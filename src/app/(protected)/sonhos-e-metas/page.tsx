@@ -169,7 +169,7 @@ export default function Page() {
                   alt="Quote"
                   src={'/icons/quote.svg'}
                 />
-                <p className="px-2 relative left-6 bottom-2 break-words w-[34vw] overflow-y-scroll scrollbar-minimal max-h-[8dvw] lg:w-[28dvw]  ">
+                <p className="px-2 relative left-6 bottom-2 break-words max-w-[26vw]  overflow-y-scroll scrollbar-minimal max-h-[8dvw] lg:max-w-[26dvw]  ">
                   {currentGoal.objetivos.principal}
                 </p>
               </div>
@@ -264,7 +264,7 @@ export default function Page() {
                   >
                     <span className="flex w-fit h-fit p-[3px] rounded bg-cyan-700 text-cyan-400 text-xs">
                       Criada em{' '}
-                      {dayjs(message.data_abertura).format('DD MMM YYYY')}
+                      {dayjs(message.data_fechamento).format('DD MMM YYYY')}
                     </span>
                     <div className="flex flex-1 items-center justify-center"></div>
 

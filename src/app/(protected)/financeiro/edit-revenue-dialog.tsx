@@ -97,7 +97,7 @@ export function EditRevenueDialog({
       if (err instanceof AxiosError && err.response?.data?.message) {
         toast.error(err.response.data.message)
       } else {
-        toast.error('Não foi possível fazer isso!')
+        toast.error('Não foi possível alterar esta receita.')
       }
     }
   }

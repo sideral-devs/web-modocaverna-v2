@@ -715,10 +715,10 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
               className={cn(
                 'flex w-fit px-2 py-1 rounded uppercase text-[0.5rem] cursor-pointer',
                 task.prioridade === 'Prioridade Alta'
-                  ? `text-red-200 bg-red-900`
+                  ? `text-white-400 bg-red-900`
                   : task.prioridade === 'Prioridade Média'
-                    ? 'text-yellow-400 bg-yellow-700'
-                    : 'text-zinc-600 bg-zinc-200',
+                    ? 'text-white-400 bg-yellow-700'
+                    : 'text-white-400 bg-green-700',
               )}
               onClick={(e) => {
                 e.stopPropagation()

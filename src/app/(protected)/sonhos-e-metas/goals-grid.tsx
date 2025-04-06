@@ -290,10 +290,11 @@ function CreatingGoal({
   }
 
   return (
-    <div className="flex w-full items-center justify-between p-3 bg-card border rounded-lg">
+    <div className="flex w-full  items-center justify-between p-3 bg-card border rounded-lg">
       <input
         autoFocus
-        className="bg-transparent text-sm"
+        placeholder='Digite a Meta e aperte "Enter" para salvar'
+        className="bg-transparent  w-[30vw] text-sm"
         onBlur={() => {
           handleCreate()
         }}

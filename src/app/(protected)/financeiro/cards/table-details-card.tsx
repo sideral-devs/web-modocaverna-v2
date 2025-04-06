@@ -63,6 +63,16 @@ export default function TableDetailsCard({
       toast.error('Não foi possível fazer isso!')
     }
   }
+  async function handlePostTransaction(transaction: Transaction) {
+    try {
+      await api.put(`/transacoes/update/${transaction.transacao_id}`, {
+        checked: !transaction.checked,
+      })
+      refetch()
+    } catch {
+      toast.error('Erro ao alterar o status da transação')
+    }
+  }
 
   const [isOpen, setIsOpen] = useState(false)
   if (transactions.length === 0) {
@@ -251,8 +261,10 @@ export default function TableDetailsCard({
                         onOpenChange={setEditRevenueOpen}
                       >
                         <EditDeletePopover
+                          transaction={transaction}
                           id={transaction.transacao_id}
                           onDelete={handleDeleteTransaction}
+                          onPost={handlePostTransaction}
                         />
 
                         <EditRevenueDialog
@@ -267,8 +279,10 @@ export default function TableDetailsCard({
                         onOpenChange={setEditExpenseOpen}
                       >
                         <EditDeletePopover
+                          transaction={transaction}
                           id={transaction.transacao_id}
                           onDelete={handleDeleteTransaction}
+                          onPost={handlePostTransaction}
                         />
 
                         <EditExpenseDialog
@@ -334,8 +348,10 @@ export default function TableDetailsCard({
                         onOpenChange={setEditRevenueOpen}
                       >
                         <EditDeletePopover
+                          transaction={transaction}
                           id={transaction.transacao_id}
                           onDelete={handleDeleteTransaction}
+                          onPost={handlePostTransaction}
                         />
                         <EditRevenueDialog
                           transaction={transaction}
@@ -349,8 +365,10 @@ export default function TableDetailsCard({
                         onOpenChange={setEditExpenseOpen}
                       >
                         <EditDeletePopover
+                          transaction={transaction}
                           id={transaction.transacao_id}
                           onDelete={handleDeleteTransaction}
+                          onPost={handlePostTransaction}
                         />
                         <EditExpenseDialog
                           transaction={transaction}
@@ -370,11 +388,15 @@ export default function TableDetailsCard({
 }
 
 function EditDeletePopover({
+  transaction,
   id,
   onDelete,
+  onPost,
 }: {
+  transaction: Transaction
   id: number
   onDelete: (arg: number) => Promise<void>
+  onPost: (transaction: Transaction) => Promise<void>
 }) {
   return (
     <Popover>
@@ -382,6 +404,12 @@ function EditDeletePopover({
         <EllipsisVertical size={16} className="text-zinc-400 cursor-pointer" />
       </PopoverTrigger>
       <PopoverContent className="w-52 p-1 bg-zinc-800 rounded-lg text-xs">
+        <button
+          onClick={() => onPost(transaction)}
+          className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+        >
+          {transaction.checked ? 'Desmarcar' : 'Efetivar'}
+        </button>
         <DialogTrigger asChild>
           <button className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300">
             Editar
