@@ -58,31 +58,47 @@ export function RegisterStep({
   async function handleSaveData(data: RegisterData) {
     try {
       const telefone = data.DDI + removeMask(data.cellphone)
+    
       const res = await api.post('/check-email', { email: data.email })
-      const validateNumber = await api.post(
-        `/evolution/check-whatsapp/${telefone}`,
-      )
+    
+      let validateNumber: any = null
+    
+      try {
+        const response = await api.post(`/evolution/check-whatsapp/${telefone}`)
+        validateNumber = response.data
+      } catch (err: any) {
+       
+        if (err.response?.status !== 500) {
+          throw err 
+        }
+      }
+    
       const registeredEmail = res.data as { resp: boolean }
-      const respEvolution = validateNumber.data as { numberExists: boolean }
-
       if (registeredEmail.resp === true) {
         setError('email', { message: 'Esse e-mail já está cadastrado' })
         return
       }
-
-      if (!respEvolution.numberExists) {
-        setError('cellphone', { message: 'Esse número de whatsapp não existe' })
-        return
+    
+     
+      if (validateNumber && validateNumber.status !== 500) {
+        const respEvolution = validateNumber as { numberExists: boolean }
+    
+        if (!respEvolution.numberExists) {
+          setError('cellphone', { message: 'Esse número de whatsapp não existe' })
+          return
+        }
       }
-
+    
+      
       setEmailStep({
         email: data.email,
-        cellphone: data.DDI + removeMask(data.cellphone),
+        cellphone: telefone,
       })
       onNext()
     } catch {
       toast.error('Não foi possível fazer isso')
     }
+    
   }
 
   return (

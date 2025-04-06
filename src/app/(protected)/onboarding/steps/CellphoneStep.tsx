@@ -47,15 +47,25 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   async function handleSaveData(data: FormData) {
     const telefone = data.DDI + removeMask(data.cellphone)
     setCellphone(telefone)
-    const validateNumber = await api.post(
-      `/evolution/check-whatsapp/${telefone}`,
-    )
-    const respEvolution = validateNumber.data as { numberExists: boolean }
-
-    if (!respEvolution.numberExists) {
-      setError('cellphone', { message: 'Esse número de whatsapp não existe' })
-      return
+    let validateNumber: any = null
+    try {
+      const response = await api.post(`/evolution/check-whatsapp/${telefone}`)
+      validateNumber = response.data
+    } catch (err: any) {
+     
+      if (err.response?.status !== 500) {
+        throw err 
+      }
     }
+    if (validateNumber && validateNumber.status !== 500) {
+      const respEvolution = validateNumber as { numberExists: boolean }
+  
+      if (!respEvolution.numberExists) {
+        setError('cellphone', { message: 'Esse número de whatsapp não existe' })
+        return
+      }
+    }
+  
 
     onNext()
   }
