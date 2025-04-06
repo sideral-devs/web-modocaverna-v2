@@ -43,8 +43,7 @@ const schema = z.object({
     .min(1, { message: 'Um curso pode possuir no mínimo 1 categoria' })
     .max(5, { message: 'Um curso pode possuir no máximo 5 categorias' }),
 
-  url: z
-    .string().nullable(),
+  url: z.string().nullable(),
 
   status: z.enum(['desejos', 'pendente', 'em_andamento', 'concluido'], {
     message: 'Categoria inválida.',
@@ -137,7 +136,6 @@ export function UploadCourseModalTrigger({
     )
   }
 
-
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (!inputValue) return
     switch (event.key) {
@@ -204,10 +202,10 @@ export function UploadCourseModalTrigger({
     })
   }
 
-  function handleBlur(){
+  function handleBlur() {
     if (!inputValue) return
     setCategoryInSelect(inputValue)
-        setInputValue('')
+    setInputValue('')
   }
 
   async function handleRegister(data: RegisterData) {
