@@ -23,8 +23,7 @@ import {
 export function GoogleAuth() {
   const session = useSession()
   const queryClient = useQueryClient()
-
-  // Query para obter as configurações do usuário
+  console.log(session)
   const { data: userConfigs, isFetched } = useQuery<Configuracoes>({
     queryKey: ['configuracoes'],
     queryFn: async () => {
@@ -53,7 +52,11 @@ export function GoogleAuth() {
   })
 
   useEffect(() => {
-    if (session.status !== 'authenticated' || !userConfigs) return
+    if (
+      (session.status !== 'authenticated' && session.data !== null) ||
+      !userConfigs
+    )
+      return
     // @ts-expect-error: session.data pode estar indefinido
     const sessionToken = session.data?.refreshToken
     const storedToken = userConfigs.refresh_token
@@ -62,27 +65,29 @@ export function GoogleAuth() {
       updateToken(sessionToken)
     }
   }, [session.status, session.data, userConfigs, updateToken])
-
+  console.log('sessionToken', session)
   const handleSignIn = async () => {
     await signIn('google')
   }
 
   const handleSignOut = async () => {
     try {
-      // @ts-expect-error: session.data pode estar indefinido
-      if (session.data?.refreshToken) {
+      try {
         await api.put('/configuracoes/update', {
-          google_oauth: '',
-          refresh_token: '',
+          google_oauth: null,
+          refresh_token: null,
         })
+      } catch (updateError) {
+        console.error('Erro ao atualizar configurações:', updateError)
       }
+
       await signOut()
     } catch (error) {
-      console.error('Erro ao desconectar:', error)
-      toast.error('Erro ao desconectar do Google.')
+      console.error('Erro no processo de logout:', error)
+      toast.error('Ocorreu um erro durante a desconexão.')
     }
+    queryClient.invalidateQueries({ queryKey: ['configuracoes'] })
   }
-
   if (!isFetched) return null
 
   return (
