@@ -23,7 +23,6 @@ import {
 export function GoogleAuth() {
   const session = useSession()
   const queryClient = useQueryClient()
-  console.log(session)
   const { data: userConfigs, isFetched } = useQuery<Configuracoes>({
     queryKey: ['configuracoes'],
     queryFn: async () => {
@@ -65,7 +64,6 @@ export function GoogleAuth() {
       updateToken(sessionToken)
     }
   }, [session.status, session.data, userConfigs, updateToken])
-  console.log('sessionToken', session)
   const handleSignIn = async () => {
     await signIn('google')
   }
