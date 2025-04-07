@@ -28,6 +28,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { EditRepetitionDialog } from './edit-repetition-dialog'
 
 const schema = z.object({
   title: z.string().min(1, { message: 'Obrigatório' }),
@@ -57,12 +58,26 @@ const schema = z.object({
 
 type RegisterData = z.infer<typeof schema>
 
+export type IntervaloTipo = 'dia' | 'semana' | 'mes' | 'ano'
+
+export type RepetitionData = {
+  repete: 0 | 1
+  repete_intervalo_quantidade?: number
+  repete_intervalo_tipo?: IntervaloTipo
+  repete_intervalo_dias?: string[]
+  repete_opcao_termino?: 'data' | 'ocorrencias'
+  repete_termino_data?: string
+  repete_termino_ocorrencias?: number
+}
+
 export function CreateEventDialogTrigger({
   children,
 }: {
   children: ReactNode
 }) {
   const queryClient = useQueryClient()
+  const [editRepetitionDialogOpen, setEditRepetitionDialogOpen] =
+    useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [repeat, setRepeat] = useState(0)
   const form = useForm<RegisterData>({
@@ -84,6 +99,9 @@ export function CreateEventDialogTrigger({
   } = form
   const initialDate = watch('initialDate')
   const endDate = watch('endDate')
+  const [repetitionData, setRepetitionData] = useState<RepetitionData>({
+    repete: 0,
+  })
 
   const selectTriggerClassName =
     'w-fit h-6 px-1 rounded border-0 data-[state=open]:border data-[state=open]:bg-cyan-700 data-[state=open]:text-cyan-400 text-xs group'
@@ -102,31 +120,28 @@ export function CreateEventDialogTrigger({
     setRepeat(0)
   }
   function setRepeatMode(data: RegisterData) {
-    let body = {}
+    const initial = {
+      titulo: data.title,
+      descricao: data.description,
+      comeca: `${dayjs(data.initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime}`,
+      termina: `${dayjs(data.endDate).format('YYYY-MM-DD') + ' ' + data.endTime}`,
+      categoria: data.category,
+      repete: 1,
+    }
     const repeteIntervaloDias = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
     const weekday = dayjs().day()
 
     if (data.repeat === 'dia') {
-      body = {
-        titulo: data.title,
-        descricao: data.description,
-        comeca: `${dayjs(data.initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime}`,
-        termina: `${dayjs(data.endDate).format('YYYY-MM-DD') + ' ' + data.endTime}`,
-        categoria: data.category,
-        repete: 1,
+      return {
+        ...initial,
         repete_intervalo_tipo: data.repeat,
         repete_opcao_termino: 'ocorrencias',
         repete_termino_ocorrencias: 30,
         repete_intervalo_quantidade: 1,
       }
     } else if (data.repeat === 'semana') {
-      body = {
-        titulo: data.title,
-        descricao: data.description,
-        comeca: `${dayjs(data.initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime}`,
-        termina: `${dayjs(data.endDate).format('YYYY-MM-DD') + ' ' + data.endTime}`,
-        categoria: data.category,
-        repete: 1,
+      return {
+        ...initial,
         repete_intervalo_tipo: 'semana',
         repete_opcao_termino: 'ocorrencias',
         repete_termino_ocorrencias: 30,
@@ -134,13 +149,8 @@ export function CreateEventDialogTrigger({
         repete_intervalo_quantidade: 1,
       }
     } else if (data.repeat === 'weekDay') {
-      body = {
-        titulo: data.title,
-        descricao: data.description,
-        comeca: `${dayjs(data.initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime}`,
-        termina: `${dayjs(data.endDate).format('YYYY-MM-DD') + ' ' + data.endTime}`,
-        categoria: data.category,
-        repete: 1,
+      return {
+        ...initial,
         repete_intervalo_tipo: 'semana',
         repete_opcao_termino: 'ocorrencias',
         repete_termino_ocorrencias: 30,
@@ -148,21 +158,21 @@ export function CreateEventDialogTrigger({
         repete_intervalo_quantidade: 1,
       }
     } else if (data.repeat === 'monthDay') {
-      body = {
-        titulo: data.title,
-        descricao: data.description,
-        comeca: `${dayjs(data.initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime}`,
-        termina: `${dayjs(data.endDate).format('YYYY-MM-DD') + ' ' + data.endTime}`,
-        categoria: data.category,
-        repete: 1,
+      return {
+        ...initial,
         repete_intervalo_tipo: 'mes',
         repete_opcao_termino: 'ocorrencias',
         repete_termino_ocorrencias: 10,
         repete_intervalo_quantidade: 1,
       }
+    } else if (data.repeat === 'custom') {
+      return {
+        ...initial,
+        ...repetitionData,
+      }
     }
-    return body // TODO MONTAR A REPETIÇÃO CUSTOM
   }
+
   async function handleCreateEvent(data: RegisterData) {
     try {
       if (data.category === 'google') {
@@ -210,6 +220,14 @@ export function CreateEventDialogTrigger({
       toast.error('Erro ao agendar o compromisso')
     }
   }
+
+  const handleUpdateRepetition = (data: Partial<RepetitionData>) => {
+    setRepetitionData((prev) => ({
+      ...prev,
+      ...data,
+    }))
+  }
+
   useEffect(() => {
     if (!isOpen) {
       reset({
@@ -398,6 +416,9 @@ export function CreateEventDialogTrigger({
               onValueChange={(val) => {
                 setValue('repeat', val)
                 setRepeat(1)
+                if (val === 'custom') {
+                  setEditRepetitionDialogOpen(true)
+                }
               }}
             >
               <SelectTrigger
@@ -463,6 +484,7 @@ export function CreateEventDialogTrigger({
                     Não repetir
                   </div>
                 </SelectItem>
+
                 <SelectItem
                   value="custom"
                   className={selectItemClassName}
@@ -486,6 +508,11 @@ export function CreateEventDialogTrigger({
             </Button>
           </DialogFooter>
         </DialogContent>
+        <EditRepetitionDialog
+          open={editRepetitionDialogOpen}
+          setOpen={setEditRepetitionDialogOpen}
+          updateRepetition={handleUpdateRepetition}
+        />
       </FormProvider>
     </Dialog>
   )
