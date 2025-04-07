@@ -91,6 +91,12 @@ export default function PomodoroTimer() {
     } else {
       setCurrentPhase('focus')
     }
+
+    const timeout = setTimeout(() => {
+      setIsRunning(true)
+    }, 1500)
+
+    return () => clearTimeout(timeout)
   }
 
   const handleStartPause = () => {
@@ -171,14 +177,6 @@ export default function PomodoroTimer() {
       }
     }
   }, [isRunning])
-
-  useEffect(() => {
-    if (showBreakDialog) {
-      setTimeout(() => {
-        handleStartPause()
-      }, 1500)
-    }
-  }, [showBreakDialog])
 
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
