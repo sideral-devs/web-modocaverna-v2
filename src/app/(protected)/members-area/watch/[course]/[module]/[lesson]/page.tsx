@@ -131,17 +131,20 @@ export default function Page({
           <section id="video" className="flex flex-col gap-10">
             <div className="flex flex-col gap-4">
               <VideoPlayer id={lesson.video} />
+              <div className="flex flex-col py-2">
+                <h1 className="text-2xl font-semibold">{lesson.titulo}</h1>
+              </div>
               <div className="flex w-full items-center justify-between">
                 <LikeButton
                   lessonId={lessonId}
                   likes={Number(lesson.like || 0) || 0}
                   userLiked={lesson.aula_feedback?.status === 'like'}
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center rounded-full gap-2">
                   <Button
                     size="icon"
                     variant="outline"
-                    className="text-primary rounded-[10px]"
+                    className="text-primary rounded-full"
                     onClick={previousLesson}
                     disabled={!canGoPrevious()}
                   >
@@ -149,7 +152,7 @@ export default function Page({
                   </Button>
                   <Button
                     size="sm"
-                    className="h-10 bg-emerald-800 rounded-[10px]"
+                    className="h-10 bg-emerald-800 rounded-full"
                     disabled={lesson.aula_feedback?.concluido === 'sim'}
                     onClick={handleFinishLesson}
                     loading={isPending}
@@ -159,7 +162,7 @@ export default function Page({
                   <Button
                     size="icon"
                     variant="outline"
-                    className="text-primary rounded-[10px]"
+                    className="text-primary rounded-full"
                     onClick={nextLesson}
                     disabled={!canGoNext()}
                   >
@@ -168,10 +171,9 @@ export default function Page({
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">{lesson.titulo} </h2>
+            <div className="flex flex-col bg-secondary rounded-lg gap-2">
               <p
-                className="text-zinc-500"
+                className="text-white py-4 px-4 text-normal"
                 dangerouslySetInnerHTML={{ __html: lesson.descricao }}
               />
               <LessonMaterial aulaId={lessonId} />
@@ -350,8 +352,9 @@ function LessonMaterial({ aulaId }: { aulaId: string }) {
               <Image
                 src="/images/cursos-indique-e-ganhe/3_regras_afiliacao_new.jpg"
                 alt="Regras de Afiliacao"
-                width={200}
-                height={200}
+                className="rounded-lg"
+                width={80}
+                height={80}
               />
             </a>
             <a
@@ -436,8 +439,8 @@ function LessonMaterial({ aulaId }: { aulaId: string }) {
           </div>
         </div>
       )}
-      {aulaId === '1' && (
-        <div className="flex flex-row gap-4 py-10 ">
+      {/* {aulaId === '1' && (
+        <div className="flex flex-row gap-4 px-4 py-10 ">
           <a
             target="_blank"
             href="https://loja.iurimeira.com/produto/modocaverna-envelope"
@@ -445,12 +448,17 @@ function LessonMaterial({ aulaId }: { aulaId: string }) {
             <Image
               src="/images/banners/banner_envelope.webp"
               alt="Banner Envelope"
-              width={800}
-              height={400}
+              width={200}
+              height={200}
+              style={{
+                position: 'relative',
+                left: '0px',
+                borderRadius: '10px',
+              }}
             />
           </a>
         </div>
-      )}
+      )} */}
 
       {aulaId === '3' && (
         <div className="flex flex-col items-start justify-start container-links">

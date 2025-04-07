@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useState } from 'react'
+import { env } from '@/lib/env'
 
 export function Comments({ lessonId }: { lessonId: string }) {
   const { data: user } = useUser()
@@ -17,7 +18,6 @@ export function Comments({ lessonId }: { lessonId: string }) {
       return res.data as ComentarioDTO
     },
   })
-
   return (
     <section id="comments" className="flex flex-col gap-6">
       {data && user
@@ -48,6 +48,7 @@ function Comment({
   const queryClient = useQueryClient()
   const [reply, setReply] = useState('')
   const [showInput, setShowInput] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   const replyMutation = useMutation({
     mutationFn: async () => {
@@ -67,7 +68,25 @@ function Comment({
     <div className="flex flex-col w-full gap-4">
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-zinc-400">{comment.nome}</span>
+          {comment.foto && !imageError ? (
+            <Image
+              src={`${env.NEXT_PUBLIC_PROD_URL}${comment.foto}`}
+              width={36}
+              height={36}
+              className="rounded-xl"
+              objectFit="cover"
+              objectPosition="center"
+              alt="Foto do usuário"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="flex w-9 h-9 items-center justify-center bg-primary px-3 rounded-xl cursor-pointer">
+              <span className="text-2xl">{comment.nome[0]}</span>
+            </div>
+          )}
+          <span className="font-semibold pl-2 text-zinc-400">
+            {comment.nome}
+          </span>
         </div>
         <span className="text-zinc-500">{comment.data}</span>
       </div>
@@ -77,14 +96,12 @@ function Comment({
             {comment.texto}
           </p>
         </div>
-        {user?.plan === 'ADMIN' && (
-          <span
-            onClick={() => setShowInput(!showInput)}
-            className="text-blue-300 cursor-pointer"
-          >
-            Responder
-          </span>
-        )}
+        <span
+          onClick={() => setShowInput(!showInput)}
+          className="text-blue-300 cursor-pointer"
+        >
+          Responder
+        </span>
         {showInput && (
           <div className="mt-2 pl-8">
             <textarea
