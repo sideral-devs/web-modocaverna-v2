@@ -22,13 +22,12 @@ import { DialogClose } from '@radix-ui/react-dialog'
 import { useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
-import { ArrowRight, ClockIcon, RepeatIcon } from 'lucide-react'
+import { ArrowRight, ClockIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { ReactNode, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { EditRepetitionDialogTrigger } from './edit-repetition-dialog'
 
 const schema = z.object({
   title: z.string().min(1, { message: 'Obrigatório' }),
@@ -306,14 +305,6 @@ export function GoogleEditEventDialogTrigger({
                 )
               )}
             </div>
-            {event.categoria !== 'google' && (
-              <EditRepetitionDialogTrigger>
-                <Button className="h-fit p-0 bg-transparent text-xs absolute bottom-3 right-3 text-zinc-400">
-                  <RepeatIcon size={12} />
-                  Editar repetição
-                </Button>
-              </EditRepetitionDialogTrigger>
-            )}
           </div>
           <DialogFooter className="flex p-3">
             <Dialog>

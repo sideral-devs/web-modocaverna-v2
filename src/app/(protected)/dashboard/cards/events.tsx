@@ -59,7 +59,6 @@ export default function EventsCard() {
   //   () => (data ? getNextEvent(data.compromissos) : null),
   //   [data],
   // )
-  console.log('nextEvent', nextEvent)
   const semCompromissos = [
     'Dia livre! Avance no Modo Caverna. 🔥',
     'Nada agendado. Que tal criar um compromisso?',
@@ -188,6 +187,5 @@ function getNextEvent(events) {
     })
     .sort((a, b) => dayjs(a.comeca).diff(dayjs(b.comeca)))
 
-  console.log('futureEvents', futureEvents)
   return futureEvents.length > 0 ? futureEvents[0] : null
 }

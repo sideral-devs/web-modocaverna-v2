@@ -28,6 +28,7 @@ import { ReactNode, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { RepetitionData } from './create-event-dialog'
 import { EditRepetitionDialogTrigger } from './edit-repetition-dialog'
 
 const schema = z.object({
@@ -64,6 +65,9 @@ export function EditEventDialogTrigger({
   const session = useSession()
   // @ts-expect-error exists
   const accessToken = session?.data?.accessToken as string
+  const [repetitionData, setRepetitionData] = useState<RepetitionData>({
+    repete: 0,
+  })
 
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
@@ -101,13 +105,19 @@ export function EditEventDialogTrigger({
   async function handleUpdateEvent(data: RegisterData) {
     try {
       const postData = {
+        ...(() => {
+          return repetitionData.repete
+            ? { ...repetitionData }
+            : event.repete
+              ? { ...event }
+              : { repete: 0 }
+        })(),
         titulo: data.title,
         descricao: data.description || '',
         comeca:
           dayjs(initialDate).format('YYYY-MM-DD') + ' ' + data.initialTime,
         termina: dayjs(endDate).format('YYYY-MM-DD') + ' ' + data.endTime,
         categoria: data.category,
-        repete: event.repete ? 1 : 0,
       }
       // Buscar propriedades não nulas
       const filteredEvent = {
@@ -169,6 +179,13 @@ export function EditEventDialogTrigger({
       }
       setOpen(false)
     }
+  }
+
+  const handleUpdateRepetition = (data: Partial<RepetitionData>) => {
+    setRepetitionData((prev) => ({
+      ...prev,
+      ...data,
+    }))
   }
 
   return (
@@ -316,7 +333,9 @@ export function EditEventDialogTrigger({
               )}
             </div>
             {event.categoria !== 'google' && (
-              <EditRepetitionDialogTrigger>
+              <EditRepetitionDialogTrigger
+                updateRepetition={handleUpdateRepetition}
+              >
                 <Button className="h-fit p-0 bg-transparent text-xs absolute bottom-3 right-3 text-zinc-400">
                   <RepeatIcon size={12} />
                   Editar repetição

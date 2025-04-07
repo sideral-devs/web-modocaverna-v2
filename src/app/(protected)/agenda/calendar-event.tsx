@@ -96,17 +96,16 @@ export function CalendarEvent({
     dayCount = eventEnd.diff(eventStart, 'days')
   }
 
-  console.log(event)
 
-  console.log({
-    isAllDay,
-    DAY_WIDTH,
-    dayIndex,
-    top: isAllDay ? 64 : `${top}px`,
-    height: isAllDay ? 44 : `${height}px`,
-    left: isAllDay ? 65 + 4 + DAY_WIDTH * dayIndex : 4,
-    ...(() => (isAllDay ? {} : { right: 4 }))(),
-  })
+  // console.log({
+  //   isAllDay,
+  //   DAY_WIDTH,
+  //   dayIndex,
+  //   top: isAllDay ? 64 : `${top}px`,
+  //   height: isAllDay ? 44 : `${height}px`,
+  //   left: isAllDay ? 65 + 4 + DAY_WIDTH * dayIndex : 4,
+  //   ...(() => (isAllDay ? {} : { right: 4 }))(),
+  // })
 
   return (
     <EditEventDialogTrigger event={event}>
