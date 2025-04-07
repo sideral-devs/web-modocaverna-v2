@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useState } from 'react'
+import { env } from '@/lib/env'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 export function Comments({ lessonId }: { lessonId: string }) {
   const { data: user } = useUser()
@@ -17,7 +19,6 @@ export function Comments({ lessonId }: { lessonId: string }) {
       return res.data as ComentarioDTO
     },
   })
-
   return (
     <section id="comments" className="flex flex-col gap-6">
       {data && user
@@ -48,6 +49,8 @@ function Comment({
   const queryClient = useQueryClient()
   const [reply, setReply] = useState('')
   const [showInput, setShowInput] = useState(false)
+  const [imageError, setImageError] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const replyMutation = useMutation({
     mutationFn: async () => {
@@ -64,23 +67,53 @@ function Comment({
   })
 
   return (
-    <div className="flex flex-col w-full gap-4">
+    <div className="flex flex-col w-full gap-8 ">
       <div className="flex w-full items-center justify-between">
-        <div className="flex items-center gap-1">
-          <span className="font-semibold text-zinc-400">{comment.nome}</span>
+        <div className="flex items-center">
+          {comment.foto && !imageError ? (
+            <div className="rounded-full">
+              <Image
+                src={`${env.NEXT_PUBLIC_PROD_URL}${comment.foto}`}
+                width={50}
+                height={50}
+                className="rounded-full"
+                objectFit="cover"
+                objectPosition="center"
+                alt="Foto do usuário"
+                onError={() => setImageError(true)}
+              />
+            </div>
+          ) : (
+            <div className="flex w-12 h-12 items-center justify-center bg-primary px-3 rounded-full cursor-pointer">
+              <span className="text-2xl">{comment.nome[0]}</span>
+            </div>
+          )}
+          <span className="font-semibold pl-2 text-white">{comment.nome}</span>
         </div>
-        <span className="text-zinc-500">{comment.data}</span>
+        <span className="text-white">{comment.data}</span>
       </div>
-      <div className="w-full pl-4">
-        <div className={cn('flex w-full p-4 bg-zinc-800 rounded-lg')}>
-          <p className="font-semibold text-zinc-400 break-words break-all overflow-hidden">
+      <div className="w-full pl-6 relative bottom-8">
+        {/* <div className={cn('flex  p-2 bg-black w-[600px] h-[200px] overflow-y-scroll scrollbar-minimal rounded-lg')}>
+          <p className="font-semibold  pl-8 text-sm text-white break-words break-all overflow-hidden">
             {comment.texto}
           </p>
-        </div>
-        {user?.plan === 'ADMIN' && (
+        </div> */}
+        <article
+          className={cn(
+            'flex p-2 bg-black max-w-2xl max-h-[100px]',
+            'overflow-y-auto overflow-x-hidden',
+            'scrollbar-minimal rounded-lg',
+          )}
+          role="comment"
+        >
+          <p className="font-semibold pl-8 text-sm text-white whitespace-pre-wrap hyphens-auto">
+            {comment.texto}
+          </p>
+        </article>
+        {comment.filhos && comment.filhos.length === 0 && (
           <span
             onClick={() => setShowInput(!showInput)}
-            className="text-blue-300 cursor-pointer"
+            className="text-blue-300 pl-10 relative top-2 cursor-pointer"
           >
             Responder
           </span>
@@ -95,44 +128,75 @@ function Comment({
             />
             <Button
               onClick={() => replyMutation.mutate()}
-              className="mt-2 bg-blue-500 text-white"
+              className="mt-2 bg-primary text-white"
               disabled={replyMutation.isPending}
             >
               Enviar
             </Button>
           </div>
         )}
-        {comment.filhos?.map((reply, idx) => (
-          <div key={idx} className="pl-8 mt-2">
-            <div className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-2 py-4 break-words">
-                <Image
-                  src={'/images/members-area/cap-cave.png'}
-                  alt={'Admin Caverna'}
-                  width={40}
-                  height={40}
-                />
-                <span className="font-semibold text-red-500">
-                  Capitão Caverna
-                </span>
+        {comment.filhos && comment.filhos.length > 0 && (
+          <div className="mt-2">
+            <Button
+              variant="ghost"
+              size="default"
+              className="text-blue-300 hover:text-blue-400 flex items-center gap-1"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {comment.filhos.length}
+              {comment.filhos.length === 1 ? ' resposta' : ' respostas'}
+              {isExpanded ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </Button>
+            {isExpanded && (
+              <div className="pl-8 mt-2 space-y-4">
+                {comment.filhos?.map((reply, idx) => (
+                  <div key={idx} className="relative top-2 pl-8 mt-2">
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex items-center gap-2 py-4 break-words">
+                        <Image
+                          src={'/images/members-area/cap-cave.png'}
+                          alt={'Admin Caverna'}
+                          width={40}
+                          height={40}
+                        />
+                        <div className="flex  flex-col bg-primary w-40 items-center justify-center rounded-full h-8">
+                          <span className="font-semibold text-white">
+                            Capitão Caverna
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-white">{reply.data}</span>
+                    </div>
+                    <article
+                      className={cn(
+                        'flex p-2  max-w-2xl max-h-[100px]',
+                        'overflow-y-auto overflow-x-hidden',
+                        'scrollbar-minimal rounded-lg',
+                      )}
+                      role="comment"
+                    >
+                      <p className="font-semibold pl-6 text-sm text-white break-words">
+                        {reply.texto}
+                      </p>
+                    </article>
+                    {user?.plan === 'ADMIN' && (
+                      <span
+                        onClick={() => setShowInput(!showInput)}
+                        className="text-blue-300 cursor-pointer mt-2 pl-8"
+                      >
+                        Responder
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
-              <span className="text-zinc-500">{reply.data}</span>
-            </div>
-            <div className="p-3 bg-zinc-800 rounded-lg">
-              <p className="text-zinc-300 break-words break-all overflow-hidden">
-                {reply.texto}
-              </p>
-            </div>
-            {user?.plan === 'ADMIN' && (
-              <span
-                onClick={() => setShowInput(!showInput)}
-                className="text-blue-300 cursor-pointer"
-              >
-                Responder
-              </span>
             )}
           </div>
-        ))}
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,8 @@
 'use client'
 
 import { api } from '@/lib/api'
-import { Heart } from 'lucide-react'
+import { ThumbsUp } from 'lucide-react'
+
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -44,14 +45,14 @@ export function LikeButton({
   return (
     <button
       onClick={handleClick}
-      className="flex h-11 items-center px-4 gap-2 bg-secondary border rounded-lg text-zinc-500"
+      className="flex h-10  3 items-center px-4 gap-2 bg-secondary  rounded-full text-zinc-500"
     >
       {liked ? (
-        <Heart size={18} className="text-primary" fill="var(--primary)" />
+        <ThumbsUp size={24} className="text-green-500 mb-1" />
       ) : (
-        <Heart size={18} />
+        <ThumbsUp size={24} className="text-white mb-1" />
       )}
-      <span className="text-sm">{likeCount}</span>
+      <span className="text-sm text-white">{likeCount}</span>
     </button>
   )
 }

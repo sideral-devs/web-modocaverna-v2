@@ -421,11 +421,11 @@ export function Board() {
 
       await createTaskFn({
         card_id: cardId,
-        item: `Nova Tarefa ${tasksFn.length + 1}`,
+        item: `Nova Tarefa`,
         prioridade: 'Prioridade Média',
         descricao: null,
-        index: 0, // Pode ser ajustado conforme necessário
-        position: 0, // Será sobrescrito no onMutate
+        index: 0,
+        position: 0,
       })
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
