@@ -11,6 +11,8 @@ import { useEffect, useMemo, useState } from 'react'
 export default function EventsCard() {
   const today = dayjs().format('YYYY-MM-DD')
   const [randomText, setRandomText] = useState<string>('')
+  const startOfDay = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+  const endOfDay = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
 
   const { data } = useQuery({
     queryKey: ['events', today],
@@ -18,8 +20,8 @@ export default function EventsCard() {
       const response = await api.get('/compromissos/find', {
         params: {
           date_field: 'comeca',
-          date_start: today,
-          date_end: today,
+          date_start: startOfDay,
+          date_end: endOfDay,
         },
       })
       return response.data as EventsDTO
@@ -32,8 +34,8 @@ export default function EventsCard() {
       const response = await api.get('/eventos-google/show', {
         params: {
           date_field: 'comeca',
-          date_start: today,
-          date_end: today,
+          date_start: startOfDay,
+          date_end: endOfDay,
         },
       })
 
