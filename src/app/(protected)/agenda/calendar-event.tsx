@@ -96,7 +96,6 @@ export function CalendarEvent({
     dayCount = eventEnd.diff(eventStart, 'days')
   }
 
-
   // console.log({
   //   isAllDay,
   //   DAY_WIDTH,
