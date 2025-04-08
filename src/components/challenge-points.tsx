@@ -5,8 +5,8 @@ import {
   TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import { TrophyIcon } from "lucide-react";
+} from '@radix-ui/react-tooltip'
+import { TrophyIcon } from 'lucide-react'
 
 export function ChallengePoints({ challenge }: { challenge: Challenge }) {
   return (
@@ -21,9 +21,9 @@ export function ChallengePoints({ challenge }: { challenge: Challenge }) {
                   className="bg-emerald-400 rounded-full"
                   style={{
                     width: challenge.meta
-                      ? challenge.meta.feitos_percent + "%"
-                      : "0%",
-                    height: "100%",
+                      ? challenge.meta.feitos_percent + '%'
+                      : '0%',
+                    height: '100%',
                   }}
                 />
                 {challenge.meta && (
@@ -47,18 +47,22 @@ export function ChallengePoints({ challenge }: { challenge: Challenge }) {
           </div>
         </TooltipTrigger>
         <TooltipPortal>
-          <TooltipContent 
-          
+          <TooltipContent
             className="TooltipContent bg-white text-emerald-500 text-xs p-3 rounded-sm "
             align="center"
             side="bottom"
             sideOffset={10}
           >
-            <p>{challenge.meta ? `${challenge.meta.dias_feitos}` : "0"}</p>
-            <TooltipArrow width={34} height={10}  color="white"   className="fill-white TooltipArrow margin-top-4 -translate-y-[2px]" />
+            <p>{challenge.meta ? `${challenge.meta.dias_feitos}` : '0'}</p>
+            <TooltipArrow
+              width={34}
+              height={10}
+              color="white"
+              className="fill-white TooltipArrow margin-top-4 -translate-y-[2px]"
+            />
           </TooltipContent>
         </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
-  );
+  )
 }
