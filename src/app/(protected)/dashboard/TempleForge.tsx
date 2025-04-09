@@ -17,7 +17,8 @@ export function TempleForge({ value }: { value: string }) {
           <div
             className="absolute  right-1 bottom-5 w-full h-full"
             style={{
-              backgroundImage: "url('/images/card-frames/frame_esquerda.png')",
+              backgroundImage:
+                "url('/images/cursos-indique-e-ganhe/frame_esquerda.png')",
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'FIT',
