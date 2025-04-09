@@ -107,6 +107,49 @@ export function CentralHubHeader() {
             </Button>
           </UpgradeDialogTrigger>
         )}
+        {user.plan === 'DESAFIO' && (
+          <Link href="settings/plans">
+            {(() => {
+              const remaining = dayjs(user.data_de_renovacao).diff(
+                dayjs(),
+                'days',
+              )
+              return remaining > 1 ? (
+                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
+                  <AlarmClock size={20} />
+                  <span className="text-sm">
+                    {(() => {
+                      const remaining = dayjs(user.data_de_renovacao).diff(
+                        dayjs(),
+                        'days',
+                      )
+                      return remaining > 1
+                        ? ` Seu Acesso Premium ao Modo Caverna encerra em ${remaining} dias`
+                        : ` Seu Acesso Premium ao Modo Caverna encerra em ${remaining} dia`
+                    })()}
+                  </span>
+                </div>
+              ) : (
+                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
+                  <AlarmClock size={20} />
+                  <span className="text-sm">
+                    Renove seu acesso clicando aqui!
+                  </span>
+                </div>
+              )
+            })()}
+          </Link>
+        )}
+        {user.plan === 'DESAFIO' && (
+          <UpgradeDialogTrigger>
+            <Button
+              variant="secondary"
+              className="hidden md:flex rounded-xl text-primary"
+            >
+              Upgrade
+            </Button>
+          </UpgradeDialogTrigger>
+        )}
         <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 pl-1 gap-2 rounded-xl">
           <div className="flex items-center justify-center w-9 h-9 border border-zinc-700 rounded-[10px]">
             <Image
