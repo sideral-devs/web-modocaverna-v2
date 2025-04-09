@@ -4,6 +4,8 @@ import { CentralCaverna } from './CentralCaverna'
 import { Networking } from './Networking'
 import { OrdemNoCaos } from './OrdemNoCaos'
 import { CentralHubHeader } from './header'
+import { TempleForge } from './TempleForge'
+import { AreaBeneficios } from './AreaBeneficios'
 
 export default function Page() {
   return (
@@ -18,13 +20,19 @@ export default function Page() {
             <TabsList className="overflow-x-auto min-h-fit">
               <TabsTrigger value="central-caverna">Central Caverna</TabsTrigger>
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
-              <TabsTrigger value="networking-conhecimento">
-                Cursos e Networking
+              <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
+              <TabsTrigger value="cursos-e-conhecimentos">
+                Cursos & Conhecimentos
+              </TabsTrigger>
+              <TabsTrigger value="area-de-beneficios">
+                Área de Benefícios
               </TabsTrigger>
             </TabsList>
             <CentralCaverna value="central-caverna" />
             <OrdemNoCaos value="ordem-no-caos" />
-            <Networking value="networking-conhecimento" />
+            <TempleForge value="forja-do-templo" />
+            <Networking value="cursos-e-conhecimentos" />
+            <AreaBeneficios value="area-de-beneficios" />
           </Tabs>
         </div>
       </div>

@@ -1,0 +1,103 @@
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader } from '@/components/ui/card'
+
+import { api } from '@/lib/api'
+
+import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+export default function GoalCard({
+  hideLabel = false,
+}: {
+  hideLabel?: boolean
+}) {
+  const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
+  const [dreamboardMessage, setDreamboardMessage] = useState('')
+  const getMessageForTime = (messages: string[]) => {
+    const now = new Date()
+    const minutesOfDay = now.getHours() * 60 + now.getMinutes()
+    const index = Math.floor(minutesOfDay / 20) % messages.length
+    return messages[index]
+  }
+  const { data: goals } = useQuery({
+    queryKey: ['goals'],
+    queryFn: async () => {
+      const response = await api.get('/metas/find')
+      return response.data as Goal[]
+    },
+  })
+  const messagesQuadroSonhos = [
+    'Adicione imagens que te inspirem e representem o que você quer conquistar, como momentos com a família.',
+    'Preencha com fotos que refletem suas aspirações, incluindo momentos importantes com a família.',
+    'Visualize o que você deseja alcançar com imagens que te inspirem, como a sua família.',
+    'Adicione fotos que representam o que você quer conquistar, como os laços familiares.',
+    'Adicione imagens que simbolizem o que te inspira, como momentos com quem você ama.',
+    'Adicione fotos que representem suas conquistas e o apoio da família.',
+  ]
+
+  useEffect(() => {
+    setDreamboardMessage(getMessageForTime(messagesQuadroSonhos))
+    setInterval(() => {
+      setDreamboardMessage(getMessageForTime(messagesQuadroSonhos))
+    }, 1200000)
+    if (goals) {
+      setCurrentGoal(
+        goals.find((goal) => goal.ano === dayjs().format('YYYY')) || null,
+      )
+    }
+  }, [goals])
+
+  return (
+    <Card className="flex flex-col w-full h-full min-h-[300px] p-0 gap-4 relative overflow-hidden">
+      {hideLabel || (
+        <div className="flex flex-col absolute inset-0 p-4 z-10">
+          <CardHeader>
+            <div className="flex w-fit px-3 py-2 border border-white rounded-full">
+              <span className="text-[10px] text-white font-semibold">
+                METAS
+              </span>
+            </div>
+          </CardHeader>
+          <Link href={'/sonhos-e-metas'} className="mt-auto ml-auto">
+            <Button size="sm">Acessar</Button>
+          </Link>
+        </div>
+      )}
+
+      {currentGoal ? (
+        <div className="flex flex-col  flex-1 items-center justify-center md:justify-center md:pt-0">
+          <div className="flex flex-row max-w-80 items-center">
+            <Image
+              height={40}
+              width={40}
+              alt="Quote"
+              src={'/icons/quote.svg'}
+              className="relative bottom-8 right-2"
+            />
+            <p className="text-base text-center mt-2">
+              {currentGoal.objetivos.principal}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col  flex-1 items-center justify-center md:justify-center md:pt-0">
+          <div className="flex flex-row max-w-80 items-center">
+            <Image
+              height={40}
+              width={40}
+              alt="Quote"
+              src={'/icons/quote.svg'}
+              className="relative bottom-8 right-2"
+            />
+            <p className="text-base text-center mt-2"> {dreamboardMessage} </p>
+          </div>
+        </div>
+      )}
+    </Card>
+  )
+}
