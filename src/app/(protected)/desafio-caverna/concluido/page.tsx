@@ -62,7 +62,7 @@ export default function Page() {
             width={228}
             height={375}
           />
-          <div className="flex flex-col h-fit relative md:absolute md:top-0 md:right-0 xl:-right-8 md:translate-x-[100%] w-72 lg:w-[319px] p-6 bg-zinc-800 border border-zinc-700 rounded-lg">
+          <div className="flex flex-col h-fit relative md:absolute md:top-10 md:right-0 xl:-right-8 md:translate-x-[100%] w-72 lg:w-[319px] p-6 bg-zinc-800 border border-zinc-700 rounded-lg">
             <p>
               É isso aí! <br /> Te vejo no próximo desafio!
             </p>

@@ -14,6 +14,7 @@ import { ConfidentialityStep } from './ConfidentialityStep'
 import { ConfirmStep } from './ConfirmStep'
 import { DownloadAppStep } from './DownloadAppStep'
 import { InfoStep } from './InfoStep'
+import { PlansSystem } from './PlansSystem'
 
 export default function Page() {
   const router = useRouter()
@@ -21,15 +22,28 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(1)
   const { cellphone } = useOnboardingStore()
+  const isDesafioPlan = user?.plan === 'DESAFIO'
 
-  const STEPS = {
-    1: <InfoStep onNext={nextPhase} />,
-    2: <CellphoneStep onNext={nextPhase} />,
-    3: <ConfidentialityStep onNext={nextPhase} />,
-    4: <DownloadAppStep onNext={nextPhase} />,
-    5: <ActivateCaveModeStep onNext={nextPhase} />,
-    6: <ConfirmStep onNext={handleFinish} isLoading={isLoading} />,
-  } as { [key: number]: ReactNode }
+  const passosTotal = isDesafioPlan ? 7 : 6
+
+  const STEPS = isDesafioPlan
+    ? ({
+        1: <InfoStep onNext={nextPhase} />,
+        2: <CellphoneStep onNext={nextPhase} />,
+        3: <ConfidentialityStep onNext={nextPhase} />,
+        4: <DownloadAppStep onNext={nextPhase} />,
+        5: <ActivateCaveModeStep onNext={nextPhase} />,
+        6: <PlansSystem onNext={nextPhase} />,
+        7: <ConfirmStep onNext={handleFinish} isLoading={isLoading} />,
+      } as { [key: number]: ReactNode })
+    : ({
+        1: <InfoStep onNext={nextPhase} />,
+        2: <CellphoneStep onNext={nextPhase} />,
+        3: <ConfidentialityStep onNext={nextPhase} />,
+        4: <DownloadAppStep onNext={nextPhase} />,
+        5: <ActivateCaveModeStep onNext={nextPhase} />,
+        6: <ConfirmStep onNext={handleFinish} isLoading={isLoading} />,
+      } as { [key: number]: ReactNode })
 
   function nextPhase() {
     setCurrentPhase((curr) => curr + 1)
@@ -66,10 +80,10 @@ export default function Page() {
               width={32}
               height={27}
             />
-            <PhaseCounter current={currentPhase} total={6} />
+            <PhaseCounter current={currentPhase} total={passosTotal} />
           </div>
           <span className="text-sm text-muted-foreground">
-            Passo {currentPhase} de 6
+            Passo {currentPhase} de {passosTotal}
           </span>
         </header>
         {STEPS[currentPhase]}
