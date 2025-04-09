@@ -89,7 +89,9 @@ export function EditTaskDialog({
     setValue,
     formState: { errors },
   } = form
-
+  const refreshTags = () => {
+    queryClient.refetchQueries({ queryKey: ['tags'] })
+  }
   async function handleRegister(data: TaskData) {
     try {
       await updateTask({
@@ -104,12 +106,12 @@ export function EditTaskDialog({
   }
 
   return (
-    <DialogContent className="max-h-[85%] bg-zinc-900 overflow-y-auto scrollbar-minimal">
+    <DialogContent className="max-h-[80%] bg-zinc-900 overflow-y-auto scrollbar-minimal">
       <DialogHeader>
         <DialogTitle>Editar Tarefa</DialogTitle>
       </DialogHeader>
       <FormProvider {...form}>
-        <div className="flex flex-col px-4 py-8 gap-8 overflow-y-auto">
+        <div className="flex flex-col px-4 py-2 gap-6 overflow-y-auto">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col w-full gap-3">
               <label htmlFor="item" className="text-sm font-medium">
@@ -174,11 +176,11 @@ export function EditTaskDialog({
               <label htmlFor="tag" className="text-sm font-medium">
                 Etiqueta
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap h-auto items-center gap-4">
                 {tags?.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-center px-5 py-2 rounded"
+                    className="flex items-center justify-center px-5 py-2 h-auto gap-2 rounded-lg"
                     style={{ backgroundColor: item.color }}
                   >
                     <span className="text-xs">{item.name}</span>
@@ -189,6 +191,8 @@ export function EditTaskDialog({
                     <PlusIcon className="text-primary cursor-pointer" />
                   </DialogTrigger>
                   <TagDialog
+                    onUpdate={refreshTags}
+                    task={task}
                     tags={tags || []}
                     setTags={setTags}
                     taskId={Number(task.tarefa_id)}
@@ -200,7 +204,7 @@ export function EditTaskDialog({
               <label htmlFor="descricao" className="text-sm font-medium">
                 Descrição
               </label>
-              <div className="flex flex-col w-full gap-2">
+              <div className="flex flex-col w-full h-20 gap-2">
                 <TextareaUpperFirstWord
                   rows={9}
                   placeholder="Insira a descrição"
@@ -217,7 +221,7 @@ export function EditTaskDialog({
           </div>
         </div>
       </FormProvider>
-      <DialogFooter className="border-t p-4">
+      <DialogFooter className="flex relative p-4">
         <Button onClick={() => setIsDeleteDialogOpen(true)} variant={'outline'}>
           Excluir
         </Button>

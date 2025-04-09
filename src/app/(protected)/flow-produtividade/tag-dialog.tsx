@@ -10,23 +10,56 @@ import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronLeft, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Dialog } from '@radix-ui/react-dialog'
 
 export function TagDialog({
+  task,
   taskId,
   tags,
   setTags,
+  onUpdate,
 }: {
+  task: Task
   taskId: number
   tags: Tag[]
   setTags: (arg: Tag[]) => void
+  onUpdate?: () => void
 }) {
   const [mode, setMode] = useState<'view' | 'create' | 'edit'>('view')
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
+  const [selectedTickets, setSelectedTickets] = useState<number[]>([])
+  const queryClient = useQueryClient()
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deletingTag, setDeletingTag] = useState<Tag | null>(null)
+  const [isTagDialogOpen, setIsTagDialogOpen] = useState(true)
+  const { data: allTickets } = useQuery({
+    queryKey: ['tickets'],
+    queryFn: async () => {
+      const response = await api.get('/task-tickets/find')
+      return response.data as Tags[]
+    },
+  })
+  useEffect(() => {
+    if (allTickets && taskId) {
+      const associatedTickets = allTickets
+        .filter((ticket) => ticket.tarefas?.some((t) => t.tarefa_id === taskId))
+        .map((ticket) => ticket.id)
+      setSelectedTickets(associatedTickets)
+    }
+  }, [allTickets, taskId])
 
+  const closeTagDialog = () => {
+    if (onUpdate) {
+      onUpdate()
+    }
+    queryClient.refetchQueries({ queryKey: ['tasks'] })
+    setIsTagDialogOpen(false)
+  }
   async function createTag(data: { name: string; color: string }) {
     const rollback = tags
     try {
@@ -43,13 +76,46 @@ export function TagDialog({
           id,
         },
       ])
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
     } catch (err) {
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
+      setTags(rollback)
+      console.log(err)
+      throw err
+    }
+  }
+  async function saveTagList() {
+    const rollback = tags
+    try {
+      await api.put(`/tarefas/update/${taskId}`, {
+        position: task.position,
+        card_id: task.card_id,
+        prioridade: task.prioridade,
+        item: task.item,
+        descricao: task.descricao,
+        tickets: selectedTickets,
+        checked: false,
+      })
+      setTags(
+        tags.map((t) =>
+          t.id === taskId ? { ...t, ticket_ids: selectedTickets } : t,
+        ),
+      )
+      toast.success('Etiquetas salvas com sucesso!')
+      closeTagDialog()
+      queryClient.invalidateQueries({ queryKey: ['tickets', 'tasks'] })
+      queryClient.refetchQueries({ queryKey: ['tasks'] })
+    } catch (err) {
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
       setTags(rollback)
       console.log(err)
       throw err
     }
   }
 
+  if (!isTagDialogOpen) {
+    return null
+  }
   async function editTag(tag: Tag) {
     const rollback = tags
     try {
@@ -58,9 +124,11 @@ export function TagDialog({
         tarefa_id: taskId,
       })
       setTags(tags.map((t) => (t.id === tag.id ? tag : t)))
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
     } catch {
       toast.error('Não foi possível fazer isso!')
       setTags(rollback)
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
     }
   }
 
@@ -70,6 +138,8 @@ export function TagDialog({
     try {
       setTags(tags.filter((t) => t.id !== tag.id))
       await api.delete(`/task-tickets/destroy/${id}`)
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
+      toast.success('Etiqueta excluída com sucesso!')
     } catch {
       toast.error('Não foi possível excluir a etiqueta!')
       setTags(rollback)
@@ -80,55 +150,126 @@ export function TagDialog({
     setMode('view')
     setEditingTag(null)
   }
+  return (
+    <>
+      {mode === 'view' ? (
+        <DialogContent className="max-w-[400px] max-h-1/2 bg-zinc-900">
+          <DialogHeader>
+            <DialogTitle>Etiquetas</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col px-4 py-8 gap-3 overflow-y-auto">
+            <span className="text-sm font-medium text-zinc-400">
+              Etiquetas Disponíveis
+            </span>
+            <div className="flex flex-col w-full gap-6 h-[400px] overflow-y-scroll scrollbar-minimal rounded">
+              {allTickets?.map((ticket) => {
+                const isChecked = selectedTickets.includes(ticket.id)
 
-  return mode === 'view' ? (
-    <DialogContent className="max-w-96 max-h-1/2 bg-zinc-900">
-      <DialogHeader>
-        <DialogTitle>Etiquetas</DialogTitle>
-      </DialogHeader>
-      <div className="flex flex-col px-4 py-8 gap-3 overflow-y-auto">
-        <span className="text-sm font-medium text-zinc-400">Etiqueta</span>
-        <div className="flex flex-col w-full gap-2">
-          {tags.map((tag, idx) => (
-            <div
-              key={tag.name + idx}
-              className="flex w-full items-center gap-4"
-            >
-              <div
-                className="flex flex-1 h-9 items-center px-3 text-sm rounded"
-                style={{ backgroundColor: tag.color }}
-              >
-                {tag.name}
-              </div>
-              <PencilIcon
-                size={20}
-                className="text-zinc-400 cursor-pointer"
-                onClick={() => {
-                  setMode('edit')
-                  setEditingTag(tag)
-                }}
-              />
-              <Trash2Icon
-                size={20}
-                className="text-zinc-400 cursor-pointer"
-                onClick={() => deleteTag(tag)}
-              />
+                return (
+                  <div
+                    key={ticket.id}
+                    className="flex w-full items-center gap-2"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => {
+                        // Se estava associado e agora está desmarcado, remove
+                        if (isChecked) {
+                          setSelectedTickets((prev) =>
+                            prev.filter((id) => id !== ticket.id),
+                          )
+                        } else {
+                          // Se não estiver marcado, adiciona o ID à lista
+                          setSelectedTickets((prev) => [...prev, ticket.id])
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <div
+                      className="flex flex-1 h-9 items-center px-4 w-30 text-sm rounded"
+                      style={{ backgroundColor: ticket.color }}
+                    >
+                      {ticket.name}
+                    </div>
+                    <PencilIcon
+                      size={14}
+                      className="text-zinc-400 cursor-pointer"
+                      onClick={() => {
+                        setMode('edit')
+                        setEditingTag(ticket)
+                      }}
+                    />
+                    <Trash2Icon
+                      size={14}
+                      className="text-zinc-400 cursor-pointer"
+                      onClick={() => {
+                        setDeletingTag(ticket)
+                        setShowDeleteDialog(true)
+                      }}
+                    />
+                  </div>
+                )
+              })}
             </div>
-          ))}
-        </div>
-        <Button
-          className="bg-zinc-700 text-zinc-400"
-          onClick={() => setMode('create')}
-        >
-          <PlusIcon />
-          Criar nova etiqueta
-        </Button>
-      </div>
-    </DialogContent>
-  ) : mode === 'edit' && editingTag ? (
-    <EditTag tag={editingTag} editTag={editTag} onBack={handleGoBack} />
-  ) : (
-    <CreateTag createTag={createTag} onBack={handleGoBack} />
+            <div className="flex gap-2 mt-4">
+              <Button
+                onClick={() => {
+                  saveTagList()
+                }}
+                className="bg-primary text-white hover:bg-red-600"
+              >
+                Salvar
+              </Button>
+              <Button
+                className="bg-zinc-700 text-white hover:bg-zinc-800"
+                onClick={() => setMode('create')}
+              >
+                <PlusIcon />
+                Criar nova etiqueta
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      ) : mode === 'edit' && editingTag ? (
+        <EditTag tag={editingTag} editTag={editTag} onBack={handleGoBack} />
+      ) : (
+        <CreateTag createTag={createTag} onBack={handleGoBack} />
+      )}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="w-[500px] bg-zinc-900">
+          <DialogHeader>
+            <DialogTitle>Confirmar Exclusão</DialogTitle>
+          </DialogHeader>
+          <div className="p-4">
+            <p className="text-zinc-400">
+              {`Tem certeza que deseja deletar a etiqueta " ${deletingTag?.name} " ?`}
+            </p>
+          </div>
+          <DialogFooter className="gap-2 p-4">
+            <Button
+              variant="ghost"
+              onClick={() => setShowDeleteDialog(false)}
+              className="text-zinc-400 hover:bg-zinc-800 mb-4"
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deletingTag) {
+                  deleteTag(deletingTag)
+                  setShowDeleteDialog(false)
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Deletar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
 

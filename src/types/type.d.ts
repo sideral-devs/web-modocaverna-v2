@@ -123,13 +123,11 @@ interface Checklist {
     checked: string
   }[]
 }
-
 interface Tag {
   id: number
   color: string
   name: string
 }
-
 interface Task {
   tarefa_id: number | string
   index: number | string
@@ -141,6 +139,12 @@ interface Task {
   checked: boolean
   checklists?: Checklist[]
   task_tickets?: Tag[]
+}
+interface Tags {
+  id: number
+  color: string
+  name: string
+  tarefas: Task[]
 }
 
 interface TaskList {
