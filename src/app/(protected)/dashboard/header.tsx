@@ -139,8 +139,8 @@ export function CentralHubHeader() {
           <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
             <span className="text-[10px] text-red-500">EM BREVE</span>
           </div>
-          <UserDropdown />
         </div>
+        <UserDropdown />
       </div>
     </header>
   )
