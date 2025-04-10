@@ -9,7 +9,6 @@ export default function ProtectedLayout({
   children: React.ReactNode
 }>) {
   const CrispWithNoSSR = dynamic(() => import('../../components/crisp'))
-
   return (
     <ProtectedRoute>
       <MusicPlayerProvider>

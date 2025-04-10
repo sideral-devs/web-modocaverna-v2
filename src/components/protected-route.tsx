@@ -2,8 +2,10 @@
 import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
-import { useRouter } from 'next/navigation'
-import { ReactNode, useEffect } from 'react'
+import { usePopupDesafio } from '@/store/usePopupDesafio'
+import { usePathname, useRouter } from 'next/navigation'
+import { ReactNode, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
 
 export function ProtectedRoute({
   children,
@@ -13,8 +15,12 @@ export function ProtectedRoute({
   level?: 'basic' | 'non-trial' | 'admin'
 }) {
   const router = useRouter()
+  const pathname = usePathname()
+  const { show } = usePopupDesafio()
   const { token, hasHydrated } = useAuthStore()
-  const { data: user, error } = useUser()
+  const { data: user, error, isLoading: userLoading } = useUser()
+  const [checkedAccess, setCheckedAccess] = useState(false)
+  dayjs.locale('pt-br')
 
   useEffect(() => {
     if (hasHydrated && !token) {
@@ -28,15 +34,27 @@ export function ProtectedRoute({
     }
   }, [error, router])
 
-  if (!token || !user) {
-    return null
-  }
+  useEffect(() => {
+    if (!user || !pathname) return
 
-  if (user && level === 'non-trial') {
-    if (user.plan.toLowerCase() === 'trial') {
-      router.push('/dashboard')
-      return null
+    const userPlan = user.plan?.toLowerCase()
+    if (user.status_plan === 'REEMBOLSO') {
+      router.push('/settings/plans')
+      return
     }
+
+    // Exemplo: se plano trial tenta acessar algo de non-trial
+    if (user && level === 'non-trial' && userPlan === 'trial') {
+      console.log('entrou no if 3')
+      router.push('/dashboard')
+      return
+    }
+
+    setCheckedAccess(true)
+  }, [user, pathname, level, router, show])
+
+  if (!token || !user || userLoading || !checkedAccess) {
+    return null
   }
 
   api.defaults.headers.Authorization = `Bearer ${token}`
