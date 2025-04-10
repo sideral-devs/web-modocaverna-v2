@@ -39,7 +39,7 @@ export function CommandmentDialog({
             <div className="absolute -top-4 right-6 z-50 md:right-12">
               <Bookmark className="text-red-700 fill-red-700" size={90} />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
-                {data.number.padStart(2, '0')}
+                {String(data.number).padStart(2, '0')}
               </span>
             </div>
             <div
