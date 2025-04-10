@@ -226,7 +226,7 @@ export function Board() {
       const res = await api.post('/tarefas/store', {
         ...data,
         checked: true,
-        position: data.position, // Garantir que a posição seja enviada
+        position: data.position + 1,
       })
       return res.data as Task
     },

@@ -76,7 +76,7 @@ export default function KnowledgeCard() {
           </SelectContent>
         </Select>
       </CardHeader>
-      <div className="grid grid-cols-3 md:grid-cols-4 w-full flex-1 gap-4">
+      <div className="grid grid-cols-3 md:grid-cols-3 w-full flex-1 gap-4">
         {selected === 'books' && books ? (
           books.length > 0 ? (
             books
@@ -210,7 +210,7 @@ function EmptyState({ type }: { type: string }) {
     curso: videosMessage,
   }
   return (
-    <div className="flex flex-row items-center justify-start flex-1 pl-10 gap-4 w-[60dvh]">
+    <div className="flex flex-row items-center justify-start flex-1 pl-10 gap-4 w-[60dvh] md:w-[36dvh] md:pl-0">
       <Image
         src={emptyImages[type]}
         alt={emptyMessages[type]}

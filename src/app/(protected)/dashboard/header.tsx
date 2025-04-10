@@ -4,18 +4,16 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { AlarmClock, MenuIcon, StoreIcon } from 'lucide-react'
+import { AlarmClock, MenuIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogTrigger } from './UpgradeDialog'
 
 export function CentralHubHeader() {
   const { data: user } = useUser()
-
   if (!user) {
     return null
   }
-
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
@@ -26,37 +24,15 @@ export function CentralHubHeader() {
             window.location.reload()
           }}
         >
-          <div className="flex h-11 items-center justify-center bg-card px-3 rounded-xl">
+          <div className="flex h-11 items-center justify-center px-3 rounded-xl">
             <Image
-              src={'/images/logo-icon.svg'}
+              src={'/icons/logo-completo.svg'}
               alt="Logo"
-              width={26}
-              height={22}
+              width={130}
+              height={40}
             />
           </div>
         </Link>
-        <Link href="/indique-e-ganhe">
-          <div className="flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-            <div>
-              <Image
-                width={20}
-                height={20}
-                src={'/icons/indique.svg'}
-                alt="Ícone de Post"
-              />
-            </div>
-            <span className="text-sm">Indique e Ganhe</span>
-          </div>
-        </Link>
-        <a href="https://www.sejacaverna.com" target="_blank">
-          <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-            <StoreIcon className="text-red-500" size={20} />
-            <span className="text-sm">Loja Caverna</span>
-            <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
-              <span className="text-[10px] text-red-500">EM BREVE</span>
-            </div>
-          </div>
-        </a>
       </div>
       <SidebarMenuTrigger>
         <div className="flex lg:hidden h-11 items-center justify-center bg-card px-3 rounded-xl">
@@ -124,8 +100,8 @@ export function CentralHubHeader() {
                         'days',
                       )
                       return remaining > 1
-                        ? ` Seu Acesso Premium ao Modo Caverna encerra em ${remaining} dias`
-                        : ` Seu Acesso Premium ao Modo Caverna encerra em ${remaining} dia`
+                        ? ` Sua avaliação encerra em ${remaining} dias`
+                        : ` Sua avaliação encerra em ${remaining} dia`
                     })()}
                   </span>
                 </div>
@@ -163,8 +139,8 @@ export function CentralHubHeader() {
           <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
             <span className="text-[10px] text-red-500">EM BREVE</span>
           </div>
+          <UserDropdown />
         </div>
-        <UserDropdown />
       </div>
     </header>
   )
