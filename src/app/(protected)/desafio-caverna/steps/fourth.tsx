@@ -20,7 +20,7 @@ export function FourthStep({
         />
         <div className="flex flex-col relative w-[611px] 3xl:px-12 3xl:py-8 px-8 py-6 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="3xl:text-xl text-lg">
-            Registre sua entrada na Caverna
+            Agora é o momento de se comprometer com a mudança dos seus hábitos.
           </h1>
           <p className="text-zinc-400 3xl:text-base text-[0.85rem]">
             Elimine tudo o que te impede de progredir e implemente novos
