@@ -194,7 +194,7 @@ function Comment({
                                 </span>
                               </div>
                             )}
-                            <div className="flex flex-col bg-secondary w-40 items-center justify-center rounded-full h-8">
+                            <div className="flex flex-col w-40 items-center justify-center rounded-full h-8">
                               <span className="font-semibold text-white">
                                 {reply.nome}
                               </span>
