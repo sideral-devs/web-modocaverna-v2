@@ -69,7 +69,7 @@ export function Sidebar() {
                 )}
               >
                 <Icon size={16} />
-                <span className="text-xs">{navItem.name}</span>
+                <span className="text-xs font-semibold">{navItem.name}</span>
               </div>
             </Link>
           )

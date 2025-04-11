@@ -1,10 +1,10 @@
 import { GlobalProviders } from '@/components/providers'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Rubik } from 'next/font/google'
 import MobileAlert from '@/components/MobileAlert'
 import './globals.css'
 
-const inter = Inter({
+const rubik = Rubik({
   subsets: ['latin'],
 })
 
@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt_BR">
-      <body className={inter.className}>
+      <body className={(rubik.className, 'antialiased')}>
         <MobileAlert />
         <GlobalProviders>{children}</GlobalProviders>
       </body>
