@@ -36,7 +36,6 @@ export function Comments({ lessonId }: { lessonId: string }) {
     </section>
   )
 }
-
 function Comment({
   comment,
   user,
@@ -65,7 +64,7 @@ function Comment({
       setShowInput(false)
     },
   })
-
+  console.log(comment.filhos)
   return (
     <div className="flex flex-col w-full gap-8 ">
       <div className="flex w-full items-center justify-between">
@@ -113,7 +112,7 @@ function Comment({
         {comment.filhos && comment.filhos.length === 0 && (
           <span
             onClick={() => setShowInput(!showInput)}
-            className="text-blue-300 pl-10 relative top-2 cursor-pointer"
+            className="text-red-600 pl-10 relative top-2 cursor-pointer"
           >
             Responder
           </span>
@@ -140,7 +139,7 @@ function Comment({
             <Button
               variant="ghost"
               size="default"
-              className="text-blue-300 hover:text-blue-400 flex items-center gap-1"
+              className="text-red-600 hover:text-red-400 flex items-center gap-1"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               {comment.filhos.length}
@@ -156,20 +155,54 @@ function Comment({
                 {comment.filhos?.map((reply, idx) => (
                   <div key={idx} className="relative top-2 pl-8 mt-2">
                     <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center gap-2 py-4 break-words">
-                        <Image
-                          src={'/images/members-area/cap-cave.png'}
-                          alt={'Admin Caverna'}
-                          width={40}
-                          height={40}
-                        />
-                        <div className="flex  flex-col bg-primary w-40 items-center justify-center rounded-full h-8">
-                          <span className="font-semibold text-white">
-                            Capitão Caverna
-                          </span>
-                        </div>
-                      </div>
-                      <span className="text-white">{reply.data}</span>
+                      {user.plan === 'ADMIN' ? (
+                        <>
+                          <div className="flex items-center gap-2 py-4 break-words">
+                            <Image
+                              src={'/images/members-area/cap-cave.png'}
+                              alt={'Admin Caverna'}
+                              width={40}
+                              height={40}
+                            />
+                            <div className="flex flex-col bg-primary w-40 items-center justify-center rounded-full h-8">
+                              <span className="font-semibold text-white">
+                                Capitão Caverna
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-white">{reply.data}</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2 py-4 break-words">
+                            {reply?.foto !== null ? (
+                              <div className="rounded-full">
+                                <Image
+                                  src={`${env.NEXT_PUBLIC_PROD_URL}${reply.foto}`}
+                                  width={50}
+                                  height={50}
+                                  className="rounded-full"
+                                  objectFit="cover"
+                                  objectPosition="center"
+                                  alt={reply.nome}
+                                />
+                              </div>
+                            ) : (
+                              <div className="flex w-12 h-12 items-center justify-center bg-primary px-3 rounded-full cursor-pointer">
+                                <span className="text-2xl">
+                                  {reply.nome[0]}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex flex-col bg-secondary w-40 items-center justify-center rounded-full h-8">
+                              <span className="font-semibold text-white">
+                                {reply.nome}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-white">{reply.data}</span>
+                        </>
+                      )}
                     </div>
                     <article
                       className={cn(
@@ -183,14 +216,12 @@ function Comment({
                         {reply.texto}
                       </p>
                     </article>
-                    {user?.plan === 'ADMIN' && (
-                      <span
-                        onClick={() => setShowInput(!showInput)}
-                        className="text-blue-300 cursor-pointer mt-2 pl-8"
-                      >
-                        Responder
-                      </span>
-                    )}
+                    <span
+                      onClick={() => setShowInput(!showInput)}
+                      className="text-red-600 cursor-pointer mt-2 pl-8"
+                    >
+                      Responder
+                    </span>
                   </div>
                 ))}
               </div>

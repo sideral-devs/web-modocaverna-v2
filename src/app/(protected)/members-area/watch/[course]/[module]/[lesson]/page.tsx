@@ -21,6 +21,7 @@ import { toast } from 'sonner'
 import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
 import { Comments } from './comments'
+import { useUser } from '@/hooks/queries/use-user'
 
 export default function Page({
   params,
@@ -30,7 +31,7 @@ export default function Page({
   const { course, module: moduloId, lesson: lessonId } = use(params)
   const queryClient = useQueryClient()
   const router = useRouter()
-
+  const { data: user } = useUser()
   const { data } = useQuery({
     queryKey: ['course', course],
     queryFn: async () => {
@@ -168,6 +169,84 @@ export default function Page({
                   >
                     <ChevronRight size={20} />
                   </Button>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row w-full justify-between">
+              <div
+                className=" h-[165px] w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
+                style={{
+                  backgroundImage:
+                    "url('/images/members-area/banners/cave_store.png')",
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                }}
+              >
+                <div className="flex flex-col w-1/2 pt-2 ">
+                  <h1 className="text-l font-extrabold text-primary">
+                    Vista-se como um Lobo Cavernoso!
+                  </h1>
+                  <p className="text-xs text-black font-semibold py-1">
+                    Acesse a loja e garanta um super desconto com o cupom
+                    “APLICATIVO”
+                  </p>
+                </div>
+                <div>
+                  <a href="https://www.cavestore.com" target="_blank">
+                    <Button
+                      className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
+                      color={'primary'}
+                    >
+                      CLIQUE AQUI
+                    </Button>
+                  </a>
+                </div>
+              </div>
+              <div
+                className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
+                style={{
+                  backgroundImage:
+                    "url('/images/members-area/banners/indique.png')",
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                }}
+              >
+                <div className="flex flex-col w-48 relative left-4  ">
+                  <h1 className="text-base font-extrabold text-yellow-400">
+                    Faça parte do nosso programa de afiliados.
+                  </h1>
+                  {user?.plan === `"TRIAL"` ? (
+                    <p className="text-xs text-white font-semibold py-2">
+                      Adquira agora o Modo Caverna e comece a ganhar comissões.
+                    </p>
+                  ) : (
+                    <p className="text-xs text-white font-semibold py-2">
+                      Ganhe comissões generosas indicando o Modo Caverna.
+                    </p>
+                  )}
+                </div>
+                <div>
+                  {user?.plan === `"TRIAL"` ? (
+                    <Link href="/settings/plans">
+                      <Button
+                        className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                        color={'primary'}
+                      >
+                        ADQUIRIR
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href="/indique-e-ganhe">
+                      <Button
+                        className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                        color={'primary'}
+                      >
+                        COMECE AGORA
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
