@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Lightning } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
 import { Star } from '@phosphor-icons/react/dist/ssr'
+import { cn } from '@/lib/utils'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -113,28 +114,65 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
-            <div className="flex flex-col gap-2 p-6 pb-0 mb-4">
-              <Avatar className="w-8 h-8 mb-2 rounded-none">
-                <AvatarImage
-                  src={'/images/logo-icon.svg'}
-                  className="object-contain"
-                />
-                <AvatarFallback>MC</AvatarFallback>
-              </Avatar>
-              <div className="flex gap-2 pr-6 justify-between items-center">
-                <div>
-                  <h2 className="text-2xl max-w-[200px] font-semibold mb-2">
-                    Avaliação gratuita acaba em
-                  </h2>
+            <div className="flex flex-col gap-2">
+              <div className="flex p-6 pb-2 flex-col gap-2">
+                <Avatar className="w-8 h-8 mb-2 rounded-none">
+                  <AvatarImage
+                    src={'/images/logo-icon.svg'}
+                    className="object-contain"
+                  />
+                  <AvatarFallback>MC</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <div className="flex gap-2 pr-4 justify-between items-center">
+                    <div>
+                      <h2 className="text-2xl max-w-[200px] font-semibold mb-2">
+                        Avaliação gratuita acaba em
+                      </h2>
+                    </div>
+                    <h3 className="text-red-500 font-bold text-4xl">5 dias</h3>
+                  </div>
                 </div>
-                <h3 className="text-red-500 font-bold text-4xl">5 dias</h3>
+              </div>
+              <div className="w-full border-t border-red-500 p-6">
+                <h4 className="text-white mb-2 font-bold text-sm">
+                  Está curtindo a experiência?
+                </h4>
+                <h4 className="text-white/50 font-medium text-sm">
+                  Ative a sua assinatura Cavernosa para continuar aproveitando
+                  todas as funcionalidades.
+                </h4>
               </div>
             </div>
           </div>
         </div>
         {/* SECOND PLAN */}
         <div className="flex flex-col  w-full h-auto bg-zinc-900 border-red-500 rounded-3xl border">
-          <div className="flex flex-col gap-2 mb-4">
+          <div className="flex flex-col relative gap-2 mb-4">
+            <div className="flex absolute top-4 right-4 items-center bg-zinc-800 rounded-full p-1 w-fit">
+              <button
+                onClick={() => setSelectedPlan('yearly')}
+                className={cn(
+                  'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                  selectedPlan === 'yearly'
+                    ? 'bg-white text-zinc-900'
+                    : 'text-zinc-400 hover:text-zinc-200',
+                )}
+              >
+                Anual
+              </button>
+              <button
+                onClick={() => setSelectedPlan('monthly')}
+                className={cn(
+                  'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                  selectedPlan === 'monthly'
+                    ? 'bg-white text-zinc-900'
+                    : 'text-zinc-400 hover:text-zinc-200',
+                )}
+              >
+                Mensal
+              </button>
+            </div>
             <div className="w-full gap-2 flex p-6 pb-0 flex-col">
               <Avatar className="w-8 h-8 mb-2 rounded-none">
                 <AvatarImage
