@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import MobileAlert from '@/components/MobileAlert'
 import './globals.css'
-import 'react-vertical-timeline-component/style.min.css'
 
 const inter = Inter({
   subsets: ['latin'],

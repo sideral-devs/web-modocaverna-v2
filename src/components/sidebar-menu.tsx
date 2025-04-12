@@ -13,7 +13,6 @@ import {
   ClipboardCheck,
   DollarSignIcon,
   FlameIcon,
-  HistoryIcon,
   HourglassIcon,
   QuoteIcon,
   TargetIcon,
