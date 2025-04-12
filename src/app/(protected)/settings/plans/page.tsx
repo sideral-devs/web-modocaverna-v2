@@ -5,6 +5,8 @@ import { env } from '@/lib/env'
 import { useState } from 'react'
 
 import { PlanCavernoso } from '@/components/plans/plan-cavernoso'
+import { PlanDesafio } from '@/components/plans/plan-desafio'
+import { PlanUpdateToAnnual } from '@/components/plans/plan-update-to-annual'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,15 +15,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { cn } from '@/lib/utils'
-import { Lightning } from '@phosphor-icons/react'
-import { PlanUpdateToAnnual } from '@/components/plans/plan-update-to-annual'
-import { Check, ToggleLeft } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { PlanDesafio } from '@/components/plans/plan-desafio'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -41,6 +34,12 @@ export default function Page() {
         return `${env.NEXT_PUBLIC_YEARLY_PLAN}${indicationCode}`
     }
   }
+
+  const isOnTrial = user?.status_plan === 'TRIAL'
+  const isExpired = user?.status_plan === 'EXPIRADO'
+  // const isActive = user?.plan === 'ATIVO'
+  const isMonthlyPlan = user?.plan === 'MENSAL'
+  // const isAnnualPlan = user?.plan === 'ANUAL'
 
   return (
     <div className="flex flex-col justify-start items-start col-span-3 gap-10">
@@ -65,22 +64,21 @@ export default function Page() {
       </div>
 
       <div className="flex items-start w-full gap-4">
-        {/* FIRST PLAN */}
-        {/* TODO: Use when the user is not on the Cavernoso Annual plan */}
-        {/* <PlanUpdateToAnnual
+        {/* FIRST COLUMN */}
+        <PlanUpdateToAnnual
           selectedPlan={selectedPlan}
           setSelectedPlan={setSelectedPlan}
           getPlanUrl={getPlanUrl}
-        /> */}
+        />
 
-        {/* TODO: Use when the user is on the free trial */}
-        <PlanDesafio />
-        {/* SECOND PLAN */}
+        {isOnTrial || (isExpired && <PlanDesafio />)}
+
+        {/* SECOND COLUMN */}
         <PlanCavernoso
           selectedPlan={selectedPlan}
-          onPlanChange={setSelectedPlan}
           setSelectedPlan={setSelectedPlan}
-          isUpdatePlan={false}
+          isUpdatePlan={isMonthlyPlan}
+          getPlanUrl={getPlanUrl}
         />
       </div>
     </div>

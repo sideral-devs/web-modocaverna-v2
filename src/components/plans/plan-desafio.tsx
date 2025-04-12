@@ -1,7 +1,25 @@
+'use client'
+
 import { Check, ToggleLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useUser } from '@/hooks/queries/use-user'
 
 export function PlanDesafio() {
+  const { data: user } = useUser()
+
+  const isTrial = user?.status_plan === 'TRIAL'
+
+  // Calculate the number of days left in the trial
+  const now = new Date()
+  const renewalDate = new Date(user?.data_de_renovacao ?? now)
+
+  now.setHours(0, 0, 0, 0)
+  renewalDate.setHours(0, 0, 0, 0)
+
+  const trialDaysLeft = Math.ceil(
+    (renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+  )
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
@@ -43,38 +61,44 @@ export function PlanDesafio() {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
-        <div className="flex flex-col gap-2">
-          <div className="flex p-6 pb-2 flex-col gap-2">
-            <Avatar className="w-8 h-8 mb-2 rounded-none">
-              <AvatarImage
-                src={'/images/logo-icon.svg'}
-                className="object-contain"
-              />
-              <AvatarFallback>MC</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <div className="flex gap-2 pr-4 justify-between items-center">
-                <div>
-                  <h2 className="text-xl max-w-[200px] font-semibold mb-2">
-                    Avaliação gratuita acaba em
-                  </h2>
+
+      {/* TODO: Use when the user is on the free trial */}
+      {isTrial && (
+        <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
+          <div className="flex flex-col gap-2">
+            <div className="flex p-6 pb-2 flex-col gap-2">
+              <Avatar className="w-8 h-8 mb-2 rounded-none">
+                <AvatarImage
+                  src={'/images/logo-icon.svg'}
+                  className="object-contain"
+                />
+                <AvatarFallback>MC</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <div className="flex gap-2 pr-4 justify-between items-center">
+                  <div>
+                    <h2 className="text-xl max-w-[200px] font-semibold mb-2">
+                      Avaliação gratuita acaba em
+                    </h2>
+                  </div>
+                  <h3 className="text-red-500 font-bold text-4xl">
+                    {trialDaysLeft} dias
+                  </h3>
                 </div>
-                <h3 className="text-red-500 font-bold text-4xl">5 dias</h3>
               </div>
             </div>
-          </div>
-          <div className="w-full border-t border-red-500 p-6">
-            <h4 className="text-white mb-2 font-bold text-sm">
-              Está curtindo a experiência?
-            </h4>
-            <h4 className="text-white/50 font-medium text-sm">
-              Ative a sua assinatura Cavernosa para continuar aproveitando todas
-              as funcionalidades.
-            </h4>
+            <div className="w-full border-t border-red-500 p-6">
+              <h4 className="text-white mb-2 font-bold text-sm">
+                Está curtindo a experiência?
+              </h4>
+              <h4 className="text-white/50 font-medium text-sm">
+                Ative a sua assinatura Cavernosa para continuar aproveitando
+                todas as funcionalidades.
+              </h4>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

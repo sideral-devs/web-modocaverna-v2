@@ -1,19 +1,19 @@
 'use client'
 
-import { cn } from '@/lib/utils'
-import { Check } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { Lightning } from '@phosphor-icons/react'
 import { Star } from '@phosphor-icons/react/dist/ssr'
+import { Check } from 'lucide-react'
 import { useState } from 'react'
 
 interface PlanCavernosoProps {
   selectedPlan: string
-  onPlanChange: (plan: 'yearly' | 'monthly') => void
   setSelectedPlan: (plan: 'yearly' | 'monthly') => void
   isUpdatePlan: boolean
+  getPlanUrl: () => string
 }
 
 const PLAN_FEATURES = [
@@ -40,6 +40,7 @@ export function PlanCavernoso({
   selectedPlan,
   setSelectedPlan,
   isUpdatePlan,
+  getPlanUrl,
 }: PlanCavernosoProps) {
   const [showAllBenefits, setShowAllBenefits] = useState(false)
 
@@ -63,7 +64,7 @@ export function PlanCavernoso({
           >
             Anual
           </button>
-          {!isUpdatePlan && (
+          {isUpdatePlan && (
             <button
               onClick={() => setSelectedPlan('monthly')}
               className={cn(
@@ -92,8 +93,9 @@ export function PlanCavernoso({
         </div>
         {!isUpdatePlan && (
           <div className="flex px-3 mb-3 items-center flex-col gap-2">
-            <Button className="w-full text-base h-[70px]">
-              Fazer upgrade <Lightning className="!w-4 !h-4" weight="fill" />{' '}
+            <Button onClick={getPlanUrl} className="w-full text-base h-[70px]">
+              Fazer upgrade{' '}
+              <Lightning className="!w-4 !h-4" weight="fill" />{' '}
             </Button>
             {selectedPlan === 'yearly' && (
               <span className="text-zinc-400 font-normal text-xs">
