@@ -93,7 +93,10 @@ export function PlanCavernoso({
         </div>
         {!isUpdatePlan && (
           <div className="flex px-3 mb-3 items-center flex-col gap-2">
-            <Button onClick={getPlanUrl} className="w-full text-base h-[70px]">
+            <Button
+              onClick={() => window.open(getPlanUrl(), '_blank')}
+              className="w-full text-base h-[70px]"
+            >
               Fazer upgrade{' '}
               <Lightning className="!w-4 !h-4" weight="fill" />{' '}
             </Button>
@@ -106,7 +109,7 @@ export function PlanCavernoso({
         )}
       </div>
 
-      <div className="flex relative flex-col h-full border-t overflow-x-hidden overflow-y-auto border-red-500 border-x border-b bg-zinc-800 rounded-3xl">
+      <div className="flex relative flex-col h-full border-t overflow-hidden  border-red-500 border-x border-b bg-zinc-800 rounded-3xl">
         <div className="border-b sticky top-0 bg-zinc-800 p-6 flex justify-between items-start">
           <div className="flex items-start flex-col gap-2">
             <Badge className="text-emerald-400 mb-2 bg-emerald-900">

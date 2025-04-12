@@ -108,7 +108,7 @@ export function PlanUpdateToAnnual({
 
       <div className="mt-6">
         <Button
-          onClick={() => (window.location.href = getPlanUrl())}
+          onClick={() => window.open(getPlanUrl(), '_blank')}
           className="w-full h-[40px] bg-red-500 hover:bg-red-600 text-white font-semibold"
         >
           Ativar Plano {selectedPlan === 'yearly' ? 'Anual' : 'Mensal'}{' '}
