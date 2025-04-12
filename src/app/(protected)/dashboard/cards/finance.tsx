@@ -105,7 +105,7 @@ export default function FinanceCard() {
         </div>
         <div className="flex justify-end mt-auto">
           <Link href={'/financeiro'}>
-            <Button size="sm">Ver Finanças</Button>
+            <Button size="sm">Acompanhar Finanças</Button>
           </Link>
         </div>
       </Card>
@@ -142,7 +142,7 @@ export default function FinanceCard() {
           </p>
           <div className="flex justify-end mt-auto">
             <Link href={'/financeiro'}>
-              <Button size="sm">Ver Finanças</Button>
+              <Button size="sm">Acompanhar Finanças</Button>
             </Link>
           </div>
         </div>
