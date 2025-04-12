@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { AlarmClock, MenuIcon } from 'lucide-react'
+import { AlarmClock, MenuIcon, StoreIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogTrigger } from './UpgradeDialog'
@@ -126,7 +126,7 @@ export function CentralHubHeader() {
             </Button>
           </UpgradeDialogTrigger>
         )}
-        <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 pl-1 gap-2 rounded-xl">
+        {/* <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 pl-1 gap-2 rounded-xl">
           <div className="flex items-center justify-center w-9 h-9 border border-zinc-700 rounded-[10px]">
             <Image
               src={'/icons/trophy.svg'}
@@ -139,7 +139,16 @@ export function CentralHubHeader() {
           <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
             <span className="text-[10px] text-red-500">EM BREVE</span>
           </div>
-        </div>
+        </div> */}
+        <a href="https://www.sejacaverna.com" target="_blank">
+          <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
+            <StoreIcon className="text-red-500" size={20} />
+            <span className="text-sm">Loja Caverna</span>
+            <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
+              <span className="text-[10px] text-red-500">EM BREVE</span>
+            </div>
+          </div>
+        </a>
         <UserDropdown />
       </div>
     </header>
