@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardHeader } from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
 import Link from 'next/link'
 
@@ -34,7 +34,7 @@ export function AreaBeneficios({ value }: { value: string }) {
         </Card>
 
         <Card
-          className="flex flex-col w-full h-full md:min-h-80 p-6 gap-6 relative overflow-hidden"
+          className="flex flex-col w-full h-full md:min-h-80 p-6 gap-6 relative overflow-hidden border border-t-zinc-500"
           // style={{
           //   backgroundImage: "url('/images/card-frames/frame_esquerda.png')",
           //   backgroundPosition: 'center',
@@ -42,10 +42,17 @@ export function AreaBeneficios({ value }: { value: string }) {
           //   backgroundSize: 'FIT',
           // }}
         >
+          <CardHeader>
+            <div className="flex w-fit px-3 py-2 border border-white rounded-full z-50">
+              <span className="text-[10px] text-white font-semibold">
+                INDIQUE & GANHE
+              </span>
+            </div>
+          </CardHeader>
           <div
             className="absolute right-1 bottom-5 w-full h-full"
             style={{
-              backgroundImage: "url('/images/card-frames/indique_mock.png')",
+              backgroundImage: "url('/images/card-frames/indiqueganhe.png')",
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'FIT',
@@ -57,6 +64,16 @@ export function AreaBeneficios({ value }: { value: string }) {
             width={800}
             height={676}
           /> */}
+
+          <div className=" absolute bottom-24 flex flex-col w-full gap-4">
+            <h2 className="text-2xl font-semibold z-10">Indique & Ganhe</h2>
+            <p className="text-zinc-400 text-sm z-10">
+              Aprenda, com aulas práticas, materiais e lives exclusivas, a
+              aplicar nossas estratégias validadas. Descubra como indicar o Modo
+              Caverna com inteligência, gerar impacto e ser recompensado por
+              cada nova indicação.
+            </p>
+          </div>
           <div className="flex flex-col absolute bottom-8 right-0  p-4 z-10">
             <Link className="ml-auto" href="/indique-e-ganhe">
               <Button size="sm">Acessar</Button>

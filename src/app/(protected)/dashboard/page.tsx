@@ -22,7 +22,7 @@ export default function Page() {
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
               <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
               <TabsTrigger value="cursos-e-conhecimentos">
-                Cursos & Conhecimentos
+                Cursos & Networking
               </TabsTrigger>
               <TabsTrigger value="area-de-beneficios">
                 Área de Benefícios
