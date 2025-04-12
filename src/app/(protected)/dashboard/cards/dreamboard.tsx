@@ -63,7 +63,7 @@ export default function DreamboardCard({
               </span>
             </div>
           </CardHeader>
-          <Link href={'/sonhos-e-metas'} className="mt-auto ml-auto">
+          <Link href={'/lei-da-atracao'} className="mt-auto ml-auto">
             <Button size="sm">Ver Sonhos & Metas</Button>
           </Link>
         </div>

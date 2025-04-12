@@ -129,13 +129,13 @@ export function CentralHubHeader() {
         {/* <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 pl-1 gap-2 rounded-xl">
           <div className="flex items-center justify-center w-9 h-9 border border-zinc-700 rounded-[10px]">
             <Image
-              src={'/icons/trophy.svg'}
+              src={'/icons/cave_store.svg'}
               width={20}
               height={20}
               alt="Troféu"
             />
           </div>
-          <span className="text-sm">Ranking & Premiações</span>
+          <span className="text-sm">Cave Store</span>
           <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
             <span className="text-[10px] text-red-500">EM BREVE</span>
           </div>
