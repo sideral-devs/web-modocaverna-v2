@@ -13,6 +13,7 @@ import {
   ClipboardCheck,
   DollarSignIcon,
   FlameIcon,
+  HistoryIcon,
   HourglassIcon,
   QuoteIcon,
   TargetIcon,
@@ -151,13 +152,13 @@ function SidebarMenu() {
             <TrophyIcon size={16} />
             <span>Indique e Ganhe</span>
           </Link>
-          {/* <Link
+          <Link
             href="/settings/historico"
             className="flex items-center gap-4 text-zinc-400 hover:text-primary transition-all duration-200"
           >
             <HistoryIcon size={16} />
             <span>Histórico Desafio Caverna</span>
-          </Link> */}
+          </Link>
         </div>
       </div>
     </SheetContent>
