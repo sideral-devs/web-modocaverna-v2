@@ -25,11 +25,11 @@ export function Sidebar() {
       href: '/settings/plans',
       icon: DollarSign,
     },
-    {
-      name: 'Histórico Desafio Caverna',
-      href: '/historico-desafio',
-      icon: HistoryIcon,
-    },
+    // {
+    //   name: 'Histórico Desafio Caverna',
+    //   href: '/historico-desafio',
+    //   icon: HistoryIcon,
+    // },
   ]
 
   if (!user) return null
@@ -57,7 +57,7 @@ export function Sidebar() {
         <span className="text-base">{user.name}</span>
       </div>
       <div className="flex flex-col gap-4">
-        <span className="text-base font-medium pl-3">Configuração geral</span>
+        <span className="text-base font-medium pl-3">Configurações Gerais</span>
         {navItems.map((navItem, index) => {
           const active = navItem.href === pathname
           const Icon = navItem.icon
