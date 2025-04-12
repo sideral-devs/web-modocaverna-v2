@@ -123,7 +123,7 @@ export default function Page() {
         <section className="flex flex-col items-center w-full gap-2 ">
           <div className="flex flex-row justify-between border-zinc-700 border-4 rounded-xl w-full max-w-8xl p-4 gap-4">
             {currentGoal ? (
-              <div className="flex flex-col col-span-2 md:h-[740px] w-[50%] p-4 gap-2  rounded-2xl shadow-lg">
+              <div className="flex flex-col col-span-2 md:h-[740px] w-[50%] p-4   rounded-2xl shadow-lg">
                 <div className="flex w-full items-center justify-between">
                   <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
                     <span className="text-[14px] font-semibold">
@@ -139,7 +139,7 @@ export default function Page() {
                         disabled={Number(selectedYear) < dayjs().year()}
                         className="disabled:cursor-not-allowed"
                       >
-                        <PencilIcon size={16} />
+                        <PencilIcon size={24} />
                       </button>
                     </DialogTrigger>
                     <EditObjetiveDialog
@@ -149,26 +149,26 @@ export default function Page() {
                     />
                   </Dialog>
                 </div>
-                <div className="flex flex-row h-full  items-center justify-center">
-                  <div className="relative bottom-32 right-2">
+                <div className="flex flex-row h-full items-center justify-center">
+                  <div className="relative bottom-24 left-4">
                     <Image
-                      height={65}
-                      width={65}
+                      height={50}
+                      width={50}
                       color="#808080"
                       alt="Quote"
                       src={'/icons/quote-2.svg'}
                     />
                   </div>
                   <div className="flex flex-col  max-w-[80%] h-auto gap-2  ">
-                    <h1 className="px-2 relative line-clamp-5 text-2xl break-all truncate overflow-hidden max-h-[6dvw] lg:max-h-[6vw] lg:max-w-[26dvw]  ">
+                    <h1 className="text-2xl w-90 text-center mt-2 line-clamp-5 overflow-hidden">
                       {currentGoal.objetivos.principal}
                     </h1>
                   </div>
-                  <div className="relative top-32  rotate-180 ">
+                  <div className="relative top-28  rotate-180 ">
                     <Image
-                      height={65}
-                      width={65}
-                      color="#808080"
+                      height={50}
+                      width={50}
+                      color="#e4e4e"
                       alt="Quote"
                       src={'/icons/quote-2.svg'}
                     />
