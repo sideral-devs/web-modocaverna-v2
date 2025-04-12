@@ -63,7 +63,7 @@ export default function GoalCard({
               </span>
             </div>
           </CardHeader>
-          <Link href={'/sonhos-e-metas'} className="mt-auto ml-auto">
+          <Link href={'/metas'} className="mt-auto ml-auto">
             <Button size="sm">Acessar</Button>
           </Link>
         </div>

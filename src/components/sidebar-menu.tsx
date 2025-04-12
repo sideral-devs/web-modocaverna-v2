@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import {
   Bookmark,
+  ClipboardCheck,
   DollarSignIcon,
   FlameIcon,
   HistoryIcon,
@@ -95,11 +96,18 @@ function SidebarMenu() {
             <span>Flow Produtividade</span>
           </Link>
           <Link
+            href="/metas"
+            className="flex items-center gap-4 text-zinc-400 hover:text-primary transition-all duration-200"
+          >
+            <ClipboardCheck size={16} />
+            <span>Metas</span>
+          </Link>
+          <Link
             href="/sonhos-e-metas"
             className="flex items-center gap-4 text-zinc-400 hover:text-primary transition-all duration-200"
           >
             <TargetIcon size={16} />
-            <span>Metas</span>
+            <span>Lei da Atração</span>
           </Link>
           <Link
             href="/financeiro"
@@ -144,13 +152,13 @@ function SidebarMenu() {
             <TrophyIcon size={16} />
             <span>Indique e Ganhe</span>
           </Link>
-          <Link
+          {/* <Link
             href="/settings/historico"
             className="flex items-center gap-4 text-zinc-400 hover:text-primary transition-all duration-200"
           >
             <HistoryIcon size={16} />
             <span>Histórico Desafio Caverna</span>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </SheetContent>

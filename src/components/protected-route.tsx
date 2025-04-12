@@ -45,7 +45,6 @@ export function ProtectedRoute({
 
     // Exemplo: se plano trial tenta acessar algo de non-trial
     if (user && level === 'non-trial' && userPlan === 'trial') {
-      console.log('entrou no if 3')
       router.push('/dashboard')
       return
     }
