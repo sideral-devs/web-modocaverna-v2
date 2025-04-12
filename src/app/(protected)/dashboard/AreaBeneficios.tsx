@@ -65,16 +65,16 @@ export function AreaBeneficios({ value }: { value: string }) {
             height={676}
           /> */}
 
-          <div className=" absolute bottom-24 flex flex-col w-full gap-4">
-            <h2 className="text-2xl font-semibold z-10">Indique & Ganhe</h2>
-            <p className="text-zinc-400 text-sm z-10">
+          <div className=" absolute bottom-20 flex pe-12 flex-col w-full gap-4">
+            <h2 className="text-2xl font-semibold  z-10">Indique & Ganhe</h2>
+            <p className="text-zinc-400  text-sm z-10">
               Aprenda, com aulas práticas, materiais e lives exclusivas, a
               aplicar nossas estratégias validadas. Descubra como indicar o Modo
               Caverna com inteligência, gerar impacto e ser recompensado por
               cada nova indicação.
             </p>
           </div>
-          <div className="flex flex-col absolute bottom-8 right-0  p-4 z-10">
+          <div className="flex flex-col absolute  bottom-[6px] right-[6px]  p-4 z-10">
             <Link className="ml-auto" href="/indique-e-ganhe">
               <Button size="sm">Acessar</Button>
             </Link>

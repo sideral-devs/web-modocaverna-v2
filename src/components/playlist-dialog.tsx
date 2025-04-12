@@ -175,7 +175,7 @@ function PlaylistView({
               return (
                 <div
                   key={song.id}
-                  className={`grid grid-cols-[auto_1fr_auto] gap-4 py-2 px-2 rounded-lg hover:bg-muted/50 cursor-pointer ${
+                  className={`grid grid-cols-[auto_1fr_auto] gap-2 py-2 px-1 rounded-lg hover:bg-muted/50 cursor-pointer ${
                     isCurrentSong ? 'border border-primary' : ''
                   }`}
                   onClick={() => onPlaySong(song, playlist.id)}
