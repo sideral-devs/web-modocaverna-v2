@@ -1,4 +1,5 @@
 'use client'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@/hooks/queries/use-user'
 import { env } from '@/lib/env'
 import { cn } from '@/lib/utils'
@@ -36,27 +37,28 @@ export function Sidebar() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pl-3">
         {user.user_foto && !imageError ? (
-          <Image
-            src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
-            width={36}
-            height={36}
-            className="rounded-xl"
-            objectFit="cover"
-            objectPosition="center"
-            alt="Foto do usuário"
-            onError={() => setImageError(true)}
-          />
+          <Avatar className="w-9 h-9 bg-red-500 border border-red-500">
+            <AvatarImage
+              src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
+              onError={() => setImageError(true)}
+            />
+            <AvatarFallback>
+              <div className="flex w-9 h-9 items-center justify-center bg-primary px-3 rounded-xl">
+                <span className="text-2xl">{user.name[0]}</span>
+              </div>
+            </AvatarFallback>
+          </Avatar>
         ) : (
           <div className="flex w-9 h-9 items-center justify-center bg-primary px-3 rounded-xl cursor-pointer">
             <span className="text-2xl">{user.name[0]}</span>
           </div>
         )}
-        <span className="text-xs">{user.name}</span>
+        <span className="text-base">{user.name}</span>
       </div>
       <div className="flex flex-col gap-4">
-        <span>Configuração geral</span>
+        <span className="text-base font-medium pl-3">Configuração geral</span>
         {navItems.map((navItem, index) => {
           const active = navItem.href === pathname
           const Icon = navItem.icon
@@ -68,8 +70,8 @@ export function Sidebar() {
                   active && 'bg-red-900 text-red-100',
                 )}
               >
-                <Icon size={16} />
-                <span className="text-xs font-semibold">{navItem.name}</span>
+                <Icon size={20} />
+                <span className="text-sm font-medium">{navItem.name}</span>
               </div>
             </Link>
           )

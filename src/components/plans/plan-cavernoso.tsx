@@ -1,74 +1,154 @@
-// import dayjs from 'dayjs'
-import { Check } from 'lucide-react'
+'use client'
 
-export function PlanCavernoso() {
-  const listToolsCavernoso = [
-    'Curso Modo Caverna',
-    'Desafio Caverna',
-    'Flow produtividade',
-    'Agenda de compromissos',
-    'Gerenciamento de Rotina',
-    'Rituais',
-    'Gestão de Finanças',
-    'Registro de Metas',
-    'Lei da atração',
-    'Acervo de Conhecimento',
-    'Treino',
-    'Alimentação',
-    'Acervo de Conhecimento',
-    'Gestão de Finanças',
-    'Anotações nativas',
-    'Lembretes rápidos',
-    'Área de cursos completa',
-    'Comunidade Alcateia',
-    'Ranking de prêmios',
-    'Indique e ganhe',
-    'Suporte via chat',
-    'Assistente Pessoal IA',
-  ]
+import { cn } from '@/lib/utils'
+import { Check } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Lightning } from '@phosphor-icons/react'
+import { Star } from '@phosphor-icons/react/dist/ssr'
+import { useState } from 'react'
+
+interface PlanCavernosoProps {
+  selectedPlan: string
+  onPlanChange: (plan: 'yearly' | 'monthly') => void
+  setSelectedPlan: (plan: 'yearly' | 'monthly') => void
+  isUpdatePlan: boolean
+}
+
+const PLAN_FEATURES = [
+  'Curso Modo Caverna',
+  'Desafio Caverna',
+  'Flow produtividade',
+  'Agenda de compromissos',
+  'Gerenciamento de Rotina',
+  'Rituais',
+  'Gestão de Finanças',
+  'Registro de Metas',
+  'Lei da atração',
+  'Acervo de Conhecimento',
+  'Anotações nativas',
+  'Lembretes rápidos',
+  'Área de cursos completa',
+  'Comunidade alcateia',
+  'Ranking de prêmios',
+  'Indique e ganhe',
+  'Suporte via chat',
+] as const
+
+export function PlanCavernoso({
+  selectedPlan,
+  setSelectedPlan,
+  isUpdatePlan,
+}: PlanCavernosoProps) {
+  const [showAllBenefits, setShowAllBenefits] = useState(false)
 
   return (
-    <div className="flex h-[455px] w-[337px] border border-red-500 rounded-2xl">
-      <div className="flex flex-col  gap-[1.5rem] w-full">
-        <div className="bg-emerald-900/30 w-full rounded-tr-2xl rounded-tl-2xl rounded p-4">
-          <p className="text-[13px] text-center text-emerald-400">
-            Você ganhou 7 dias para experimentar todas as ferramentas do Plano
-            Cavernoso!
+    <div
+      className={cn(
+        'flex flex-col transition-all duration-700 h-[800px] overflow-hidden w-full bg-zinc-900  rounded-3xl border',
+        showAllBenefits && 'h-[1132px]',
+      )}
+    >
+      <div className="flex flex-col relative gap-2">
+        <div className="flex absolute top-4  border border-zinc-700 right-4 items-center bg-zinc-800 rounded-full p-1 w-fit">
+          <button
+            onClick={() => setSelectedPlan('yearly')}
+            className={cn(
+              'px-6 py-2 rounded-full text-sm font-medium transition-all',
+              selectedPlan === 'yearly'
+                ? 'bg-white text-zinc-900'
+                : 'text-zinc-400 hover:text-zinc-200',
+            )}
+          >
+            Anual
+          </button>
+          {!isUpdatePlan && (
+            <button
+              onClick={() => setSelectedPlan('monthly')}
+              className={cn(
+                'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                selectedPlan === 'monthly'
+                  ? 'bg-white text-zinc-900'
+                  : 'text-zinc-400 hover:text-zinc-200',
+              )}
+            >
+              Mensal
+            </button>
+          )}
+        </div>
+        <div className="w-full gap-2 flex p-6 pb-0 flex-col">
+          <Avatar className="w-8 h-8 mb-2 rounded-none">
+            <AvatarImage
+              src={'/images/logo-icon.svg'}
+              className="object-contain"
+            />
+            <AvatarFallback>MC</AvatarFallback>
+          </Avatar>
+          <h2 className="text-2xl font-semibold">Plano Caverna</h2>
+          <p className="text-zinc-400 font-medium mb-4">
+            Explore todas ferramentas da plataforma
           </p>
         </div>
-        <div className="flex flex-col pb-1  gap-5 px-5 items-start justify-center">
-          <h3 className=" text-xl  pb-[0.8rem]"> Plano Cavernoso </h3>
+        {!isUpdatePlan && (
+          <div className="flex px-3 mb-3 items-center flex-col gap-2">
+            <Button className="w-full text-base h-[70px]">
+              Fazer upgrade <Lightning className="!w-4 !h-4" weight="fill" />{' '}
+            </Button>
+            {selectedPlan === 'yearly' && (
+              <span className="text-zinc-400 font-normal text-xs">
+                *cobrado anualmente
+              </span>
+            )}
+          </div>
+        )}
+      </div>
 
-          {/* <div className="flex items-end text-emerald-400 gap-2">
-          <h3 className="text-5xl">
-            R$
-            {selectedPlan === 'yearly' ? 299 : 49}
-          </h3>
-          <span>/ {selectedPlan === 'yearly' ? 'ano' : 'mês'}</span>
-        </div> */}
+      <div className="flex relative flex-col h-full border-t overflow-x-hidden overflow-y-auto border-red-500 border-x border-b bg-zinc-800 rounded-3xl">
+        <div className="border-b sticky top-0 bg-zinc-800 p-6 flex justify-between items-start">
+          <div className="flex items-start flex-col gap-2">
+            <Badge className="text-emerald-400 mb-2 bg-emerald-900">
+              Economize 50%
+            </Badge>
+            <h2 className="text-white flex items-end gap-2 mb-2 font-semibold text-3xl">
+              12x <span className="text-2xl">de R$30</span>
+            </h2>
+            <span className="text-zinc-400 font-medium text-sm">
+              ou R$299 à vista
+            </span>
+          </div>
+          <div className="flex items-center gap-2 flex-col">
+            <span className="text-yellow-50 font-medium text-xs">
+              +50 mil usuários
+            </span>
+            <div className="flex items-center gap-2">
+              <Star fill="#F9CB15" size={16} weight="fill" />
+              <Star fill="#F9CB15" size={16} weight="fill" />
+              <Star fill="#F9CB15" size={16} weight="fill" />
+              <Star fill="#F9CB15" size={16} weight="fill" />
+              <Star fill="#F9CB15" size={16} weight="fill" />
+            </div>
+          </div>
         </div>
-
-        <div className="flex flex-col  max-h-[298px]  bg-zinc-800 pt-5 pb-3 px-6 rounded-2xl gap-6">
-          <h5 className="text-sm text-zinc-400">
-            Acesso a todas as ferramentas:
-          </h5>
-          <ul className="flex max-h-[219px] overflow-auto flex-col gap-5  scrollbar-minimal">
-            {listToolsCavernoso &&
-              listToolsCavernoso.map((tool, index) => (
-                <li key={index} className="flex items-center gap-4">
-                  <Check size={16} className="text-zinc-400" />
-                  <span className="text-sm">{tool}</span>
-                </li>
-              ))}
-          </ul>
-          {/* <Link
-          href={getPlanUrl()}
-          target="_blank"
-          className="align-center justify-center flex"
-        >
-          <Button className="mt-6">Desbloquear Funcionalidades</Button>
-        </Link> */}
-        </div>
+        <ul className="flex flex-col gap-4 p-6">
+          <h3 className="text-zinc-400 mb-2">Ferramentas contempladas:</h3>
+          {PLAN_FEATURES.map((feature) => (
+            <li key={feature} className="flex items-center gap-3">
+              <Check size={20} className="text-zinc-400" />
+              <span className="text-zinc-300 text-sm">{feature}</span>
+            </li>
+          ))}
+        </ul>
+        {!showAllBenefits && (
+          <div className="absolute flex items-end pb-8 justify-center bottom-0 w-full h-52 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent">
+            <span
+              onClick={() => setShowAllBenefits(true)}
+              className="text-red-500 cursor-pointer font-medium text-sm"
+            >
+              Ver todos os benefícios
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

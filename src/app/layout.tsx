@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt_BR">
-      <body className={(rubik.className, 'antialiased')}>
+      <body className={`${rubik.className} antialiased`}>
         <MobileAlert />
         <GlobalProviders>{children}</GlobalProviders>
       </body>

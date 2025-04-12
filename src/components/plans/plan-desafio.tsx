@@ -1,51 +1,78 @@
-//  import dayjs from 'dayjs'
-import { Check } from 'lucide-react'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function PlanDesafio({ user }: { user: User }): JSX.Element {
-  const listToolsDesafio = [
-    'Curso Modo Caverna',
-    'Desafio Caverna',
-    'Indique e ganhe',
-    'Suporte via chat',
-  ]
-  return (
-    <div className="flex h-[455px] w-[337px] border border-zinc-700 rounded-2xl">
-      <div className="flex flex-col pt-10 gap-6 w-full">
-        <div className="flex flex-col gap-8 pb-4 px-5 items-start justify-center">
-          <h4 className="text-yellow-300 text-[14px]">Seu plano atual</h4>
-          <h3 className=" text-xl"> Plano Caverna </h3>
-          {/* <p className="text-xs">
-              Assinatura garantida até{" "}
-              <strong className="text-red-700">{dayjs(user.data_de_renovacao).format('DD/MM/YYYY')}</strong>
-            </p> */}
+import { Check, ToggleLeft } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-          {/* <div className="flex items-end text-emerald-400 gap-2">
-          <h3 className="text-5xl">
-            R$
-            {selectedPlan === 'yearly' ? 299 : 49}
-          </h3>
-          <span>/ {selectedPlan === 'yearly' ? 'ano' : 'mês'}</span>
-        </div> */}
+export function PlanDesafio() {
+  return (
+    <div className="flex flex-col w-full">
+      <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
+        <div className="flex flex-col gap-2 p-6 pb-0 mb-4">
+          <ToggleLeft size={20} className="text-zinc-400" />
+          <h3 className="text-[#F9CB15]">Sua assinatura atual</h3>
+          <h2 className="text-2xl font-semibold mb-2">Plano Caverna</h2>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-zinc-800/50 w-fit px-3 py-1 rounded-md border">
+              <span className="text-xs font-medium truncate text-zinc-400">
+                Assinante desde 21 Julho, 2024
+              </span>
+            </div>
+            <span className="text-[#F9CB15] font-medium truncate">
+              Acesso semestral
+            </span>
+          </div>
         </div>
 
-        <div className="flex flex-col h-full bg-zinc-800 py-5 px-6 rounded-2xl gap-6">
-          <h5 className="text-sm text-zinc-400">Você tem acesso a:</h5>
-          <ul className="flex flex-col gap-5">
-            {listToolsDesafio &&
-              listToolsDesafio.map((tool, index) => (
-                <li key={index} className="flex items-center gap-4">
-                  <Check size={16} className="text-amber-400" />
-                  <span className="text-sm">{tool}</span>
-                </li>
-              ))}
+        <div className="flex flex-col bg-zinc-800 border border-zinc-700 rounded-2xl p-6">
+          <h3 className="text-zinc-400 mb-4">Ferramentas contempladas:</h3>
+          <ul className="flex flex-col text-sm gap-4">
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Curso Modo Caverna</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Desafio Caverna</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Indique e ganhe</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Suporte via chat</span>
+            </li>
           </ul>
-          {/* <Link
-          href={getPlanUrl()}
-          target="_blank"
-          className="align-center justify-center flex"
-        >
-          <Button className="mt-6">Desbloquear Funcionalidades</Button>
-        </Link> */}
+        </div>
+      </div>
+      <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
+        <div className="flex flex-col gap-2">
+          <div className="flex p-6 pb-2 flex-col gap-2">
+            <Avatar className="w-8 h-8 mb-2 rounded-none">
+              <AvatarImage
+                src={'/images/logo-icon.svg'}
+                className="object-contain"
+              />
+              <AvatarFallback>MC</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="flex gap-2 pr-4 justify-between items-center">
+                <div>
+                  <h2 className="text-xl max-w-[200px] font-semibold mb-2">
+                    Avaliação gratuita acaba em
+                  </h2>
+                </div>
+                <h3 className="text-red-500 font-bold text-4xl">5 dias</h3>
+              </div>
+            </div>
+          </div>
+          <div className="w-full border-t border-red-500 p-6">
+            <h4 className="text-white mb-2 font-bold text-sm">
+              Está curtindo a experiência?
+            </h4>
+            <h4 className="text-white/50 font-medium text-sm">
+              Ative a sua assinatura Cavernosa para continuar aproveitando todas
+              as funcionalidades.
+            </h4>
+          </div>
         </div>
       </div>
     </div>
