@@ -97,8 +97,7 @@ export function PlanCavernoso({
               onClick={() => window.open(getPlanUrl(), '_blank')}
               className="w-full text-base h-[70px]"
             >
-              Fazer upgrade{' '}
-              <Lightning className="!w-4 !h-4" weight="fill" />{' '}
+              Fazer upgrade <Lightning className="!w-4 !h-4" weight="fill" />{' '}
             </Button>
             {selectedPlan === 'yearly' && (
               <span className="text-zinc-400 font-normal text-xs">
