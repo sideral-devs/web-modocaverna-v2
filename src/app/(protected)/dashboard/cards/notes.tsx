@@ -140,7 +140,7 @@ export default function NotesCard() {
       </div>
       <Link className="ml-auto" href="/anotacoes">
         <Button className="block" size="sm">
-          Abrir Anotações
+          Abrir Notas
         </Button>
       </Link>
     </Card>
