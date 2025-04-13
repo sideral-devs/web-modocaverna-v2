@@ -54,8 +54,8 @@ export function PlanCavernoso({
     <div
       className={cn(
         'flex flex-col transition-all duration-700 h-[800px] overflow-hidden w-full bg-zinc-900  rounded-3xl border',
-        showAllBenefits && 'h-[1132px]',
-        isAnnualPlan && 'h-[632px]',
+        showAllBenefits && 'h-auto',
+        isAnnualPlan && 'h-auto',
       )}
     >
       <div className="flex flex-col relative gap-2">
@@ -126,7 +126,7 @@ export function PlanCavernoso({
         )}
       </div>
 
-      <div className="flex relative flex-col h-full border-t overflow-hidden  border-red-500 border-x border-b bg-zinc-800 rounded-3xl">
+      <div className="flex relative flex-col h-auto border-t overflow-hidden  border-red-500 border-x border-b bg-zinc-800 rounded-3xl">
         {!isAnnualPlan && (
           <div className="border-b sticky top-0 bg-zinc-800 p-6 flex justify-between items-start">
             <div className="flex items-start flex-col gap-2">
