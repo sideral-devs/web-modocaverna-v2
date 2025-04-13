@@ -160,47 +160,83 @@ export default function RitualsCard() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="matinal">
-              <div className="flex flex-col px-4 divide-y">
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd}
-                >
-                  <SortableContext
-                    items={morningRitual.itens}
-                    strategy={verticalListSortingStrategy}
+              {morningRitual.itens.length > 0 ? (
+                <div className="flex flex-col px-4 divide-y">
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
                   >
-                    <ul className="divide-y">
-                      {morningRitual.itens.map((item, index) => (
-                        <SortableItem
-                          key={index}
-                          id={item + '-' + index}
-                          index={index + 1}
-                          text={item}
-                          onRemove={() => handleRemove(item, morningRitual)}
-                          disabled
-                        />
-                      ))}
-                    </ul>
-                  </SortableContext>
-                </DndContext>
-              </div>
+                    <SortableContext
+                      items={morningRitual.itens}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <ul className="divide-y">
+                        {morningRitual.itens.map((item, index) => (
+                          <SortableItem
+                            key={index}
+                            id={item + '-' + index}
+                            index={index + 1}
+                            text={item}
+                            onRemove={() => handleRemove(item, morningRitual)}
+                            disabled
+                          />
+                        ))}
+                      </ul>
+                    </SortableContext>
+                  </DndContext>
+                </div>
+              ) : (
+                <div className="flex flex-col flex-1 items-center justify-center relative">
+                  <Image
+                    src="/images/empty-states/empty_rituals.png"
+                    alt="Nenhum objetivo encontrado"
+                    width={140}
+                    height={110}
+                    className="opacity-50"
+                  />
+                  <div className="w-60">
+                    <p className="text-[13px] text-zinc-400 text-center">
+                      Em breve você poderá criar e acompanhar seus rituais por
+                      aqui.
+                    </p>
+                  </div>
+                </div>
+              )}
             </TabsContent>
             <TabsContent value="noturno">
-              <div className="flex flex-col px-4 divide-y">
-                <ul className="divide-y">
-                  {nightRitual.itens.map((item, index) => (
-                    <SortableItem
-                      key={index}
-                      id={item + '-' + index}
-                      index={index + 1}
-                      text={item}
-                      onRemove={() => handleRemove(item, nightRitual)}
-                      disabled
-                    />
-                  ))}
-                </ul>
-              </div>
+              {nightRitual.itens.length > 0 ? (
+                <div className="flex flex-col px-4 divide-y">
+                  <ul className="divide-y">
+                    {nightRitual.itens.map((item, index) => (
+                      <SortableItem
+                        key={index}
+                        id={item + '-' + index}
+                        index={index + 1}
+                        text={item}
+                        onRemove={() => handleRemove(item, nightRitual)}
+                        disabled
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="flex flex-col flex-1 items-center justify-center relative">
+                  <Image
+                    src="/images/empty-states/empty_rituals.png"
+                    alt="Nenhum objetivo encontrado"
+                    width={140}
+                    height={110}
+                    className="opacity-50"
+                  />
+                  <div className="w-60">
+                    <p className="text-[13px] text-zinc-400 text-center">
+                      Em breve você poderá criar e acompanhar seus rituais por
+                      aqui.
+                    </p>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>

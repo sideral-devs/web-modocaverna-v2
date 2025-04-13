@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import {
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -167,8 +168,9 @@ export function EditRitualDialog({
                       value={newItem}
                       onChange={(e) => setNewItem(e.target.value)}
                     />
-
-                    <PlusIcon className="text-primary" />
+                    <button type="submit">
+                      <PlusIcon className="text-primary" />
+                    </button>
                   </div>
                 </form>
                 <div className="flex flex-col px-4">
@@ -215,8 +217,9 @@ export function EditRitualDialog({
                       value={newItem}
                       onChange={(e) => setNewItem(e.target.value)}
                     />
-
-                    <PlusIcon className="text-primary" />
+                    <button type="submit">
+                      <PlusIcon className="text-primary" />
+                    </button>
                   </div>
                 </form>
                 <div className="flex flex-col px-4">
@@ -260,7 +263,9 @@ export function EditRitualDialog({
         >
           Recalcular rituais
         </Button>
-        <Button className="h-10">Salvar</Button>
+        <DialogClose asChild>
+          <Button className="h-10">Salvar</Button>
+        </DialogClose>
       </DialogFooter>
     </DialogContent>
   )

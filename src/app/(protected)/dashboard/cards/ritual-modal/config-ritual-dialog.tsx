@@ -40,7 +40,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addHours, format, parse } from 'date-fns'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
@@ -85,6 +85,8 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
   const [morningItems, setMorningItems] = useState<ListItem[]>([])
   const [nightItems, setNightItems] = useState<ListItem[]>([])
   const [loading, setLoading] = useState(false)
+
+  const queryClient = useQueryClient()
 
   const allSteps = 4
 
@@ -233,6 +235,12 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
                   setMorningItems([])
                   setNightItems([])
                   onClose()
+                  queryClient.invalidateQueries({
+                    queryKey: ['rituais-blocos-matinais'],
+                  })
+                  queryClient.invalidateQueries({
+                    queryKey: ['rituais-blocos-noturnos'],
+                  })
               }
             }}
           >
@@ -492,8 +500,9 @@ function AddMorningRitual({
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
             />
-
-            <PlusIcon className="text-primary" />
+            <button type="submit">
+              <PlusIcon className="text-primary" />
+            </button>
           </div>
           {recommended.filter((item) => !items.some((i) => i.id === item.id))
             .length > 0 && (
