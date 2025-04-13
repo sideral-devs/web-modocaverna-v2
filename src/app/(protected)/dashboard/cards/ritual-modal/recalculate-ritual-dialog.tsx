@@ -244,6 +244,19 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
     )
   }
 
+  function sleepTime() {
+    let horasSomadas: string = ''
+    if (data) {
+      horasSomadas = sumHours(
+        data.horario_trabalho_estudo,
+        (data.duracao_ritual_matinal / 60) * -1,
+      )
+    }
+    const horasSemZero = parseInt(horasSomadas.split(':')[0], 10)
+
+    return horasSemZero
+  }
+
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
       <div className="flex items-center p-5 gap-6">
@@ -268,9 +281,8 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <Bed className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">Sono</h3>
             <span className="text-xs leading-none">
-              Tenha pelo menos 8 horas de sono diárias
+              {sleepTime()} horas de sono
             </span>
           </div>
         </div>
@@ -279,7 +291,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <AlarmClock className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">Manhã</h3>
             <span className="text-xs leading-none">
               Acorde às{' '}
               <strong>
@@ -296,9 +307,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <CloudSun className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">
-              Ritual Matinal
-            </h3>
             <span className="text-xs leading-none">
               Dedique {data.duracao_ritual_matinal} minutos ao{' '}
               <strong>Ritual Matinal</strong>
@@ -310,9 +318,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <MoonIcon className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">
-              Ritual Noturno
-            </h3>
             <span className="text-xs leading-none">
               Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
               {sumHours(data.inicio_dormir, 0.5 * -1)}
