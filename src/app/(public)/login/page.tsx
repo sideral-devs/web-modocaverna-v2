@@ -45,7 +45,7 @@ export default function Page() {
   } = form
 
   const { setToken, token } = useAuthStore()
-  const { data: user, isLoading, isError } = useUser()
+  const { data: user, isLoading, isError, isFetched } = useUser()
   const router = useRouter()
 
   const { mutateAsync } = useMutation({
@@ -53,7 +53,6 @@ export default function Page() {
       timezone,
       ...data
     }: LoginData & { timezone: string }) => {
-      // await getCsrfToken()
       const response = await api.post('/auth/login', {
         ...data,
         timezone,
@@ -89,7 +88,7 @@ export default function Page() {
     }
   }
 
-  if (user && !isLoading && !isError && token) {
+  if (user && !isLoading && !isError && token && isFetched) {
     return redirect('/dashboard')
   }
 

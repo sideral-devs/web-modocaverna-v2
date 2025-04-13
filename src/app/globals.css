@@ -106,6 +106,9 @@
   .text-gradient {
     @apply bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
   }
+  .vertical-timeline::before {
+    background: linear-gradient(to bottom, #dc2626, #000); /* red-600 para black */
+  }
 }
 
 .fc-theme-standard {

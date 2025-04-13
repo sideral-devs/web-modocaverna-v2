@@ -110,9 +110,16 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
               rituais.
             </span>
           </div>
-          <Link href="/desafio-caverna" className="mt-auto ml-auto">
-            <Button size="sm">Ver Desafio</Button>
-          </Link>
+          <div className="flex w-full justify-between">
+            <Link href="/historico-desafio" className="mt-auto bg-primary">
+              <Button size="sm">Ver Histórico</Button>
+            </Link>
+            <Link href="/desafio-caverna" className="mt-auto">
+              <Button size="sm" className="bg-zinc-700" color="bg-zinc-700">
+                Ver Desafio
+              </Button>
+            </Link>
+          </div>
         </div>
       )
     } else {
@@ -144,9 +151,16 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
           </div>
           <CountdownTimer targetDate={targetDate} />
         </div>
-        <Link href="/desafio-caverna" className="mt-auto ml-auto">
-          <Button size="sm">Ver Desafio</Button>
-        </Link>
+        <div className="flex w-full justify-between">
+          <Link href="/historico-desafio" className="mt-auto">
+            {/* <Button size="sm" className="bg-zinc-500">
+              Ver Histórico
+            </Button> */}
+          </Link>
+          <Link href="/desafio-caverna" className="mt-auto">
+            <Button size="sm">Ver Desafio</Button>
+          </Link>
+        </div>
       </>
     )
   }

@@ -63,25 +63,32 @@ export default function GoalCard({
               </span>
             </div>
           </CardHeader>
-          <Link href={'/sonhos-e-metas'} className="mt-auto ml-auto">
-            <Button size="sm">Acessar</Button>
+          <Link href={'/metas'} className="mt-auto ml-auto">
+            <Button size="sm">Minhas Metas</Button>
           </Link>
         </div>
       )}
 
       {currentGoal ? (
-        <div className="flex flex-col  flex-1 items-center justify-center md:justify-center md:pt-0">
-          <div className="flex flex-row max-w-80 items-center">
+        <div className="flex flex-col flex-1 items-center justify-center md:pt-0">
+          <div className=" flex flex-col max-w-80 items-start">
             <Image
               height={40}
               width={40}
               alt="Quote"
               src={'/icons/quote.svg'}
-              className="relative bottom-8 right-2"
+              className="relative  right-2"
             />
-            <p className="text-base text-center mt-2">
+            <p className="text-base w-80 text-center mt-2 line-clamp-5 overflow-hidden">
               {currentGoal.objetivos.principal}
             </p>
+            <Image
+              className=" translate-x-72 bottom-5"
+              height={40}
+              width={40}
+              alt="Quote"
+              src={'/icons/quote-revers.svg'}
+            />
           </div>
         </div>
       ) : (

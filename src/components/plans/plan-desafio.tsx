@@ -1,96 +1,104 @@
-import { Check, X } from 'lucide-react'
+'use client'
+
+import { Check, ToggleLeft } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useUser } from '@/hooks/queries/use-user'
 
 export function PlanDesafio() {
-  return (
-    <div className="flex  w-80 bg-gradient-to-b from-[#2a2a2a] from-[12%] to-zinc-900 rounded-2xl">
-      <div className="flex flex-col py-8 gap-6 w-full">
-        <div className="flex items-center justify-center">
-          <h3 className=""> Plano Desafio Caverna </h3>
+  const { data: user } = useUser()
 
-          {/* <div className="flex items-end text-emerald-400 gap-2">
-          <h3 className="text-5xl">
-            R$
-            {selectedPlan === 'yearly' ? 299 : 49}
-          </h3>
-          <span>/ {selectedPlan === 'yearly' ? 'ano' : 'mês'}</span>
-        </div> */}
+  const isTrial = user?.status_plan === 'TRIAL'
+
+  // Calculate the number of days left in the trial
+  const now = new Date()
+  const renewalDate = new Date(user?.data_de_renovacao ?? now)
+
+  now.setHours(0, 0, 0, 0)
+  renewalDate.setHours(0, 0, 0, 0)
+
+  const trialDaysLeft = Math.ceil(
+    (renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+  )
+
+  return (
+    <div className="flex flex-col w-full">
+      <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
+        <div className="flex flex-col gap-2 p-6 pb-0 mb-4">
+          <ToggleLeft size={20} className="text-zinc-400" />
+          <h3 className="text-[#F9CB15]">Sua assinatura atual</h3>
+          <h2 className="text-2xl font-semibold mb-2">Plano Caverna</h2>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center bg-zinc-800/50 w-fit px-3 py-1 rounded-md border">
+              <span className="text-xs font-medium truncate text-zinc-400">
+                Assinante desde 21 Julho, 2024
+              </span>
+            </div>
+            <span className="text-[#F9CB15] font-medium truncate">
+              Acesso semestral
+            </span>
+          </div>
         </div>
-        <div className="w-full h-[1px] bg-zinc-700" />
-        <div className="flex flex-col pb-5 px-6 gap-6">
-          <span className="flex w-fit px-3 py-1 text-xs font-semibold bg-red-700  rounded-full">
-            6 meses de Acesso
-          </span>
-          <ul className="flex flex-col gap-5">
-            <li className="flex items-center gap-4">
-              <Check size={16} className="text-emerald-400" />
-              <span className="text-xs text-zinc-400">
-                Desafio Modo caverna
-              </span>
+
+        <div className="flex flex-col bg-zinc-800 border border-zinc-700 rounded-2xl p-6">
+          <h3 className="text-zinc-400 mb-4">Ferramentas contempladas:</h3>
+          <ul className="flex flex-col text-sm gap-4">
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Curso Modo Caverna</span>
             </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Flow Produtividade
-              </span>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Desafio Caverna</span>
             </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Gestão de Metas Anuais
-              </span>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Indique e ganhe</span>
             </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Agenda Integrada ao Google
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Gestão Financeira Pessoal
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Assistente Pessoal com IA
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Organização de Biblioteca
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Acesso a Cursos e Vídeos
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Conteúdos Exclusivos
-              </span>
-            </li>
-            <li className="flex items-center gap-4">
-              <X size={16} className="text-primary" />
-              <span className="text-xs line-through text-zinc-400">
-                Suporte Humanizado via Chat
-              </span>
+            <li className="flex items-center gap-3">
+              <Check size={20} className="text-[#F9CB15]" />
+              <span className="text-zinc-300">Suporte via chat</span>
             </li>
           </ul>
-          {/* <Link
-          href={getPlanUrl()}
-          target="_blank"
-          className="align-center justify-center flex"
-        >
-          <Button className="mt-6">Desbloquear Funcionalidades</Button>
-        </Link> */}
         </div>
       </div>
+
+      {/* TODO: Use when the user is on the free trial */}
+      {isTrial && (
+        <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
+          <div className="flex flex-col gap-2">
+            <div className="flex p-6 pb-2 flex-col gap-2">
+              <Avatar className="w-8 h-8 mb-2 rounded-none">
+                <AvatarImage
+                  src={'/images/logo-icon.svg'}
+                  className="object-contain"
+                />
+                <AvatarFallback>MC</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <div className="flex gap-2 pr-4 justify-between items-center">
+                  <div>
+                    <h2 className="text-xl max-w-[200px] font-semibold mb-2">
+                      Avaliação gratuita acaba em
+                    </h2>
+                  </div>
+                  <h3 className="text-red-500 font-bold text-4xl">
+                    {trialDaysLeft} dias
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div className="w-full border-t border-red-500 p-6">
+              <h4 className="text-white mb-2 font-bold text-sm">
+                Está curtindo a experiência?
+              </h4>
+              <h4 className="text-white/50 font-medium text-sm">
+                Ative a sua assinatura Cavernosa para continuar aproveitando
+                todas as funcionalidades.
+              </h4>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
