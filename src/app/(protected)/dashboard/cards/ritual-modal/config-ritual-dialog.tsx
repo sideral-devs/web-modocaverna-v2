@@ -317,7 +317,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
     )
   }
   function sleepTime() {
-    let horasSomadas = 0
+    let horasSomadas: string = ''
     if (data) {
       horasSomadas = sumHours(
         data.horario_trabalho_estudo,
