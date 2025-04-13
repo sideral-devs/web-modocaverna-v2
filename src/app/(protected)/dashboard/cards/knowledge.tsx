@@ -112,7 +112,7 @@ export default function KnowledgeCard() {
       </div>
 
       <Link className="ml-auto" href="/conhecimento">
-        <Button size="sm">Acessar</Button>
+        <Button size="sm">Gerenciar</Button>
       </Link>
     </Card>
   )
