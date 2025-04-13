@@ -196,10 +196,22 @@ export default function RitualsCard() {
                     className="opacity-50"
                   />
                   <div className="w-60">
-                    <p className="text-[13px] text-zinc-400 text-center">
-                      Em breve você poderá criar e acompanhar seus rituais por
-                      aqui.
-                    </p>
+                    <Dialog
+                      open={editRitualDialogOpen}
+                      onOpenChange={setEditRitualDialogOpen}
+                    >
+                      <DialogTrigger>
+                        <p className="text-[13px] text-zinc-400 text-center">
+                          Clique aqui para montar o seu Ritual Matinal.
+                        </p>
+                      </DialogTrigger>
+                      <EditRitualDialog
+                        openRecalculate={() => {
+                          setEditRitualDialogOpen(false)
+                          setRecalculateDialogOpen(true)
+                        }}
+                      />
+                    </Dialog>
                   </div>
                 </div>
               )}
@@ -230,10 +242,22 @@ export default function RitualsCard() {
                     className="opacity-50"
                   />
                   <div className="w-60">
-                    <p className="text-[13px] text-zinc-400 text-center">
-                      Em breve você poderá criar e acompanhar seus rituais por
-                      aqui.
-                    </p>
+                    <Dialog
+                      open={editRitualDialogOpen}
+                      onOpenChange={setEditRitualDialogOpen}
+                    >
+                      <DialogTrigger>
+                        <p className="text-[13px] text-zinc-400 text-center">
+                          Clique aqui para montar o seu Ritual Noturno.
+                        </p>
+                      </DialogTrigger>
+                      <EditRitualDialog
+                        openRecalculate={() => {
+                          setEditRitualDialogOpen(false)
+                          setRecalculateDialogOpen(true)
+                        }}
+                      />
+                    </Dialog>
                   </div>
                 </div>
               )}
@@ -261,7 +285,10 @@ export default function RitualsCard() {
         />
         <div className="w-60">
           <p className="text-[13px] text-zinc-400 text-center">
-            Em breve você poderá criar e acompanhar seus rituais por aqui.
+            Rituais constroem disciplina.
+          </p>
+          <p className="text-[13px] text-zinc-400 text-center">
+            Crie seus Rituais e assuma o controle do seu dia.
           </p>
         </div>
       </div>

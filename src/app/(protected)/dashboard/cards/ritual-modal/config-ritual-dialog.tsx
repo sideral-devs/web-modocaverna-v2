@@ -316,6 +316,15 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
       </div>
     )
   }
+  function sleepTime() {
+    const horasSomadas = sumHours(
+      data.horario_trabalho_estudo,
+      (data.duracao_ritual_matinal / 60) * -1,
+    )
+    const horasSemZero = parseInt(horasSomadas.split(':')[0], 10)
+
+    return horasSemZero
+  }
 
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
@@ -341,9 +350,8 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <Bed className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">Sono</h3>
             <span className="text-xs leading-none">
-              Tenha pelo menos 8 horas de sono diárias
+              {sleepTime()} horas de sono
             </span>
           </div>
         </div>
@@ -352,7 +360,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <AlarmClock className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">Manhã</h3>
             <span className="text-xs leading-none">
               Acorde às{' '}
               <strong>
@@ -369,9 +376,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <CloudSun className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">
-              Ritual Matinal
-            </h3>
             <span className="text-xs leading-none">
               Dedique {data.duracao_ritual_matinal} minutos ao{' '}
               <strong>Ritual Matinal</strong>
@@ -383,9 +387,6 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             <MoonIcon className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h3 className="text-sm font-semibold leading-tight">
-              Ritual Noturno
-            </h3>
             <span className="text-xs leading-none">
               Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
               {sumHours(data.inicio_dormir, 0.5 * -1)}
@@ -470,14 +471,14 @@ function AddMorningRitual({
           <span className="font-normal text-sm">
             Seu Ritual Matinal começa às{' '}
             <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(data.inicio_dormir, 8).replace(':', 'h') + 'm'}
+              {sumHours(
+                data.horario_trabalho_estudo,
+                (data.duracao_ritual_matinal / 60) * -1,
+              ).replace(':', 'h') + 'm'}
             </span>{' '}
             <br /> e termina às{' '}
             <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(
-                sumHours(data.inicio_dormir, 8),
-                data.duracao_ritual_matinal / 60,
-              ).replace(':', 'h') + 'm'}
+              {data.horario_trabalho_estudo.replace(':', 'h') + 'm'}
             </span>
           </span>
           <span className="text-zinc-400 text-xs">
@@ -624,7 +625,7 @@ function AddNightRitual({
         </Avatar>
         <div className="flex flex-col gap-3">
           <span className="font-normal text-sm">
-            Seu Ritual Matinal começa às{' '}
+            Seu Ritual Noturno começa às{' '}
             <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {sumHours(data.inicio_dormir, 0.5 * -1).replace(':', 'h') + 'm'}
             </span>{' '}
