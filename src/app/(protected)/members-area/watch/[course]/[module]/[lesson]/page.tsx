@@ -420,9 +420,7 @@ function ClassLink({
     </Link>
   )
 }
-
+// eslint-disable-next-line
 function LessonMaterial({ aulaId }: { aulaId: string }) {
-  return (
-    <></>
-  )
+  return <></>
 }
