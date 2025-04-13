@@ -115,8 +115,11 @@ export default function Page() {
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
         <Header className="border-0">
-          <div className="flex w-fit items-center px-3 py-2 gap-1 border rounded-full">
-            <span className="uppercase text-[10px] font-semibold"> Metas </span>
+          <div className="flex w-fit items-center px-3 py-2 gap-1 border border-white rounded-full">
+            <span className="uppercase text-[10px] text-white font-semibold ">
+              {' '}
+              Metas{' '}
+            </span>
           </div>
           <HeaderClose />
         </Header>

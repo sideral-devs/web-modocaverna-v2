@@ -110,7 +110,9 @@ export default function RitualsCard() {
       <Card className="flex flex-col w-full h-full min-h-[300px] relative overflow-hidden">
         <CardHeader className="justify-between p-4">
           <div className="flex px-3 py-2 pt-[9px] border border-white rounded-full">
-            <span className="text-[10px] font-semibold">RITUAIS</span>
+            <span className="text-[10px] text-white font-semibold">
+              RITUAIS
+            </span>
           </div>
           <Dialog
             open={editRitualDialogOpen}

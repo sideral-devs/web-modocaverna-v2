@@ -17,8 +17,7 @@ export function TempleForge({ value }: { value: string }) {
           <div
             className="absolute  right-1 bottom-5 w-full h-full"
             style={{
-              backgroundImage:
-                "url('/images/cursos-indique-e-ganhe/frame_esquerda.png')",
+              backgroundImage: "url('/images/card-frames/treinos_mock.png')",
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'FIT',
@@ -44,8 +43,9 @@ export function TempleForge({ value }: { value: string }) {
           <div
             className="absolute right-1 bottom-5 w-full h-full"
             style={{
-              backgroundImage: "url('/images/card-frames/frame_direita.png')",
-              backgroundPosition: 'center',
+              backgroundImage:
+                "url('/images/card-frames/alimentacao_mock.png')",
+              backgroundPosition: 'cover',
               backgroundRepeat: 'no-repeat',
               backgroundSize: 'FIT',
             }}
