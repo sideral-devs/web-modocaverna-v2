@@ -3,22 +3,14 @@
 import { Check, ToggleLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@/hooks/queries/use-user'
+import dayjs from 'dayjs'
 
 export function PlanDesafio() {
   const { data: user } = useUser()
 
-  const isTrial = user?.status_plan === 'TRIAL'
+  const isTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
 
-  // Calculate the number of days left in the trial
-  const now = new Date()
-  const renewalDate = new Date(user?.data_de_renovacao ?? now)
-
-  now.setHours(0, 0, 0, 0)
-  renewalDate.setHours(0, 0, 0, 0)
-
-  const trialDaysLeft = Math.ceil(
-    (renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-  )
+  const trialDaysLeft = dayjs(user?.data_de_renovacao).diff(dayjs(), 'days')
 
   return (
     <div className="flex flex-col w-full">
@@ -26,7 +18,7 @@ export function PlanDesafio() {
         <div className="flex flex-col gap-2 p-6 pb-0 mb-4">
           <ToggleLeft size={20} className="text-zinc-400" />
           <h3 className="text-[#F9CB15]">Sua assinatura atual</h3>
-          <h2 className="text-2xl font-semibold mb-2">Plano Caverna</h2>
+          <h2 className="text-2xl font-semibold mb-2">Plano Desafio Caverna</h2>
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-zinc-800/50 w-fit px-3 py-1 rounded-md border">
               <span className="text-xs font-medium truncate text-zinc-400">

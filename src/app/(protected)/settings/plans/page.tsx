@@ -15,6 +15,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -35,11 +36,14 @@ export default function Page() {
     }
   }
 
-  const isOnTrial = user?.status_plan === 'TRIAL'
+  // const isActive = user?.status_plan === 'ATIVO'
+  // const isInactive = user?.status_plan === 'INATIVO'
+  const isOnTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
   const isExpired = user?.status_plan === 'EXPIRADO'
-  // const isActive = user?.plan === 'ATIVO'
   const isMonthlyPlan = user?.plan === 'MENSAL'
-  // const isAnnualPlan = user?.plan === 'ANUAL'
+  const isAnnualPlan = user?.plan === 'ANUAL'
+
+  console.log(user?.plan, user?.status_plan)
 
   return (
     <div className="flex flex-col justify-start items-start col-span-3 gap-10">
@@ -63,15 +67,39 @@ export default function Page() {
         </Breadcrumb>
       </div>
 
+      {isExpired && (
+        <div className="flex border border-red-500 bg-red-900/20 rounded-lg p-4 justify-between items-center w-full gap-4">
+          <div className="flex items-center gap-4">
+            <Avatar className="w-8 h-8 rounded-none">
+              <AvatarImage
+                src={'/images/logo-icon.svg'}
+                className="object-contain"
+              />
+              <AvatarFallback>MC</AvatarFallback>
+            </Avatar>
+            <p className="text-lg text-white">Sua avaliação gratuita expirou</p>
+          </div>
+          <h3 className="text-red-500 font-bold">Upgrade</h3>
+        </div>
+      )}
+
+      {isAnnualPlan && (
+        <div className="">
+          <h2 className="text-3xl font-medium">Aproveite seu plano </h2>
+        </div>
+      )}
+
       <div className="flex items-start w-full gap-4">
         {/* FIRST COLUMN */}
-        <PlanUpdateToAnnual
-          selectedPlan={selectedPlan}
-          setSelectedPlan={setSelectedPlan}
-          getPlanUrl={getPlanUrl}
-        />
+        {!isAnnualPlan && isMonthlyPlan && (
+          <PlanUpdateToAnnual
+            selectedPlan={selectedPlan}
+            setSelectedPlan={setSelectedPlan}
+            getPlanUrl={getPlanUrl}
+          />
+        )}
 
-        {isOnTrial || (isExpired && <PlanDesafio />)}
+        {(isOnTrial || isExpired) && <PlanDesafio />}
 
         {/* SECOND COLUMN */}
         <PlanCavernoso
