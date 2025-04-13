@@ -187,11 +187,10 @@ export function EditRitualDialog({
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item + '-' + index}
+                            id={item}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
-                            disabled
                           />
                         ))}
                       </ul>
@@ -236,11 +235,10 @@ export function EditRitualDialog({
                         {nightRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item + '-' + index}
+                            id={item}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
-                            disabled
                           />
                         ))}
                       </ul>

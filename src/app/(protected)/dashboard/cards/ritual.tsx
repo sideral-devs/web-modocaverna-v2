@@ -98,6 +98,7 @@ export default function RitualsCard() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
+    console.log(event)
     if (!morningRitual || !over || active.id === over.id) return
 
     const oldIndex = morningRitual.itens.findIndex((item) => item === active.id)
@@ -175,11 +176,10 @@ export default function RitualsCard() {
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item + '-' + index}
+                            id={item}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item, morningRitual)}
-                            disabled
                           />
                         ))}
                       </ul>
@@ -223,11 +223,10 @@ export default function RitualsCard() {
                     {nightRitual.itens.map((item, index) => (
                       <SortableItem
                         key={index}
-                        id={item + '-' + index}
+                        id={item}
                         index={index + 1}
                         text={item}
                         onRemove={() => handleRemove(item, nightRitual)}
-                        disabled
                       />
                     ))}
                   </ul>
