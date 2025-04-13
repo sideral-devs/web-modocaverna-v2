@@ -64,7 +64,7 @@ export default function DreamboardCard({
             </div>
           </CardHeader>
           <Link href={'/lei-da-atracao'} className="mt-auto ml-auto">
-            <Button size="sm">Acessar</Button>
+            <Button size="sm">Manifestar Futuro</Button>
           </Link>
         </div>
       )}

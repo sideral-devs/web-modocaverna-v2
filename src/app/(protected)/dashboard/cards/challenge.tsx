@@ -162,9 +162,9 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
         </div>
         <div className="flex w-full justify-between">
           <Link href="/historico-desafio" className="mt-auto">
-            {/* <Button size="sm" className="bg-zinc-500">
+            <Button size="sm" className="bg-zinc-500">
               Ver Histórico
-            </Button> */}
+            </Button>
           </Link>
           <Link href="/desafio-caverna" className="mt-auto">
             <Button size="sm">Ver Desafio</Button>

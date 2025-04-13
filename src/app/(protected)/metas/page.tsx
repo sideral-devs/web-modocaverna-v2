@@ -124,9 +124,9 @@ export default function Page() {
           <HeaderClose />
         </Header>
         <section className="flex flex-col items-center w-full gap-2 ">
-          <div className="flex flex-row justify-between border-zinc-700 border-4 rounded-xl w-full max-w-8xl p-4 gap-4">
+          <div className="flex flex-row justify-between border-zinc-700 h-[360px] border-4 rounded-xl w-full max-w-8xl p-2 gap-4">
             {currentGoal ? (
-              <div className="flex flex-col col-span-2 md:h-[740px] w-[50%] p-4   rounded-2xl shadow-lg">
+              <div className="flex flex-col col-span-2 md:h-[350px] w-[50%] p-4   rounded-2xl shadow-lg">
                 <div className="flex w-full items-center justify-between">
                   <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
                     <span className="text-[14px] font-semibold">
@@ -197,14 +197,14 @@ export default function Page() {
               </div>
             )}
             {currentGoal ? (
-              <div className="flex flex-col col-span-2  md:h-[740px] w-[50%] p-4 gap-2 bg-zinc-800 border-t border-zinc-600 rounded-2xl shadow-lg">
+              <div className="flex flex-col col-span-2  md:h-[340px] w-[50%] p-4 gap-2 bg-zinc-800 border-t border-zinc-600 rounded-2xl shadow-lg">
                 <div className="flex flex-col gap-8 lg:gap-8">
                   <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
                     <span className="text-[14px] font-semibold">
                       O que preciso fazer?
                     </span>
                   </div>
-                  <div className="flex flex-col gap-8">
+                  <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto">
                     {currentGoal.objetivos.lista.length > 0 ? (
                       currentGoal.objetivos.lista.map((item, index) => (
                         <EditableObjectiveItem
