@@ -33,7 +33,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>
 
 export default function Page() {
-  const queryClient = useQueryClient()
+ // const queryClient = useQueryClient()
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   })
@@ -74,7 +74,7 @@ export default function Page() {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       await mutateAsync({ timezone, ...data })
       await signOut({ redirect: false }).catch(() => {})
-      queryClient.invalidateQueries({ queryKey: ['user'] })
+      // queryClient.invalidateQueries({ queryKey: ['user'] })
       toast.success('Login realizado com sucesso.')
       router.replace('/dashboard')
     } catch (err) {

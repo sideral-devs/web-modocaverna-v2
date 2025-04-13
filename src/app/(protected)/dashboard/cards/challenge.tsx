@@ -87,8 +87,17 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
             {challengeMessage}
           </p>
         </div>
+
+        <Link
+          href="/historico-desafio"
+          className="mt-auto absolute bottom-0 left-0"
+        >
+          <Button size="sm" className="bg-zinc-700">
+            Ver Histórico
+          </Button>
+        </Link>
         <Link href={'/desafio-caverna'}>
-          <Button size="sm" className="absolute bottom-1 right-0">
+          <Button size="sm" className="absolute bottom-0 right-0">
             Começar Agora!
           </Button>
         </Link>
@@ -111,13 +120,13 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
             </span>
           </div>
           <div className="flex w-full justify-between">
-            <Link href="/historico-desafio" className="mt-auto bg-primary">
-              <Button size="sm">Ver Histórico</Button>
+            <Link href="/historico-desafio" className="mt-auto">
+              <Button size="sm" className="bg-zinc-700">
+                Ver Histórico
+              </Button>
             </Link>
             <Link href="/desafio-caverna" className="mt-auto">
-              <Button size="sm" className="bg-zinc-700" color="bg-zinc-700">
-                Ver Desafio
-              </Button>
+              <Button size="sm">Ver Desafio</Button>
             </Link>
           </div>
         </div>
