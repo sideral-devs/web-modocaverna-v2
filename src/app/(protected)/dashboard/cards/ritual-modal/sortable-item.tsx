@@ -37,7 +37,7 @@ export function SortableItem({
       <div className="w-4 h-4 flex items-center justify-center bg-zinc-700 rounded">
         <span className="text-[10px]">{index}</span>
       </div>
-      <span className="flex-1 text-sm">{text}</span>
+      <span className="flex-1 text-sm capitalize">{text}</span>
 
       <Trash2
         className="h-4 w-4 text-zinc-400 cursor-pointer"

@@ -33,6 +33,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
+import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
 
 interface RitualResponseItem {
@@ -49,6 +50,7 @@ export default function RitualsCard() {
   const [stepsDialogOpen, setStepsDialogOpen] = useState(false)
   const [finishDialogOpen, setFinishDialogOpen] = useState(false)
   const [editRitualDialogOpen, setEditRitualDialogOpen] = useState(false)
+  const [recalculateDialogOpen, setRecalculateDialogOpen] = useState(false)
   const queryClient = useQueryClient()
 
   const { data: morningRitual } = useQuery({
@@ -122,14 +124,26 @@ export default function RitualsCard() {
               <Pencil className="text-primary cursor-pointer" size={20} />
             </DialogTrigger>
             <EditRitualDialog
-              onClose={() => {
+              openRecalculate={() => {
                 setEditRitualDialogOpen(false)
+                setRecalculateDialogOpen(true)
+              }}
+            />
+          </Dialog>
+          <Dialog
+            open={recalculateDialogOpen}
+            onOpenChange={setRecalculateDialogOpen}
+          >
+            <RecalculateRitualDialog
+              onClose={() => {
+                setRecalculateDialogOpen(false)
                 setFinishDialogOpen(true)
               }}
             />
           </Dialog>
+          <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
         </CardHeader>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 overflow-y-scroll scrollbar-minimal">
           <Tabs defaultValue="matinal">
             <TabsList className="w-full border-b px-4">
               <TabsTrigger
@@ -231,27 +245,43 @@ export default function RitualsCard() {
             }}
           />
         </Dialog>
-        <Dialog open={finishDialogOpen} onOpenChange={setFinishDialogOpen}>
-          <DialogContent className="h-[633px] max-h-[80%] rounded-3xl">
-            <div className="flex flex-col flex-1 items-center justify-center gap-6">
-              <Image
-                src="/images/empty-states/empty_rituals.png"
-                alt="Nenhum objetivo encontrado"
-                width={140}
-                height={110}
-                className="opacity-50"
-              />
-              <DialogTitle>Rituais criados com sucesso</DialogTitle>
-              <p className="text-zinc-400 text-xs text-center max-w-60">
-                Acompanhe seus rituais na tela inicial da Central Caverna
-              </p>
-              <DialogClose asChild>
-                <Button size="sm">Finalizar</Button>
-              </DialogClose>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
       </CardFooter>
     </Card>
+  )
+}
+
+function FinishDialog({
+  open,
+  setOpen,
+  mode = 'created',
+}: {
+  open: boolean
+  setOpen: (arg: boolean) => void
+  mode?: 'created' | 'updated'
+}) {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="h-[633px] max-h-[80%] rounded-3xl">
+        <div className="flex flex-col flex-1 items-center justify-center gap-6">
+          <Image
+            src="/images/empty-states/empty_rituals.png"
+            alt="Nenhum objetivo encontrado"
+            width={140}
+            height={110}
+            className="opacity-50"
+          />
+          <DialogTitle>
+            Rituais {mode === 'created' ? 'criados' : 'atualizados'} com sucesso
+          </DialogTitle>
+          <p className="text-zinc-400 text-xs text-center max-w-60">
+            Acompanhe seus rituais na tela inicial da Central Caverna
+          </p>
+          <DialogClose asChild>
+            <Button size="sm">Finalizar</Button>
+          </DialogClose>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

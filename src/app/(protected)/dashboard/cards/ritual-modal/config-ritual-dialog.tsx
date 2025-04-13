@@ -9,14 +9,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { cn, timeMask } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { AvatarFallback } from '@radix-ui/react-avatar'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlarmClock,
   Bed,
   BriefcaseBusiness,
-  Clock,
   CloudSun,
   Loader2,
   MoonIcon,
@@ -52,7 +51,9 @@ import { SortableItem } from './sortable-item'
 const ritualFormSchema = z.object({
   workTime: z.string().min(4, 'Informe um horário válido'),
   sleepTime: z.string().min(4, 'Informe um horário válido'),
-  morningRoutine: z.string().min(4, 'Informe um horário válido'),
+  morningRoutine: z
+    .string()
+    .refine((val) => Number(val) > 0, { message: 'O menor valor é 1' }),
 })
 
 type RitualFormValues = z.infer<typeof ritualFormSchema>
@@ -70,11 +71,6 @@ type ListItem = {
 }
 
 type SetListItem = Dispatch<SetStateAction<ListItem[]>>
-
-function timeStringToMinutes(time: string) {
-  const [hours, minutes] = time.split(':').map(Number)
-  return hours * 60 + minutes
-}
 
 function sumHours(hour: string, hours: number) {
   const date = parse(hour, 'HH:mm', new Date())
@@ -106,9 +102,7 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
       const res = await api.post('/rituais-calculadoras/upsert', {
         inicio_dormir: data.sleepTime,
         horario_trabalho_estudo: data.workTime,
-        duracao_ritual_matinal: String(
-          timeStringToMinutes(data.morningRoutine),
-        ),
+        duracao_ritual_matinal: data.morningRoutine,
       })
       return res.data as RitualResponseDTO
     },
@@ -167,11 +161,11 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
     <DialogContent
       className={cn(
         'flex flex-col p-0 bg-zinc-900 transition-all duration-200 overflow-hidden',
-        currentStep > 2 ? 'h-[744px] max-h-[90%]' : 'h-[538px] max-h-[70%]',
+        currentStep > 2 ? 'h-[900px] max-h-[95%]' : 'h-[780px] max-h-[85%]',
       )}
     >
       <DialogHeader className="p-0 pt-4 gap-4">
-        <DialogTitle>Calcular hábitos</DialogTitle>
+        <DialogTitle>Calculadora de Rituais</DialogTitle>
         <StepCounter current={currentStep} total={allSteps} />
       </DialogHeader>
 
@@ -204,36 +198,47 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
         </AnimatePresence>
       </div>
 
-      <DialogFooter className="flex !flex-row w-full items-center !justify-between py-2 pr-1 pl-5 bg-zinc-800">
+      <DialogFooter className="flex !flex-row w-full items-center !justify-between py-2 pr-2 pl-5 bg-zinc-800">
         <span>
           {currentStep} de {allSteps}
         </span>
-        <Button
-          loading={stepOneForm.formState.isLoading || loading}
-          className="h-10"
-          onClick={async () => {
-            switch (currentStep) {
-              case 1:
-                stepOneForm.handleSubmit(stepOneSubmit)()
-                break
-              case 2:
-                nextStep()
-                break
-              case 3:
-                await stepThreeSubmit()
-                nextStep()
-                break
-              case 4:
-                await stepFourSubmit()
-                setCurrentStep(1)
-                setMorningItems([])
-                setNightItems([])
-                onClose()
-            }
-          }}
-        >
-          Continuar
-        </Button>
+        <div className="flex items-center gap-2">
+          {currentStep > 1 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setCurrentStep((prev) => prev - 1)}
+            >
+              Voltar
+            </Button>
+          )}
+          <Button
+            loading={stepOneForm.formState.isLoading || loading}
+            className="h-10"
+            onClick={async () => {
+              switch (currentStep) {
+                case 1:
+                  stepOneForm.handleSubmit(stepOneSubmit)()
+                  break
+                case 2:
+                  nextStep()
+                  break
+                case 3:
+                  await stepThreeSubmit()
+                  nextStep()
+                  break
+                case 4:
+                  await stepFourSubmit()
+                  setCurrentStep(1)
+                  setMorningItems([])
+                  setNightItems([])
+                  onClose()
+              }
+            }}
+          >
+            Continuar
+          </Button>
+        </div>
       </DialogFooter>
     </DialogContent>
   )
@@ -244,7 +249,7 @@ function CalculateHabitStep({
 }: {
   form: UseFormReturn<RitualFormValues>
 }) {
-  const { register, setValue } = form
+  const { register } = form
 
   return (
     <div className="flex flex-col flex-1 divide-y">
@@ -259,75 +264,34 @@ function CalculateHabitStep({
           <strong>responda as perguntas a seguir:</strong>
         </p>
       </div>
-      <div className="flex items-center justify-between px-5 py-7">
+      <div className="flex items-center justify-between p-5">
         <span className="flex items-center gap-2 text-sm">
           <BriefcaseBusiness size={16} />
-          Horário de trabalho/estudo
+          Horário de início trabalho/estudo
         </span>
-        <div className="relative">
-          <Clock
-            className="absolute left-2 top-1/2 bottom-1/2 -translate-y-1/2 z-50 fill-zinc-400  text-zinc-700"
-            size={16}
-          />
-          <Input
-            className="w-24 p-1 pl-8 border-0 bg-zinc-700"
-            {...register('workTime')}
-            onChange={(e) => {
-              const value = e.target.value
-              const formatted = timeMask(value)
-
-              setValue('workTime', formatted)
-            }}
-            required
-            maxLength={5}
-          />
-        </div>
+        <Input
+          type="time"
+          {...register('workTime')}
+          className="bg-zinc-700 border-0"
+        />
       </div>
-      <div className="flex items-center justify-between px-5 py-7">
+      <div className="flex items-center justify-between p-5">
         <span className="flex items-center gap-2 text-sm">
           <Bed size={16} />
           Horário de dormir
         </span>
-        <div className="relative">
-          <Clock
-            className="absolute left-2 top-1/2 bottom-1/2 -translate-y-1/2 z-50 fill-zinc-400  text-zinc-700"
-            size={16}
-          />
-          <Input
-            className="w-24 p-1 pl-8 border-0 bg-zinc-700"
-            {...register('sleepTime')}
-            onChange={(e) => {
-              const value = e.target.value
-              const formatted = timeMask(value)
-              setValue('sleepTime', formatted)
-            }}
-            required
-            maxLength={5}
-          />
-        </div>
+        <Input
+          type="time"
+          {...register('sleepTime')}
+          className="bg-zinc-700 border-0"
+        />
       </div>
-      <div className="flex items-center justify-between px-5 py-7">
+      <div className="flex items-center justify-between p-5">
         <span className="flex items-center gap-2 text-sm">
           <Sunrise size={16} />
-          Duração ritual matinal
+          Duração do Ritual Matinal em minutos
         </span>
-        <div className="relative">
-          <Clock
-            className="absolute left-2 top-1/2 bottom-1/2 -translate-y-1/2 z-50 fill-zinc-400  text-zinc-700"
-            size={16}
-          />
-          <Input
-            className="w-24 p-1 pl-8 border-0 bg-zinc-700"
-            {...register('morningRoutine')}
-            onChange={(e) => {
-              const value = e.target.value
-              const formatted = timeMask(value)
-              setValue('morningRoutine', formatted)
-            }}
-            required
-            maxLength={5}
-          />
-        </div>
+        <Input {...register('morningRoutine')} />
       </div>
     </div>
   )
@@ -344,13 +308,13 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
 
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
-      <div className="flex items-center p-6 gap-6">
+      <div className="flex items-center p-5 gap-6">
         <Avatar className="h-20 w-20">
           <AvatarImage src="/images/lobo-face.svg" />
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col gap-3">
-          <h3 className="font-semibold text-sm">Hábitos calculados</h3>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold text-sm">Horários definidos</h3>
           <p className="font-normal text-sm">
             De acordo com as suas respostas, aqui estão algumas informações que
             determinam os seus rituais.
@@ -360,9 +324,9 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </span>
         </div>
       </div>
-      <div className="flex flex-col px-4 py-6 gap-5">
+      <div className="flex flex-col px-4 py-5 gap-5">
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <Bed className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -373,7 +337,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <AlarmClock className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -384,7 +348,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <CloudSun className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -398,7 +362,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <MoonIcon className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -510,7 +474,7 @@ function AddMorningRitual({
         </div>
       </div>
 
-      <div className="">
+      <div className="divide-y">
         <form
           className="flex flex-col w-full px-4 py-6 gap-6"
           onSubmit={handleSubmit}
@@ -527,24 +491,27 @@ function AddMorningRitual({
 
             <PlusIcon className="text-primary" />
           </div>
-          <div className="flex flex-col gap-3">
-            <p className="text-xs">Recomendado</p>
-            <div className="flex items-center gap-2">
-              {recommended
-                .filter((item) => !items.some((i) => i.id === item.id))
-                .map((item) => (
-                  <span
-                    key={item.id}
-                    className="flex px-2 py-0.5 text-sm bg-red-900/50 text-primary rounded-full cursor-pointer"
-                    onClick={() => setItems((prev) => [...prev, item])}
-                  >
-                    {item.text} +
-                  </span>
-                ))}
+          {recommended.filter((item) => !items.some((i) => i.id === item.id))
+            .length > 0 && (
+            <div className="flex flex-col gap-3">
+              <p className="text-xs">Recomendados</p>
+              <div className="flex items-center gap-2">
+                {recommended
+                  .filter((item) => !items.some((i) => i.id === item.id))
+                  .map((item) => (
+                    <span
+                      key={item.id}
+                      className="flex px-2 py-0.5 text-sm bg-red-900/50 text-primary rounded-full cursor-pointer"
+                      onClick={() => setItems((prev) => [...prev, item])}
+                    >
+                      {item.text} +
+                    </span>
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </form>
-        <div className="flex flex-col px-4 py-6 divide-y">
+        <div className="flex flex-col px-4">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -554,7 +521,7 @@ function AddMorningRitual({
               items={items.map((item) => item.id)}
               strategy={verticalListSortingStrategy}
             >
-              <ul className="divide-y">
+              <ul>
                 {items.map((item, index) => (
                   <SortableItem
                     key={index}
@@ -622,8 +589,6 @@ function AddNightRitual({
         const oldIndex = items.findIndex((item) => item.id === active.id)
         const newIndex = items.findIndex((item) => item.id === over?.id)
 
-        console.log({ items, oldIndex, newIndex })
-
         return arrayMove(items, oldIndex, newIndex)
       })
     }
@@ -653,10 +618,10 @@ function AddNightRitual({
               {sumHours(data.inicio_dormir, 8).replace(':', 'h') + 'm'}
             </span>
             <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(
-                sumHours(data.inicio_dormir, 8),
-                data.duracao_ritual_matinal / 60,
-              ).replace(':', 'h') + 'm'}
+              {sumHours(sumHours(data.inicio_dormir, 8), 0.5).replace(
+                ':',
+                'h',
+              ) + 'm'}
             </span>
           </div>
           <span className="text-zinc-400 text-xs">
