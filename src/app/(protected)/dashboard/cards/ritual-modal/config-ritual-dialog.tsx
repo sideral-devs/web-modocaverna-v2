@@ -561,7 +561,7 @@ function AddMorningRitual({
               items={items.map((item) => item.id)}
               strategy={verticalListSortingStrategy}
             >
-              <ul className="divide-y">
+              <ul>
                 {items.map((item, index) => (
                   <SortableItem
                     key={index}
