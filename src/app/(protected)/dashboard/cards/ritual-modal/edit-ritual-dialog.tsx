@@ -181,7 +181,7 @@ export function EditRitualDialog({
                       items={morningRitual?.itens}
                       strategy={verticalListSortingStrategy}
                     >
-                      <ul>
+                      <ul className="divide-y">
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
@@ -189,6 +189,7 @@ export function EditRitualDialog({
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
+                            disabled
                           />
                         ))}
                       </ul>
@@ -228,7 +229,7 @@ export function EditRitualDialog({
                       items={nightRitual?.itens}
                       strategy={verticalListSortingStrategy}
                     >
-                      <ul>
+                      <ul className="divide-y">
                         {nightRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
@@ -236,6 +237,7 @@ export function EditRitualDialog({
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
+                            disabled
                           />
                         ))}
                       </ul>
@@ -256,7 +258,7 @@ export function EditRitualDialog({
             openRecalculate()
           }}
         >
-          Recalcular hábitos
+          Recalcular rituais
         </Button>
         <Button className="h-10">Salvar</Button>
       </DialogFooter>

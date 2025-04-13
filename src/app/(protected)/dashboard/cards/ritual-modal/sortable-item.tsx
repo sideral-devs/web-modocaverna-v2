@@ -7,11 +7,13 @@ export function SortableItem({
   id,
   text,
   onRemove,
+  disabled,
 }: {
   index: number
   id: string
   text: string
   onRemove: () => void
+  disabled?: boolean
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
@@ -27,13 +29,15 @@ export function SortableItem({
       style={style}
       className="flex w-full items-center py-6 gap-4"
     >
-      <div
-        {...attributes}
-        {...listeners}
-        className="cursor-grab active:cursor-grabbing"
-      >
-        <GripVertical size={16} className="text-zinc-400" />
-      </div>
+      {disabled || (
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing"
+        >
+          <GripVertical size={16} className="text-zinc-400" />
+        </div>
+      )}
       <div className="w-4 h-4 flex items-center justify-center bg-zinc-700 rounded">
         <span className="text-[10px]">{index}</span>
       </div>

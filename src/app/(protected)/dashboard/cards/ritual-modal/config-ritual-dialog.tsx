@@ -261,18 +261,18 @@ function CalculateHabitStep({
         <p className="font-normal text-sm">
           O sistema te ajudará a determinar os horários dos seus rituais de
           acordo com as suas necessidades. Para isso,{' '}
-          <strong>responda as perguntas a seguir:</strong>
+          <strong>preencha os campos abaixo:</strong>
         </p>
       </div>
       <div className="flex items-center justify-between p-5">
         <span className="flex items-center gap-2 text-sm">
           <BriefcaseBusiness size={16} />
-          Horário de início trabalho/estudo
+          Horário de início de trabalho/estudo
         </span>
         <Input
           type="time"
           {...register('workTime')}
-          className="bg-zinc-700 border-0"
+          className="w-28 bg-zinc-700 border-0"
         />
       </div>
       <div className="flex items-center justify-between p-5">
@@ -283,7 +283,7 @@ function CalculateHabitStep({
         <Input
           type="time"
           {...register('sleepTime')}
-          className="bg-zinc-700 border-0"
+          className="w-28 bg-zinc-700 border-0"
         />
       </div>
       <div className="flex items-center justify-between p-5">
@@ -291,7 +291,10 @@ function CalculateHabitStep({
           <Sunrise size={16} />
           Duração do Ritual Matinal em minutos
         </span>
-        <Input {...register('morningRoutine')} />
+        <Input
+          className="w-28 bg-zinc-700 border-0"
+          {...register('morningRoutine')}
+        />
       </div>
     </div>
   )
@@ -343,7 +346,13 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           <div className="flex flex-col gap-1">
             <h3 className="text-sm font-semibold leading-tight">Manhã</h3>
             <span className="text-xs leading-none">
-              Acorde às <strong>{sumHours(data.inicio_dormir, 8)}</strong>
+              Acorde às{' '}
+              <strong>
+                {sumHours(
+                  data.horario_trabalho_estudo,
+                  (data.duracao_ritual_matinal / 60) * -1,
+                )}
+              </strong>
             </span>
           </div>
         </div>
@@ -370,12 +379,8 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
               Ritual Noturno
             </h3>
             <span className="text-xs leading-none">
-              Dedique {data.duracao_ritual_matinal} minutos ao{' '}
-              <strong>Ritual Noturno</strong>. Inicie às{' '}
-              {sumHours(
-                data.inicio_dormir,
-                (data.duracao_ritual_matinal / 60) * -1,
-              )}
+              Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
+              {sumHours(data.inicio_dormir, 0.5 * -1)}
             </span>
           </div>
         </div>
@@ -454,20 +459,19 @@ function AddMorningRitual({
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-3">
-          <p className="font-normal text-sm">
-            Seu Ritual Matinal começa e termina às:
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
+          <span className="font-normal text-sm">
+            Seu Ritual Matinal começa às{' '}
+            <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {sumHours(data.inicio_dormir, 8).replace(':', 'h') + 'm'}
-            </span>
-            <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
+            </span>{' '}
+            <br /> e termina às{' '}
+            <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {sumHours(
                 sumHours(data.inicio_dormir, 8),
                 data.duracao_ritual_matinal / 60,
               ).replace(':', 'h') + 'm'}
             </span>
-          </div>
+          </span>
           <span className="text-zinc-400 text-xs">
             Adicione e organize sua rotina abaixo:
           </span>
@@ -610,27 +614,24 @@ function AddNightRitual({
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-3">
-          <p className="font-normal text-sm">
-            Seu Ritual Noturno começa e termina às:
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(data.inicio_dormir, 8).replace(':', 'h') + 'm'}
+          <span className="font-normal text-sm">
+            Seu Ritual Matinal começa às{' '}
+            <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
+              {sumHours(data.inicio_dormir, 0.5 * -1).replace(':', 'h') + 'm'}
+            </span>{' '}
+            <br /> e termina às{' '}
+            <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
+              {data.inicio_dormir.replace(':', 'h') + 'm'}
             </span>
-            <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(sumHours(data.inicio_dormir, 8), 0.5).replace(
-                ':',
-                'h',
-              ) + 'm'}
-            </span>
-          </div>
+          </span>
+
           <span className="text-zinc-400 text-xs">
             Adicione e organize sua rotina abaixo:
           </span>
         </div>
       </div>
 
-      <div className="">
+      <div className="divide-y">
         <form
           className="flex flex-col w-full px-4 py-6 gap-6"
           onSubmit={handleSubmit}
@@ -647,24 +648,27 @@ function AddNightRitual({
 
             <PlusIcon className="text-primary" />
           </div>
-          <div className="flex flex-col gap-3">
-            <p className="text-xs">Recomendado</p>
-            <div className="flex items-center gap-2">
-              {recommended
-                .filter((item) => !items.some((i) => i.id === item.id))
-                .map((item) => (
-                  <span
-                    key={item.id}
-                    className="flex px-2 py-0.5 text-sm bg-red-900/50 text-primary rounded-full cursor-pointer"
-                    onClick={() => setItems((prev) => [...prev, item])}
-                  >
-                    {item.text} +
-                  </span>
-                ))}
+          {recommended.filter((item) => !items.some((i) => i.id === item.id))
+            .length > 0 && (
+            <div className="flex flex-col gap-3">
+              <p className="text-xs">Recomendados</p>
+              <div className="flex items-center gap-2">
+                {recommended
+                  .filter((item) => !items.some((i) => i.id === item.id))
+                  .map((item) => (
+                    <span
+                      key={item.id}
+                      className="flex px-2 py-0.5 text-sm bg-red-900/50 text-primary rounded-full cursor-pointer"
+                      onClick={() => setItems((prev) => [...prev, item])}
+                    >
+                      {item.text} +
+                    </span>
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </form>
-        <div className="flex flex-col px-4 py-6 divide-y">
+        <div className="flex flex-col px-4 divide-y">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

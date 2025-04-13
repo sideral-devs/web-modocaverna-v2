@@ -178,6 +178,7 @@ export default function RitualsCard() {
                           index={index + 1}
                           text={item}
                           onRemove={() => handleRemove(item, morningRitual)}
+                          disabled
                         />
                       ))}
                     </ul>
@@ -195,6 +196,7 @@ export default function RitualsCard() {
                       index={index + 1}
                       text={item}
                       onRemove={() => handleRemove(item, nightRitual)}
+                      disabled
                     />
                   ))}
                 </ul>

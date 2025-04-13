@@ -123,7 +123,7 @@ export function RecalculateRitualDialog({ onClose }: { onClose: () => void }) {
       )}
     >
       <DialogHeader className="p-0 pt-4 gap-4">
-        <DialogTitle>Recalcular hábitos</DialogTitle>
+        <DialogTitle>Calculadora de Rituais</DialogTitle>
         <StepCounter current={currentStep} total={allSteps} />
       </DialogHeader>
 
@@ -146,23 +146,34 @@ export function RecalculateRitualDialog({ onClose }: { onClose: () => void }) {
         <span>
           {currentStep} de {allSteps}
         </span>
-        <Button
-          loading={stepOneForm.formState.isLoading}
-          className="h-10"
-          onClick={async () => {
-            switch (currentStep) {
-              case 1:
-                stepOneForm.handleSubmit(stepOneSubmit)()
-                break
-              case 2:
-                setCurrentStep(1)
-                onClose()
-                break
-            }
-          }}
-        >
-          Continuar
-        </Button>
+        <div className="flex items-center gap-2">
+          {currentStep > 1 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setCurrentStep((prev) => prev - 1)}
+            >
+              Voltar
+            </Button>
+          )}
+          <Button
+            loading={stepOneForm.formState.isLoading}
+            className="h-10"
+            onClick={async () => {
+              switch (currentStep) {
+                case 1:
+                  stepOneForm.handleSubmit(stepOneSubmit)()
+                  break
+                case 2:
+                  setCurrentStep(1)
+                  onClose()
+                  break
+              }
+            }}
+          >
+            Continuar
+          </Button>
+        </div>
       </DialogFooter>
     </DialogContent>
   )
@@ -185,18 +196,18 @@ function CalculateHabitStep({
         <p className="font-normal text-sm">
           O sistema te ajudará a determinar os horários dos seus rituais de
           acordo com as suas necessidades. Para isso,{' '}
-          <strong>responda as perguntas a seguir:</strong>
+          <strong>preencha os campos abaixo:</strong>
         </p>
       </div>
       <div className="flex items-center justify-between px-5 py-7">
         <span className="flex items-center gap-2 text-sm">
           <BriefcaseBusiness size={16} />
-          Horário de início trabalho/estudo
+          Horário de início de trabalho/estudo
         </span>
         <Input
           type="time"
           {...register('workTime')}
-          className="w-28 bg-zinc-700 border-0"
+          className="items-center text-center w-28 bg-zinc-700 border-0"
         />
       </div>
       <div className="flex items-center justify-between px-5 py-7">
@@ -235,13 +246,13 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
 
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
-      <div className="flex items-center p-6 gap-6">
+      <div className="flex items-center p-5 gap-6">
         <Avatar className="h-20 w-20">
           <AvatarImage src="/images/lobo-face.svg" />
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col gap-3">
-          <h3 className="font-semibold text-sm">Hábitos calculados</h3>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold text-sm">Horários definidos</h3>
           <p className="font-normal text-sm">
             De acordo com as suas respostas, aqui estão algumas informações que
             determinam os seus rituais.
@@ -251,9 +262,9 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </span>
         </div>
       </div>
-      <div className="flex flex-col px-4 py-6 gap-5">
+      <div className="flex flex-col px-4 py-5 gap-5">
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <Bed className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -264,18 +275,24 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <AlarmClock className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-sm font-semibold leading-tight">Manhã</h3>
             <span className="text-xs leading-none">
-              Acorde às <strong>{sumHours(data.inicio_dormir, 8)}</strong>
+              Acorde às{' '}
+              <strong>
+                {sumHours(
+                  data.horario_trabalho_estudo,
+                  (data.duracao_ritual_matinal / 60) * -1,
+                )}
+              </strong>
             </span>
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <CloudSun className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -289,7 +306,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
         <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-lg bg-red-900/30">
+          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
             <MoonIcon className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
@@ -297,12 +314,8 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
               Ritual Noturno
             </h3>
             <span className="text-xs leading-none">
-              Dedique {data.duracao_ritual_matinal} minutos ao{' '}
-              <strong>Ritual Noturno</strong>. Inicie às{' '}
-              {sumHours(
-                data.inicio_dormir,
-                (data.duracao_ritual_matinal / 60) * -1,
-              )}
+              Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
+              {sumHours(data.inicio_dormir, 0.5 * -1)}
             </span>
           </div>
         </div>
