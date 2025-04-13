@@ -170,7 +170,7 @@ export default function Page() {
             <span className="mt-auto text-sm font-medium items-baseline">
               Não possui uma conta?{' '}
               <Link
-                href={'/sign-up'}
+                href={'https://redirect.lifs.app/cc-anual-1'}
                 className="text-primary text-sm font-medium"
               >
                 Cadastrar
