@@ -36,7 +36,7 @@ export function ProtectedRoute({
 
   useEffect(() => {
     if (!user || !pathname) return
-
+    console.log('user', user)
     const userPlan = user.plan?.toLowerCase()
     if (user.status_plan === 'REEMBOLSO') {
       router.push('/settings/plans')

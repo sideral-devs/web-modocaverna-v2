@@ -30,7 +30,7 @@ export const UpgradeModalTrigger = ({ children }: { children: ReactNode }) => {
     const renovationDate = dayjs(user.data_de_renovacao)
     const afterSevenDays = renovationDate.add(7, 'day')
     if (
-      userPlan === 'mensal' ||
+      (userPlan === 'mensal' && actualDate.isAfter(afterSevenDays)) ||
       (userPlan === 'anual' && actualDate.isAfter(afterSevenDays))
     ) {
       setIsopen(true)
