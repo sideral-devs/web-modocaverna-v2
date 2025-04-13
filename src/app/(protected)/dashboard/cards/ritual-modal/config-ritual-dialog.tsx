@@ -317,10 +317,13 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
     )
   }
   function sleepTime() {
-    const horasSomadas = sumHours(
-      data.horario_trabalho_estudo,
-      (data.duracao_ritual_matinal / 60) * -1,
-    )
+    let horasSomadas = 0
+    if (data) {
+      horasSomadas = sumHours(
+        data.horario_trabalho_estudo,
+        (data.duracao_ritual_matinal / 60) * -1,
+      )
+    }
     const horasSemZero = parseInt(horasSomadas.split(':')[0], 10)
 
     return horasSemZero
