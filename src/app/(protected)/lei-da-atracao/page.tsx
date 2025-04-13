@@ -20,6 +20,7 @@ dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
 
 export default function Page() {
+  // eslint-disable-next-line
   const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'))
   const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
   const [currentMessage, setCurrentMessage] = useState<LockedMessage | null>(
