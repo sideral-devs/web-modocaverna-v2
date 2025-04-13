@@ -74,7 +74,7 @@ export function PlanDesafio() {
                     </h2>
                   </div>
                   <h3 className="text-red-500 font-bold text-4xl">
-                    {trialDaysLeft} dias
+                    {`${trialDaysLeft}  ${trialDaysLeft > 1 ? 'dias' : 'dia'}`}
                   </h3>
                 </div>
               </div>

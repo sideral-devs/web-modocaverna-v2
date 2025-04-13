@@ -119,7 +119,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
               rituais.
             </span>
           </div>
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-between relative top-14">
             <Link href="/historico-desafio" className="mt-auto">
               <Button size="sm" className="bg-zinc-700">
                 Ver Histórico
