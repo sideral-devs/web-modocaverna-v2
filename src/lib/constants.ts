@@ -4,5 +4,5 @@ export const videos = {
   challengeTutorial: '67f0291bea0f253b2d1d4ef4',
   challengeTourFinal: '67f3b59d902b8a612190ed20',
   onboardingTutorial: '67f0299ed75d2074cce0f8af',
-  affiliateTutorial: '6769bf31572299dbc2d8df79',
+  affiliateTutorial: '673ba95084647c000ad93566',
 }

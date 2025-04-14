@@ -16,6 +16,7 @@ import { ReactNode, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { CodeDialogTrigger } from '../code-affiliate'
 
 const schema = z.object({
   code: z.string().min(2, { message: 'Obrigatório' }),
@@ -23,8 +24,10 @@ const schema = z.object({
 
 export function AffiliateCodeDialogTrigger({
   children,
+  code,
 }: {
   children: ReactNode
+  code: string
 }) {
   const [open, setOpen] = useState(false)
   const { setCode } = useAffiliateStore()
@@ -48,7 +51,6 @@ export function AffiliateCodeDialogTrigger({
       toast.error('Não foi possível salvar esse código')
     }
   }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -65,6 +67,7 @@ export function AffiliateCodeDialogTrigger({
               <Input
                 placeholder="Insira o código"
                 maxLength={64}
+                defaultValue={code}
                 {...register('code')}
               />
               {errors.code && (
@@ -74,7 +77,11 @@ export function AffiliateCodeDialogTrigger({
               )}
             </div>
           </div>
+
           <DialogFooter className="border-t p-4">
+            <CodeDialogTrigger>
+              <Button variant="outline">Como encontrar o meu código?</Button>
+            </CodeDialogTrigger>
             <Button
               onClick={handleSubmit(handleSaveCode)}
               loading={isSubmitting}
