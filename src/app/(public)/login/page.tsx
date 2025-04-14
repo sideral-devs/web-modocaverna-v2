@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
+import { env } from '@/lib/env'
 import { useAuthStore } from '@/store/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
@@ -170,7 +171,7 @@ export default function Page() {
             <span className="mt-auto text-sm font-medium items-baseline">
               Não possui uma conta?{' '}
               <Link
-                href={'https://redirect.lifs.app/cc-a1'}
+                href={`${env.NEXT_PUBLIC_YEARLY_PLAN}`}
                 className="text-primary text-sm font-medium"
               >
                 Cadastrar
