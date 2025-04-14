@@ -20,3 +20,12 @@ export const modals: Record<
 > = {
   'Vista-se como um Lobo Cavernoso! 🔺🐺': DialogCaveStore,
 }
+export const WEEK_DAYS = [
+  { short: 'Dom', long: 'Domingo' },
+  { short: 'Seg', long: 'Segunda' },
+  { short: 'Ter', long: 'Terça' },
+  { short: 'Qua', long: 'Quarta' },
+  { short: 'Qui', long: 'Quinta' },
+  { short: 'Sex', long: 'Sexta' },
+  { short: 'Sab', long: 'Sábado' },
+]
