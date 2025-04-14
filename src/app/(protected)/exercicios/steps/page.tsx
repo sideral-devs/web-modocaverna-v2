@@ -1,0 +1,87 @@
+'use client'
+import { ProtectedRoute } from '@/components/protected-route'
+import { useUser } from '@/hooks/queries/use-user'
+import { useOnboardingStore } from '@/store/onboarding'
+import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
+import { CloseButton } from '../../settings/CloseButton'
+import { AnalysisResultsStep } from './AnalysisResultsStep'
+import { ShapeConfigStep } from './ShapeConfigStep'
+import { ShapeGoalsStep } from './ShapeGoalsStep'
+
+export default function Page() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { data: user } = useUser()
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentPhase, setCurrentPhase] = useState(
+    Number(searchParams.get('step')) || 1,
+  )
+  const { cellphone } = useOnboardingStore()
+
+  const passosTotal = 3
+
+  const STEPS = {
+    1: <ShapeConfigStep onNext={nextPhase} />,
+    2: <ShapeGoalsStep onNext={nextPhase} onBack={backPhase} />,
+    3: <AnalysisResultsStep onBack={backPhase} onFinish={handleFinish} />,
+  }
+
+  function nextPhase() {
+    const nextStep = currentPhase + 1
+    setCurrentPhase(nextStep)
+    router.push(`/exercicios/steps?step=${nextStep}`)
+  }
+
+  function backPhase() {
+    const previousStep = currentPhase - 1
+    setCurrentPhase(previousStep)
+    router.push(`/exercicios/steps?step=${previousStep}`)
+  }
+
+  async function handleFinish() {
+    // try {
+    //   setIsLoading(true)
+    //   await api.put('/users/update?save=true', {
+    //     tutorial_complete: true,
+    //     telefone: cellphone,
+    //   })
+    //   router.replace('/dashboard/tour')
+    // } catch {
+    //   toast.error('Algo deu errado. Tente novamente.')
+    // } finally {
+    //   setIsLoading(false)
+    // }
+    router.replace('/exercicios')
+  }
+
+  // if (user && !!Number(user.tutorial_complete)) {
+  //   return redirect('/dashboard')
+  // }
+
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col w-full min-h-screen items-center gap-6 bg-zinc-900">
+        <header className="flex w-full pt-4 items-center justify-between p-6">
+          <span className="text-sm text-muted-foreground">
+            Passo {currentPhase} de {passosTotal}
+          </span>
+          <div className="flex flex-col w-full max-w-2xl items-center gap-6">
+            <Image
+              src={'/images/logo-icon.svg'}
+              alt="Logo"
+              width={32}
+              height={27}
+            />
+            <PhaseCounter current={currentPhase} total={passosTotal} />
+          </div>
+
+          <CloseButton />
+        </header>
+        {STEPS[currentPhase as keyof typeof STEPS]}
+      </div>
+    </ProtectedRoute>
+  )
+}
