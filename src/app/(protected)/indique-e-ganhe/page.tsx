@@ -63,7 +63,7 @@ export default function Page() {
                       Vendas nos{' '}
                       <span className="text-white">últimos 7 dias</span>
                     </span>
-                    <AffiliateCodeDialogTrigger>
+                    <AffiliateCodeDialogTrigger code={affiliateCode}>
                       <Settings
                         size={20}
                         className="text-zinc-400 cursor-pointer"
