@@ -90,7 +90,7 @@ export default function Page() {
                       Para visualizar seu desempenho adicione o seu código de
                       afiliação.
                     </p>
-                    <AffiliateCodeDialogTrigger>
+                    <AffiliateCodeDialogTrigger code={affiliateCode}>
                       <Button className="mt-5" size="sm">
                         Inserir código
                       </Button>
