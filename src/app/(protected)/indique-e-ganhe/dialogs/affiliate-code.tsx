@@ -27,7 +27,7 @@ export function AffiliateCodeDialogTrigger({
   code,
 }: {
   children: ReactNode
-  code: string
+  code: string | null
 }) {
   const [open, setOpen] = useState(false)
   const { setCode } = useAffiliateStore()
@@ -67,7 +67,7 @@ export function AffiliateCodeDialogTrigger({
               <Input
                 placeholder="Insira o código"
                 maxLength={64}
-                defaultValue={code}
+                defaultValue={code || ''}
                 {...register('code')}
               />
               {errors.code && (
