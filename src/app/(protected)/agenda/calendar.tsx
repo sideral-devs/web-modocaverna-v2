@@ -3,6 +3,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import { parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
@@ -49,7 +50,27 @@ export function EventCalendar() {
     },
     enabled: !!session,
   })
+
+  const { data: morningRitual } = useQuery({
+    queryKey: ['rituais-blocos-matinais'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=1')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
+  })
+
+  const { data: nightRitual } = useQuery({
+    queryKey: ['rituais-blocos-noturnos'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=2')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
+  })
+
   const scrollableRef = useRef<HTMLDivElement | null>(null)
+
   function scrollToNow() {
     if (scrollableRef.current) {
       const now = new Date()
@@ -154,6 +175,26 @@ export function EventCalendar() {
                     }}
                     key={event.event_id}
                     now={selected}
+                  />
+                ))}
+              {morningRitual &&
+                Array.from({ length: 7 }).map((i, index) => (
+                  <RitualEvent
+                    key={index}
+                    title="Ritual Matinal"
+                    dayIndex={index}
+                    timeStart={morningRitual.horario_inicial}
+                    timeEnd={morningRitual.horario_final}
+                  />
+                ))}
+              {nightRitual &&
+                Array.from({ length: 7 }).map((i, index) => (
+                  <RitualEvent
+                    key={index}
+                    title="Ritual Noturno"
+                    dayIndex={index}
+                    timeStart={nightRitual.horario_inicial}
+                    timeEnd={nightRitual.horario_final}
                   />
                 ))}
               <NowIndicator />
@@ -322,6 +363,65 @@ function GoogleEvent({
         )} */}
       </div>
     </GoogleEditEventDialogTrigger>
+  )
+}
+
+function RitualEvent({
+  title,
+  timeStart,
+  timeEnd,
+  dayIndex,
+}: {
+  title: string
+  timeStart: string
+  timeEnd: string
+  dayIndex: number
+}) {
+  const PIXELS_PER_MINUTE = 112 / 60
+  const minHeight = 44
+
+  const start = parse(timeStart, 'HH:mm', new Date())
+  const end = parse(timeEnd, 'HH:mm', new Date())
+
+  const startMinutes = start.getHours() * 60 + start.getMinutes()
+  const endMinutes = end.getHours() * 60 + end.getMinutes()
+
+  const top = startMinutes * PIXELS_PER_MINUTE
+  const height = Math.max(
+    (endMinutes - startMinutes) * PIXELS_PER_MINUTE,
+    minHeight,
+  )
+
+  const baseLeft = 80
+
+  return (
+    <div
+      className={`
+          absolute flex flex-col py-3 px-4 gap-2 w-32 2xl:w-36 3xl:w-40
+          bg-yellow-900 hover:bg-yellow-800 text-white rounded-lg 
+          border-l-4 border-yellow-500 cursor-pointer transition-colors
+          shadow-md overflow-hidden pointer-events-auto
+        `}
+      style={{
+        top: `${top}px`,
+        height: `${height}px`,
+        left: `calc(${baseLeft}px + ${dayIndex * 144}px)`,
+      }}
+    >
+      <span
+        className={`${height < 80 ? 'text-[10px]' : 'text-xs'} font-medium text-yellow-400`}
+      >
+        {timeStart + ' - ' + timeEnd}
+      </span>
+
+      <p className={`text-xs font-normal line-clamp-2`}>{title}</p>
+
+      {/* {event.descricao && (
+          <p className="text-xs text-yellow-200 line-clamp-2">
+            {event.descricao}
+          </p>
+        )} */}
+    </div>
   )
 }
 

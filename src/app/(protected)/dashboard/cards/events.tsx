@@ -42,25 +42,63 @@ export default function EventsCard() {
       return response.data
     },
   })
+
+  const { data: morningRitual } = useQuery({
+    queryKey: ['rituais-blocos-matinais'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=1')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
+  })
+
+  const { data: nightRitual } = useQuery({
+    queryKey: ['rituais-blocos-noturnos'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=2')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
+  })
+
   const allEvents = useMemo(() => {
     const local = data?.compromissos || []
     const google = googleEvents?.events || []
-    // Combine e ordene todos os eventos
-    const combined = [...local, ...google].sort((a, b) =>
+    const rituals = []
+
+    if (morningRitual) {
+      rituals.push({
+        comeca: dayjs(
+          `${today} ${morningRitual.horario_inicial}`,
+        ).toISOString(),
+        termina: dayjs(`${today} ${morningRitual.horario_final}`).toISOString(),
+        titulo: 'Ritual Matinal',
+        categoria: 'Ritual',
+        compromisso_id: 'morning-ritual',
+      })
+    }
+
+    if (nightRitual) {
+      rituals.push({
+        comeca: dayjs(`${today} ${nightRitual.horario_inicial}`).toISOString(),
+        termina: dayjs(`${today} ${nightRitual.horario_final}`).toISOString(),
+        titulo: 'Ritual Noturno',
+        categoria: 'Ritual',
+        compromisso_id: 'night-ritual',
+      })
+    }
+
+    const combined = [...local, ...google, ...rituals].sort((a, b) =>
       dayjs(a.comeca).diff(dayjs(b.comeca)),
     )
     return combined
-  }, [data, googleEvents])
+  }, [data, googleEvents, morningRitual, nightRitual])
 
   const nextEvent = useMemo(
     () => (allEvents ? getNextEvent(allEvents) : null),
     [allEvents],
   )
 
-  // const nextEvent = useMemo(
-  //   () => (data ? getNextEvent(data.compromissos) : null),
-  //   [data],
-  // )
   const semCompromissos = [
     'Dia livre! Avance no Modo Caverna. 🔥',
     'Nada agendado. Que tal criar um compromisso?',
@@ -116,7 +154,7 @@ export default function EventsCard() {
           <div className="hidden md:flex flex-col gap-8 overflow-y-auto scrollbar-minimal">
             {allEvents
               .filter((event) => dayjs(event.comeca).isAfter(dayjs()))
-              .slice(nextEvent ? 1 : 0) // Skip next event if it's being shown
+              .slice(nextEvent ? 1 : 0)
               .map((event, i) => {
                 const eventTime = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
 
@@ -139,7 +177,8 @@ export default function EventsCard() {
                                 ? ' bg-red-500'
                                 : event.categoria === 'Pessoal'
                                   ? ' bg-green-500'
-                                  : (event.event_id?.length ?? 0) > 0
+                                  : // @ts-expect-error event_id é válido para Compromisso e GoogleEvent, mas não para o Ritual
+                                    (event.event_id?.length ?? 0) > 0
                                     ? ' bg-orange-400'
                                     : ' border-zinc-500'
                         } group-data-[state=closed]:hidden`}

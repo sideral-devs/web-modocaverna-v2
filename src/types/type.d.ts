@@ -658,3 +658,13 @@ interface Configuracoes {
   modal_flow: boolean
   notificacao: boolean
 }
+
+interface RitualResponseItem {
+  id: number
+  horario_inicial: string
+  horario_final: string
+  itens: string[]
+  tipo_ritual: number
+  created_at: string
+  updated_at: string
+}

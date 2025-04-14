@@ -36,16 +36,6 @@ import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
 
-interface RitualResponseItem {
-  id: number
-  horario_inicial: string
-  horario_final: string
-  itens: string[]
-  tipo_ritual: number
-  created_at: string
-  updated_at: string
-}
-
 export default function RitualsCard() {
   const [stepsDialogOpen, setStepsDialogOpen] = useState(false)
   const [finishDialogOpen, setFinishDialogOpen] = useState(false)

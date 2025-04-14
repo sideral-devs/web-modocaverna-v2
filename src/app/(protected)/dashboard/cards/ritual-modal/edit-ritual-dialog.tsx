@@ -31,16 +31,6 @@ import { PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 import { SortableItem } from './sortable-item'
 
-interface RitualResponseItem {
-  id: number
-  horario_inicial: string
-  horario_final: string
-  itens: string[]
-  tipo_ritual: number
-  created_at: string
-  updated_at: string
-}
-
 export function EditRitualDialog({
   openRecalculate,
 }: {
