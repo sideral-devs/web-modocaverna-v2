@@ -41,7 +41,7 @@ export function Networking({ value }: { value: string }) {
 
           {/* Botão de ação */}
           <Link className="ml-auto" href="/members-area">
-            <Button size="sm">Ver Cursos</Button>
+            <Button size="sm">Assistir</Button>
           </Link>
         </Card>
 

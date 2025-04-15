@@ -105,7 +105,7 @@ export default function FinanceCard() {
         </div>
         <div className="flex justify-end mt-auto">
           <Link href={'/financeiro'}>
-            <Button size="sm">Controlar Finanças</Button>
+            <Button size="sm">Gerenciar</Button>
           </Link>
         </div>
       </Card>
@@ -142,7 +142,7 @@ export default function FinanceCard() {
           </p>
           <div className="flex justify-end mt-auto">
             <Link href={'/financeiro'}>
-              <Button size="sm">Controlar Finanças</Button>
+              <Button size="sm">Gerenciar</Button>
             </Link>
           </div>
         </div>
@@ -205,7 +205,7 @@ export default function FinanceCard() {
         </div>
       </div>
       <Link href="/financeiro" className="absolute right-4 bottom-4">
-        <Button size="sm">Controlar Finanças</Button>
+        <Button size="sm">Gerenciar</Button>
       </Link>
     </Card>
   )
