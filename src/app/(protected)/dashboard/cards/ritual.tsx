@@ -108,8 +108,6 @@ export default function RitualsCard() {
     const ritual = currentTab === 'matinal' ? morningRitual : nightRitual
     if (!ritual) return
 
-    console.log({ ritual })
-
     const oldIndex = ritual.itens.findIndex(
       (item, index) => item + index === active.id,
     )
