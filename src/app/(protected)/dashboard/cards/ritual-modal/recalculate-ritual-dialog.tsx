@@ -200,7 +200,7 @@ function CalculateHabitStep({
             <strong>preencha os campos abaixo:</strong>
           </p>
         </div>
-        <div className="flex items-center justify-between px-5 py-7">
+        <div className="flex items-center justify-between p-5">
           <span className="flex items-center gap-2 text-sm">
             <BriefcaseBusiness size={16} />
             Horário de início de trabalho/estudo
@@ -208,28 +208,28 @@ function CalculateHabitStep({
           <Input
             type="time"
             {...register('workTime')}
-            className="items-center text-center w-28 bg-zinc-700 border-0"
+            className="items-center text-center w-24 bg-zinc-700 border-0"
           />
         </div>
-        <div className="flex items-center justify-between px-5 py-7">
+        <div className="flex items-center justify-between p-5">
           <span className="flex items-center gap-2 text-sm">
             <Bed size={16} />
             Horário de dormir
           </span>
           <Input
             type="time"
-            className="w-28 bg-zinc-700 border-0"
+            className="w-24 bg-zinc-700 border-0"
             {...register('sleepTime')}
           />
         </div>
-        <div className="flex items-center justify-between px-5 py-7">
+        <div className="flex items-center justify-between p-5">
           <span className="flex items-center gap-2 text-sm">
             <Sunrise size={16} />
             Duração do Ritual Matinal em minutos
           </span>
           <div className="flex flex-col gap-1">
             <Input
-              className="w-28 bg-zinc-700 border-0"
+              className="w-24 bg-zinc-700 border-0"
               {...register('morningRoutine')}
             />
             <span className="text-[10px] text-zinc-400 text-right">
@@ -249,14 +249,6 @@ function CalculateHabitStep({
 }
 
 function ResultStep({ data }: { data?: RitualResponseDTO }) {
-  if (!data) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader2 className="animate-spin duration-150" />
-      </div>
-    )
-  }
-
   function sleepTime() {
     let horasSomadas: string = ''
     if (data) {
@@ -268,6 +260,14 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
     const horasSemZero = parseInt(horasSomadas.split(':')[0], 10)
 
     return horasSemZero
+  }
+
+  if (!data) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <Loader2 className="animate-spin duration-150" />
+      </div>
+    )
   }
 
   return (

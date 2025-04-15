@@ -281,7 +281,7 @@ function CalculateHabitStep({
           <Input
             type="time"
             {...register('workTime')}
-            className="w-28 bg-zinc-700 border-0"
+            className="items-center text-center w-24 bg-zinc-700 border-0"
           />
         </div>
         <div className="flex items-center justify-between p-5">
@@ -291,8 +291,8 @@ function CalculateHabitStep({
           </span>
           <Input
             type="time"
+            className="w-24 bg-zinc-700 border-0"
             {...register('sleepTime')}
-            className="w-28 bg-zinc-700 border-0"
           />
         </div>
         <div className="flex items-center justify-between p-5">
@@ -302,7 +302,7 @@ function CalculateHabitStep({
           </span>
           <div className="flex flex-col gap-1">
             <Input
-              className="w-28 bg-zinc-700 border-0"
+              className="w-24 bg-zinc-700 border-0"
               {...register('morningRoutine')}
             />
             <span className="text-[10px] text-zinc-400 text-right">
@@ -322,13 +322,6 @@ function CalculateHabitStep({
 }
 
 function ResultStep({ data }: { data?: RitualResponseDTO }) {
-  if (!data) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader2 className="animate-spin duration-150" />
-      </div>
-    )
-  }
   function sleepTime() {
     let horasSomadas: string = ''
     if (data) {
@@ -342,73 +335,90 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
     return horasSemZero
   }
 
+  if (!data) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <Loader2 className="animate-spin duration-150" />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
-      <div className="flex items-center p-5 gap-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src="/images/lobo-face.svg" />
-          <AvatarFallback>C</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-sm">Horários definidos</h3>
-          <p className="font-normal text-sm">
-            De acordo com as suas respostas, aqui estão algumas informações que
-            determinam os seus rituais.
-          </p>
-          <span className="text-zinc-400 text-xs">
-            Altere sempre que desejar ou for necessário.
-          </span>
+    <div className="flex flex-col flex-1 overflow-y-auto scrollbar-minimal">
+      <div className="flex-1 divide-y">
+        <div className="flex items-center p-5 gap-6">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src="/images/lobo-face.svg" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col gap-2">
+            <h3 className="font-semibold text-sm">Horários definidos</h3>
+            <p className="font-normal text-sm">
+              De acordo com as suas respostas, aqui estão algumas informações
+              que determinam os seus rituais.
+            </p>
+            <span className="text-zinc-400 text-xs">
+              Altere sempre que desejar ou for necessário.
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col px-4 py-5 gap-5">
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <Bed className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                {sleepTime()} horas de sono
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <AlarmClock className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Acorde às{' '}
+                <strong>
+                  {sumHours(
+                    data.horario_trabalho_estudo,
+                    (data.duracao_ritual_matinal / 60) * -1,
+                  )}
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <CloudSun className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Dedique {data.duracao_ritual_matinal} minutos ao{' '}
+                <strong>Ritual Matinal</strong>
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <MoonIcon className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
+                {sumHours(data.inicio_dormir, 0.5 * -1)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col px-4 py-5 gap-5">
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <Bed className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              {sleepTime()} horas de sono
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <AlarmClock className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Acorde às{' '}
-              <strong>
-                {sumHours(
-                  data.horario_trabalho_estudo,
-                  (data.duracao_ritual_matinal / 60) * -1,
-                )}
-              </strong>
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <CloudSun className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Dedique {data.duracao_ritual_matinal} minutos ao{' '}
-              <strong>Ritual Matinal</strong>
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <MoonIcon className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
-              {sumHours(data.inicio_dormir, 0.5 * -1)}
-            </span>
-          </div>
-        </div>
+      <div className="flex flex-1 items-center justify-between p-6 py-2">
+        <p className="text-sm text-zinc-200 font-normal">
+          <strong className="text-white">Deseja alterar os horários? </strong>{' '}
+          Clique em &quot;Voltar&quot; e reajuste até que fique adequado à sua
+          necessidade e realidade.
+        </p>
       </div>
     </div>
   )

@@ -260,7 +260,7 @@ export function EditRitualDialog({
             openRecalculate()
           }}
         >
-          Recalcular rituais
+          Recalcular Rituais
         </Button>
         <DialogClose asChild>
           <Button className="h-10">Salvar</Button>
