@@ -13,6 +13,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { use, useState } from 'react'
 import { EditProfileDialog } from './edit-profile-dialog'
+import { useUser } from '@/hooks/queries/use-user'
 
 export default function ProfilePage({
   params,
@@ -21,6 +22,7 @@ export default function ProfilePage({
 }) {
   const { id } = use(params)
   const [isOpen, setIsOpen] = useState(false)
+  const { data: user } = useUser()
 
   const { data } = useQuery({
     queryKey: ['posts', id],
@@ -31,7 +33,7 @@ export default function ProfilePage({
     enabled: !!id,
   })
 
-  const { data: user, refetch } = useQuery({
+  const { data: profile, refetch } = useQuery({
     queryKey: ['user-profile', id],
     queryFn: async () => {
       const response = await api.get(`/perfil-comunidade/show/` + id)
@@ -44,7 +46,7 @@ export default function ProfilePage({
     <div>
       <div className="grid grid-cols-1 xl:flex gap-6">
         <div className="h-fit xl:min-w-[390px] relative rounded-lg border overflow-hidden">
-          {user && (
+          {profile && user && user.id === profile?.user_id && (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Pen
@@ -53,7 +55,7 @@ export default function ProfilePage({
                 />
               </DialogTrigger>
               <EditProfileDialog
-                profile={user}
+                profile={profile}
                 refetch={refetch}
                 setIsOpen={setIsOpen}
               />
@@ -63,8 +65,8 @@ export default function ProfilePage({
           <div className="h-32 bg-muted">
             <Image
               src={
-                user?.banner
-                  ? env.NEXT_PUBLIC_PROD_URL + user?.banner
+                profile?.banner
+                  ? env.NEXT_PUBLIC_PROD_URL + profile?.banner
                   : '/images/bg.webp'
               }
               alt="Cover image"
@@ -77,17 +79,17 @@ export default function ProfilePage({
           <div className="flex flex-col xl:items-center relative px-4 pb-4">
             <div className="absolute -top-12 left-4 xl:left-1/2 xl:-translate-x-1/2">
               <div className="rounded-full relative border-4 border-background overflow-hidden h-20 w-20">
-                {user ? (
+                {profile ? (
                   <Avatar className="w-full h-full">
                     <AvatarImage
                       src={
-                        user.foto_perfil
-                          ? `${env.NEXT_PUBLIC_PROD_URL}${user.foto_perfil}`
+                        profile.foto_perfil
+                          ? `${env.NEXT_PUBLIC_PROD_URL}${profile.foto_perfil}`
                           : undefined
                       }
                     />
                     <AvatarFallback className="uppercase">
-                      {user.nickname.charAt(0)}
+                      {profile.nickname.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 ) : (
@@ -95,31 +97,32 @@ export default function ProfilePage({
                 )}
               </div>
             </div>
-            {user ? (
+            {profile ? (
               <div className="flex flex-col w-full xl:items-center pt-10 gap-4">
                 <div className="flex flex-col xl:max-w-60  gap-4">
                   <h2 className="text-xl font-semibold xl:text-center">
-                    {user.nickname}
+                    {profile.nickname}
                   </h2>
                   <p className="text-xs xl:text-sm text-zinc-400 xl:text-center">
-                    {user.biography || (
+                    {profile.biography || (
                       <span className="text-[10px] text-zinc-600">
                         Sem descrição
                       </span>
                     )}
                   </p>
                 </div>
-                {user.biography && (user.instagram || user.linkedin) && (
-                  <div className="w-full h-[1px] bg-border mt-4" />
-                )}
+                {profile.biography &&
+                  (profile.instagram || profile.linkedin) && (
+                    <div className="w-full h-[1px] bg-border mt-4" />
+                  )}
 
                 <div className="flex flex-col w-full p-4 gap-6">
-                  {user.instagram && (
+                  {profile.instagram && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <SiInstagram className="h-4 w-4 mr-2" />
                         <Link
-                          href={`${user.instagram}`}
+                          href={`${profile.instagram}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -129,12 +132,12 @@ export default function ProfilePage({
                       <ArrowUpRight className="text-primary w-5 h-5" />
                     </div>
                   )}
-                  {user.linkedin && (
+                  {profile.linkedin && (
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Linkedin className="h-4 w-4 mr-2" />
                         <Link
-                          href={`${user.linkedin}`}
+                          href={`${profile.linkedin}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
