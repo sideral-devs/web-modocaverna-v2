@@ -171,7 +171,7 @@ export default function Page() {
             <span className="mt-auto text-sm font-medium items-baseline">
               Não possui uma conta?{' '}
               <Link
-                href={`${env.NEXT_PUBLIC_YEARLY_PLAN}`}
+                href={`${env.NEXT_PUBLIC_REGISTER}`}
                 className="text-primary text-sm font-medium"
               >
                 Cadastrar

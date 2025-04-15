@@ -141,12 +141,12 @@ export function Moodboard({ className }: GoalsSwiperProps) {
                     Nenhuma imagem adicionada ainda
                   </h4>
                   <p className="text-xs text-muted-foreground">
-                    Adicione imagens para criar seu moodboard de sonhos e metas
+                    Adicione imagens para criar seu Dreamboard de Lei da Atração
                   </p>
                 </div>
                 <Button
                   size="sm"
-                  onClick={() => router.push('/sonhos-e-metas')}
+                  onClick={() => router.push('/lei-da-atracao')}
                 >
                   Adicionar imagens
                 </Button>
