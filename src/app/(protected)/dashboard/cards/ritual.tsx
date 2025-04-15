@@ -98,7 +98,7 @@ export default function RitualsCard() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-    console.log(event)
+
     if (!morningRitual || !over || active.id === over.id) return
 
     const oldIndex = morningRitual.itens.findIndex((item) => item === active.id)

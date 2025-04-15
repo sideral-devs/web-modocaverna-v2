@@ -11,7 +11,7 @@ export function PlanDesafio() {
   const isTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
 
   const trialDaysLeft = dayjs(user?.data_de_renovacao).diff(dayjs(), 'days')
-  console.log(user?.data_de_compra)
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
