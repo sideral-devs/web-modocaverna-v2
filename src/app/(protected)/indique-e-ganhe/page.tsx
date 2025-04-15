@@ -13,18 +13,17 @@ import {
   ArrowUpRight,
   CircleDollarSignIcon,
   FileOutputIcon,
-  FilterIcon,
   GlobeIcon,
   LucideIcon,
   MapIcon,
   Settings,
   TrophyIcon,
+  Users,
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { AffiliateCodeDialogTrigger } from './dialogs/affiliate-code'
 import { CommissionPlanDialogTrigger } from './dialogs/commission-plan'
-import { LeadFluxDialogTrigger } from './dialogs/lead-flux'
 import { PlateDialogTrigger } from './dialogs/plate'
 import { PublicMapDialogTrigger } from './dialogs/public-map'
 import { AffiliatesHeader } from './header'
@@ -174,18 +173,23 @@ export default function Page() {
               <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
                 <CircleDollarSignIcon className="scale-75 md:scale-100 text-primary" />
                 <p className="text-xs md:text-base font-semibold truncate">
-                  Plano de Comissão
+                  Solicite a sua Afiliação
                 </p>
               </Card>
             </CommissionPlanDialogTrigger>
-            <LeadFluxDialogTrigger>
+            {/* <LeadFluxDialogTrigger>
               <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
-                <FilterIcon className="scale-75 md:scale-100 text-primary" />
+                <Users className="scale-75 md:scale-100 text-primary" />
                 <p className="text-xs md:text-base font-semibold truncate">
-                  Fluxo do Lead
+                  Grupo no Whatsapp
                 </p>
               </Card>
-            </LeadFluxDialogTrigger>
+            </LeadFluxDialogTrigger> */}
+            <AffiliateDashLink
+              icon={Users}
+              title="Grupo no Whatsapp"
+              href="https://chat.whatsapp.com/F7KQFLZUTD59m5D7ou8udY"
+            />
             <PublicMapDialogTrigger>
               <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
                 <MapIcon className="scale-75 md:scale-100 text-primary" />

@@ -36,7 +36,7 @@ export function PlateDialogTrigger({ children }: { children: ReactNode }) {
               className="w-full h-auto"
             />
             <Image
-              src="/images/indique-e-ganhe/placas/plca-100k.png"
+              src="/images/indique-e-ganhe/placas/placa_100k.png"
               alt="Plano de Comissão"
               width={189}
               height={291}

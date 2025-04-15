@@ -193,14 +193,15 @@ export default function Page({
                   </p>
                 </div>
                 <div>
-                  <a href="https://redirect.lifs.app/loja-mc" target="_blank">
-                    <Button
-                      className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
-                      color={'primary'}
-                    >
-                      CLIQUE AQUI
-                    </Button>
-                  </a>
+                  {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
+                  <Button
+                    className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
+                    color={'primary'}
+                    disabled
+                  >
+                    EM BREVE
+                  </Button>
+                  {/* </a> */}
                 </div>
               </div>
               {[5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
