@@ -193,62 +193,68 @@ export default function Page({
                   </p>
                 </div>
                 <div>
-                  <a href="https://redirect.lifs.app/loja-mc" target="_blank">
-                    <Button
-                      className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
-                      color={'primary'}
-                    >
-                      CLIQUE AQUI
-                    </Button>
-                  </a>
+                  {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
+                  <Button
+                    className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
+                    color={'primary'}
+                    disabled
+                  >
+                    EM BREVE
+                  </Button>
+                  {/* </a> */}
                 </div>
               </div>
-              <div
-                className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
-                style={{
-                  backgroundImage:
-                    "url('/images/members-area/banners/indique.png')",
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                }}
-              >
-                <div className="flex flex-col w-48 relative left-4  ">
-                  <h1 className="text-base font-extrabold text-yellow-400">
-                    Faça parte do nosso programa de afiliados.
-                  </h1>
-                  {user?.plan === `"TRIAL"` ? (
-                    <p className="text-xs text-white font-semibold py-2">
-                      Adquira agora o Modo Caverna e comece a ganhar comissões.
-                    </p>
-                  ) : (
-                    <p className="text-xs text-white font-semibold py-2">
-                      Ganhe comissões generosas indicando o Modo Caverna.
-                    </p>
-                  )}
+              {[5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
+                Number(lessonId),
+              ) && (
+                <div
+                  className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
+                  style={{
+                    backgroundImage:
+                      "url('/images/members-area/banners/indique.png')",
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                  }}
+                >
+                  <div className="flex flex-col w-48 relative left-4  ">
+                    <h1 className="text-base font-extrabold text-yellow-400">
+                      Faça parte do nosso programa de afiliados.
+                    </h1>
+                    {user?.plan === `"TRIAL"` ? (
+                      <p className="text-xs text-white font-semibold py-2">
+                        Adquira agora o Modo Caverna e comece a ganhar
+                        comissões.
+                      </p>
+                    ) : (
+                      <p className="text-xs text-white font-semibold py-2">
+                        Ganhe comissões generosas indicando o Modo Caverna.
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    {user?.plan === `"TRIAL"` ? (
+                      <Link href="/settings/plans">
+                        <Button
+                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          color={'primary'}
+                        >
+                          ADQUIRIR
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link href="/indique-e-ganhe">
+                        <Button
+                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          color={'primary'}
+                        >
+                          COMECE AGORA
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  {user?.plan === `"TRIAL"` ? (
-                    <Link href="/settings/plans">
-                      <Button
-                        className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
-                        color={'primary'}
-                      >
-                        ADQUIRIR
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Link href="/indique-e-ganhe">
-                      <Button
-                        className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
-                        color={'primary'}
-                      >
-                        COMECE AGORA
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-              </div>
+              )}
             </div>
             <div className="flex flex-col bg-secondary rounded-lg gap-2">
               <p
