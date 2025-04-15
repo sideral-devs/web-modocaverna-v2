@@ -30,7 +30,7 @@ import {
 } from '@dnd-kit/sortable'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
@@ -42,6 +42,10 @@ export default function RitualsCard() {
   const [editRitualDialogOpen, setEditRitualDialogOpen] = useState(false)
   const [recalculateDialogOpen, setRecalculateDialogOpen] = useState(false)
   const queryClient = useQueryClient()
+
+  const defaultTab = useMemo(() => {
+    return new Date().getHours() >= 15 ? 'noturno' : 'matinal'
+  }, [])
 
   const { data: morningRitual } = useQuery({
     queryKey: ['rituais-blocos-matinais'],
@@ -135,7 +139,7 @@ export default function RitualsCard() {
           <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
         </CardHeader>
         <div className="flex flex-col flex-1 overflow-y-scroll scrollbar-minimal">
-          <Tabs defaultValue="matinal">
+          <Tabs defaultValue={defaultTab}>
             <TabsList className="w-full border-b px-4">
               <TabsTrigger
                 value="matinal"
