@@ -204,8 +204,8 @@ export default function Page({
                   {/* </a> */}
                 </div>
               </div>
-              {[5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
-                Number(lessonId),
+              {![5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
+                Number(moduloId),
               ) && (
                 <div
                   className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
