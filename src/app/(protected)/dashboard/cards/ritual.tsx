@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Pencil } from 'lucide-react'
 
+import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/lib/api'
 import {
@@ -47,7 +48,7 @@ export default function RitualsCard() {
     return new Date().getHours() >= 15 ? 'noturno' : 'matinal'
   }, [])
 
-  const { data: morningRitual } = useQuery({
+  const { data: morningRitual, isFetched: morningFetched } = useQuery({
     queryKey: ['rituais-blocos-matinais'],
     queryFn: async () => {
       const res = await api.get('/blocos/find?tipo_ritual=1')
@@ -56,7 +57,7 @@ export default function RitualsCard() {
     },
   })
 
-  const { data: nightRitual } = useQuery({
+  const { data: nightRitual, isFetched: nightFetched } = useQuery({
     queryKey: ['rituais-blocos-noturnos'],
     queryFn: async () => {
       const res = await api.get('/blocos/find?tipo_ritual=2')
@@ -100,6 +101,12 @@ export default function RitualsCard() {
 
     const moved = arrayMove(morningRitual.itens, oldIndex, newIndex)
     updateBlocks.mutate({ ...morningRitual, itens: moved })
+  }
+
+  if (!morningFetched || !nightFetched) {
+    return (
+      <Skeleton className="flex flex-col w-full h-full min-h-[300px] relative overflow-hidden" />
+    )
   }
 
   if (morningRitual && nightRitual) {
