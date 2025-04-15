@@ -551,7 +551,7 @@ function AddMorningRitual({
             </div>
           )}
         </form>
-        <div className="flex flex-col px-4">
+        <div className="flex flex-col px-4 overflow-hidden">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -561,7 +561,7 @@ function AddMorningRitual({
               items={items.map((item) => item.id)}
               strategy={verticalListSortingStrategy}
             >
-              <ul>
+              <ul className="divide-y">
                 {items.map((item, index) => (
                   <SortableItem
                     key={index}
@@ -704,7 +704,7 @@ function AddNightRitual({
             </div>
           )}
         </form>
-        <div className="flex flex-col px-4 divide-y">
+        <div className="flex flex-col px-4 overflow-hidden">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
