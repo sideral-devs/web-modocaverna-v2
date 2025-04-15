@@ -13,7 +13,7 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className=" bg-white overflow-y-auto gap-0  max-w-[40vw] max-h-[60vh] overflow-auto scrollbar-minimal">
+      <DialogContent className=" bg-white overflow-y-auto gap-0  max-w-[55vw] max-h-[75vh] overflow-auto scrollbar-minimal">
         <DialogHeader className=" bg-zinc-800 w-full" color="inherit">
           <DialogTitle>Mapa do Público-Alvo</DialogTitle>
         </DialogHeader>

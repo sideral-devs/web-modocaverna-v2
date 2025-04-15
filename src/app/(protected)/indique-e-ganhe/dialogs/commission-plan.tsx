@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import Image from 'next/image'
 import { ReactNode } from 'react'
 
 export function CommissionPlanDialogTrigger({
@@ -24,39 +23,34 @@ export function CommissionPlanDialogTrigger({
           <DialogTitle>Solicite sua afiliação</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col w-full bg-zinc-900 gap-2 px-4 py-2">
-          <Card className="flex flex-col w-full h-auto justify-center items-center  border border-red-600 ">
-            <p className="text-white text-sm py-4">
+          <Card className="flex flex-col w-full h-auto justify-center items-center py-4 border border-red-600 ">
+            <p className="text-white pb-4 text-lg">
               Cadastro na Plataforma de Vendas
             </p>
-            <a className="p-2" href="https://redirect.lifs.app/cadastro-ticto">
-              <Button size={'sm'}>Clique aqui</Button>
+            <a className="" href="https://redirect.lifs.app/cadastro-ticto">
+              <Button size={'sm'} className="w-52 text-sm">
+                Clique aqui
+              </Button>
             </a>
           </Card>
 
-          <span className="text-normal text-primary pt-2">
+          <span className="text-normal text-primary pt-2 flex">
             PRODUTOS DISPONÍVEIS
           </span>
 
-          <Card className="flex flex-col w-full h-full  gap-2 justify-center items-center bg-[#2a2a2a]">
-            <div className="flex  flex-col items-center gra-4  justify-center">
-              <div className="flex flex-col items-center justify-center mt-4 mb-2 w-[40px] h-[28px] bg-black  rounded-lg py-5 px-1 ">
-                <Image
-                  src="/images/logo-icon.svg"
-                  alt="Plano de Comissão"
-                  width={25}
-                  height={10}
-                  color="#fff"
-                ></Image>
-              </div>
-              <div className="flex flex-row jusfity-between   py-1i bg-red-500/15 text-[#ff3333] rounded-lg py-1 w-fit">
-                <p className="ml-2 text-xs opacity-100">Comissão inicial: </p>
-
-                <p className="text-extrabold text-xs pl-2 mr-2"> 50%</p>
-              </div>
-              <p className="text-white text-sm  text-bold p-4 pb-2">
+          <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
+            <div className="flex w-full flex-col px-3 items-start gra-4  justify-start">
+              <p className="text-white text-bold pb-2 w-full flex justify-center text-2xl ">
                 Desafio Modo Caverna
               </p>{' '}
-              <div className="flex flex-row jusfity-between text-xs  text-white w-fit">
+              <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
+                <p className="text-base opacity-100 text-zinc-400">
+                  Comissão inicial:{' '}
+                </p>
+
+                <p className="text-extrabold text-base pl-2 mr-2"> 50%</p>
+              </div>
+              <div className="flex flex-row jusfity-between text-base  text-white w-fit">
                 <p className="text-zinc-400">Página de vendas:</p>
                 <a
                   className="pl-2 text-primary"
@@ -68,34 +62,29 @@ export function CommissionPlanDialogTrigger({
               </div>
             </div>
             <a
-              className="p-2"
+              className="pt-2"
               href="https://redirect.lifs.app/mc-afiliacao"
               target="_blank"
             >
-              <Button size={'sm'}>Solicitar Afiliação</Button>
+              <Button size={'sm'} className="w-52 text-sm">
+                Solicitar Afiliação
+              </Button>
             </a>
           </Card>
 
-          <Card className="flex flex-col gap-4 w-full h-full justify-center items-center bg-[#2a2a2a]">
-            <div className="flex  flex-col items-center justify-center">
-              <div className="flex flex-col items-center justify-center mt-4 mb-2 w-[40px] h-[28px] bg-white  rounded-lg py-5 px-1">
-                <Image
-                  src="/images/logo-icon.svg"
-                  alt="Plano de Comissão"
-                  width={25}
-                  height={10}
-                  color="#fff"
-                ></Image>
-              </div>
-              <div className="flex flex-row jusfity-between  bg-red-500/15 text-[#ff3333] rounded-lg py-1 w-fit">
-                <p className="ml-2 text-xs">Comissão inicial: </p>
-
-                <p className="text-extrabold text-xs  pl-2 mr-2"> 50%</p>
-              </div>
-              <p className="text-white text-sm  text-bold p-4 pb-2">
+          <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
+            <div className="flex w-full flex-col px-3 items-start justify-center">
+              <p className="text-white  text-2xl w-full flex justify-center text text-bold  pb-2">
                 Aplicativo Modo Caverna
               </p>{' '}
-              <div className="flex flex-col jusfity-between text-xs  text-white w-fit">
+              <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
+                <p className="text-base opacity-100 text-zinc-400">
+                  Comissão inicial:{' '}
+                </p>
+
+                <p className="text-extrabold text-base pl-2 mr-2"> 50%</p>
+              </div>
+              <div className="flex flex-col jusfity-between text-base  text-white w-fit">
                 <p className="text-zinc-400">
                   Página de vendas:
                   <a
@@ -109,17 +98,19 @@ export function CommissionPlanDialogTrigger({
               </div>
             </div>
             <a
-              className="p-2"
+              className="pt-2"
               href="https://redirect.lifs.app/cc-afiliacao"
               target="_blank"
             >
-              <Button size={'sm'}>Solicitar Afiliação</Button>
+              <Button size={'sm'} className="w-52 text-sm">
+                Solicitar Afiliação
+              </Button>
             </a>
           </Card>
-          <div className="bg-red-700  bg-opacity-10 rounded-lg ">
-            <div className="flex flex-row items-center justify-center p-4 pe-2 gap-6">
+          <div className="bg-yellow-500 flex justify-between  bg-opacity-20 rounded-lg ">
+            <div className="flex flex-row items-center justify-center p-4 pe-2 gap-2">
               <p>⚠️</p>
-              <span className="text-primary text-opacity-50 text-center text-xs">
+              <span className="text-primary  text-center text-white text-sm ">
                 Atenção: Assista às aulas do curso para entender as regras e
                 evitar problemas.
               </span>

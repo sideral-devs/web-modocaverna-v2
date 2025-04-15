@@ -64,7 +64,7 @@ function Comment({
       setShowInput(false)
     },
   })
-  console.log(comment.filhos)
+
   return (
     <div className="flex flex-col w-full gap-8 ">
       <div className="flex w-full items-center justify-between">

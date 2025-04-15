@@ -82,7 +82,7 @@ export function CentralCaverna({ value }: { value: string }) {
             </div>
             <Link href="/flow-produtividade" className="ml-auto">
               <Button className="ml-auto min-h-9" size="sm">
-                Ativar Flow
+                Ativar
               </Button>
             </Link>
           </Card>

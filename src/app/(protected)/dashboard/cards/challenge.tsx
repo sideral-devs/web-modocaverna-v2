@@ -126,7 +126,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
               </Button>
             </Link>
             <Link href="/desafio-caverna" className="mt-auto">
-              <Button size="sm">Ver Desafio</Button>
+              <Button size="sm">Acessar</Button>
             </Link>
           </div>
         </div>
@@ -167,7 +167,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
             </Button>
           </Link>
           <Link href="/desafio-caverna" className="mt-auto">
-            <Button size="sm">Ver Desafio</Button>
+            <Button size="sm">Acessar</Button>
           </Link>
         </div>
       </>

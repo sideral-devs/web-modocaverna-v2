@@ -122,7 +122,7 @@ export default function Page() {
               <Card className="flex flex-col min-h-24 justify-center py-4 px-5 gap-4">
                 <p className="font-semibold text-sm text-emerald-400">Total</p>
                 <span className="font-semibold truncate">
-                  {formatMoney(data?.valorTotal || 0, 'K')}
+                  {formatMoney(data?.valorTotal || 0)}
                 </span>
               </Card>
             </div>

@@ -43,8 +43,6 @@ export default function Page() {
   const isMonthlyPlan = user?.plan === 'MENSAL'
   const isAnnualPlan = user?.plan === 'ANUAL'
 
-  console.log(user?.plan, user?.status_plan)
-
   return (
     <div className="flex flex-col justify-start items-start col-span-3 gap-10">
       <div className="flex flex-col w-full items-start gap-4">
