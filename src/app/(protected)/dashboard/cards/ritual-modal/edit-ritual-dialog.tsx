@@ -104,8 +104,12 @@ export function EditRitualDialog({
     const ritual = currentTab === 'matinal' ? morningRitual : nightRitual
     if (!ritual) return
 
-    const oldIndex = ritual.itens.findIndex((item) => item === active.id)
-    const newIndex = ritual.itens.findIndex((item) => item === over.id)
+    const oldIndex = ritual.itens.findIndex(
+      (item, index) => item + index === active.id,
+    )
+    const newIndex = ritual.itens.findIndex(
+      (item, index) => item + index === over.id,
+    )
 
     const moved = arrayMove(ritual.itens, oldIndex, newIndex)
     updateBlocks.mutate({ ...ritual, itens: moved })
@@ -181,14 +185,16 @@ export function EditRitualDialog({
                     onDragEnd={handleDragEnd}
                   >
                     <SortableContext
-                      items={morningRitual?.itens}
+                      items={morningRitual.itens.map(
+                        (item, index) => item + index,
+                      )}
                       strategy={verticalListSortingStrategy}
                     >
                       <ul className="divide-y">
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item}
+                            id={item + index}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
@@ -229,14 +235,16 @@ export function EditRitualDialog({
                     onDragEnd={handleDragEnd}
                   >
                     <SortableContext
-                      items={nightRitual?.itens}
+                      items={nightRitual.itens.map(
+                        (item, index) => item + index,
+                      )}
                       strategy={verticalListSortingStrategy}
                     >
                       <ul className="divide-y">
                         {nightRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item}
+                            id={item + index}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item)}
