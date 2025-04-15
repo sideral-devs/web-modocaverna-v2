@@ -90,7 +90,7 @@ export function RecalculateRitualDialog({ onClose }: { onClose: () => void }) {
 
   function nextStep() {
     if (currentStep >= allSteps) {
-      // handleFinish()
+      // Nada
     } else {
       setCurrentStep((prev) => (prev += 1))
     }
@@ -157,7 +157,7 @@ export function RecalculateRitualDialog({ onClose }: { onClose: () => void }) {
             </Button>
           )}
           <Button
-            loading={stepOneForm.formState.isLoading}
+            loading={stepOneForm.formState.isSubmitting}
             className="h-10"
             onClick={async () => {
               switch (currentStep) {
@@ -187,49 +187,62 @@ function CalculateHabitStep({
   const { register } = form
 
   return (
-    <div className="flex flex-col flex-1 divide-y">
-      <div className="flex items-center p-6 gap-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src="/images/lobo-face.svg" />
-          <AvatarFallback>C</AvatarFallback>
-        </Avatar>
-        <p className="font-normal text-sm">
-          O sistema te ajudará a determinar os horários dos seus rituais de
-          acordo com as suas necessidades. Para isso,{' '}
-          <strong>preencha os campos abaixo:</strong>
+    <div className="flex flex-col flex-1">
+      <div className="divide-y">
+        <div className="flex items-center p-6 gap-6">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src="/images/lobo-face.svg" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <p className="font-normal text-sm">
+            O sistema te ajudará a determinar os horários dos seus rituais de
+            acordo com as suas necessidades. Para isso,{' '}
+            <strong>preencha os campos abaixo:</strong>
+          </p>
+        </div>
+        <div className="flex items-center justify-between px-5 py-7">
+          <span className="flex items-center gap-2 text-sm">
+            <BriefcaseBusiness size={16} />
+            Horário de início de trabalho/estudo
+          </span>
+          <Input
+            type="time"
+            {...register('workTime')}
+            className="items-center text-center w-28 bg-zinc-700 border-0"
+          />
+        </div>
+        <div className="flex items-center justify-between px-5 py-7">
+          <span className="flex items-center gap-2 text-sm">
+            <Bed size={16} />
+            Horário de dormir
+          </span>
+          <Input
+            type="time"
+            className="w-28 bg-zinc-700 border-0"
+            {...register('sleepTime')}
+          />
+        </div>
+        <div className="flex items-center justify-between px-5 py-7">
+          <span className="flex items-center gap-2 text-sm">
+            <Sunrise size={16} />
+            Duração do Ritual Matinal em minutos
+          </span>
+          <div className="flex flex-col gap-1">
+            <Input
+              className="w-28 bg-zinc-700 border-0"
+              {...register('morningRoutine')}
+            />
+            <span className="text-[10px] text-zinc-400 text-right">
+              Sugerido: 90 min
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-1 items-center justify-between p-6 py-2">
+        <p className="text-sm text-zinc-200 font-normal">
+          <strong className="text-white">Recomendação: </strong> Assista ao
+          curso do Modo Caverna para aproveitar ao máximo essa ferramenta
         </p>
-      </div>
-      <div className="flex items-center justify-between px-5 py-7">
-        <span className="flex items-center gap-2 text-sm">
-          <BriefcaseBusiness size={16} />
-          Horário de início de trabalho/estudo
-        </span>
-        <Input
-          type="time"
-          {...register('workTime')}
-          className="items-center text-center w-28 bg-zinc-700 border-0"
-        />
-      </div>
-      <div className="flex items-center justify-between px-5 py-7">
-        <span className="flex items-center gap-2 text-sm">
-          <Bed size={16} />
-          Horário de dormir
-        </span>
-        <Input
-          type="time"
-          className="w-28 bg-zinc-700 border-0"
-          {...register('sleepTime')}
-        />
-      </div>
-      <div className="flex items-center justify-between px-5 py-7">
-        <span className="flex items-center gap-2 text-sm">
-          <Sunrise size={16} />
-          Duração do Ritual Matinal em minutos
-        </span>
-        <Input
-          className="w-28 bg-zinc-700 border-0"
-          {...register('morningRoutine')}
-        />
       </div>
     </div>
   )
@@ -258,72 +271,81 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
   }
 
   return (
-    <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
-      <div className="flex items-center p-5 gap-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src="/images/lobo-face.svg" />
-          <AvatarFallback>C</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-sm">Horários definidos</h3>
-          <p className="font-normal text-sm">
-            De acordo com as suas respostas, aqui estão algumas informações que
-            determinam os seus rituais.
-          </p>
-          <span className="text-zinc-400 text-xs">
-            Altere sempre que desejar ou for necessário.
-          </span>
+    <div className="flex flex-col flex-1 overflow-y-auto scrollbar-minimal">
+      <div className="flex-1 divide-y">
+        <div className="flex items-center p-5 gap-6">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src="/images/lobo-face.svg" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col gap-2">
+            <h3 className="font-semibold text-sm">Horários definidos</h3>
+            <p className="font-normal text-sm">
+              De acordo com as suas respostas, aqui estão algumas informações
+              que determinam os seus rituais.
+            </p>
+            <span className="text-zinc-400 text-xs">
+              Altere sempre que desejar ou for necessário.
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col px-4 py-5 gap-5">
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <Bed className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                {sleepTime()} horas de sono
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <AlarmClock className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Acorde às{' '}
+                <strong>
+                  {sumHours(
+                    data.horario_trabalho_estudo,
+                    (data.duracao_ritual_matinal / 60) * -1,
+                  )}
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <CloudSun className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Dedique {data.duracao_ritual_matinal} minutos ao{' '}
+                <strong>Ritual Matinal</strong>
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
+            <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
+              <MoonIcon className="text-primary" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs leading-none">
+                Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
+                {sumHours(data.inicio_dormir, 0.5 * -1)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col px-4 py-5 gap-5">
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <Bed className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              {sleepTime()} horas de sono
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <AlarmClock className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Acorde às{' '}
-              <strong>
-                {sumHours(
-                  data.horario_trabalho_estudo,
-                  (data.duracao_ritual_matinal / 60) * -1,
-                )}
-              </strong>
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <CloudSun className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Dedique {data.duracao_ritual_matinal} minutos ao{' '}
-              <strong>Ritual Matinal</strong>
-            </span>
-          </div>
-        </div>
-        <div className="flex w-full items-center p-1 gap-4 bg-[#1e1e1e] rounded-2xl">
-          <div className="flex w-10 h-10 items-center justify-center rounded-xl bg-red-900/30">
-            <MoonIcon className="text-primary" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-xs leading-none">
-              Dedique 30 minutos ao <strong>Ritual Noturno</strong>. Inicie às{' '}
-              {sumHours(data.inicio_dormir, 0.5 * -1)}
-            </span>
-          </div>
-        </div>
+      <div className="flex flex-1 items-center justify-between p-6 py-2">
+        <p className="text-sm text-zinc-200 font-normal">
+          <strong className="text-white">Deseja alterar os horários? </strong>{' '}
+          Clique em &quot;Voltar&quot; e reajuste até que fique adequado à sua
+          necessidade e realidade.
+        </p>
       </div>
     </div>
   )

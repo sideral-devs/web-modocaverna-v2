@@ -260,49 +260,62 @@ function CalculateHabitStep({
   const { register } = form
 
   return (
-    <div className="flex flex-col flex-1 divide-y">
-      <div className="flex items-center p-6 gap-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src="/images/lobo-face.svg" />
-          <AvatarFallback>C</AvatarFallback>
-        </Avatar>
-        <p className="font-normal text-sm">
-          O sistema te ajudará a determinar os horários dos seus rituais de
-          acordo com as suas necessidades. Para isso,{' '}
-          <strong>preencha os campos abaixo:</strong>
+    <div className="flex flex-col flex-1">
+      <div className="divide-y">
+        <div className="flex items-center p-6 gap-6">
+          <Avatar className="h-20 w-20">
+            <AvatarImage src="/images/lobo-face.svg" />
+            <AvatarFallback>C</AvatarFallback>
+          </Avatar>
+          <p className="font-normal text-sm">
+            O sistema te ajudará a determinar os horários dos seus rituais de
+            acordo com as suas necessidades. Para isso,{' '}
+            <strong>preencha os campos abaixo:</strong>
+          </p>
+        </div>
+        <div className="flex items-center justify-between p-5">
+          <span className="flex items-center gap-2 text-sm">
+            <BriefcaseBusiness size={16} />
+            Horário de início de trabalho/estudo
+          </span>
+          <Input
+            type="time"
+            {...register('workTime')}
+            className="w-28 bg-zinc-700 border-0"
+          />
+        </div>
+        <div className="flex items-center justify-between p-5">
+          <span className="flex items-center gap-2 text-sm">
+            <Bed size={16} />
+            Horário de dormir
+          </span>
+          <Input
+            type="time"
+            {...register('sleepTime')}
+            className="w-28 bg-zinc-700 border-0"
+          />
+        </div>
+        <div className="flex items-center justify-between p-5">
+          <span className="flex items-center gap-2 text-sm">
+            <Sunrise size={16} />
+            Duração do Ritual Matinal em minutos
+          </span>
+          <div className="flex flex-col gap-1">
+            <Input
+              className="w-28 bg-zinc-700 border-0"
+              {...register('morningRoutine')}
+            />
+            <span className="text-[10px] text-zinc-400 text-right">
+              Sugerido: 90 min
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-1 items-center justify-between p-6 py-2">
+        <p className="text-sm text-zinc-200 font-normal">
+          <strong className="text-white">Recomendação: </strong> Assista ao
+          curso do Modo Caverna para aproveitar ao máximo essa ferramenta
         </p>
-      </div>
-      <div className="flex items-center justify-between p-5">
-        <span className="flex items-center gap-2 text-sm">
-          <BriefcaseBusiness size={16} />
-          Horário de início de trabalho/estudo
-        </span>
-        <Input
-          type="time"
-          {...register('workTime')}
-          className="w-28 bg-zinc-700 border-0"
-        />
-      </div>
-      <div className="flex items-center justify-between p-5">
-        <span className="flex items-center gap-2 text-sm">
-          <Bed size={16} />
-          Horário de dormir
-        </span>
-        <Input
-          type="time"
-          {...register('sleepTime')}
-          className="w-28 bg-zinc-700 border-0"
-        />
-      </div>
-      <div className="flex items-center justify-between p-5">
-        <span className="flex items-center gap-2 text-sm">
-          <Sunrise size={16} />
-          Duração do Ritual Matinal em minutos
-        </span>
-        <Input
-          className="w-28 bg-zinc-700 border-0"
-          {...register('morningRoutine')}
-        />
       </div>
     </div>
   )
