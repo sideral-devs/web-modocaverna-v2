@@ -68,7 +68,7 @@ export default function EventsCard() {
     'Seu dia está livre. Planeje algo produtivo!',
     'Sem compromissos. Explore Networking & Conhecimento! 🚀',
     'Agenda Livre. Aprenda algo novo na seção de cursos!',
-    'Sem Compromissos. Busque insights na Comunidade Alcatéia.',
+    'Sem Compromissos. Busque insights na Comunidade Alcateia.',
     'Dia Livre? Invista em aprendizado e conexões!',
   ]
 

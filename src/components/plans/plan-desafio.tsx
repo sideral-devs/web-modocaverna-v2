@@ -11,7 +11,7 @@ export function PlanDesafio() {
   const isTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
 
   const trialDaysLeft = dayjs(user?.data_de_renovacao).diff(dayjs(), 'days')
-
+  console.log(user?.data_de_compra)
   return (
     <div className="flex flex-col w-full">
       <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
@@ -22,7 +22,7 @@ export function PlanDesafio() {
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-zinc-800/50 w-fit px-3 py-1 rounded-md border">
               <span className="text-xs font-medium truncate text-zinc-400">
-                Assinante desde 21 Julho, 2024
+                {`Assinante desde ${dayjs(user?.data_de_compra).locale('pt-br').format('D MMMM, YYYY')}`}
               </span>
             </div>
             <span className="text-[#F9CB15] font-medium truncate">
