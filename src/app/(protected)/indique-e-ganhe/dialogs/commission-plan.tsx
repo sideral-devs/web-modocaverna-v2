@@ -119,7 +119,7 @@ export function CommissionPlanDialogTrigger({
           <div className="bg-red-700  bg-opacity-10 rounded-lg ">
             <div className="flex flex-row items-center justify-center p-4 pe-2 gap-6">
               <p>⚠️</p>
-              <span className="text-primary text-opacity-50 text-center text-xs">
+              <span className="text-primary  text-center text-white text-xs">
                 Atenção: Assista às aulas do curso para entender as regras e
                 evitar problemas.
               </span>
