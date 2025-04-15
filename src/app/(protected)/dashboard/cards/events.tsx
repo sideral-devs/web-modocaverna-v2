@@ -213,7 +213,7 @@ export default function EventsCard() {
       )}
 
       <Link className="mt-auto ml-auto" href="/agenda">
-        <Button size="sm">Ver compromisso</Button>
+        <Button size="sm">Ver Compromissos</Button>
       </Link>
     </Card>
   )

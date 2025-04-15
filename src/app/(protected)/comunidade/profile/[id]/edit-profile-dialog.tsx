@@ -14,6 +14,7 @@ import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Avatar } from '@radix-ui/react-avatar'
+import {  useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -86,6 +87,7 @@ export function EditProfileDialog({
   const [previewBanner, setPreviewBanner] = useState<string | null>(
     profile.banner ? `${env.NEXT_PUBLIC_PROD_URL}${profile.banner}` : '',
   )
+  const queryClient = useQueryClient()
 
   const {
     handleSubmit,
@@ -227,6 +229,7 @@ export function EditProfileDialog({
       refetch()
       setIsOpen(false)
       toast.success('Perfl atualizado com sucesso!')
+      await queryClient.invalidateQueries({ queryKey: ['user-profile-user'] })
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         if (err.response.data.status === 500)
