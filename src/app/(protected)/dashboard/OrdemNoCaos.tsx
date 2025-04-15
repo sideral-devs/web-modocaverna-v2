@@ -20,6 +20,7 @@ const RemindersCard = dynamic(() => import('./cards/reminders'), {
 const GoalCard = dynamic(() => import('./cards/goals'), {
   loading: () => <Skeleton className="flex w-full h-full min-h-[300px]" />,
 })
+
 export function OrdemNoCaos({ value }: { value: string }) {
   return (
     <TabsContent value={value}>

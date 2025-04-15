@@ -1,9 +1,9 @@
 import { Header, HeaderClose } from '@/components/header'
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { ProtectedRoute } from '@/components/protected-route'
 import { Skeleton } from '@/components/ui/skeleton'
 import dynamic from 'next/dynamic'
 import { FinanceDashboard } from './dashboard'
-import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 
 const WalletsCard = dynamic(() => import('./cards/wallets-card'), {
   loading: () => <Skeleton className="w-full h-96" />,
@@ -24,7 +24,7 @@ export default function Page() {
                 Minhas Finanças
               </span>
             </div>
-            <HeaderClose />
+            <HeaderClose to="ordem-no-caos" />
           </Header>
           <section className="flex flex-col w-full max-w-8xl items-center gap-12 p-4">
             <h1 className="text-xl font-semibold">Minha carteira</h1>

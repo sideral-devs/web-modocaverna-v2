@@ -59,7 +59,7 @@ export function HeaderTitle({
   )
 }
 
-export function HeaderClose() {
+export function HeaderClose({ to = '' }: { to?: string }) {
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -74,8 +74,9 @@ export function HeaderClose() {
       document.removeEventListener('keydown', handleKeyPress)
     }
   }, [])
+
   return (
-    <Link href={'/'}>
+    <Link href={`/dashboard?to=${to}`}>
       <Button
         ref={buttonRef}
         variant="outline"
