@@ -62,9 +62,20 @@ export function EditRitualDialog({
     mutationFn: async (data: RitualResponseItem) => {
       await api.put('/blocos/update/' + data.id, data)
     },
+    onMutate: async (data) => {
+      const queryKey =
+        data.tipo_ritual === 1
+          ? 'rituais-blocos-matinais'
+          : 'rituais-blocos-noturnos'
+
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+
+      queryClient.setQueryData([queryKey], data)
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rituais-blocos-matinais'] })
-      queryClient.invalidateQueries({ queryKey: ['rituais-blocos-noturnos'] })
+      queryClient.invalidateQueries({
+        queryKey: ['rituais-blocos-matinais', 'rituais-blocos-noturnos'],
+      })
     },
   })
 
@@ -142,7 +153,7 @@ export function EditRitualDialog({
               Noturno
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="matinal">
+          <TabsContent value="matinal" className="overflow-hidden">
             {morningRitual && (
               <div className="divide-y">
                 <form
@@ -190,7 +201,7 @@ export function EditRitualDialog({
               </div>
             )}
           </TabsContent>
-          <TabsContent value="noturno">
+          <TabsContent value="noturno" className="overflow-hidden">
             {nightRitual && (
               <div className="divide-y">
                 <form

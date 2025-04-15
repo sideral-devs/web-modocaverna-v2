@@ -31,22 +31,21 @@ import {
 } from '@dnd-kit/sortable'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
 
 export default function RitualsCard() {
+  const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
+    new Date().getHours() >= 15 ? 'noturno' : 'matinal',
+  )
   const [stepsDialogOpen, setStepsDialogOpen] = useState(false)
   const [finishDialogOpen, setFinishDialogOpen] = useState(false)
   const [editRitualDialogOpen, setEditRitualDialogOpen] = useState(false)
   const [recalculateDialogOpen, setRecalculateDialogOpen] = useState(false)
   const queryClient = useQueryClient()
-
-  const defaultTab = useMemo(() => {
-    return new Date().getHours() >= 15 ? 'noturno' : 'matinal'
-  }, [])
 
   const { data: morningRitual, isFetched: morningFetched } = useQuery({
     queryKey: ['rituais-blocos-matinais'],
@@ -70,9 +69,20 @@ export default function RitualsCard() {
     mutationFn: async (data: RitualResponseItem) => {
       await api.put('/blocos/update/' + data.id, data)
     },
+    onMutate: async (data) => {
+      const queryKey =
+        data.tipo_ritual === 1
+          ? 'rituais-blocos-matinais'
+          : 'rituais-blocos-noturnos'
+
+      await queryClient.cancelQueries({ queryKey: [queryKey] })
+
+      queryClient.setQueryData([queryKey], data)
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rituais-blocos-matinais'] })
-      queryClient.invalidateQueries({ queryKey: ['rituais-blocos-noturnos'] })
+      queryClient.invalidateQueries({
+        queryKey: ['rituais-blocos-matinais', 'rituais-blocos-noturnos'],
+      })
     },
   })
 
@@ -93,14 +103,22 @@ export default function RitualsCard() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
+    if (!over || active.id === over.id) return
 
-    if (!morningRitual || !over || active.id === over.id) return
+    const ritual = currentTab === 'matinal' ? morningRitual : nightRitual
+    if (!ritual) return
 
-    const oldIndex = morningRitual.itens.findIndex((item) => item === active.id)
-    const newIndex = morningRitual.itens.findIndex((item) => item === over.id)
+    console.log({ ritual })
 
-    const moved = arrayMove(morningRitual.itens, oldIndex, newIndex)
-    updateBlocks.mutate({ ...morningRitual, itens: moved })
+    const oldIndex = ritual.itens.findIndex(
+      (item, index) => item + index === active.id,
+    )
+    const newIndex = ritual.itens.findIndex(
+      (item, index) => item + index === over.id,
+    )
+
+    const moved = arrayMove(ritual.itens, oldIndex, newIndex)
+    updateBlocks.mutate({ ...ritual, itens: moved })
   }
 
   if (!morningFetched || !nightFetched) {
@@ -146,7 +164,10 @@ export default function RitualsCard() {
           <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
         </CardHeader>
         <div className="flex flex-col flex-1 overflow-y-scroll scrollbar-minimal">
-          <Tabs defaultValue={defaultTab}>
+          <Tabs
+            value={currentTab}
+            onValueChange={(val) => setCurrentTab(val as 'matinal' | 'noturno')}
+          >
             <TabsList className="w-full border-b px-4">
               <TabsTrigger
                 value="matinal"
@@ -170,18 +191,19 @@ export default function RitualsCard() {
                     onDragEnd={handleDragEnd}
                   >
                     <SortableContext
-                      items={morningRitual.itens}
+                      items={morningRitual.itens.map(
+                        (item, index) => item + index,
+                      )}
                       strategy={verticalListSortingStrategy}
                     >
                       <ul className="divide-y">
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
-                            id={item}
+                            id={item + index}
                             index={index + 1}
                             text={item}
                             onRemove={() => handleRemove(item, morningRitual)}
-                            disabled
                           />
                         ))}
                       </ul>
@@ -221,18 +243,30 @@ export default function RitualsCard() {
             <TabsContent value="noturno">
               {nightRitual.itens.length > 0 ? (
                 <div className="flex flex-col px-4 divide-y">
-                  <ul className="divide-y">
-                    {nightRitual.itens.map((item, index) => (
-                      <SortableItem
-                        key={index}
-                        id={item}
-                        index={index + 1}
-                        text={item}
-                        onRemove={() => handleRemove(item, nightRitual)}
-                        disabled
-                      />
-                    ))}
-                  </ul>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={nightRitual.itens.map(
+                        (item, index) => item + index,
+                      )}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <ul className="divide-y">
+                        {nightRitual.itens.map((item, index) => (
+                          <SortableItem
+                            key={index}
+                            id={item + index}
+                            index={index + 1}
+                            text={item}
+                            onRemove={() => handleRemove(item, nightRitual)}
+                          />
+                        ))}
+                      </ul>
+                    </SortableContext>
+                  </DndContext>
                 </div>
               ) : (
                 <div className="flex flex-col flex-1 items-center justify-center relative">
