@@ -27,6 +27,7 @@ import { CommissionPlanDialogTrigger } from './dialogs/commission-plan'
 import { PlateDialogTrigger } from './dialogs/plate'
 import { PublicMapDialogTrigger } from './dialogs/public-map'
 import { AffiliatesHeader } from './header'
+import { TutorialAffiliateDialogTrigger } from './tutorial-affilate'
 
 const DigitalMarketing = dynamic(
   () => import('../members-area/sell-strategy'),
@@ -50,6 +51,7 @@ export default function Page() {
   return (
     <ProtectedRoute level="non-trial">
       {/* <UpgradeModalTrigger> */}
+      <TutorialAffiliateDialogTrigger/>
       <div className="flex flex-col w-full min-h-screen items-center gap-8 md:gap-16 overflow-y-auto scrollbar-minimal">
         <AffiliatesHeader />
         <section className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-8xl gap-6 p-4">
