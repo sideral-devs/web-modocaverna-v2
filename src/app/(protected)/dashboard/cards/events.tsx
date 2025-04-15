@@ -68,10 +68,12 @@ export default function EventsCard() {
 
     if (morningRitual) {
       rituals.push({
-        comeca: dayjs(
-          `${today} ${morningRitual.horario_inicial}`,
-        ).toISOString(),
-        termina: dayjs(`${today} ${morningRitual.horario_final}`).toISOString(),
+        comeca: dayjs(`${today} ${morningRitual.horario_inicial}`).format(
+          'YYYY-MM-DD HH:mm',
+        ),
+        termina: dayjs(`${today} ${morningRitual.horario_final}`).format(
+          'YYYY-MM-DD HH:mm',
+        ),
         titulo: 'Ritual Matinal',
         categoria: 'Ritual',
         compromisso_id: 'morning-ritual',
@@ -80,8 +82,12 @@ export default function EventsCard() {
 
     if (nightRitual) {
       rituals.push({
-        comeca: dayjs(`${today} ${nightRitual.horario_inicial}`).toISOString(),
-        termina: dayjs(`${today} ${nightRitual.horario_final}`).toISOString(),
+        comeca: dayjs(`${today} ${nightRitual.horario_inicial}`).format(
+          'YYYY-MM-DD HH:mm',
+        ),
+        termina: dayjs(`${today} ${nightRitual.horario_final}`).format(
+          'YYYY-MM-DD HH:mm',
+        ),
         titulo: 'Ritual Noturno',
         categoria: 'Ritual',
         compromisso_id: 'night-ritual',
