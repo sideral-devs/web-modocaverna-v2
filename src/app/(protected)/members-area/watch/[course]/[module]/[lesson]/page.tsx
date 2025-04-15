@@ -420,6 +420,9 @@ function ClassLink({
           active ? 'border-primary' : '',
           watched ? 'border-primary bg-primary' : '',
         )}
+        onClick={() =>
+          toast.warning('Conclua a aula clicando em "Concluir aula".')
+        }
       >
         {watched && <CheckIcon />}
       </div>

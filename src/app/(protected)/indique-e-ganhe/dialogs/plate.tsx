@@ -22,21 +22,21 @@ export function PlateDialogTrigger({ children }: { children: ReactNode }) {
         <div className="flex flex-col w-full items-center px-8 py-8 gap-8 overflow-y-auto">
           <div className="flex w-full items-center gap-4">
             <Image
-              src="/images/indique-e-ganhe/placas/placa-10k.png"
+              src="/images/indique-e-ganhe/placas/placa-10K.jpg"
               alt="Plano de Comissão"
               width={189}
               height={291}
               className="w-full h-auto"
             />
             <Image
-              src="/images/indique-e-ganhe/placas/placa-50k.png"
+              src="/images/indique-e-ganhe/placas/placa-50K.jpg"
               alt="Plano de Comissão"
               width={189}
               height={291}
               className="w-full h-auto"
             />
             <Image
-              src="/images/indique-e-ganhe/placas/placa_100k.png"
+              src="/images/indique-e-ganhe/placas/placa_100K.jpg"
               alt="Plano de Comissão"
               width={189}
               height={291}

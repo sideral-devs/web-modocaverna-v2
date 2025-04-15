@@ -13,13 +13,13 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className=" bg-white overflow-y-auto  max-w-[40vw] max-h-[60vh] overflow-auto scrollbar-minimal">
+      <DialogContent className=" bg-white overflow-y-auto gap-0  max-w-[40vw] max-h-[60vh] overflow-auto scrollbar-minimal">
         <DialogHeader className=" bg-zinc-800 w-full" color="inherit">
           <DialogTitle>Mapa do Público-Alvo</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col px-4 py-8 gap-8 overflow-y-auto">
+        <div className="flex flex-col  overflow-y-auto">
           <Image
-            src="/images/indique-e-ganhe/mapa-publico-alvo.jpg"
+            src="/images/indique-e-ganhe/mapa-publico-alvo.jpeg"
             alt="Plano de Comissão"
             width={1131}
             height={398}
