@@ -543,6 +543,7 @@ interface UserProfile {
   num_notifications: number
   nickname: string
   foto_perfil: string | null
+  is_completed: boolean
 }
 
 interface Post {

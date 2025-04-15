@@ -334,7 +334,7 @@ export default function RitualsCard() {
               size="sm"
               className="bg-red-100 text-primary ml-auto"
             >
-              Criar ritual
+              Criar Ritual
             </Button>
           </DialogTrigger>
           <ConfigRitualDialog
