@@ -14,7 +14,7 @@ export default function ProtectedLayout({
       <MusicPlayerProvider>
         <SessionProvider>
           <CrispWithNoSSR />
-          {children}
+          {children}  
         </SessionProvider>
       </MusicPlayerProvider>
     </ProtectedRoute>

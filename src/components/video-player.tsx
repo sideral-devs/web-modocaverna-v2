@@ -11,7 +11,7 @@ export function VideoPlayer({ id }: VideoPlayerProps) {
       <div
         id={`ifr_${id}_aspect`}
         className="relative w-full box-border  mb-0"
-        style={{ paddingTop: '54.05%' }}
+        style={{ paddingTop: '56.55%' }}
       >
         <div className="absolute top-0 left-0 w-full h-full rounded-xl overflow-hidden border-2 pb-0 mb-0 border-red-500">
           <iframe

@@ -19,6 +19,16 @@ export function MainNav() {
       return numNotifications
     },
   })
+
+  const { data: profile } = useQuery({
+    queryKey: ['user-profile-user'],
+    queryFn: async () => {
+      const response = await api.get('/perfil-comunidade/user')
+      return response.data as UserProfile
+    },
+  })
+
+  
   const navItems = [
     {
       name: 'Início',
@@ -32,7 +42,7 @@ export function MainNav() {
       showBadge: true,
     },
     {
-      name: 'Perfil',
+      name: profile?.is_completed ? 'Perfil' : 'Perfil Incompleto',
       href: '/comunidade/profile',
       icon: User,
     },
