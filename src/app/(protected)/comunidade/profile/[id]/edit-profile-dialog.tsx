@@ -29,35 +29,34 @@ dayjs.extend(customParseFormat)
 const schema = z.object({
   biography: z.string().min(1, { message: 'A biografia é obrigatória' }),
   nickname: z.string().min(1, { message: 'O nome de usuário é obrigatório' }),
+
   instagram: z
     .string()
-    .url(
-      'Por favor, insira uma URL válida do Instagram (ex: https://instagram.com/usuario)',
-    )
-    .nullable()
+    .transform((val) => (val === '' ? undefined : val))
+    .optional()
     .refine(
-      (value) => {
-        if (!value) return true
-        return value.includes('instagram.com')
-      },
+      (value) =>
+        !value ||
+        (z.string().url().safeParse(value).success &&
+          value.includes('instagram.com')),
       {
-        message: 'A URL deve ser do Instagram (instagram.com)',
+        message:
+          'A URL deve ser válida e do Instagram (ex: https://instagram.com/usuario)',
       },
     ),
 
   linkedin: z
     .string()
-    .url(
-      'Por favor, insira uma URL válida do LinkedIn (ex: https://linkedin.com/in/usuario)',
-    )
-    .nullable()
+    .transform((val) => (val === '' ? undefined : val))
+    .optional()
     .refine(
-      (value) => {
-        if (!value) return true
-        return value.includes('linkedin.com')
-      },
+      (value) =>
+        !value ||
+        (z.string().url().safeParse(value).success &&
+          value.includes('linkedin.com')),
       {
-        message: 'A URL deve ser do LinkedIn (linkedin.com)',
+        message:
+          'A URL deve ser válida e do LinkedIn (ex: https://linkedin.com/in/usuario)',
       },
     ),
 })
