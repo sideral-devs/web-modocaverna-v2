@@ -28,7 +28,6 @@ export function MainNav() {
     },
   })
 
-  
   const navItems = [
     {
       name: 'Início',

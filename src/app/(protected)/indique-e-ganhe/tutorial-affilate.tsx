@@ -3,26 +3,26 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { VideoPlayer } from "@/components/video-player";
-import { videos } from "@/lib/constants";
-import Image from "next/image";
-import { ReactNode, useEffect, useState } from "react";
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { VideoPlayer } from '@/components/video-player'
+import { videos } from '@/lib/constants'
+import Image from 'next/image'
+import { ReactNode, useEffect, useState } from 'react'
 
 export function TutorialAffiliateDialogTrigger() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const storedValue = localStorage.getItem("video-affiliate");
+    const storedValue = localStorage.getItem('video-affiliate')
     if (!storedValue) {
-      setOpen(true);
+      setOpen(true)
     }
-  }, []);
+  }, [])
 
   function handleCheckboxChange() {
-    setOpen(false);
-    localStorage.setItem("video-affiliate", "true");
+    setOpen(false)
+    localStorage.setItem('video-affiliate', 'true')
   }
 
   return (
@@ -32,7 +32,7 @@ export function TutorialAffiliateDialogTrigger() {
           <div className="flex flex-col gap-6">
             <div className="flex w-full-items-center gap-16">
               <Image
-                src={"/images/lobo-face.svg"}
+                src={'/images/lobo-face.svg'}
                 width={125}
                 height={109}
                 alt="Capitão Caverna"
@@ -46,7 +46,7 @@ export function TutorialAffiliateDialogTrigger() {
                   </p>
                 </div>
                 <Image
-                  src={"/images/triangle-balloon.svg"}
+                  src={'/images/triangle-balloon.svg'}
                   width={54}
                   height={14}
                   alt="balloon"
@@ -69,5 +69,5 @@ export function TutorialAffiliateDialogTrigger() {
         </div>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
