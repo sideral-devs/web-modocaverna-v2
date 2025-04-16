@@ -669,3 +669,26 @@ interface RitualResponseItem {
   created_at: string
   updated_at: string
 }
+// Exercícios
+export interface Exercise {
+  id: string
+  name: string
+  series: number
+  repetitions: number
+  currentWeight: number
+  imageUrl: string
+  created_at?: string
+  updated_at?: string
+}
+
+// Treinos
+export interface Workout {
+  id: string
+  name: string
+  day: string
+  startTime: string
+  endTime: string
+  exercises: Exercise[]
+  created_at?: string
+  updated_at?: string
+}

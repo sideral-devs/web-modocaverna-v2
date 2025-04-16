@@ -13,6 +13,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { Note, Folder } from '@/types/type'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronDown,

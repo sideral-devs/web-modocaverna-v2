@@ -1,8 +1,10 @@
 'use client'
+import { Button } from '@/components/ui/button'
 import { TabsContent } from '@/components/ui/tabs'
 import { SmileyAngry } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import Link from 'next/link'
 
 export function TempleForge({ value }: { value: string }) {
   const today = new Date()
@@ -12,7 +14,7 @@ export function TempleForge({ value }: { value: string }) {
   return (
     <TabsContent value={value} className="flex-1">
       <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
-        <div className="w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
+        <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
               <span className="uppercase text-[10px] text-yellow-500 font-semibold">
@@ -80,9 +82,12 @@ export function TempleForge({ value }: { value: string }) {
               </div>
             </div>
           </div>
+          <Link className="absolute right-4 bottom-4" href="/exercicios">
+            <Button size="sm">Acessar</Button>
+          </Link>
         </div>
 
-        <div className="w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
+        <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
               <span className="uppercase text-[10px] text-yellow-500 font-semibold">
@@ -107,6 +112,9 @@ export function TempleForge({ value }: { value: string }) {
                 </div>
               </div>
             </div>
+            <Link className="absolute right-4 bottom-4" href="/refeicoes">
+              <Button size="sm">Acessar</Button>
+            </Link>
           </div>
         </div>
       </div>
