@@ -43,10 +43,11 @@ export function CentralHubHeader() {
         {user.plan === 'TRIAL' && (
           <Link href="settings/plans">
             {(() => {
-              const remaining = dayjs(user.data_de_renovacao).diff(
-                dayjs(),
-                'days',
-              )
+              const isTrial = user.plan === 'TRIAL'
+              const isDesafio = user.plan === 'DESAFIO'
+              const remaining = dayjs(user.data_de_compra).diff(dayjs(), 'days')
+              const renovationDate = dayjs(user.data_de_renovacao).diff( dayjs(), 'days')
+
               return remaining > 1 ? (
                 <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
                   <AlarmClock size={20} />
@@ -86,8 +87,8 @@ export function CentralHubHeader() {
         {user.plan === 'DESAFIO' && (
           <Link href="settings/plans">
             {(() => {
-              const remaining = dayjs(user.data_de_renovacao).diff(
-                dayjs(),
+              const remaining = dayjs(user.data_de_compra).diff(
+                dayjs(user.data_de_compra + 7),
                 'days',
               )
               return remaining > 1 ? (
