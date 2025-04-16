@@ -93,7 +93,7 @@ export default function DreamboardCard({
               height={110}
               className="opacity-50"
             />
-            <div className="flex flex-col gap-4 w-[40dvh]">
+            <div className="flex flex-col gap-4 w-[372px]">
               <p className="text-center text-[13px] text-zinc-500">
                 {dreamboardMessage}
               </p>
