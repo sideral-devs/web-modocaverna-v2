@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/lib/api'
+import { cn } from '@/lib/utils'
 import {
   closestCenter,
   DndContext,
@@ -33,10 +34,14 @@ import { SortableItem } from './sortable-item'
 
 export function EditRitualDialog({
   openRecalculate,
+  defaultTab = 'matinal',
 }: {
-  openRecalculate: () => void
+  openRecalculate?: () => void
+  defaultTab?: 'matinal' | 'noturno'
 }) {
-  const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>('matinal')
+  const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
+    defaultTab,
+  )
   const [newItem, setNewItem] = useState('')
   const queryClient = useQueryClient()
 
@@ -260,16 +265,23 @@ export function EditRitualDialog({
         </Tabs>
       </div>
 
-      <DialogFooter className="flex !flex-row w-full items-center !justify-between p-4 border-t">
-        <Button
-          className="h-10 bg-zinc-700"
-          variant="outline"
-          onClick={() => {
-            openRecalculate()
-          }}
-        >
-          Recalcular Rituais
-        </Button>
+      <DialogFooter
+        className={cn(
+          'flex !flex-row w-full items-center p-4 border-t',
+          openRecalculate ? '!justify-between' : '',
+        )}
+      >
+        {openRecalculate && (
+          <Button
+            className="h-10 bg-zinc-700"
+            variant="outline"
+            onClick={() => {
+              openRecalculate()
+            }}
+          >
+            Recalcular Rituais
+          </Button>
+        )}
         <DialogClose asChild>
           <Button className="h-10">Salvar</Button>
         </DialogClose>

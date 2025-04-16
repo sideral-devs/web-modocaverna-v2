@@ -1,9 +1,11 @@
 'use client'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 import { parse } from 'date-fns'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { EditRitualDialog } from '../dashboard/cards/ritual-modal/edit-ritual-dialog'
 import { EditEventDialogTrigger } from './edit-event'
 import { GoogleEditEventDialogTrigger } from './google-edit-event'
 
@@ -38,7 +40,6 @@ const eventColors = {
 function BaseEvent({
   start,
   end,
-  allDay,
   title,
   category,
   checked,
@@ -74,11 +75,42 @@ function BaseEvent({
   let dayCount = 0
 
   if (!eventStart.isSame(eventEnd, 'day')) {
-    if (!allDay) {
-      return null
-    }
     isAllDay = true
     dayCount = eventEnd.diff(eventStart, 'days')
+
+    if (category === 'google') {
+      dayCount -= 1 // Os dias são calculados de forma diferente pelo Google (1 a mais)
+    }
+  }
+
+  if (isAllDay) {
+    return (
+      <div
+        className={cn(
+          'flex p-4 absolute  text-white rounded-lg z-10 overflow-y-hidden cursor-pointer',
+          'shadow-md overflow-hidden pointer-events-auto',
+          category === 'google' || category === 'Ritual'
+            ? 'bg-yellow-900'
+            : 'bg-zinc-800',
+        )}
+        style={{
+          top: 4,
+          width: (() => {
+            if (mode === 'daily') return '100%'
+
+            const maxLength = (7 - dayIndex) * DAY_WIDTH - 8
+            const minLength = DAY_WIDTH - 8
+
+            return Math.min(
+              Math.max((dayCount + 1) * DAY_WIDTH - 8, minLength),
+              maxLength,
+            )
+          })(),
+        }}
+      >
+        <p className={cn('line-clamp-2 text-xs')}>{title}</p>
+      </div>
+    )
   }
 
   return (
@@ -91,32 +123,13 @@ function BaseEvent({
             ? 'bg-yellow-950'
             : 'bg-yellow-900'
           : 'bg-zinc-800',
-        isAllDay && '2xl:translate-x-4',
       )}
       style={{
         borderColor: eventColors[category].text,
-        top: isAllDay ? 64 : `${top}px`,
-        height: isAllDay ? 44 : `${height}px`,
-        left: isAllDay
-          ? 65 + 4 + DAY_WIDTH * dayIndex
-          : mode === 'daily'
-            ? 80
-            : 4,
-        ...(() => (isAllDay ? {} : { right: 4 }))(),
-        ...(() =>
-          isAllDay
-            ? {
-                width: (() => {
-                  const maxLength = (7 - dayIndex) * DAY_WIDTH - 8
-                  const minLength = DAY_WIDTH - 8
-
-                  return Math.min(
-                    Math.max((dayCount + 1) * DAY_WIDTH - 8, minLength),
-                    maxLength,
-                  )
-                })(),
-              }
-            : {})(), // Para não ter essa propriedade para eventos do dia todo
+        top: `${top}px`,
+        height: `${height}px`,
+        left: 4,
+        right: 4,
         maxWidth: '100%',
       }}
     >
@@ -143,7 +156,6 @@ function BaseEvent({
 
 export function CalendarEvent({
   event,
-  now,
   mode,
   allDay = false,
 }: {
@@ -152,25 +164,6 @@ export function CalendarEvent({
   mode: 'weekly' | 'daily'
   allDay?: boolean
 }) {
-  const eventStart = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
-  const eventEnd = dayjs(event.termina, 'YYYY-MM-DD HH:mm')
-
-  if (mode === 'weekly') {
-    if (
-      eventEnd.isBefore(dayjs(now).startOf('week')) ||
-      eventStart.isAfter(dayjs(now).endOf('week'))
-    ) {
-      return null
-    }
-  } else {
-    if (
-      eventEnd.isBefore(dayjs(now).startOf('day')) ||
-      eventStart.isAfter(dayjs(now).endOf('day'))
-    ) {
-      return null
-    }
-  }
-
   return (
     <EditEventDialogTrigger event={event}>
       <button className="block">
@@ -190,7 +183,6 @@ export function CalendarEvent({
 
 export function GoogleEvent({
   event,
-  now,
   mode,
   allDay = false,
 }: {
@@ -199,25 +191,6 @@ export function GoogleEvent({
   mode: 'weekly' | 'daily'
   allDay?: boolean
 }) {
-  const eventStart = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
-  const eventEnd = dayjs(event.termina, 'YYYY-MM-DD HH:mm')
-
-  if (mode === 'weekly') {
-    if (
-      eventEnd.isBefore(dayjs(now).startOf('week')) ||
-      eventStart.isAfter(dayjs(now).endOf('week'))
-    ) {
-      return null
-    }
-  } else {
-    if (
-      eventEnd.isBefore(dayjs(now).startOf('day')) ||
-      eventStart.isAfter(dayjs(now).endOf('day'))
-    ) {
-      return null
-    }
-  }
-
   return (
     <GoogleEditEventDialogTrigger event={event}>
       <button className="block">
@@ -240,12 +213,14 @@ export function RitualEvent({
   timeStart,
   timeEnd,
   mode,
+  type = 'matinal',
 }: {
   title: string
   timeStart: string
   timeEnd: string
   now: Date | undefined
   mode: 'weekly' | 'daily'
+  type?: 'matinal' | 'noturno'
 }) {
   const start = dayjs(parse(timeStart, 'HH:mm', new Date())).format(
     'YYYY-MM-DD HH:mm',
@@ -255,14 +230,19 @@ export function RitualEvent({
   )
 
   return (
-    <BaseEvent
-      start={start}
-      end={end}
-      title={title}
-      category="Ritual"
-      checked={false}
-      allDay={false}
-      mode={mode}
-    />
+    <Dialog>
+      <DialogTrigger>
+        <BaseEvent
+          start={start}
+          end={end}
+          title={title}
+          category="Ritual"
+          checked={false}
+          allDay={false}
+          mode={mode}
+        />
+      </DialogTrigger>
+      <EditRitualDialog defaultTab={type} />
+    </Dialog>
   )
 }

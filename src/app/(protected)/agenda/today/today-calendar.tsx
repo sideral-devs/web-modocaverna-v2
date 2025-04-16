@@ -5,19 +5,22 @@ import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import isBetween from 'dayjs/plugin/isBetween'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
-import { CalendarEvent } from '../calendar-event'
-import { GoogleEditEventDialogTrigger } from '../google-edit-event'
+import { CalendarEvent, GoogleEvent, RitualEvent } from '../calendar-event'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
+dayjs.extend(isBetween)
 
 export function TodayEventCalendar() {
   const session = useSession()
   const [selected, setSelected] = useState<Date | undefined>(new Date())
   const today = dayjs(selected).startOf('day').format('YYYY-MM-DD')
   const scrollableRef = useRef<HTMLDivElement | null>(null)
+  const startWeek = dayjs(selected).startOf('week').format('YYYY-MM-DD')
+  const endWeek = dayjs(selected).endOf('week').format('YYYY-MM-DD')
 
   const { data } = useQuery({
     queryKey: ['events', `${today}-${today}`],
@@ -33,19 +36,37 @@ export function TodayEventCalendar() {
     },
   })
 
-  const { data: googleEvents } = useQuery({
-    queryKey: ['events-google', `${today}-${today}`],
+  const { data: googleEvents } = useQuery<GoogleEventsResponse>({
+    queryKey: ['events-google', `${startWeek}-${endWeek}`],
     queryFn: async () => {
       const response = await api.get('/eventos-google/show', {
         params: {
           date_field: 'comeca',
-          date_start: today,
-          date_end: today,
+          date_start: startWeek,
+          date_end: endWeek,
         },
       })
       return response.data
     },
     enabled: !!session,
+  })
+
+  const { data: morningRitual } = useQuery({
+    queryKey: ['rituais-blocos-matinais'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=1')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
+  })
+
+  const { data: nightRitual } = useQuery({
+    queryKey: ['rituais-blocos-noturnos'],
+    queryFn: async () => {
+      const res = await api.get('/blocos/find?tipo_ritual=2')
+      const data = res.data as RitualResponseItem[]
+      return data[0]
+    },
   })
 
   function scrollToNow() {
@@ -86,118 +107,87 @@ export function TodayEventCalendar() {
         className="flex flex-col xl:w-full h-full flex-1 overflow-y-auto scrollbar-minimal"
       >
         <div className="flex-1 min-h-0">
-          <div className="flex flex-col h-full max-h-[calc(100vh-100px)] relative">
-            {Array.from({ length: 24 }).map((_, index) => (
-              <div key={index} className="flex items-center">
-                <div className="flex w-16 min-w-16 h-28 items-end justify-end p-2 bg-zinc-900 border-r">
+          <div className="flex flex-1 h-full max-h-[calc(100vh-100px)] relative">
+            <div className="flex flex-col">
+              {Array.from({ length: 24 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex w-16 min-w-16 h-28 min-h-28 items-end justify-end p-2 bg-zinc-900 border-r"
+                >
                   <span className="text-sm text-zinc-500">
                     {(index < 23 ? index + 1 : 0).toFixed(0).padStart(2, '0')}
                     :00
                   </span>
                 </div>
-                <div className="flex w-full h-28 border-b">
+              ))}
+            </div>
+            <div className="w-full relative">
+              {Array.from({ length: 24 }).map((_, index) => (
+                <div key={index} className="flex w-full h-28 border-b">
                   <div className="min-w-36 w-full h-full border-r" />
                 </div>
-              </div>
-            ))}
-            {data &&
-              data.compromissos.map((event) => (
-                <CalendarEvent
-                  event={event}
-                  key={event.compromisso_id}
-                  now={selected}
-                  mode="daily"
-                />
               ))}
-            {googleEvents?.events?.length > 0 &&
-              googleEvents.events?.map((event: GoogleEvent, index: number) => (
-                <GoogleEvent
-                  event={{
-                    ...event,
-                    compromisso_id: event.event_id,
-                    event_id: event.event_id,
-                    repete: event.repete,
-                    categoria: 'google',
-                  }}
-                  key={event.event_id || `google-event-${index}`}
+              {data &&
+                data.compromissos.map((event) => (
+                  <CalendarEvent
+                    event={event}
+                    key={event.compromisso_id}
+                    now={selected}
+                    mode="daily"
+                  />
+                ))}
+              {googleEvents &&
+                googleEvents.events &&
+                googleEvents.events
+                  .filter(
+                    (event) =>
+                      dayjs(today).isBetween(
+                        dayjs(event.comeca),
+                        dayjs(event.termina),
+                        null,
+                        '[]',
+                      ) || dayjs(event.comeca).isSame(today, 'day'),
+                  )
+                  .map((e) => ({
+                    ...e,
+                    compromisso_id: e.event_id,
+                    repete: e.repete,
+                    categoria: 'google' as const,
+                  }))
+                  .map((event) => (
+                    <GoogleEvent
+                      event={event}
+                      key={event.compromisso_id}
+                      now={selected}
+                      mode="daily"
+                    />
+                  ))}
+              {morningRitual && (
+                <RitualEvent
+                  mode="weekly"
                   now={selected}
+                  timeStart={morningRitual.horario_inicial}
+                  timeEnd={morningRitual.horario_final}
+                  title="Ritual Matinal"
+                  type="matinal"
                 />
-              ))}
+              )}
+              {nightRitual && (
+                <RitualEvent
+                  mode="weekly"
+                  now={selected}
+                  timeStart={nightRitual.horario_inicial}
+                  timeEnd={nightRitual.horario_final}
+                  title="Ritual Noturno"
+                  type="noturno"
+                />
+              )}
+            </div>
             <Now />
           </div>
         </div>
       </div>
     </section>
-  )
-}
-
-function GoogleEvent({
-  event,
-  now,
-}: {
-  event: GoogleEvent & { compromisso_id: string; categoria: string }
-  now: Date | undefined
-}) {
-  const PIXELS_PER_MINUTE = 112 / 60
-  const minHeight = 44
-
-  const eventStart = dayjs(event.comeca, 'YYYY-MM-DD HH:mm')
-  const eventEnd = dayjs(event.termina, 'YYYY-MM-DD HH:mm')
-
-  if (
-    eventEnd.isBefore(dayjs(now).startOf('week')) ||
-    eventStart.isAfter(dayjs(now).endOf('week'))
-  ) {
-    return null
-  }
-
-  const startMinutes = eventStart.hour() * 60 + eventStart.minute()
-  const endMinutes = eventEnd.hour() * 60 + eventEnd.minute()
-
-  const top = startMinutes * PIXELS_PER_MINUTE
-  const height = Math.max(
-    (endMinutes - startMinutes) * PIXELS_PER_MINUTE,
-    minHeight,
-  )
-  const baseLeft = 70
-
-  return (
-    <GoogleEditEventDialogTrigger event={event}>
-      <div
-        className={`
-          absolute flex flex-col py-3 px-4 gap-2 
-          ${event.checked ? 'bg-yellow-950' : 'bg-yellow-900'}
-          hover:bg-yellow-800 text-white rounded-lg 
-          border-l-4 border-yellow-500 cursor-pointer transition-colors
-          shadow-md overflow-hidden pointer-events-auto
-        `}
-        style={{
-          top: `${top}px`,
-          height: `${height}px`,
-          // left: `calc(${baseLeft}px + ${dayIndex * 144}px)`, // Não precisa calcular posição na visão diária
-          left: baseLeft,
-          right: 4,
-        }}
-      >
-        <span
-          className={`${height < 80 ? 'text-[10px]' : 'text-xs'} font-medium text-yellow-400`}
-        >
-          {`${eventStart.format('HH:mm')} - ${eventEnd.format('HH:mm')}`}
-        </span>
-        {height >= 80 && (
-          <p
-            className={`${height < 80 ? 'text-[10px]' : 'text-xs'} font-normal line-clamp-2 ${event.checked ? 'line-through opacity-75' : ''}`}
-          >
-            {event.titulo}
-          </p>
-        )}
-        {/* {event.descricao && (
-          <p className="text-xs text-yellow-200 line-clamp-2">
-            {event.descricao}
-          </p>
-        )} */}
-      </div>
-    </GoogleEditEventDialogTrigger>
   )
 }
 

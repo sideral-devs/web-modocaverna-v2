@@ -231,6 +231,7 @@ function Column({
           timeStart={morningRitual.horario_inicial}
           timeEnd={morningRitual.horario_final}
           title="Ritual Matinal"
+          type="matinal"
         />
       )}
       {nightRitual && (
@@ -240,6 +241,7 @@ function Column({
           timeStart={nightRitual.horario_inicial}
           timeEnd={nightRitual.horario_final}
           title="Ritual Noturno"
+          type="noturno"
         />
       )}
     </div>
