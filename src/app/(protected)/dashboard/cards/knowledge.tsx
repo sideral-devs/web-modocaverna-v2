@@ -210,7 +210,7 @@ function EmptyState({ type }: { type: string }) {
     curso: videosMessage,
   }
   return (
-    <div className="flex flex-row items-center justify-start flex-1 pl-10 gap-4 w-[60dvh] md:w-[36dvh] md:pl-0">
+    <div className="flex flex-row items-center justify-start flex-1 pl-10 gap-4 w-[60dvh] md:w-[378px] md:pl-2 xl:w-[378px] xl:pl-0">
       <Image
         src={emptyImages[type]}
         alt={emptyMessages[type]}

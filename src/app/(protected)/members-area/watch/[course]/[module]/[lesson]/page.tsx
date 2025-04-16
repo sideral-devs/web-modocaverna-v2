@@ -419,25 +419,25 @@ function ClassLink({
     >
       <span className={cn('flex-1', active || 'text-zinc-500')}>
         {
-          //eslint-ignore-next-line
+          // eslint-ignore-next-line
           title === 'Os dias na Caverna' || title === 'Acabou, é o fim?'
             ? `${title}  - Aula disponível dia: 17/04/2025`
             : title
         }
       </span>
       <div
-          className={cn(
-            'hidden lg:flex w-5 h-5 items-center justify-center border-2 rounded-md border-zinc-500',
-            active ? 'border-primary' : '',
-            watched ? 'border-primary bg-primary' : '',
-          )}
-          onClick={() => 
-          {
-            title === 'Os dias na Caverna' || title === 'Acabou, é o fim?'
-              ? toast.warning('A aula estará disponível dia: 17/04/2025')
-              : toast.warning('Conclua a aula clicando em "Concluir aula".')
+        className={cn(
+          'hidden lg:flex w-5 h-5 items-center justify-center border-2 rounded-md border-zinc-500',
+          active ? 'border-primary' : '',
+          watched ? 'border-primary bg-primary' : '',
+        )}
+        onClick={() => {
+          if (title === 'Os dias na Caverna' || title === 'Acabou, é o fim?') {
+            toast.warning('A aula estará disponível dia: 17/04/2025')
+          } else {
+            toast.warning('Conclua a aula clicando em "Concluir aula".')
           }
-        }
+        }}
       >
         {watched && <CheckIcon />}
       </div>
