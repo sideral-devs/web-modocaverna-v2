@@ -1,5 +1,6 @@
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/store/auth'
+import { EventsDTO } from '@/types/type'
 import { useQuery } from '@tanstack/react-query'
 
 export function useEvents() {

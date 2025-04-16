@@ -1,15 +1,16 @@
+'use client'
+
 import Image from 'next/image'
 import { DotsThree } from '@phosphor-icons/react'
 import { motion, Reorder, useMotionValue } from 'framer-motion'
-
-interface Exercise {
-  id: number
-  name: string
-  series: number
-  repetitions: number
-  currentWeight: number
-  imageUrl: string
-}
+import { Exercise } from '@/types/type'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface ExerciseCardProps {
   name: string
@@ -18,6 +19,7 @@ interface ExerciseCardProps {
   currentWeight: number
   imageUrl: string
   value: Exercise
+  onEdit: () => void
 }
 
 export function ExerciseCard({
@@ -27,8 +29,14 @@ export function ExerciseCard({
   currentWeight,
   imageUrl,
   value,
+  onEdit,
 }: ExerciseCardProps) {
   const y = useMotionValue(0)
+  const { deleteExercise } = useWorkouts()
+
+  const handleDelete = async () => {
+    await deleteExercise(value.id)
+  }
 
   return (
     <Reorder.Item
@@ -62,9 +70,27 @@ export function ExerciseCard({
             </div>
           </div>
 
-          <button className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
-            <DotsThree className="w-6 h-6 text-zinc-400" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
+                <DotsThree className="w-6 h-6 text-zinc-400" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-zinc-800 border-zinc-700">
+              <DropdownMenuItem
+                className="text-zinc-400 hover:text-white cursor-pointer"
+                onClick={onEdit}
+              >
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-500 hover:text-red-400 cursor-pointer"
+                onClick={handleDelete}
+              >
+                Excluir
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </motion.div>
       <div className="pt-4 pb-2 pl-2">
