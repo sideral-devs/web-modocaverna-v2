@@ -12,6 +12,7 @@ import { WEEK_DAYS } from '@/lib/constants'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Meal } from '@/lib/api/meals'
+import Image from 'next/image'
 
 export default function Page() {
   const [selectedDay, setSelectedDay] = useState(0)
@@ -133,7 +134,7 @@ export default function Page() {
             </h2>
             <Button
               variant="secondary"
-              className="text-zinc-500 hover:text-zinc-300 pl-4 py-0 pr-0 gap-2"
+              className="text-zinc-500 pl-4 py-0 pr-0 gap-2"
               onClick={() => handleOpenModal()}
             >
               Nova refeição
@@ -157,15 +158,33 @@ export default function Page() {
                 />
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
-                <p>Nenhuma refeição cadastrada para este dia</p>
+              <div className="flex min-h-[300px] border border-zinc-700 rounded-xl flex-col items-center justify-center py-16 text-zinc-500">
+                <div className="w-24 h-24 mb-8 relative">
+                  <Image
+                    src="/images/meals/bowl.svg"
+                    alt="Empty state"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h2 className="text-xl mb-2 text-white font-semibold">
+                  Nenhuma refeição cadastrada
+                </h2>
+                <p className="text-zinc-400 mb-10 max-w-xs text-center text-sm">
+                  Adicione uma refeição para começar a controlar sua dieta
+                </p>
                 <Button
-                  variant="ghost"
-                  className="text-red-500 gap-2 mt-4"
+                  variant="secondary"
+                  className="text-red-500 group bg-transparent hover:text-red-500/80 hover:bg-transparent pl-4 py-0 pr-0 gap-2"
                   onClick={() => handleOpenModal()}
                 >
-                  <Plus className="w-5 h-5" />
                   Nova refeição
+                  <div className="h-full  flex items-center justify-center px-4 ">
+                    <Plus
+                      className="w-5 h-5 text-red-500 group-hover:text-red-500/80"
+                      weight="bold"
+                    />
+                  </div>
                 </Button>
               </div>
             )}
