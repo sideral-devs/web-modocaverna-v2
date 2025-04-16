@@ -36,7 +36,6 @@ import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
-
 export default function RitualsCard() {
   const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
     new Date().getHours() >= 15 ? 'noturno' : 'matinal',

@@ -38,7 +38,6 @@ const DigitalMarketing = dynamic(
 
 export default function Page() {
   const { code: affiliateCode } = useAffiliateStore()
-
   const { data } = useQuery({
     queryKey: ['indication', affiliateCode],
     queryFn: async () => {
@@ -50,7 +49,6 @@ export default function Page() {
 
   return (
     <ProtectedRoute level="non-trial">
-      {/* <UpgradeModalTrigger> */}
       <TutorialAffiliateDialogTrigger />
       <div className="flex flex-col w-full min-h-screen items-center gap-8 md:gap-16 overflow-y-auto scrollbar-minimal">
         <AffiliatesHeader />
@@ -293,7 +291,6 @@ export default function Page() {
           <DigitalMarketing />
         </section>
       </div>
-      {/* </UpgradeModalTrigger> */}
     </ProtectedRoute>
   )
 }
