@@ -41,7 +41,7 @@ export default function RitualsCard() {
   const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
     new Date().getHours() >= 15 ? 'noturno' : 'matinal',
   )
-  const [stepsDialogOpen, setStepsDialogOpen] = useState(true)
+  const [stepsDialogOpen, setStepsDialogOpen] = useState(false)
   const [finishDialogOpen, setFinishDialogOpen] = useState(false)
   const [editRitualDialogOpen, setEditRitualDialogOpen] = useState(false)
   const [recalculateDialogOpen, setRecalculateDialogOpen] = useState(false)
