@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { MenuIcon, StoreIcon } from 'lucide-react'
+import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogTrigger } from './UpgradeDialog'
@@ -14,6 +14,8 @@ export function CentralHubHeader() {
   if (!user) {
     return null
   }
+  const dataDeCompra = dayjs(user.data_de_compra)
+  const dataMaisSeteDias = dataDeCompra.add(7, 'day')
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
@@ -45,52 +47,69 @@ export function CentralHubHeader() {
           <>
             {user.data_de_renovacao &&
             dayjs(user.data_de_renovacao) < dayjs() ? (
-              <div className="flex bg-yellow-600 rounded-lg  px-1 gap-2 items-center justify-center">
+              <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans">
-                  <div className="flex flex-col md:flex  items-start justify-center px-1 py-1 rounded-xl  text-white">
-                    <span className="text-normal">
-                      {' '}
-                      Assine o Plano Cavernoso{' '}
-                    </span>
-                    <p className="text-xs pb-2">
-                      Acesso Ilimitado a todas as ferramentas do sistema
-                    </p>
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
+                    </div>
+                    <div className="flex flex-col pl-4">
+                      <span className="text-normal">
+                        {' '}
+                        Assine o Plano Cavernoso{' '}
+                      </span>
+                      <p className="text-xs">
+                        Acesso Ilimitado a todas as ferramentas do sistema
+                      </p>
+                    </div>
                   </div>
                 </Link>
                 <UpgradeDialogTrigger>
                   <Button
                     variant="secondary"
-                    className="hidden md:flex rounded-xl text-black"
+                    className="hidden md:flex rounded-xl text-primary"
                   >
                     Saiba mais
                   </Button>
                 </UpgradeDialogTrigger>
               </div>
             ) : (
-              <div className="flex bg-yellow-600 rounded-lg  px-1 gap-2 items-center justify-center">
+              <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans">
-                  <div className="flex flex-col md:flex  items-start justify-center px-1 py-2 rounded-xl  text-white">
-                    <div className=" flex flex-row text-normal">
-                      <span className="text-xl"> Avaliação gratuita</span>
-                      <span className="text-primary pl-1 font-bold text-xl">
-                        {`encerra em ${dayjs(user.data_de_renovacao).diff(
-                          dayjs(),
-                          'days',
-                        )} dias`}
-                      </span>
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
                     </div>
-                    <p className="text-xs ">
-                      Faça o upgrade para continuar explorando todas as
-                      ferramentas.
-                    </p>
+
+                    <div className="flex flex-col pl-4">
+                      <div className=" flex flex-row text-normal">
+                        <span className="text-normal"> Avaliação gratuita</span>
+                        <span className="text-primary pl-1 font-semibold text-normal">
+                          {`encerra em ${dayjs(user.data_de_renovacao).diff(
+                            dayjs(),
+                            'days',
+                          )} dias`}
+                        </span>
+                      </div>
+                      <p className="text-xs ">
+                        Faça o upgrade para continuar explorando todas as
+                        ferramentas.
+                      </p>
+                    </div>
                   </div>
                 </Link>
                 <UpgradeDialogTrigger>
                   <Button
-                    variant="secondary"
-                    className="hidden md:flex rounded-xl text-black"
+                    color="#FFF"
+                    className=" md:flex bg-white rounded-xl text-primary"
                   >
-                    Upgrade
+                    <Zap
+                      fill="#FF3333"
+                      color="#FF3333"
+                      width={11}
+                      height={15}
+                    ></Zap>
+                    UPGRADE
                   </Button>
                 </UpgradeDialogTrigger>
               </div>
@@ -100,54 +119,70 @@ export function CentralHubHeader() {
         {/** USE CASE DO USUÁRIO DESAFIO */}
         {user.plan === 'DESAFIO' && (
           <>
-            {user.data_de_renovacao &&
-            dayjs(user.data_de_renovacao) < dayjs() ? (
-              <div className="flex bg-yellow-600 rounded-lg  px-1 gap-2 items-center justify-center">
+            {user.data_de_compra && dataMaisSeteDias >= dayjs() ? (
+              <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans">
-                  <div className="flex flex-col md:flex  items-start justify-center px-1 py-1 rounded-xl  text-white">
-                    <span className="text-normal">
-                      {' '}
-                      Assine o Plano Cavernoso{' '}
-                    </span>
-                    <p className="text-xs pb-2">
-                      Acesso Ilimitado a todas as ferramentas do sistema
-                    </p>
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
+                    </div>
+
+                    <div className="flex flex-col pl-4">
+                      <div className=" flex flex-row text-normal">
+                        <span className="text-normal"> Avaliação gratuita</span>
+                        <span className="text-primary pl-1 font-semibold text-normal">
+                          {`encerra em ${dayjs(dataMaisSeteDias).diff(
+                            dayjs(),
+                            'days',
+                          )} dias`}
+                        </span>
+                      </div>
+                      <p className="text-xs ">
+                        Faça o upgrade para continuar explorando todas as
+                        ferramentas.
+                      </p>
+                    </div>
                   </div>
                 </Link>
                 <UpgradeDialogTrigger>
                   <Button
-                    variant="secondary"
-                    className="hidden md:flex rounded-xl text-black"
+                    color="#FFF"
+                    className=" md:flex bg-white rounded-xl text-primary"
                   >
-                    Saiba mais
+                    <Zap
+                      fill="#FF3333"
+                      color="#FF3333"
+                      width={11}
+                      height={15}
+                    ></Zap>
+                    UPGRADE
                   </Button>
                 </UpgradeDialogTrigger>
               </div>
             ) : (
-              <div className="flex bg-yellow-600 rounded-lg  px-1 gap-2 items-center justify-center">
+              <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans">
-                  <div className="flex flex-col md:flex  items-start justify-center px-1 py-2 rounded-xl  text-white">
-                    <div className=" flex flex-row text-normal">
-                      <span className="text-xl"> Avaliação gratuita</span>
-                      <span className="text-primary pl-1 font-bold text-xl">
-                        {`encerra em ${dayjs(user.data_de_renovacao).diff(
-                          dayjs(),
-                          'days',
-                        )} dias`}
-                      </span>
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
                     </div>
-                    <p className="text-xs ">
-                      Faça o upgrade para continuar explorando todas as
-                      ferramentas.
-                    </p>
+                    <div className="flex flex-col pl-4">
+                      <span className="text-normal">
+                        {' '}
+                        Assine o Plano Cavernoso{' '}
+                      </span>
+                      <p className="text-xs">
+                        Acesso Ilimitado a todas as ferramentas do sistema
+                      </p>
+                    </div>
                   </div>
                 </Link>
                 <UpgradeDialogTrigger>
                   <Button
                     variant="secondary"
-                    className="hidden md:flex rounded-xl text-black"
+                    className="hidden md:flex rounded-xl text-primary"
                   >
-                    Upgrade
+                    Saiba mais
                   </Button>
                 </UpgradeDialogTrigger>
               </div>
@@ -161,22 +196,27 @@ export function CentralHubHeader() {
           <>
             {user.data_de_renovacao &&
               dayjs(user.data_de_renovacao) < dayjs() && (
-                <div className="flex bg-yellow-600 rounded-lg  px-1 gap-2 items-center justify-center">
+                <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
                   <Link href="settings/plans">
-                    <div className="flex flex-col md:flex  items-start justify-center px-1 py-1 rounded-xl  text-white">
-                      <span className="text-normal">
-                        {' '}
-                        Assine o Plano Cavernoso{' '}
-                      </span>
-                      <p className="text-xs pb-2">
-                        Acesso Ilimitado a todas as ferramentas do sistema
-                      </p>
+                    <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                      <div className="pl-2">
+                        <AlarmClock color="#e9b208" />
+                      </div>
+                      <div className="flex flex-col pl-4">
+                        <span className="text-normal">
+                          {' '}
+                          Assine o Plano Cavernoso{' '}
+                        </span>
+                        <p className="text-xs">
+                          Acesso Ilimitado a todas as ferramentas do sistema
+                        </p>
+                      </div>
                     </div>
                   </Link>
                   <UpgradeDialogTrigger>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-black"
+                      className="hidden md:flex rounded-xl text-primary"
                     >
                       Saiba mais
                     </Button>
