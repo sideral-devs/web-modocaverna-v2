@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { AlarmClock, MenuIcon, StoreIcon } from 'lucide-react'
+import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogTrigger } from './UpgradeDialog'
@@ -14,6 +14,8 @@ export function CentralHubHeader() {
   if (!user) {
     return null
   }
+  const dataDeCompra = dayjs(user.data_de_compra)
+  const dataMaisSeteDias = dataDeCompra.add(7, 'day')
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
@@ -39,105 +41,227 @@ export function CentralHubHeader() {
           <MenuIcon className="text-primary" />
         </div>
       </SidebarMenuTrigger>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center  gap-3">
+        {/** USE CASE DO USUÁRIO TRIAL */}
         {user.plan === 'TRIAL' && (
-          <Link href="settings/plans">
-            {(() => {
-              const remaining = dayjs(user.data_de_compra).diff(dayjs(), 'days')
+          <>
+            {user.data_de_renovacao &&
+            dayjs(user.data_de_renovacao) < dayjs() ? (
+              <div className="flex bg-[#503e04]  rounded-xl  px-1 gap-2 items-center justify-center">
+                <Link href="settings/plans">
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="flex flex-col pl-4">
+                      <div>
+                        <span className="text-normal"> Assine o</span>
+                        <span className="text-normal text-primary">
+                          {' '}
+                          Plano Cavernoso{' '}
+                        </span>
+                      </div>
 
-              return remaining > 1 ? (
-                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
-                  <AlarmClock size={20} />
-                  <span className="text-sm">
-                    {(() => {
-                      const remaining = dayjs(user.data_de_renovacao).diff(
-                        dayjs(),
-                        'days',
-                      )
-                      return remaining > 1
-                        ? ` Sua Avaliação encerra em ${remaining} dias`
-                        : `${remaining} dia`
-                    })()}
-                  </span>
+                      <p className="text-[10px]">
+                        Acesso Ilimitado a todas as ferramentas do sistema
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
                 </div>
-              ) : (
-                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
-                  <AlarmClock size={20} />
-                  <span className="text-sm">
-                    Renove seu acesso clicando aqui!
-                  </span>
+              </div>
+            ) : (
+              <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
+                <Link href="settings/plans">
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
+                    </div>
+
+                    <div className="flex flex-col pl-4">
+                      <div className=" flex flex-row text-normal">
+                        <span className="text-normal"> Avaliação gratuita</span>
+                        <span className="text-primary pl-1 font-semibold text-normal">
+                          {`encerra em ${dayjs(user.data_de_renovacao).diff(
+                            dayjs(),
+                            'days',
+                          )} dias`}
+                        </span>
+                      </div>
+                      <p className="text-xs ">
+                        Faça o upgrade para continuar explorando todas as
+                        ferramentas.
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
                 </div>
-              )
-            })()}
-          </Link>
+              </div>
+            )}
+          </>
         )}
-        {user.plan === 'TRIAL' && (
-          <UpgradeDialogTrigger>
-            <Button
-              variant="secondary"
-              className="hidden md:flex rounded-xl text-primary"
-            >
-              Upgrade
-            </Button>
-          </UpgradeDialogTrigger>
-        )}
+        {/** USE CASE DO USUÁRIO DESAFIO */}
         {user.plan === 'DESAFIO' && (
-          <Link href="settings/plans">
-            {(() => {
-              const remaining = dayjs(user.data_de_compra).diff(
-                dayjs(user.data_de_compra + 7),
-                'days',
-              )
-              return remaining > 1 ? (
-                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
-                  <AlarmClock size={20} />
-                  <span className="text-sm">
-                    {(() => {
-                      const remaining = dayjs(user.data_de_renovacao).diff(
-                        dayjs(),
-                        'days',
-                      )
-                      return remaining > 1
-                        ? ` Sua avaliação encerra em ${remaining} dias`
-                        : ` Sua avaliação encerra em ${remaining} dia`
-                    })()}
-                  </span>
+          <>
+            {user.data_de_compra && dataMaisSeteDias >= dayjs() ? (
+              <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
+                <Link href="settings/plans">
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
+                    </div>
+
+                    <div className="flex flex-col pl-4">
+                      <div className=" flex flex-row text-normal">
+                        <span className="text-normal"> Avaliação gratuita</span>
+                        <span className="text-primary pl-1 font-semibold text-normal">
+                          {`encerra em ${dayjs(dataMaisSeteDias).diff(
+                            dayjs(),
+                            'days',
+                          )} dias`}
+                        </span>
+                      </div>
+                      <p className="text-xs ">
+                        Faça o upgrade para continuar explorando todas as
+                        ferramentas.
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
                 </div>
-              ) : (
-                <div className="hidden md:flex h-11 items-center justify-center px-5 gap-2 rounded-xl bg-[#713F12] text-[#F9CB15]">
-                  <AlarmClock size={20} />
-                  <span className="text-sm">
-                    Renove seu acesso clicando aqui!
-                  </span>
+              </div>
+            ) : (
+              <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
+                <Link href="settings/plans">
+                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                    <div className="pl-2">
+                      <AlarmClock color="#e9b208" />
+                    </div>
+                    <div className="flex flex-col pl-4">
+                      <div>
+                        <span className="text-normal"> Assine o</span>
+                        <span className="text-normal text-primary">
+                          {' '}
+                          Plano Cavernoso{' '}
+                        </span>
+                      </div>
+                      <p className="text-xs">
+                        Acesso Ilimitado a todas as ferramentas do sistema
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
                 </div>
-              )
-            })()}
-          </Link>
+              </div>
+            )}
+          </>
         )}
-        {user.plan === 'DESAFIO' && (
-          <UpgradeDialogTrigger>
-            <Button
-              variant="secondary"
-              className="hidden md:flex rounded-xl text-primary"
-            >
-              Upgrade
-            </Button>
-          </UpgradeDialogTrigger>
+        {/** USE CASE DO USUÁRIO ANUAL, TRIAL , Ticto */}
+        {(user.plan === 'ANUAL' ||
+          user.plan === 'MENSAL' ||
+          user.plan === 'Ticto') && (
+          <>
+            {user.data_de_renovacao &&
+              dayjs(user.data_de_renovacao) < dayjs() && (
+                <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
+                  <Link href="settings/plans">
+                    <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
+                      <div className="pl-2">
+                        <AlarmClock color="#e9b208" />
+                      </div>
+                      <div className="flex flex-col pl-4">
+                        <div>
+                          <span className="text-normal"> Assine o</span>
+                          <span className="text-normal text-primary">
+                            {' '}
+                            Plano Cavernoso{' '}
+                          </span>
+                        </div>
+                        <p className="text-xs">
+                          Acesso Ilimitado a todas as ferramentas do sistema
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                  <div className="px-2 py-2">
+                    <UpgradeDialogTrigger>
+                      <Button
+                        variant="secondary"
+                        className="hidden md:flex rounded-xl text-primary"
+                      >
+                        <Zap
+                          fill="#FF3333"
+                          color="#FF3333"
+                          width={11}
+                          height={15}
+                        ></Zap>
+                        UPGRADE
+                      </Button>
+                    </UpgradeDialogTrigger>
+                  </div>
+                </div>
+              )}
+          </>
         )}
-        {/* <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 pl-1 gap-2 rounded-xl">
-          <div className="flex items-center justify-center w-9 h-9 border border-zinc-700 rounded-[10px]">
-            <Image
-              src={'/icons/cave_store.svg'}
-              width={20}
-              height={20}
-              alt="Troféu"
-            />
-          </div>
-          <span className="text-sm">Cave Store</span>
-          <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
-            <span className="text-[10px] text-red-500">EM BREVE</span>
-          </div>
-        </div> */}
+      </div>
+      <div className="flex items-center gap-3">
         {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
         <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
           <StoreIcon className="text-red-500" size={20} />

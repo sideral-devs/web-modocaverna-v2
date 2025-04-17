@@ -10,8 +10,6 @@ export function PlanDesafio() {
   console.log(user)
 
   const isTrial = user?.plan === 'TRIAL'
-  const isDesafio = user?.plan === 'DESAFIO'
-
   const trialDaysLeft = dayjs(user?.data_de_renovacao).diff(dayjs(), 'days')
 
   return (
@@ -57,7 +55,7 @@ export function PlanDesafio() {
       </div>
 
       {/* TODO: Use when the user is on the free trial */}
-      {(isTrial && dayjs(user.data_de_compra)) && (
+      {isTrial && dayjs(user.data_de_renovacao) >= dayjs() && (
         <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
           <div className="flex flex-col gap-2">
             <div className="flex p-6 pb-2 flex-col gap-2">

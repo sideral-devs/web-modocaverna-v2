@@ -36,6 +36,8 @@ import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
+import { useUser } from '@/hooks/queries/use-user'
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 export default function RitualsCard() {
   const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
     new Date().getHours() >= 15 ? 'noturno' : 'matinal',
@@ -45,6 +47,8 @@ export default function RitualsCard() {
   const [editRitualDialogOpen, setEditRitualDialogOpen] = useState(false)
   const [recalculateDialogOpen, setRecalculateDialogOpen] = useState(false)
   const queryClient = useQueryClient()
+  const { data: user } = useUser()
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
 
   const { data: morningRitual, isFetched: morningFetched } = useQuery({
     queryKey: ['rituais-blocos-matinais'],
@@ -300,7 +304,9 @@ export default function RitualsCard() {
       </Card>
     )
   }
-
+  const ShowUpgradeModal = () => {
+    setShowUpgradeModal(true)
+  }
   return (
     <Card className="flex flex-col w-full h-full min-h-[300px] relative p-4 gap-5 overflow-hidden">
       <CardHeader className="justify-between">
@@ -326,25 +332,44 @@ export default function RitualsCard() {
         </div>
       </div>
       <CardFooter className="p-0">
-        <Dialog open={stepsDialogOpen} onOpenChange={setStepsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="bg-red-100 text-primary ml-auto"
-            >
-              Criar Ritual
-            </Button>
-          </DialogTrigger>
-          <ConfigRitualDialog
-            onClose={() => {
-              setStepsDialogOpen(false)
-              setFinishDialogOpen(true)
-            }}
-          />
-        </Dialog>
+        {user?.status_plan === 'EXPIRADO' ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            className="bg-red-100 text-primary ml-auto"
+            onClick={ShowUpgradeModal}
+          >
+            Criar Ritual
+          </Button>
+        ) : (
+          <>
+            <Dialog open={stepsDialogOpen} onOpenChange={setStepsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="bg-red-100 text-primary ml-auto"
+                >
+                  Criar Ritual
+                </Button>
+              </DialogTrigger>
+              <ConfigRitualDialog
+                onClose={() => {
+                  setStepsDialogOpen(false)
+                  setFinishDialogOpen(true)
+                }}
+              />
+            </Dialog>
+          </>
+        )}
+
         <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
       </CardFooter>
+      {showUpgradeModal && (
+        <UpgradeModalTrigger>
+          <></>
+        </UpgradeModalTrigger>
+      )}
     </Card>
   )
 }
