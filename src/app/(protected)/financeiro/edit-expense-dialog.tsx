@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
+  Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -23,6 +24,7 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -47,11 +49,13 @@ type RegisterData = z.infer<typeof schema>
 export function EditExpenseDialog({
   transaction,
   refetch,
-  onClose,
+  open,
+  setOpen,
 }: {
   transaction: Transaction
   refetch: () => void
-  onClose: () => void
+  open: boolean
+  setOpen: (arg: boolean) => void
 }) {
   const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
@@ -91,7 +95,7 @@ export function EditExpenseDialog({
       toast.success('Alterações salvas')
       reset()
       refetch()
-      onClose()
+      setOpen(false)
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         toast.error(err.response.data.message)
@@ -101,133 +105,148 @@ export function EditExpenseDialog({
     }
   }
 
+  useEffect(() => {
+    if (transaction) {
+      reset({
+        title: transaction.titulo,
+        type: transaction.tipo as 'custo_fixo' | 'custo_variavel',
+        value: moneyMask(transaction.valor),
+        date: transaction.data,
+        observation: transaction.descricao || undefined,
+        checked: transaction.checked,
+      })
+    }
+  }, [transaction, reset])
+
   return (
-    <DialogContent className="max-h-[85%] bg-zinc-900 overflow-y-auto scrollbar-minimal">
-      <DialogHeader>
-        <DialogTitle>Editar custo</DialogTitle>
-      </DialogHeader>
-      <FormProvider {...form}>
-        <div className="flex flex-col px-4 py-8 gap-8 overflow-y-auto">
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col w-full gap-3">
-              <label htmlFor="title" className="text-sm font-medium">
-                Título
-              </label>
-              <div className="flex flex-col w-full gap-2">
-                <Input placeholder="Insira o título" {...register('title')} />
-                {errors.title && (
-                  <span className="text-red-400 text-xs">
-                    {errors.title.message}
-                  </span>
-                )}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="max-h-[85%] bg-zinc-900 overflow-y-auto scrollbar-minimal">
+        <DialogHeader>
+          <DialogTitle>Editar custo</DialogTitle>
+        </DialogHeader>
+        <FormProvider {...form}>
+          <div className="flex flex-col px-4 py-8 gap-8 overflow-y-auto">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col w-full gap-3">
+                <label htmlFor="title" className="text-sm font-medium">
+                  Título
+                </label>
+                <div className="flex flex-col w-full gap-2">
+                  <Input placeholder="Insira o título" {...register('title')} />
+                  {errors.title && (
+                    <span className="text-red-400 text-xs">
+                      {errors.title.message}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col w-full gap-3">
-              <label htmlFor="value" className="text-sm font-medium">
-                Custo
-              </label>
-              <div className="flex flex-col w-full gap-2">
-                <Input
-                  placeholder="R$ 0,00"
-                  {...register('value')}
-                  onChange={(e) => {
-                    const formatted = moneyMask(e.target.value)
-                    if (formatted !== 'NaN') {
-                      setValue('value', `R$ ${formatted}`)
-                    } else {
-                      setValue('value', 'R$ 0,00')
-                    }
-                  }}
+              <div className="flex flex-col w-full gap-3">
+                <label htmlFor="value" className="text-sm font-medium">
+                  Custo
+                </label>
+                <div className="flex flex-col w-full gap-2">
+                  <Input
+                    placeholder="R$ 0,00"
+                    {...register('value')}
+                    onChange={(e) => {
+                      const formatted = moneyMask(e.target.value)
+                      if (formatted !== 'NaN') {
+                        setValue('value', `R$ ${formatted}`)
+                      } else {
+                        setValue('value', 'R$ 0,00')
+                      }
+                    }}
+                  />
+                  {errors.value && (
+                    <span className="text-red-400 text-xs">
+                      {errors.value.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col w-full gap-3">
+                <label htmlFor="type" className="text-sm font-medium">
+                  Tipo
+                </label>
+                <div className="flex flex-col w-full gap-2">
+                  <Select
+                    onValueChange={(val) => {
+                      setValue('type', val as RegisterData['type'])
+                    }}
+                  >
+                    <SelectTrigger className="h-11 rounded-lg border border-input bg-zinc-800 px-3 py-1 text-base font-medium shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+                      <SelectValue placeholder="Selecione" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-zinc-800 ">
+                      <SelectItem
+                        value="custo_fixo"
+                        className="w-full rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                      >
+                        Custo Fixo
+                      </SelectItem>
+                      <SelectItem
+                        value="custo_variavel"
+                        className="w-full rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                      >
+                        Custo Variável
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.type && (
+                    <span className="text-red-400 text-xs">
+                      {errors.type.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col w-full gap-3">
+                <label htmlFor="date" className="text-sm font-medium">
+                  Data de pagamento
+                </label>
+                <div className="flex flex-col w-full gap-2">
+                  <Input
+                    placeholder="dd/mm/yyyy"
+                    {...register('date')}
+                    onChange={(e) => {
+                      const formattedValue = dateMask(e.target.value)
+                      setValue('date', formattedValue)
+                    }}
+                  />
+                  {errors.date && (
+                    <span className="text-red-400 text-xs">
+                      {errors.date.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col w-full gap-3">
+                <label htmlFor="observation" className="text-sm font-medium">
+                  Observação (Opcional)
+                </label>
+                <div className="flex flex-col w-full gap-2">
+                  <Textarea
+                    rows={9}
+                    placeholder="Insira a descrição"
+                    {...register('observation')}
+                  />
+                </div>
+              </div>
+              <span className="flex items-center gap-2 text-sm">
+                <Checkbox
+                  onCheckedChange={handleCheck}
+                  defaultChecked={transaction.checked}
                 />
-                {errors.value && (
-                  <span className="text-red-400 text-xs">
-                    {errors.value.message}
-                  </span>
-                )}
-              </div>
+                Efetivado
+              </span>
             </div>
-            <div className="flex flex-col w-full gap-3">
-              <label htmlFor="type" className="text-sm font-medium">
-                Tipo
-              </label>
-              <div className="flex flex-col w-full gap-2">
-                <Select
-                  onValueChange={(val) => {
-                    setValue('type', val as RegisterData['type'])
-                  }}
-                >
-                  <SelectTrigger className="h-11 rounded-lg border border-input bg-zinc-800 px-3 py-1 text-base font-medium shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 ">
-                    <SelectItem
-                      value="custo_fixo"
-                      className="w-full rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
-                    >
-                      Custo Fixo
-                    </SelectItem>
-                    <SelectItem
-                      value="custo_variavel"
-                      className="w-full rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
-                    >
-                      Custo Variável
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.type && (
-                  <span className="text-red-400 text-xs">
-                    {errors.type.message}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col w-full gap-3">
-              <label htmlFor="date" className="text-sm font-medium">
-                Data de pagamento
-              </label>
-              <div className="flex flex-col w-full gap-2">
-                <Input
-                  placeholder="dd/mm/yyyy"
-                  {...register('date')}
-                  onChange={(e) => {
-                    const formattedValue = dateMask(e.target.value)
-                    setValue('date', formattedValue)
-                  }}
-                />
-                {errors.date && (
-                  <span className="text-red-400 text-xs">
-                    {errors.date.message}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col w-full gap-3">
-              <label htmlFor="observation" className="text-sm font-medium">
-                Observação (Opcional)
-              </label>
-              <div className="flex flex-col w-full gap-2">
-                <Textarea
-                  rows={9}
-                  placeholder="Insira a descrição"
-                  {...register('observation')}
-                />
-              </div>
-            </div>
-            <span className="flex items-center gap-2 text-sm">
-              <Checkbox
-                onCheckedChange={handleCheck}
-                defaultChecked={transaction.checked}
-              />
-              Efetivado
-            </span>
           </div>
-        </div>
-      </FormProvider>
-      <DialogFooter className="border-t p-4">
-        <Button onClick={handleSubmit(handleRegister)} loading={isSubmitting}>
-          Salvar
-        </Button>
-      </DialogFooter>
-    </DialogContent>
+        </FormProvider>
+        <DialogFooter className="border-t p-4">
+          <Button onClick={handleSubmit(handleRegister)} loading={isSubmitting}>
+            Salvar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

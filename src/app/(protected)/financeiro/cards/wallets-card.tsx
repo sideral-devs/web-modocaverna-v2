@@ -125,7 +125,10 @@ export default function WalletsCard() {
                 <TableCell>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <EllipsisVertical size={16} className="text-zinc-400" />
+                      <EllipsisVertical
+                        size={16}
+                        className="text-zinc-400 cursor-pointer"
+                      />
                     </PopoverTrigger>
                     <PopoverContent className="w-52 p-1 bg-zinc-800 rounded-lg text-xs">
                       <button
