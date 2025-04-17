@@ -34,9 +34,12 @@ export const UpgradeModalTrigger = ({ children }: { children: ReactNode }) => {
       (userPlan === 'anual' && actualDate.isAfter(afterSevenDays))
     ) {
       setIsopen(true)
+    } else if (userPlan === 'trial' && actualDate.isAfter(renovationDate)) {
+      setIsopen(true)
     }
   }, [user])
   // verificação para o usuário reembolso
+  console.log(isOpen, user?.status_plan, user?.plan)
   return (
     <>
       {children}

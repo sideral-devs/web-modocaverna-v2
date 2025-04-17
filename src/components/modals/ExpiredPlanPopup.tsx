@@ -20,7 +20,7 @@ export function ExpiredPlanPopup({
           className="w-full h-auto"
           alt="Imagens modo caverna"
         />
-        <h1 className="text-xl font-semibold">Plano Modo Caverna Expirado</h1>
+        <h1 className="text-xl font-semibold">Plano Cavernoso Expirado</h1>
         <ul className="flex flex-col gap-6">
           <li className="flex items-center gap-4">
             <Check size={16} className="text-emerald-400" />
