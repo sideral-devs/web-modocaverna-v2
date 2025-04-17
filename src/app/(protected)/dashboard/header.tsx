@@ -47,31 +47,40 @@ export function CentralHubHeader() {
           <>
             {user.data_de_renovacao &&
             dayjs(user.data_de_renovacao) < dayjs() ? (
-              <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
+              <div className="flex bg-[#503e04]  rounded-xl  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans">
                   <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
-                    <div className="pl-2">
-                      <AlarmClock color="#e9b208" />
-                    </div>
                     <div className="flex flex-col pl-4">
-                      <span className="text-normal">
-                        {' '}
-                        Assine o Plano Cavernoso{' '}
-                      </span>
-                      <p className="text-xs">
+                      <div>
+                        <span className="text-normal"> Assine o</span>
+                        <span className="text-normal text-primary">
+                          {' '}
+                          Plano Cavernoso{' '}
+                        </span>
+                      </div>
+
+                      <p className="text-[10px]">
                         Acesso Ilimitado a todas as ferramentas do sistema
                       </p>
                     </div>
                   </div>
                 </Link>
-                <UpgradeDialogTrigger>
-                  <Button
-                    variant="secondary"
-                    className="hidden md:flex rounded-xl text-primary"
-                  >
-                    Saiba mais
-                  </Button>
-                </UpgradeDialogTrigger>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
+                </div>
               </div>
             ) : (
               <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
@@ -98,20 +107,22 @@ export function CentralHubHeader() {
                     </div>
                   </div>
                 </Link>
-                <UpgradeDialogTrigger>
-                  <Button
-                    color="#FFF"
-                    className=" md:flex bg-white rounded-xl text-primary"
-                  >
-                    <Zap
-                      fill="#FF3333"
-                      color="#FF3333"
-                      width={11}
-                      height={15}
-                    ></Zap>
-                    UPGRADE
-                  </Button>
-                </UpgradeDialogTrigger>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
+                </div>
               </div>
             )}
           </>
@@ -144,20 +155,22 @@ export function CentralHubHeader() {
                     </div>
                   </div>
                 </Link>
-                <UpgradeDialogTrigger>
-                  <Button
-                    color="#FFF"
-                    className=" md:flex bg-white rounded-xl text-primary"
-                  >
-                    <Zap
-                      fill="#FF3333"
-                      color="#FF3333"
-                      width={11}
-                      height={15}
-                    ></Zap>
-                    UPGRADE
-                  </Button>
-                </UpgradeDialogTrigger>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
+                </div>
               </div>
             ) : (
               <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
@@ -167,24 +180,35 @@ export function CentralHubHeader() {
                       <AlarmClock color="#e9b208" />
                     </div>
                     <div className="flex flex-col pl-4">
-                      <span className="text-normal">
-                        {' '}
-                        Assine o Plano Cavernoso{' '}
-                      </span>
+                      <div>
+                        <span className="text-normal"> Assine o</span>
+                        <span className="text-normal text-primary">
+                          {' '}
+                          Plano Cavernoso{' '}
+                        </span>
+                      </div>
                       <p className="text-xs">
                         Acesso Ilimitado a todas as ferramentas do sistema
                       </p>
                     </div>
                   </div>
                 </Link>
-                <UpgradeDialogTrigger>
-                  <Button
-                    variant="secondary"
-                    className="hidden md:flex rounded-xl text-primary"
-                  >
-                    Saiba mais
-                  </Button>
-                </UpgradeDialogTrigger>
+                <div className="px-2 py-2">
+                  <UpgradeDialogTrigger>
+                    <Button
+                      variant="secondary"
+                      className="hidden md:flex rounded-xl text-primary"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </UpgradeDialogTrigger>
+                </div>
               </div>
             )}
           </>
@@ -203,24 +227,35 @@ export function CentralHubHeader() {
                         <AlarmClock color="#e9b208" />
                       </div>
                       <div className="flex flex-col pl-4">
-                        <span className="text-normal">
-                          {' '}
-                          Assine o Plano Cavernoso{' '}
-                        </span>
+                        <div>
+                          <span className="text-normal"> Assine o</span>
+                          <span className="text-normal text-primary">
+                            {' '}
+                            Plano Cavernoso{' '}
+                          </span>
+                        </div>
                         <p className="text-xs">
                           Acesso Ilimitado a todas as ferramentas do sistema
                         </p>
                       </div>
                     </div>
                   </Link>
-                  <UpgradeDialogTrigger>
-                    <Button
-                      variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary"
-                    >
-                      Saiba mais
-                    </Button>
-                  </UpgradeDialogTrigger>
+                  <div className="px-2 py-2">
+                    <UpgradeDialogTrigger>
+                      <Button
+                        variant="secondary"
+                        className="hidden md:flex rounded-xl text-primary"
+                      >
+                        <Zap
+                          fill="#FF3333"
+                          color="#FF3333"
+                          width={11}
+                          height={15}
+                        ></Zap>
+                        UPGRADE
+                      </Button>
+                    </UpgradeDialogTrigger>
+                  </div>
                 </div>
               )}
           </>
