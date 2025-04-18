@@ -195,7 +195,7 @@ export function EditRitualDialog({
                       )}
                       strategy={verticalListSortingStrategy}
                     >
-                      <ul className="divide-y">
+                      <ul>
                         {morningRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
@@ -245,7 +245,7 @@ export function EditRitualDialog({
                       )}
                       strategy={verticalListSortingStrategy}
                     >
-                      <ul className="divide-y">
+                      <ul>
                         {nightRitual.itens.map((item, index) => (
                           <SortableItem
                             key={index}
