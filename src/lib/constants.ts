@@ -7,3 +7,13 @@ export const videos = {
   codeTutorial: '673ba95084647c000ad93566',
   affiliateTutorial: '67fea6ca3ea2667a8e542ebd',
 }
+
+export const WEEK_DAYS = [
+  { short: 'Dom', long: 'Domingo' },
+  { short: 'Seg', long: 'Segunda' },
+  { short: 'Ter', long: 'Terça' },
+  { short: 'Qua', long: 'Quarta' },
+  { short: 'Qui', long: 'Quinta' },
+  { short: 'Sex', long: 'Sexta' },
+  { short: 'Sab', long: 'Sábado' },
+]
