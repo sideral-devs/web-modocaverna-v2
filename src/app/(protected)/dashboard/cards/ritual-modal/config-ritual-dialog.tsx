@@ -641,7 +641,6 @@ function AddNightRitual({
       </div>
     )
   }
-
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
       <div className="flex items-center p-6 gap-6">
@@ -659,18 +658,13 @@ function AddNightRitual({
             <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {data.inicio_dormir.replace(':', 'h') + 'm'}
             </span>
-<<<<<<< HEAD
-          </span>
-
-=======
             <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {sumHours(sumHours(data.inicio_dormir, 8), 0.5).replace(
                 ':',
                 'h',
               ) + 'm'}
             </span>
-          </div>
->>>>>>> c441c06 (feat: Adicionar modal intermediário de atualizar rituais e outras funcionalidades)
+          </span>
           <span className="text-zinc-400 text-xs">
             Adicione e organize sua rotina abaixo:
           </span>
