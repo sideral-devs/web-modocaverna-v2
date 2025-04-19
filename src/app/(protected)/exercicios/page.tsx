@@ -78,6 +78,7 @@ export default function Page() {
     isLoading: isLoadingShape,
   } = useShape()
 
+  const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1]
 
@@ -85,11 +86,11 @@ export default function Page() {
     setIsScrolled(latest > 0)
   })
 
-  // useEffect(() => {
-  //   if (!lastShapeRegistration) {
-  //     router.push('/exercicios/steps?step=1')
-  //   }
-  // }, [lastShapeRegistration, isLoadingShape, router])
+  useEffect(() => {
+    if (firstShapeRegistration?.peso_meta === null) {
+      router.push('/exercicios/steps?step=1')
+    }
+  }, [firstShapeRegistration, isLoadingShape, router])
 
   const currentDate = new Date()
   const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
@@ -133,19 +134,6 @@ export default function Page() {
     )
   }
 
-  console.log(
-    'lastShapeRegistration',
-    lastShapeRegistration.peso,
-    shapeRegistrations,
-  )
-
-  // if (!lastShapeRegistration) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen">
-  //       <p>Nenhum registro de shape encontrado</p>
-  //     </div>
-  //   )
-  // }
 
   return (
     <>
