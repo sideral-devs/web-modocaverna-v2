@@ -14,6 +14,7 @@ import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { WEEK_DAYS } from '@/lib/constants'
 import { useState } from 'react'
 import { Plus, Trash, X } from '@phosphor-icons/react'
+import { toast } from 'sonner'
 
 interface ExerciciosCreateUpdateProps {
   workout?: Workout
@@ -70,10 +71,13 @@ export function ExerciciosCreateUpdate({
     setExercises(newExercises)
   }
 
-  console.log(workout)
-
   const handleSaveWorkout = async () => {
     try {
+      if (exercises.length === 0) {
+        toast.error('Adicione pelo menos um exercício')
+        return
+      }
+
       if (workout) {
         const sanitizedExercises = exercises.map((exercise, index) => ({
           nome: exercise.nome,
@@ -82,12 +86,7 @@ export function ExerciciosCreateUpdate({
           carga: exercise.carga.toString(),
           indice: index,
         }))
-        console.log('IS UPDATING', {
-          ficha_id: workout.ficha_id,
-          titulo: workoutTitle,
-          indice: selectedDay,
-          exercicios: sanitizedExercises,
-        })
+
         await updateWorkout({
           ficha_id: workout.ficha_id,
           titulo: workoutTitle,
@@ -95,11 +94,6 @@ export function ExerciciosCreateUpdate({
           exercicios: sanitizedExercises,
         })
       } else {
-        console.log('asiadsia', {
-          titulo: workoutTitle,
-          indice: selectedDay,
-          exercicios: exercises,
-        })
         await createWorkout({
           titulo: workoutTitle,
           indice: selectedDay,
@@ -116,8 +110,6 @@ export function ExerciciosCreateUpdate({
     e.preventDefault()
     setSelectedDay(index)
   }
-
-  console.log(selectedDay)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

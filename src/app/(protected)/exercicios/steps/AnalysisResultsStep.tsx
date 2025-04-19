@@ -4,6 +4,17 @@ import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Info, Warning } from '@phosphor-icons/react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { useShapeFormStore } from '@/store/shape-form'
+
+import { toast } from 'sonner'
+import { api } from '@/lib/api'
+
+type IMCStatus = {
+  label: string
+  color: string
+  message: string
+  icon: React.ReactNode
+}
 
 export function AnalysisResultsStep({
   onBack,
@@ -12,8 +23,81 @@ export function AnalysisResultsStep({
   onBack: () => void
   onFinish: () => void
 }) {
+  const { data, reset } = useShapeFormStore()
+
+  const alturaEmMetros = data.altura / 100
+  const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
+
+  const getIMCStatus = (imc: number): IMCStatus => {
+    if (imc < 18.5) {
+      return {
+        label: 'IMC BAIXO',
+        color: 'yellow',
+        message:
+          'Seu IMC indica que você está abaixo do peso ideal. Vamos trabalhar para ganhar massa muscular de forma saudável.',
+        icon: <Warning className="w-4 h-4 text-yellow-500" />,
+      }
+    } else if (imc < 25) {
+      return {
+        label: 'IMC IDEAL',
+        color: 'green',
+        message:
+          'Seu IMC está dentro da faixa considerada saudável. Vamos manter esse equilíbrio e focar em ganhar massa muscular.',
+        icon: <Info className="w-4 h-4 text-green-500" />,
+      }
+    } else if (imc < 30) {
+      return {
+        label: 'IMC ELEVADO',
+        color: 'orange',
+        message:
+          'Seu IMC indica sobrepeso. Vamos trabalhar para reduzir o percentual de gordura e ganhar massa muscular.',
+        icon: <Warning className="w-4 h-4 text-orange-500" />,
+      }
+    } else {
+      return {
+        label: 'IMC ALTO',
+        color: 'red',
+        message:
+          'Seu IMC indica obesidade. Vamos focar em reduzir o percentual de gordura de forma saudável e sustentável.',
+        icon: <Warning className="w-4 h-4 text-red-500" />,
+      }
+    }
+  }
+
+  const imcStatus = getIMCStatus(imc)
+
+  async function handleFinish() {
+    try {
+      // Prepare the final data
+      const finalData = {
+        ...data,
+        imc,
+        satisfeito_fisico: data.nivel_satisfacao === 'Não satisfeito' ? 0 : 1,
+        classificacao:
+          imc < 18.5
+            ? 'Abaixo do peso'
+            : imc < 25
+              ? 'Peso normal'
+              : imc < 30
+                ? 'Sobrepeso'
+                : 'Obesidade',
+      }
+
+      console.log(finalData)
+
+      // Submit to API
+      await api.post('/registro-de-shape/store', finalData)
+
+      // Reset form and proceed
+      reset()
+      onFinish()
+    } catch (error) {
+      toast.error('Algo deu errado. Tente novamente.')
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
+    <div className="flex flex-col w-[632px] flex-1 relative items-center p-4 3xl:pb-16 gap-12">
       <div className="flex items-start gap-16">
         <Image
           src={'/images/lobo/apresentando.png'}
@@ -33,14 +117,20 @@ export function AnalysisResultsStep({
 
           <div className="flex flex-col w-full max-w-3xl gap-4">
             <div className="flex w-full gap-4">
-              <div className="flex flex-1 items-center justify-between bg-red-950/50 pl-4 pr-8 py-6 rounded-lg border border-red-900/50">
+              <div
+                className={`flex flex-1 items-center justify-between bg-${imcStatus.color}-950/50 pl-4 pr-8 py-6 rounded-lg border border-${imcStatus.color}-900/50`}
+              >
                 <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-lg">
-                    <Warning className="w-4 h-4 text-red-500" />
-                  </div>
-                  <span className="text-red-500 font-medium">IMC ALTO.</span>
+                  <div className="p-2 rounded-lg">{imcStatus.icon}</div>
+                  <span className={`text-${imcStatus.color}-500 font-medium`}>
+                    {imcStatus.label}
+                  </span>
                 </div>
-                <span className="text-2xl text-red-500 font-medium">24.5</span>
+                <span
+                  className={`text-2xl text-${imcStatus.color}-500 font-medium`}
+                >
+                  {imc.toFixed(2)}
+                </span>
               </div>
             </div>
 
@@ -55,11 +145,26 @@ export function AnalysisResultsStep({
                   </span>
                 </div>
                 <span className="text-2xl text-yellow-500 font-medium">
-                  2140
+                  {Math.round(data.peso * 30)}
                 </span>
               </div>
             </div>
-            <span className="text-zinc-400">Posso te dar um conselho?</span>
+
+            <div className="flex w-full gap-4">
+              <div className="flex flex-1 items-center justify-between bg-zinc-950/20 pl-4 pr-8 py-6 rounded-lg border border-zinc-900/50">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 rounded-lg">
+                    <Info className="w-4 h-4 text-zinc-500" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-zinc-500 font-medium">
+                      {imcStatus.message}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex w-full gap-4">
               <div className="flex flex-1 items-center justify-between bg-yellow-950/20 pl-4 pr-8 py-6 rounded-lg border border-yellow-900/50">
                 <div className="flex items-center gap-4">
@@ -97,7 +202,7 @@ export function AnalysisResultsStep({
           >
             Voltar
           </Button>
-          <AutoSubmitButton onClick={onFinish}>
+          <AutoSubmitButton onClick={handleFinish}>
             Organizar exercícios
           </AutoSubmitButton>
         </div>

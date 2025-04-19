@@ -4,39 +4,44 @@ import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Button } from '@/components/ui/button'
 import { InputWithSuffix } from '@/components/ui/input-with-suffix'
 import { useUser } from '@/hooks/queries/use-user'
+import { useShapeFormStore } from '@/store/shape-form'
 import { FormProvider, useForm } from 'react-hook-form'
 
 type Measurements = {
-  bicepsD: string
-  bicepsE: string
-  peitoral: string
-  cintura: string
+  ombro: string
+  peito: string
+  biceps_direito: string
+  biceps_esquerdo: string
+  triceps_direito: string
+  triceps_esquerdo: string
   gluteos: string
-  quadricepsD: string
-  quadricepsE: string
   quadril: string
-  panturrilhaD: string
-  panturrilhaE: string
-  idade: string
+  quadriceps_direito: string
+  quadriceps_esquerdo: string
+  panturrilha_direita: string
+  panturrilha_esquerda: string
   altura: string
   peso: string
 }
 
 export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
   const { data: user } = useUser()
+  const { setData } = useShapeFormStore()
+
   const form = useForm<Measurements>({
     defaultValues: {
-      bicepsD: '',
-      bicepsE: '',
-      peitoral: '',
-      cintura: '',
+      ombro: '',
+      peito: '',
+      biceps_direito: '',
+      biceps_esquerdo: '',
+      triceps_direito: '',
+      triceps_esquerdo: '',
       gluteos: '',
-      quadricepsD: '',
-      quadricepsE: '',
       quadril: '',
-      panturrilhaD: '',
-      panturrilhaE: '',
-      idade: '27',
+      quadriceps_direito: '',
+      quadriceps_esquerdo: '',
+      panturrilha_direita: '',
+      panturrilha_esquerda: '',
       altura: '',
       peso: '',
     },
@@ -51,12 +56,36 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
   }
 
   const onSubmit = (data: Measurements) => {
-    console.log(data)
+    const numericData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [key, parseFloat(value) || 0]),
+    )
+
+    setData({
+      membros_superiores: {
+        ombro: numericData.ombro,
+        peito: numericData.peito,
+        biceps_direito: numericData.biceps_direito,
+        biceps_esquerdo: numericData.biceps_esquerdo,
+        triceps_direito: numericData.triceps_direito,
+        triceps_esquerdo: numericData.triceps_esquerdo,
+      },
+      membros_inferiores: {
+        gluteos: numericData.gluteos,
+        quadril: numericData.quadril,
+        quadriceps_direito: numericData.quadriceps_direito,
+        quadriceps_esquerdo: numericData.quadriceps_esquerdo,
+        panturrilha_direita: numericData.panturrilha_direita,
+        panturrilha_esquerda: numericData.panturrilha_esquerda,
+      },
+      altura: numericData.altura,
+      peso: numericData.peso,
+    })
+
     onNext()
   }
 
   return (
-    <div className="flex flex-col flex-1 items-center gap-4 ">
+    <div className="flex flex-col w-[632px] flex-1 items-center gap-4 min-h-screen">
       <div className="flex mb-10 flex-col gap-2">
         <h2 className="text-2xl font-medium">
           Olá <span className="text-white">{user?.name}</span>, vamos registrar
@@ -77,15 +106,13 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 </h3>
                 <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
               </div>
-              <div className="flex items-center justify-between gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm">Bíceps (D)</label>
+                  <label className="text-sm">Ombro</label>
                   <InputWithSuffix
                     type="number"
-                    value={measurements.bicepsE}
-                    onChange={(e) =>
-                      handleInputChange('bicepsE', e.target.value.slice(0, 3))
-                    }
+                    value={measurements.ombro}
+                    onChange={(e) => handleInputChange('ombro', e.target.value)}
                     className="bg-zinc-800"
                     suffix="cm"
                   />
@@ -94,21 +121,55 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                   <label className="text-sm">Peitoral</label>
                   <InputWithSuffix
                     type="number"
-                    value={measurements.peitoral}
+                    value={measurements.peito}
+                    onChange={(e) => handleInputChange('peito', e.target.value)}
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Bíceps Direito</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.biceps_direito}
                     onChange={(e) =>
-                      handleInputChange('peitoral', e.target.value)
+                      handleInputChange('biceps_direito', e.target.value)
                     }
                     className="bg-zinc-800"
                     suffix="cm"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm">Cintura</label>
+                  <label className="text-sm">Bíceps Esquerdo</label>
                   <InputWithSuffix
                     type="number"
-                    value={measurements.cintura}
+                    value={measurements.biceps_esquerdo}
                     onChange={(e) =>
-                      handleInputChange('cintura', e.target.value)
+                      handleInputChange('biceps_esquerdo', e.target.value)
+                    }
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Tríceps Direito</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.triceps_direito}
+                    onChange={(e) =>
+                      handleInputChange('triceps_direito', e.target.value)
+                    }
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Tríceps Esquerdo</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.triceps_esquerdo}
+                    onChange={(e) =>
+                      handleInputChange('triceps_esquerdo', e.target.value)
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -125,7 +186,7 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 </h3>
                 <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
               </div>
-              <div className="flex items-center mb-2 justify-between gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Glúteos</label>
                   <InputWithSuffix
@@ -139,32 +200,6 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm">Quadríceps (D)</label>
-                  <InputWithSuffix
-                    type="number"
-                    value={measurements.quadricepsD}
-                    onChange={(e) =>
-                      handleInputChange('quadricepsD', e.target.value)
-                    }
-                    className="bg-zinc-800"
-                    suffix="cm"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm">Quadríceps (E)</label>
-                  <InputWithSuffix
-                    type="number"
-                    value={measurements.quadricepsE}
-                    onChange={(e) =>
-                      handleInputChange('quadricepsE', e.target.value)
-                    }
-                    className="bg-zinc-800"
-                    suffix="cm"
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-col gap-2">
                   <label className="text-sm">Quadril</label>
                   <InputWithSuffix
                     type="number"
@@ -177,24 +212,48 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm">Panturrilha (D)</label>
+                  <label className="text-sm">Quadríceps Direito</label>
                   <InputWithSuffix
                     type="number"
-                    value={measurements.panturrilhaD}
+                    value={measurements.quadriceps_direito}
                     onChange={(e) =>
-                      handleInputChange('panturrilhaD', e.target.value)
+                      handleInputChange('quadriceps_direito', e.target.value)
                     }
                     className="bg-zinc-800"
                     suffix="cm"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm">Panturrilha (E)</label>
+                  <label className="text-sm">Quadríceps Esquerdo</label>
                   <InputWithSuffix
                     type="number"
-                    value={measurements.panturrilhaE}
+                    value={measurements.quadriceps_esquerdo}
                     onChange={(e) =>
-                      handleInputChange('panturrilhaE', e.target.value)
+                      handleInputChange('quadriceps_esquerdo', e.target.value)
+                    }
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Panturrilha Direita</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.panturrilha_direita}
+                    onChange={(e) =>
+                      handleInputChange('panturrilha_direita', e.target.value)
+                    }
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Panturrilha Esquerda</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.panturrilha_esquerda}
+                    onChange={(e) =>
+                      handleInputChange('panturrilha_esquerda', e.target.value)
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -209,18 +268,6 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
               </div>
               <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm">Idade</label>
-                  <InputWithSuffix
-                    type="number"
-                    disabled
-                    value={measurements.idade}
-                    onChange={(e) => handleInputChange('idade', e.target.value)}
-                    className="bg-zinc-900 !border !border-zinc-700"
-                    suffix="anos"
-                    suffixClassName="text-zinc-400"
-                  />
-                </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Altura</label>
                   <InputWithSuffix
@@ -247,7 +294,7 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
             </div>
           </div>
 
-          <div className="flex justify-center fixed bottom-0 w-full border-t left-0 pb-10 pt-10">
+          <div className="flex justify-center fixed bottom-0 w-full border-t left-0 py-4 pt-6">
             <div className="flex gap-2">
               <Button
                 variant="outline"

@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { BicepsFlexed } from 'lucide-react'
 
 interface ExerciseCardProps {
   exercise: Exercise
@@ -23,30 +24,18 @@ export function ExerciseCard({
   workoutIndex,
   onEdit,
 }: ExerciseCardProps) {
-  const { deleteExercise } = useWorkouts()
   const y = useMotionValue(0)
-
-  const handleDelete = async () => {
-    try {
-      await deleteExercise({
-        workoutIndex,
-        exerciseIndex: exercise.indice,
-      })
-    } catch (error) {
-      console.error('Error deleting exercise:', error)
-    }
-  }
 
   return (
     <Reorder.Item
       value={exercise}
-      id={String(exercise.exercicio_id)}
+      id={String(exercise.indice)}
       style={{ y }}
       className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800"
     >
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
-          <DotsThree weight="bold" className="text-zinc-400" />
+          <BicepsFlexed size={24} className="text-zinc-400" />
         </div>
 
         <div>
@@ -60,7 +49,7 @@ export function ExerciseCard({
       <div className="flex items-center gap-2">
         <span className="text-sm text-zinc-400">{exercise.carga} kg</span>
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -87,7 +76,7 @@ export function ExerciseCard({
               Excluir
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </Reorder.Item>
   )

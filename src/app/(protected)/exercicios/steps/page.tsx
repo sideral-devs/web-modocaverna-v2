@@ -64,11 +64,11 @@ export default function Page() {
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-screen items-center gap-6 bg-zinc-900">
-        <header className="flex w-full pt-4 items-center justify-between p-6">
-          <span className="text-sm text-muted-foreground">
+        <header className="flex fixed w-full pt-4 items-center justify-between p-6">
+          <span className="text-sm w-1/3 text-muted-foreground">
             Passo {currentPhase} de {passosTotal}
           </span>
-          <div className="flex flex-col w-full max-w-2xl items-center gap-6">
+          <div className="flex flex-col w-2/3 max-w-2xl items-center gap-6">
             <Image
               src={'/images/logo-icon.svg'}
               alt="Logo"
@@ -78,9 +78,13 @@ export default function Page() {
             <PhaseCounter current={currentPhase} total={passosTotal} />
           </div>
 
-          <CloseButton />
+          <div className="flex w-1/3 justify-end">
+            <CloseButton />
+          </div>
         </header>
-        {STEPS[currentPhase as keyof typeof STEPS]}
+        <div className="flex flex-col flex-1 w-full items-center pt-28">
+          {STEPS[currentPhase as keyof typeof STEPS]}
+        </div>
       </div>
     </ProtectedRoute>
   )
