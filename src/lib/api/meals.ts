@@ -48,6 +48,7 @@ export async function createMeal(
 }
 
 export async function updateMeal(id: number, data: Partial<Meal>) {
+  
   const response = await api.put(`/refeicoes/update/${id}`, data)
   return response.data as Meal
 }
