@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Exercise, Workout } from '@/types/type'
 import {
+  Exercise,
+  Workout,
   createExercise,
   createWorkout,
   deleteExercise,
@@ -10,11 +10,12 @@ import {
   updateExercise,
   updateWorkout,
 } from '@/lib/api/exercises'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useWorkouts() {
   const queryClient = useQueryClient()
 
-  const { data: workouts, isLoading } = useQuery({
+  const { data: workouts, isLoading } = useQuery<Workout[]>({
     queryKey: ['workouts'],
     queryFn: getWorkouts,
   })
@@ -25,18 +26,8 @@ export function useWorkouts() {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },
   })
-
   const updateWorkoutMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Workout> }) => {
-      const workoutData = {
-        ...data,
-        exercises: data.exercises?.map((exercise) => ({
-          ...exercise,
-          workoutId: id,
-        })),
-      }
-      return updateWorkout(id, workoutData)
-    },
+    mutationFn: updateWorkout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },
@@ -50,22 +41,47 @@ export function useWorkouts() {
   })
 
   const createExerciseMutation = useMutation({
-    mutationFn: createExercise,
+    mutationFn: ({
+      workoutIndex,
+      dayIndex,
+      title,
+      exercise,
+    }: {
+      workoutIndex: number
+      dayIndex: number
+      title: string
+      exercise: Exercise
+    }) => createExercise(workoutIndex, dayIndex, title, exercise),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },
   })
 
   const updateExerciseMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Exercise> }) =>
-      updateExercise(id, data),
+    mutationFn: ({
+      fichaId,
+      dayIndex,
+      title,
+      exercises,
+    }: {
+      fichaId: number
+      dayIndex: number
+      title: string
+      exercises: Exercise[]
+    }) => updateExercise(fichaId, dayIndex, title, exercises),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },
   })
 
   const deleteExerciseMutation = useMutation({
-    mutationFn: deleteExercise,
+    mutationFn: ({
+      workoutIndex,
+      exerciseIndex,
+    }: {
+      workoutIndex: number
+      exerciseIndex: number
+    }) => deleteExercise(workoutIndex, exerciseIndex),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },
@@ -73,12 +89,12 @@ export function useWorkouts() {
 
   const reorderExercisesMutation = useMutation({
     mutationFn: ({
-      workoutId,
-      exerciseIds,
+      workoutIndex,
+      exerciseIndices,
     }: {
-      workoutId: string
-      exerciseIds: string[]
-    }) => reorderExercises(workoutId, exerciseIds),
+      workoutIndex: number
+      exerciseIndices: number[]
+    }) => reorderExercises(workoutIndex, exerciseIndices),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
     },

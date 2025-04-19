@@ -21,11 +21,11 @@ export const modals: Record<
   'Vista-se como um Lobo Cavernoso! 🔺🐺': DialogCaveStore,
 }
 export const WEEK_DAYS = [
-  { short: 'Dom', long: 'Domingo' },
-  { short: 'Seg', long: 'Segunda' },
-  { short: 'Ter', long: 'Terça' },
-  { short: 'Qua', long: 'Quarta' },
-  { short: 'Qui', long: 'Quinta' },
-  { short: 'Sex', long: 'Sexta' },
-  { short: 'Sab', long: 'Sábado' },
+  { short: 'Dom', long: 'Domingo', workoutIndex: 0 },
+  { short: 'Seg', long: 'Segunda', workoutIndex: 1 },
+  { short: 'Ter', long: 'Terça', workoutIndex: 2 },
+  { short: 'Qua', long: 'Quarta', workoutIndex: 3 },
+  { short: 'Qui', long: 'Quinta', workoutIndex: 4 },
+  { short: 'Sex', long: 'Sexta', workoutIndex: 5 },
+  { short: 'Sab', long: 'Sábado', workoutIndex: 6 },
 ]

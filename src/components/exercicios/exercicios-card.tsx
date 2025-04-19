@@ -1,9 +1,8 @@
 'use client'
 
-import Image from 'next/image'
 import { DotsThree } from '@phosphor-icons/react'
-import { motion, Reorder, useMotionValue } from 'framer-motion'
-import { Exercise } from '@/types/type'
+import { Reorder, useMotionValue } from 'framer-motion'
+import { Exercise } from '@/lib/api/exercises'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
 import {
   DropdownMenu,
@@ -11,92 +10,84 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 
 interface ExerciseCardProps {
-  name: string
-  series: number
-  repetitions: number
-  currentWeight: number
-  imageUrl: string
-  value: Exercise
+  exercise: Exercise
+  workoutIndex: number
   onEdit: () => void
 }
 
 export function ExerciseCard({
-  name,
-  series,
-  repetitions,
-  currentWeight,
-  imageUrl,
-  value,
+  exercise,
+  workoutIndex,
   onEdit,
 }: ExerciseCardProps) {
-  const y = useMotionValue(0)
   const { deleteExercise } = useWorkouts()
+  const y = useMotionValue(0)
 
   const handleDelete = async () => {
-    await deleteExercise(value.id)
+    try {
+      await deleteExercise({
+        workoutIndex,
+        exerciseIndex: exercise.indice,
+      })
+    } catch (error) {
+      console.error('Error deleting exercise:', error)
+    }
   }
 
   return (
     <Reorder.Item
-      value={value}
-      id={value.id}
+      value={exercise}
+      id={String(exercise.exercicio_id)}
       style={{ y }}
-      className="bg-black w-full border border-zinc-700 rounded-xl p-2 cursor-grab active:cursor-grabbing"
+      className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800"
     >
-      <motion.div
-        className="bg-zinc-800 rounded-lg p-2"
-        whileTap={{ scale: 1.02 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex h-full gap-4 w-full">
-            <div className="w-16 h-16 bg-white rounded-xl overflow-hidden">
-              <Image
-                src={imageUrl}
-                alt={name}
-                width={64}
-                height={64}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="flex flex-col justify-center">
-              <h4 className="text-lg font-medium">{name}</h4>
-              <p className="text-zinc-400">
-                {series} × {repetitions} repetições
-              </p>
-            </div>
-          </div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-2 hover:bg-zinc-700/50 rounded-lg transition-colors">
-                <DotsThree className="w-6 h-6 text-zinc-400" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-zinc-800 border-zinc-700">
-              <DropdownMenuItem
-                className="text-zinc-400 hover:text-white cursor-pointer"
-                onClick={onEdit}
-              >
-                Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-500 hover:text-red-400 cursor-pointer"
-                onClick={handleDelete}
-              >
-                Excluir
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+      <div className="flex items-center gap-4">
+        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
+          <DotsThree weight="bold" className="text-zinc-400" />
         </div>
-      </motion.div>
-      <div className="pt-4 pb-2 pl-2">
-        <p className="text-zinc-400 text-sm">
-          Carga atual · {currentWeight} KG
-        </p>
+
+        <div>
+          <h4 className="text-zinc-300 font-medium">{exercise.nome}</h4>
+          <p className="text-sm text-zinc-500">
+            {exercise.series} séries x {exercise.repeticoes} repetições
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-zinc-400">{exercise.carga} kg</span>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-zinc-400 hover:text-white"
+            >
+              <DotsThree weight="bold" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="bg-zinc-900 border-zinc-800"
+          >
+            <DropdownMenuItem
+              onClick={onEdit}
+              className="text-zinc-400 hover:text-white cursor-pointer"
+            >
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleDelete}
+              className="text-red-500 hover:text-red-400 cursor-pointer"
+            >
+              Excluir
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Reorder.Item>
   )
