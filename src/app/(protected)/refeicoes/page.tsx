@@ -6,7 +6,7 @@ import { Plus } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { HeaderClose, Header } from '@/components/header'
 import { MealCard } from '@/components/refeicoes/refeicoes-card'
-import { MealFormModal } from '@/components/refeicoes/meal-form-modal'
+import { MealFormModal } from '@/components/refeicoes/refeicoes-form-modal'
 import { useMeals } from '@/hooks/queries/use-meals'
 import { WEEK_DAYS } from '@/lib/constants'
 import { format } from 'date-fns'
@@ -47,6 +47,7 @@ export default function Page() {
 
   async function handleSubmit(data: Partial<Meal>) {
     if (selectedMeal) {
+      console.log(selectedMeal.horario_id, data)
       await updateMeal({ id: selectedMeal.horario_id, data })
     } else {
       await createMeal({

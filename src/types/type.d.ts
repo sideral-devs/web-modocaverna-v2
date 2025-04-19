@@ -676,7 +676,6 @@ export interface Exercise {
   series: number
   repetitions: number
   currentWeight: number
-  imageUrl: string
   created_at?: string
   updated_at?: string
 }

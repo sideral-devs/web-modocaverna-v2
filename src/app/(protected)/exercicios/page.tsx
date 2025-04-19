@@ -78,15 +78,19 @@ export default function Page() {
     isLoading: isLoadingShape,
   } = useShape()
 
+  const firstShapeRegistration = shapeRegistrations?.[0]
+  const lastShapeRegistration =
+    shapeRegistrations?.[shapeRegistrations.length - 1]
+
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0)
   })
 
   useEffect(() => {
-    if (!isLoadingShape && !hasRegistration) {
-      router.push('/exercicios/steps')
+    if (firstShapeRegistration?.peso_meta === null) {
+      router.push('/exercicios/steps?step=1')
     }
-  }, [hasRegistration, isLoadingShape, router])
+  }, [firstShapeRegistration, isLoadingShape, router])
 
   const currentDate = new Date()
   const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
@@ -129,13 +133,6 @@ export default function Page() {
       </motion.div>
     )
   }
-
-  if (!hasRegistration) {
-    return null // Prevent flash of content before redirect
-  }
-
-  console.log('workouts', workouts)
-  console.log('currentWorkout', currentWorkouts)
 
   return (
     <>

@@ -1,19 +1,54 @@
-'use client'
-import { Button } from '@/components/ui/button'
-import { TabsContent } from '@/components/ui/tabs'
-import { SmileyAngry } from '@phosphor-icons/react'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import Link from 'next/link'
+"use client";
+
+import { ExerciseCardHub } from "@/components/exercicios/exercicios-card-hub";
+import { MealCardHub } from "@/components/refeicoes/refeicoes-card-hub";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { TabsContent } from "@/components/ui/tabs";
+import { useWorkouts } from "@/hooks/queries/use-exercises";
+import { useMeals } from "@/hooks/queries/use-meals";
+import { useShape } from "@/hooks/queries/use-shape";
+import { WEEK_DAYS } from "@/lib/constants";
+import { SmileyAngry } from "@phosphor-icons/react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import Link from "next/link";
 
 export function TempleForge({ value }: { value: string }) {
-  const today = new Date()
-  const dayName = format(today, 'EEEE', { locale: ptBR })
-  const formattedTime = '12h30 - 14h10'
+  const { workouts } = useWorkouts();
+  const {
+    shapeRegistrations,
+    // hasRegistration,
+    isLoading: isLoadingShape,
+  } = useShape();
+
+  const firstShapeRegistration = shapeRegistrations?.[0];
+  const lastShapeRegistration =
+    shapeRegistrations?.[shapeRegistrations.length - 1];
+
+  const today = new Date();
+  const dayName = format(today, "EEEE", { locale: ptBR });
+  const formattedTime = "12h30 - 14h10";
+
+  // // Filter workouts for today
+  const todayIndex = WEEK_DAYS.findIndex(
+    (day) => day.long.toLowerCase() === dayName.toLowerCase()
+  );
+  const todaysWorkouts = workouts?.filter((workout) => {
+    return workout.indice === todayIndex;
+  });
+
+  // Meals
+  const { meals } = useMeals();
+  const todaysMeals = meals?.filter((meal) => {
+    return meal.dia_semana === todayIndex;
+  });
+
+  console.log(todaysMeals);
 
   return (
     <TabsContent value={value} className="flex-1">
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
+      <div className="grid relative grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
         <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
@@ -23,17 +58,29 @@ export function TempleForge({ value }: { value: string }) {
             </div>
           </div>
 
+          <div className="absolute right-4 top-4">
+            <span className="text-xs text-zinc-400">
+              *
+              {lastShapeRegistration?.updated_at
+                ? `Medidas atualizadas em ${format(
+                    new Date(lastShapeRegistration.updated_at),
+                    "dd MMM yyyy",
+                    { locale: ptBR }
+                  )}`
+                : "Não atualizadas"}
+            </span>
+          </div>
+
           <div className="flex border-b items-center justify-between gap-4 p-6">
             {/* Card de Medidas */}
             <div className="flex flex-col w-full pl-4 border-l-4 border-l-yellow-500 border-y-0 border-r-0">
               <div className="flex flex-col h-full">
                 <div className="flex flex-col gap-2">
-                  <span className="text-sm text-zinc-400">Novas Medidas</span>
-                  <span className="text-base font-medium">Não atualizadas</span>
+                  <span className="text-sm text-zinc-400">Peso atual</span>
+                  <span className="text-lg font-medium">
+                    {lastShapeRegistration?.peso}KG
+                  </span>
                 </div>
-                <span className="text-xs text-zinc-400">
-                  *atualizado 6 Abril, 2025
-                </span>
               </div>
             </div>
 
@@ -41,8 +88,10 @@ export function TempleForge({ value }: { value: string }) {
             <div className="flex flex-col w-full pl-4 border-l-4 border-l-yellow-500 border-y-0 border-r-0">
               <div className="flex flex-col h-full">
                 <div className="flex flex-col gap-2">
-                  <span className="text-base text-zinc-400">Peso atual</span>
-                  <span className="text-base font-medium">86kg</span>
+                  <span className="text-base text-zinc-400">Objetivo</span>
+                  <span className="text-base font-medium">
+                    {lastShapeRegistration?.peso_meta}KG
+                  </span>
                 </div>
               </div>
             </div>
@@ -66,20 +115,55 @@ export function TempleForge({ value }: { value: string }) {
           {/* Treino do Dia */}
           <div className="md:col-span-3 flex flex-col w-full p-6  border-0">
             <div className="flex flex-col gap-2">
-              <span className="text-base text-zinc-500">
+              <span className="text-sm text-zinc-400">
                 Hoje é <span className="font-medium">{dayName}</span>.
               </span>
-              <div className="flex gap-2 justify-between">
-                <div className="flex gap-1">
-                  <h2 className="text-2xl font-medium">Treino de hoje:</h2>
-                  <span className="text-2xl font-medium text-zinc-400">
-                    Peito
-                  </span>
+              <div className="flex mb-4 gap-2 items-center justify-between">
+                <div className="flex gap-1 items-center">
+                  <h2 className="text-xl font-medium">Treino de hoje</h2>
+                  {todaysWorkouts ? (
+                    todaysWorkouts.length > 0 &&
+                    todaysWorkouts?.slice(0, 2).map((workout, index) => (
+                      <Badge key={index} variant="outline">
+                        {workout.titulo}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Badge variant="outline">Nenhum treino cadastrado</Badge>
+                  )}
                 </div>
-                <span className="text-lg font-normal text-zinc-300">
-                  {formattedTime}
+                <span className="text-sm font-medium text-zinc-300">
+                  {todaysWorkouts && todaysWorkouts.length > 0
+                    ? todaysWorkouts.length
+                    : 0}{" "}
+                  treinos separados
                 </span>
               </div>
+
+              {todaysWorkouts && todaysWorkouts.length > 0 ? (
+                todaysWorkouts.map((workout) => (
+                  <div key={workout.ficha_id} className="space-y-4">
+                    {workout.exercicios.length > 0 && (
+                      <div className="flex flex-col gap-1">
+                        {workout.exercicios.map((exercise) => (
+                          <ExerciseCardHub
+                            key={exercise.indice}
+                            exercise={exercise}
+                            workoutIndex={workout.indice}
+                            onEdit={() => {
+                              return;
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
+                  <p>Nenhum treino cadastrado para este dia</p>
+                </div>
+              )}
             </div>
           </div>
           <Link className="absolute right-4 bottom-4" href="/exercicios">
@@ -98,19 +182,35 @@ export function TempleForge({ value }: { value: string }) {
 
           {/* Treino do Dia */}
           <div className="md:col-span-3 flex flex-col w-full p-6 pt-2 border-0">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <span className="text-base text-zinc-400">
                 Hoje é <span className="font-medium">{dayName}</span>.
               </span>
-              <div className="flex gap-2 justify-between">
+              <div className="flex mb-4  gap-2 justify-between">
                 <div className="flex gap-1">
                   <h2 className="text-2xl font-medium">
-                    Confira suas{' '}
+                    Confira suas{" "}
                     <span className="text-zinc-400 mr-1">próximas</span>
                     refeições
                   </h2>
                 </div>
               </div>
+              {todaysMeals && todaysMeals.length > 0 ? (
+                  todaysMeals.map((meal) => (
+                    <MealCardHub
+                      key={meal.horario_id}
+                      meal={meal}
+                      dayIndex={todayIndex}
+                      onEdit={() => {
+                        return;
+                      }}
+                    />
+                  ))
+                ) : (
+                  <p className="text-zinc-500">
+                    Nenhuma refeição cadastrada para este dia
+                  </p>
+                )}
             </div>
             <Link className="absolute right-4 bottom-4" href="/refeicoes">
               <Button size="sm">Acessar</Button>
@@ -119,5 +219,5 @@ export function TempleForge({ value }: { value: string }) {
         </div>
       </div>
     </TabsContent>
-  )
+  );
 }
