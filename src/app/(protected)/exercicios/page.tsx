@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { SmileyAngry } from '@phosphor-icons/react'
+import { Pencil, Plus, SmileyAngry, Trash, X } from '@phosphor-icons/react'
 import { useState, useEffect } from 'react'
 import { Reorder, motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { Header, HeaderClose } from '@/components/header'
@@ -9,13 +9,22 @@ import { WEEK_DAYS } from '@/lib/constants'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { useShape } from '@/hooks/queries/use-shape'
 import { useRouter } from 'next/navigation'
-import type { Exercise } from '@/lib/api/exercises'
+import type { Exercise, Workout } from '@/lib/api/exercises'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
 import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
 import { ExerciseCard } from '@/components/exercicios/exercicios-card'
 import { ExerciciosCreateUpdate } from '@/components/exercicios/modals/exercicios-create-update'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog'
 
 export interface ShapeRegistration {
   shape_id: number
@@ -46,17 +55,23 @@ export interface ShapeRegistration {
 
 export default function Page() {
   const router = useRouter()
-  const [selectedDay, setSelectedDay] = useState('Qui')
+  const [selectedDay, setSelectedDay] = useState(
+    WEEK_DAYS[new Date().getDay()].workoutIndex,
+  )
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isCreateUpdateModal, setisCreateUpdateModal] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null)
+  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null)
+  const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null)
   const { scrollY } = useScroll()
 
   const {
     workouts,
     isLoading: isLoadingWorkouts,
     reorderExercises,
+    deleteWorkout,
   } = useWorkouts()
+
   const {
     shapeRegistrations,
     hasRegistration,
@@ -78,19 +93,24 @@ export default function Page() {
     locale: ptBR,
   })
 
-  // Group workouts by day
-  const workoutsByDay = workouts?.reduce(
-    (acc, workout) => {
-      if (!acc[workout.day]) {
-        acc[workout.day] = []
-      }
-      acc[workout.day].push(workout)
-      return acc
-    },
-    {} as Record<string, typeof workouts>,
-  )
+  // Get workouts for the selected day
+  const currentWorkouts =
+    workouts?.filter((workout: Workout) => workout.indice === selectedDay) || []
 
-  const currentWorkouts = workoutsByDay?.[selectedDay] || []
+  const handleDeleteWorkout = async (workout: Workout) => {
+    setWorkoutToDelete(workout)
+  }
+
+  const confirmDeleteWorkout = async () => {
+    if (!workoutToDelete) return
+
+    try {
+      await deleteWorkout(workoutToDelete.ficha_id)
+      setWorkoutToDelete(null)
+    } catch (error) {
+      console.error('Error deleting workout:', error)
+    }
+  }
 
   if (isLoadingWorkouts || isLoadingShape) {
     return (
@@ -114,7 +134,9 @@ export default function Page() {
     return null // Prevent flash of content before redirect
   }
 
-  console.log(shapeRegistrations)
+  console.log('workouts', workouts)
+  console.log('currentWorkout', currentWorkouts)
+
   return (
     <>
       <motion.div
@@ -137,6 +159,7 @@ export default function Page() {
           <HeaderClose />
         </Header>
       </motion.div>
+
       <div className="min-h-screen pt-32 pb-[400px] bg-black text-white p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -322,18 +345,33 @@ export default function Page() {
             targetWeight={Number(shapeRegistrations?.[0]?.texto_meta) || 0}
           />
 
-          {/* Treinos */}
+          {/* Workouts section */}
           <div className="mt-16 w-full">
-            <h2 className="text-2xl font-medium mb-8">Organize seus treinos</h2>
+            <div className="flex items-center mb-8 justify-between">
+              <h2 className="text-2xl font-medium">Organize seus treinos</h2>
+              <Button
+                variant="secondary"
+                className="text-zinc-500 pl-4 py-0 pr-0 gap-2"
+                onClick={() => {
+                  setEditingWorkout(null)
+                  setisCreateUpdateModal(true)
+                }}
+              >
+                Novo treino
+                <div className="h-full border-l flex items-center justify-center px-4 border-zinc-300">
+                  <Plus className="w-5 h-5 text-red-500" weight="bold" />
+                </div>
+              </Button>
+            </div>
 
             <div className="flex gap-4 w-full justify-between mb-8">
               {WEEK_DAYS.map((day) => (
                 <button
                   key={day.short}
-                  onClick={() => setSelectedDay(day.short)}
+                  onClick={() => setSelectedDay(day.workoutIndex)}
                   className={`px-6 py-4 w-full rounded-lg text-base font-medium transition-colors
                   ${
-                    selectedDay === day.short
+                    selectedDay === day.workoutIndex
                       ? 'bg-red-500 text-white'
                       : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-800'
                   }
@@ -345,50 +383,65 @@ export default function Page() {
             </div>
 
             <div className="space-y-8">
-              {currentWorkouts.map((workout) => (
-                <div key={workout.id} className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-base text-zinc-300">
-                        {workout.type}
-                      </h3>
-                      •
-                      <span className="text-base text-zinc-400">
-                        {workout.startTime} - {workout.endTime}
-                      </span>
+              {currentWorkouts.length > 0 ? (
+                currentWorkouts.map((workout) => (
+                  <div key={workout.ficha_id} className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base text-zinc-300">
+                          {workout.titulo}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setisCreateUpdateModal(true)
+                            setEditingWorkout(workout)
+                          }}
+                          className="bg-zinc-700 hover:bg-red-800 px-2 py-1 gap-2"
+                        >
+                          Editar treino
+                          <Pencil weight="fill" size={20} />
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteWorkout(workout)}
+                          variant="destructive"
+                          className="bg-transparent aspect-square hover:bg-red-900 p-2"
+                        >
+                          <Trash size={20} />
+                        </Button>
+                      </div>
                     </div>
+
+                    {workout.exercicios.length > 0 && (
+                      <Reorder.Group
+                        axis="y"
+                        values={workout.exercicios}
+                        onReorder={(newExercises: Exercise[]) =>
+                          reorderExercises({
+                            workoutIndex: workout.indice,
+                            exerciseIndices: newExercises.map((e) => e.indice),
+                          })
+                        }
+                        className="space-y-6"
+                      >
+                        {workout.exercicios.map((exercise: Exercise) => (
+                          <ExerciseCard
+                            key={exercise.indice}
+                            exercise={exercise}
+                            workoutIndex={workout.indice}
+                            onEdit={() => {
+                              setEditingExercise(exercise)
+                              setisCreateUpdateModal(true)
+                            }}
+                          />
+                        ))}
+                      </Reorder.Group>
+                    )}
                   </div>
-
-                  {workout.exercises.length > 0 && (
-                    <Reorder.Group
-                      axis="y"
-                      values={workout.exercises}
-                      onReorder={(newExercises) =>
-                        reorderExercises({
-                          workoutId: String(workout.id),
-                          exerciseIds: newExercises.map((e) => e.id),
-                        })
-                      }
-                      className="space-y-6"
-                    >
-                      {workout.exercises.map((exercise) => (
-                        <ExerciseCard
-                          key={exercise.id}
-                          value={exercise}
-                          name={exercise.name}
-                          series={exercise.series}
-                          repetitions={exercise.repetitions}
-                          currentWeight={exercise.currentWeight}
-                          imageUrl={exercise.imageUrl}
-                          onEdit={() => setEditingExercise(exercise)}
-                        />
-                      ))}
-                    </Reorder.Group>
-                  )}
-                </div>
-              ))}
-
-              {currentWorkouts.length === 0 && (
+                ))
+              ) : (
                 <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
                   <p>Nenhum treino cadastrado para este dia</p>
                 </div>
@@ -398,16 +451,56 @@ export default function Page() {
         </div>
       </div>
 
-      {isCreateModalOpen && currentWorkouts.length > 0 && (
+      {isCreateUpdateModal && (
         <ExerciciosCreateUpdate
-          isOpen={isCreateModalOpen || !!editingExercise}
+          isOpen={isCreateUpdateModal || !!editingExercise}
           onClose={() => {
-            setIsCreateModalOpen(false)
+            setisCreateUpdateModal(false)
             setEditingExercise(null)
           }}
-          exercise={editingExercise || undefined}
+          workout={editingWorkout || undefined}
         />
       )}
+
+      <Dialog
+        open={!!workoutToDelete}
+        onOpenChange={() => setWorkoutToDelete(null)}
+      >
+        <DialogContent className="overflow-hidden">
+          {/* <DialogHeader className="text-left flex">
+            <h2 className="text-red-500 text-left">Excluir treino</h2>
+           
+          </DialogHeader> */}
+          <DialogHeader className="p-4 relative w-full z-10">
+            <DialogTitle className="flex pt-2 justify-between items-center w-full">
+              Excluir treino
+            </DialogTitle>
+            <DialogDescription className="pt-4">
+              Tem certeza que deseja excluir o treino{' '}
+              <span className="text-red-500 font-bold">
+                &ldquo;{workoutToDelete?.titulo}&rdquo;
+              </span>{' '}
+              ? Esta ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2 justify-end p-4 pt-0">
+            <Button
+              variant="outline"
+              onClick={() => setWorkoutToDelete(null)}
+              className="bg-transparent text-zinc-400 hover:text-white hover:bg-zinc-800"
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeleteWorkout}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              Excluir
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

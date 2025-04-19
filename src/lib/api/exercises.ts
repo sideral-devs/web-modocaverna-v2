@@ -1,38 +1,26 @@
-import { api } from '../api'
+import { api } from '@/lib/api'
 
 export interface Exercise {
-  id: string
-  name: string
-  series: number
-  repetitions: number
-  currentWeight: number
-  imageUrl: string
-  workoutId: string
-  created_at?: string
-  updated_at?: string
+  nome: string
+  series: string
+  repeticoes: string
+  carga: string
+  indice: number
 }
 
 export interface ExerciseDTO {
-  id: string
   nome: string
-  series: number
-  repeticoes: number
-  carga_atual: number
-  imagem_url: string
-  treino_id: string
-  created_at?: string
-  updated_at?: string
+  series: string
+  repeticoes: string
+  carga: string
+  indice: number
 }
 
 export interface Workout {
-  id: number
-  day: string
-  startTime: string
-  endTime: string
-  type: string
-  exercises: Exercise[]
-  created_at?: string
-  updated_at?: string
+  ficha_id: number
+  titulo: string
+  indice: number
+  exercicios: Exercise[]
 }
 
 export interface WorkoutDTO {
@@ -43,6 +31,32 @@ export interface WorkoutDTO {
   metadata: string[]
   created_at?: string
   updated_at?: string
+}
+
+export interface CreateWorkoutRequest {
+  titulo: string
+  indice: number
+  exercicios: Exercise[]
+}
+
+export interface UpdateWorkoutRequest extends CreateWorkoutRequest {
+  ficha_id: number
+}
+
+export interface CreateExerciseRequest {
+  titulo: string
+  indice: number
+  exercicios: Array<{
+    nome: string
+    series: string
+    repeticoes: string
+    carga: string
+    indice: number
+  }>
+}
+
+export interface UpdateExerciseRequest extends CreateExerciseRequest {
+  id: number
 }
 
 const dayMap: Record<string, string> = {
@@ -57,82 +71,50 @@ const dayMap: Record<string, string> = {
 
 function mapExerciseFromDTO(dto: ExerciseDTO): Exercise {
   return {
-    id: dto.id,
-    name: dto.nome,
-    series: dto.series,
-    repetitions: dto.repeticoes,
-    currentWeight: dto.carga_atual,
-    imageUrl: dto.imagem_url,
-    workoutId: dto.treino_id,
-    created_at: dto.created_at,
-    updated_at: dto.updated_at,
+    nome: dto.nome,
+    series: dto.series.toString(),
+    repeticoes: dto.repeticoes.toString(),
+    carga: dto.carga.toString(),
+    indice: 0,
   }
 }
 
 function mapWorkoutFromDTO(dto: WorkoutDTO): Workout {
   return {
-    id: dto.treino_id,
-    day: dayMap[dto.chave] || dto.chave,
-    startTime: dto.inicio,
-    endTime: dto.fim,
-    type: dto.metadata[0] || '',
-    exercises: [], // We'll need to fetch exercises separately
-    created_at: dto.created_at,
-    updated_at: dto.updated_at,
-  }
-}
-
-function mapExerciseToDTO(exercise: Partial<Exercise>): Partial<ExerciseDTO> {
-  return {
-    ...(exercise.name && { nome: exercise.name }),
-    ...(exercise.series && { series: exercise.series }),
-    ...(exercise.repetitions && { repeticoes: exercise.repetitions }),
-    ...(exercise.currentWeight && { carga_atual: exercise.currentWeight }),
-    ...(exercise.imageUrl && { imagem_url: exercise.imageUrl }),
-    ...(exercise.workoutId && { treino_id: exercise.workoutId }),
-  }
-}
-
-function mapWorkoutToDTO(workout: Partial<Workout>): Partial<WorkoutDTO> {
-  const dayKey = Object.entries(dayMap).find(
-    ([, value]) => value === workout.day,
-  )?.[0]
-
-  return {
-    ...(workout.day && { chave: dayKey || workout.day }),
-    ...(workout.startTime && { inicio: workout.startTime }),
-    ...(workout.endTime && { fim: workout.endTime }),
-    ...(workout.type && { metadata: [workout.type] }),
+    titulo: dayMap[dto.chave] || dto.chave,
+    indice: Number(dto.chave),
+    ficha_id: dto.treino_id,
+    exercicios: [],
   }
 }
 
 // Workouts (Treinos) endpoints
-export async function getWorkouts() {
-  const response = await api.get('/treinos/find')
-  return response.data.map(mapWorkoutFromDTO) as Workout[]
+export const getWorkouts = async () => {
+  const response = await api.get('/fichas-de-treinos/find')
+  return response.data
 }
 
 export async function getWorkoutById(id: number) {
-  const response = await api.get(`/treinos/show/${id}`)
+  const response = await api.get(`/fichas-de-treinos/show/${id}`)
   return mapWorkoutFromDTO(response.data) as Workout
 }
 
-export async function createWorkout(
-  data: Omit<Workout, 'id' | 'exercises' | 'created_at' | 'updated_at'>,
-) {
-  const dto = mapWorkoutToDTO(data)
-  const response = await api.post('/treinos/store', dto)
-  return mapWorkoutFromDTO(response.data) as Workout
+export const createWorkout = async (data: CreateWorkoutRequest) => {
+  const response = await api.post('/fichas-de-treinos/store', data)
+  return response.data
 }
 
-export async function updateWorkout(id: number, data: Partial<Workout>) {
-  const dto = mapWorkoutToDTO(data)
-  const response = await api.put(`/treinos/update/${id}`, dto)
-  return mapWorkoutFromDTO(response.data) as Workout
+export const updateWorkout = async (data: UpdateWorkoutRequest) => {
+  const response = await api.put(
+    `/fichas-de-treinos/update/${data.ficha_id}`,
+    data,
+  )
+  return response.data
 }
 
-export async function deleteWorkout(id: number) {
-  await api.delete(`/treinos/destroy/${id}`)
+export const deleteWorkout = async (workoutId: number) => {
+  const response = await api.delete(`/fichas-de-treinos/destroy/${workoutId}`)
+  return response.data
 }
 
 // Exercises (Fichas de Treinos) endpoints
@@ -146,30 +128,59 @@ export async function getExerciseById(id: string) {
   return mapExerciseFromDTO(response.data) as Exercise
 }
 
-export async function createExercise(
-  data: Omit<Exercise, 'id' | 'created_at' | 'updated_at'>,
-) {
-  const dto = mapExerciseToDTO(data)
-  const response = await api.post('/fichas-de-treinos/store', dto)
-  return mapExerciseFromDTO(response.data) as Exercise
-}
-
-export async function updateExercise(id: string, data: Partial<Exercise>) {
-  const dto = mapExerciseToDTO(data)
-  const response = await api.put(`/fichas-de-treinos/update/${id}`, dto)
-  return mapExerciseFromDTO(response.data) as Exercise
-}
-
-export async function deleteExercise(id: string) {
-  await api.delete(`/fichas-de-treinos/destroy/${id}`)
-}
-
-export async function reorderExercises(
-  workoutId: string,
-  exerciseIds: string[],
-) {
-  const response = await api.put(`/fichas-de-treinos/reorder/${workoutId}`, {
-    exerciseIds,
+export const createExercise = async (
+  workoutIndex: number,
+  dayIndex: number,
+  title: string,
+  exercise: Exercise,
+) => {
+  const response = await api.post('/fichas-de-treinos/store', {
+    titulo: title,
+    indice: dayIndex,
+    exercicios: [
+      {
+        nome: exercise.nome,
+        series: exercise.series,
+        repeticoes: exercise.repeticoes,
+        carga: exercise.carga,
+        indice: exercise.indice,
+      },
+    ],
   })
-  return response.data as Workout
+  return response.data
+}
+
+export const updateExercise = async (
+  fichaId: number,
+  dayIndex: number,
+  title: string,
+  exercises: Exercise[],
+) => {
+  const response = await api.put(`/fichas-de-treinos/${fichaId}`, {
+    ficha_id: fichaId,
+    titulo: title,
+    indice: dayIndex,
+    exercicios: exercises,
+  })
+  return response.data
+}
+
+export const deleteExercise = async (
+  workoutIndex: number,
+  exerciseIndex: number,
+) => {
+  const response = await api.delete(
+    `/fichas-de-treinos/${workoutIndex}/exercicios/${exerciseIndex}`,
+  )
+  return response.data
+}
+
+export const reorderExercises = async (
+  workoutIndex: number,
+  exerciseIndices: number[],
+) => {
+  const response = await api.put(`/fichas-de-treinos/${workoutIndex}/reorder`, {
+    exerciseIndices,
+  })
+  return response.data
 }
