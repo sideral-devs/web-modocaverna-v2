@@ -412,7 +412,7 @@ function ClassLink({
         active && 'border border-red-800',
       )}
       href={
-        title === 'Os dias na Caverna' || title === 'Acabou, é o fim?'
+        title === 'Acabou, é o fim?'
           ? ''
           : href
       }
@@ -420,7 +420,7 @@ function ClassLink({
       <span className={cn('flex-1', active || 'text-zinc-500')}>
         {
           // eslint-ignore-next-line
-          title === 'Os dias na Caverna' || title === 'Acabou, é o fim?'
+          title === 'Acabou, é o fim?'
             ? `${title}  - Aula disponível dia: 17/04/2025`
             : title
         }
@@ -432,7 +432,7 @@ function ClassLink({
           watched ? 'border-primary bg-primary' : '',
         )}
         onClick={() => {
-          if (title === 'Os dias na Caverna' || title === 'Acabou, é o fim?') {
+          if (title === 'Acabou, é o fim?') {
             toast.warning('A aula estará disponível dia: 17/04/2025')
           } else {
             toast.warning('Conclua a aula clicando em "Concluir aula".')
