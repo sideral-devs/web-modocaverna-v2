@@ -31,9 +31,8 @@ export function TempleForge({ value }: { value: string }) {
   const formattedTime = "12h30 - 14h10";
 
   // // Filter workouts for today
-  const todayIndex = WEEK_DAYS.findIndex(
-    (day) => day.long.toLowerCase() === dayName.toLowerCase()
-  );
+  const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex;
+
   const todaysWorkouts = workouts?.filter((workout) => {
     return workout.indice === todayIndex;
   });
@@ -44,11 +43,10 @@ export function TempleForge({ value }: { value: string }) {
     return meal.dia_semana === todayIndex;
   });
 
-  console.log(todaysMeals);
-
   return (
     <TabsContent value={value} className="flex-1">
       <div className="grid relative grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
+        {/* Treinos */}
         <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
@@ -66,7 +64,7 @@ export function TempleForge({ value }: { value: string }) {
                     new Date(lastShapeRegistration.updated_at),
                     "dd MMM yyyy",
                     { locale: ptBR }
-                  )}`
+                  )}.`
                 : "Não atualizadas"}
             </span>
           </div>
@@ -136,34 +134,39 @@ export function TempleForge({ value }: { value: string }) {
                   {todaysWorkouts && todaysWorkouts.length > 0
                     ? todaysWorkouts.length
                     : 0}{" "}
-                  treinos separados
+                  {todaysWorkouts && todaysWorkouts.length > 1
+                    ? "treinos separados"
+                    : "treino"}
                 </span>
               </div>
 
-              {todaysWorkouts && todaysWorkouts.length > 0 ? (
-                todaysWorkouts.map((workout) => (
-                  <div key={workout.ficha_id} className="space-y-4">
-                    {workout.exercicios.length > 0 && (
-                      <div className="flex flex-col gap-1">
-                        {workout.exercicios.map((exercise) => (
-                          <ExerciseCardHub
-                            key={exercise.indice}
-                            exercise={exercise}
-                            workoutIndex={workout.indice}
-                            onEdit={() => {
-                              return;
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
+              <div className="h-[400px] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-800 overflow-y-auto pb-24">
+                {todaysWorkouts && todaysWorkouts.length > 0 ? (
+                  todaysWorkouts.map((workout) => (
+                    <div key={workout.ficha_id} className="space-y-4">
+                      {workout.exercicios.length > 0 && (
+                        <div className="flex flex-col gap-1">
+                          {workout.exercicios.map((exercise) => (
+                            <ExerciseCardHub
+                              key={exercise.indice}
+                              exercise={exercise}
+                              workoutIndex={workout.indice}
+                              onEdit={() => {
+                                return;
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
+                    <p>Nenhum treino cadastrado para este dia</p>
                   </div>
-                ))
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
-                  <p>Nenhum treino cadastrado para este dia</p>
-                </div>
-              )}
+                )}
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent pointer-events-none" />
+              </div>
             </div>
           </div>
           <Link className="absolute right-4 bottom-4" href="/exercicios">
@@ -171,6 +174,7 @@ export function TempleForge({ value }: { value: string }) {
           </Link>
         </div>
 
+        {/* Refeições */}
         <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
@@ -180,10 +184,10 @@ export function TempleForge({ value }: { value: string }) {
             </div>
           </div>
 
-          {/* Treino do Dia */}
-          <div className="md:col-span-3 flex flex-col w-full p-6 pt-2 border-0">
+          {/* Refeições do Dia */}
+          <div className="md:col-span-3  flex flex-col w-full p-6 pt-2 border-0">
             <div className="flex flex-col gap-1">
-              <span className="text-base text-zinc-400">
+              <span className="text-sm text-zinc-400">
                 Hoje é <span className="font-medium">{dayName}</span>.
               </span>
               <div className="flex mb-4  gap-2 justify-between">
@@ -195,7 +199,9 @@ export function TempleForge({ value }: { value: string }) {
                   </h2>
                 </div>
               </div>
-              {todaysMeals && todaysMeals.length > 0 ? (
+
+              <div className="h-[500px] pb-24 overflow-y-auto">
+                {todaysMeals && todaysMeals.length > 0 ? (
                   todaysMeals.map((meal) => (
                     <MealCardHub
                       key={meal.horario_id}
@@ -211,6 +217,8 @@ export function TempleForge({ value }: { value: string }) {
                     Nenhuma refeição cadastrada para este dia
                   </p>
                 )}
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent pointer-events-none" />
+              </div>
             </div>
             <Link className="absolute right-4 bottom-4" href="/refeicoes">
               <Button size="sm">Acessar</Button>

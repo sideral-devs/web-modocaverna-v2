@@ -12,6 +12,93 @@ export function AnalysisResultsStep({
   onBack: () => void
   onFinish: () => void
 }) {
+  const { data, reset } = useShapeFormStore()
+
+  const alturaEmMetros = data.altura / 100
+  const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
+
+  const getIMCStatus = (imc: number): IMCStatus => {
+    if (isNaN(imc)) {
+      return {
+        label: 'IMC NÃO DISPONÍVEL',
+        color: 'red',
+        message: 'Não foi possível calcular o IMC.',
+        icon: <Warning className="w-4 h-4 text-red-500" />, 
+      }
+    }
+
+    if (imc < 18.5) {
+      return {
+        label: 'IMC BAIXO',
+        color: 'yellow',
+        message:
+          'Seu IMC indica que você está abaixo do peso ideal. Vamos trabalhar para ganhar massa muscular de forma saudável.',
+        icon: <Warning className="w-4 h-4 text-yellow-500" />,
+      }
+    } else if (imc < 25) {
+      return {
+        label: 'IMC IDEAL',
+        color: 'green',
+        message:
+          'Seu IMC está dentro da faixa considerada saudável. Vamos manter esse equilíbrio e focar em ganhar massa muscular.',
+        icon: <Info className="w-4 h-4 text-green-500" />,
+      }
+    } else if (imc < 30) {
+      return {
+        label: 'IMC ELEVADO',
+        color: 'orange',
+        message:
+          'Seu IMC indica sobrepeso. Vamos trabalhar para reduzir o percentual de gordura e ganhar massa muscular.',
+        icon: <Warning className="w-4 h-4 text-orange-500" />,
+      }
+    } else {
+      return {
+        label: 'IMC ALTO',
+        color: 'red',
+        message:
+          'Seu IMC indica obesidade. Vamos focar em reduzir o percentual de gordura de forma saudável e sustentável.',
+        icon: <Warning className="w-4 h-4 text-red-500" />,
+      }
+    }
+  }
+
+  const imcStatus = getIMCStatus(imc)
+
+  async function handleFinish() {
+    try {
+      // Prepare the final data
+      const finalData = {
+        ...data,
+        imc,
+        satisfeito_fisico: data.nivel_satisfacao === 'Não satisfeito' ? 0 : 1,
+        classificacao:
+          imc < 18.5
+            ? 'Abaixo do peso'
+            : imc < 25
+              ? 'Peso normal'
+              : imc < 30
+                ? 'Sobrepeso'
+                : 'Obesidade',
+      }
+
+      // Set IMC to 0 if NaN
+      if (isNaN(imc)) {
+        finalData.imc = 0.00
+      }
+
+      console.log(finalData)
+
+      // Submit to API
+      await api.post('/registro-de-shape/store', finalData)
+
+      // Reset form and proceed
+      reset()
+      onFinish()
+    } catch (error) {
+      toast.error('Algo deu errado. Tente novamente.')
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
       <div className="flex items-start gap-16">
@@ -40,7 +127,11 @@ export function AnalysisResultsStep({
                   </div>
                   <span className="text-red-500 font-medium">IMC ALTO.</span>
                 </div>
-                <span className="text-2xl text-red-500 font-medium">24.5</span>
+                <span
+                  className={`text-2xl text-${imcStatus.color}-500 font-medium`}
+                >
+                  {!isNaN(imc) ? imc.toFixed(2) : 'Não disponível'}
+                </span>
               </div>
             </div>
 
