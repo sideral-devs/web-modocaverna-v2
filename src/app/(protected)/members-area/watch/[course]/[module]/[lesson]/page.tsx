@@ -411,20 +411,9 @@ function ClassLink({
         'flex w-full items-center justify-between pl-8 pr-6 py-10 gap-6 rounded-lg',
         active && 'border border-red-800',
       )}
-      href={
-        title === 'Acabou, é o fim?'
-          ? ''
-          : href
-      }
+      href={href}
     >
-      <span className={cn('flex-1', active || 'text-zinc-500')}>
-        {
-          // eslint-ignore-next-line
-          title === 'Acabou, é o fim?'
-            ? `${title}  - Aula disponível dia: 17/04/2025`
-            : title
-        }
-      </span>
+      <span className={cn('flex-1', active || 'text-zinc-500')}>{title}</span>
       <div
         className={cn(
           'hidden lg:flex w-5 h-5 items-center justify-center border-2 rounded-md border-zinc-500',
