@@ -38,6 +38,7 @@ export default function ChallengeCard() {
     </Card>
   )
 }
+
 function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   const [challengeMessage, setChallengeMessage] = useState('')
 
@@ -45,6 +46,11 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
     () => dayjs().set('hour', 19).set('minute', 0).set('second', 0).toDate(),
     [],
   )
+  const remainingDate = useMemo(
+    () => dayjs().set('hour', 23).set('minute', 59).set('second', 59).toDate(),
+    [],
+  )
+
   const getMessageForTime = (messages: string[]) => {
     const now = new Date()
     const minutesOfDay = now.getHours() * 60 + now.getMinutes()
@@ -69,6 +75,7 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
       setChallengeMessage(getMessageForTime(messagesDesafioCaverna))
     }, 1200000)
   }, [])
+
   if (
     !challenge ||
     challenge.status_desafio === 'finalizado' ||
@@ -176,31 +183,28 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
 
   if (!challenge.hojeInfo || challenge.hojeInfo === 'null') {
     return (
-      <div className="flex flex-col items-center justify-center flex-1 md:pt-6 gap-7">
-        <div className="flex flex-col items-center gap-3">
-          <Image
-            src={'/images/logo-icon.svg'}
-            alt="Logo"
-            width={26}
-            height={22}
-          />
-          <p className="text-center text-[13px] text-zinc-400">
-            De acordo com as marcações, como você avalia a sua conduta hoje?
-          </p>
+      <>
+        <div className="flex flex-col flex-1 items-center gap-5">
+          <div className="flex flex-col items-center gap-2">
+            <AlarmClock className="text-zinc-700" fill="#EE4444" />
+            <p className="text-center">
+              A avaliação de hoje já está disponível. <br />
+              Não deixa para a última hora
+            </p>
+          </div>
+          <CountdownTimer targetDate={remainingDate} />
         </div>
-        <div className="flex w-full items-center justify-center gap-3">
-          <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button className="flex-1 max-w-24 text-red-300 bg-red-800">
-              Negativa
+        <div className="flex w-full justify-between">
+          <Link href="/historico-desafio" className="mt-auto">
+            <Button size="sm" className="bg-zinc-500">
+              Ver Histórico
             </Button>
           </Link>
-          <Link href={'/desafio-caverna/dashboard?register_open=true'}>
-            <Button className="flex-1 max-w-24 text-emerald-400 bg-emerald-800">
-              Positiva
-            </Button>
+          <Link href="/desafio-caverna" className="mt-auto">
+            <Button size="sm">Acessar</Button>
           </Link>
         </div>
-      </div>
+      </>
     )
   }
 
