@@ -72,11 +72,15 @@ export default function Page() {
     deleteWorkout,
   } = useWorkouts()
 
+  console.log(workouts)
+
   const {
     shapeRegistrations,
     // hasRegistration,
     isLoading: isLoadingShape,
   } = useShape()
+
+  console.log(shapeRegistrations)
 
   const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =

@@ -29,6 +29,15 @@ export function AnalysisResultsStep({
   const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
 
   const getIMCStatus = (imc: number): IMCStatus => {
+    if (isNaN(imc)) {
+      return {
+        label: 'IMC NÃO DISPONÍVEL',
+        color: 'red',
+        message: 'Não foi possível calcular o IMC.',
+        icon: <Warning className="w-4 h-4 text-red-500" />, 
+      }
+    }
+
     if (imc < 18.5) {
       return {
         label: 'IMC BAIXO',
@@ -83,6 +92,11 @@ export function AnalysisResultsStep({
                 : 'Obesidade',
       }
 
+      // Set IMC to 0 if NaN
+      if (isNaN(imc)) {
+        finalData.imc = 0.00
+      }
+
       console.log(finalData)
 
       // Submit to API
@@ -129,7 +143,7 @@ export function AnalysisResultsStep({
                 <span
                   className={`text-2xl text-${imcStatus.color}-500 font-medium`}
                 >
-                  {imc.toFixed(2)}
+                  {!isNaN(imc) ? imc.toFixed(2) : 'Não disponível'}
                 </span>
               </div>
             </div>

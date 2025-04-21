@@ -27,6 +27,7 @@ type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
 interface ShapePhoto {
   url: string
   type: PhotoType
+  base64: string
 }
 
 type FormData = {
@@ -66,10 +67,28 @@ export function ShapeGoalsStep({
     { type: 'lateral2', label: 'Lateral' },
   ]
 
-  function handlePhotoUpload(type: PhotoType, file: File) {
+  // Check if all required photos are uploaded
+  const hasAllPhotos = photoTypes.every(({ type }) => 
+    photos.some(photo => photo.type === type)
+  )
+
+  const hasFilledAllFields = nivel_satisfacao && objetivo && peso_meta && texto_meta
+
+  async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)
+    
+    // Convert to base64
+    const base64 = await new Promise<string>((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64String = reader.result as string
+        resolve(base64String)
+      }
+      reader.readAsDataURL(file)
+    })
+
     const newPhotos = photos.filter((photo) => photo.type !== type)
-    setValue('photos', [...newPhotos, { url, type }])
+    setValue('photos', [...newPhotos, { url, type, base64 }])
   }
 
   function onSubmit(data: FormData) {
@@ -78,18 +97,19 @@ export function ShapeGoalsStep({
       objetivo: data.objetivo,
       peso_meta: parseFloat(data.peso_meta) || 0,
       texto_meta: data.texto_meta,
+      photos: data.photos.map(photo => photo.base64),
     })
     onNext()
   }
 
   return (
-    <div className="flex select-none w-[632px] overflow-y-auto px-1 flex-col flex-1 items-center gap-8">
+    <div className="flex flex-col select-none w-[632px] flex-1 items-center gap-4 min-h-screen">
       <FormProvider {...form}>
         <div className="flex flex-col w-full max-w-3xl gap-8">
           <div className="flex mb-4 flex-col gap-2">
             <h2 className="text-2xl font-medium">Registre seu progresso</h2>
             <p className="text-zinc-400 font-normal">
-              Faça upload do seu shape atual abaixo para comparação futura
+              Faça upload do seu shape atual abaixo para comparação futura (todas as fotos são obrigatórias)
             </p>
           </div>
 
@@ -248,7 +268,7 @@ export function ShapeGoalsStep({
 
           {objetivo && objetivo !== 'Manter peso' && (
             <div className="flex flex-col gap-2">
-              <h3 className="text-normal font-medium">Quantos kg?</h3>
+              <h3 className="text-normal font-medium">Qual sua meta de peso?</h3>
               <InputWithSuffix
                 type="number"
                 value={peso_meta}
@@ -280,7 +300,10 @@ export function ShapeGoalsStep({
               >
                 Voltar
               </Button>
-              <AutoSubmitButton onClick={form.handleSubmit(onSubmit)}>
+              <AutoSubmitButton 
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={!hasAllPhotos || !hasFilledAllFields}
+              >
                 Continuar
               </AutoSubmitButton>
             </div>
