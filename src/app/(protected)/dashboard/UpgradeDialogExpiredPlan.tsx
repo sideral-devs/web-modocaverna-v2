@@ -1,19 +1,24 @@
-import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog'
+import { AlertTitle } from '@/components/ui/alert'
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Check, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AlertTitle } from '../ui/alert'
-import { AlertDialogCancel } from '@radix-ui/react-alert-dialog'
-export function ChallengePlanPopup({
-  open,
-  setOpen,
+import { ReactNode } from 'react'
+
+export function UpgradeDialogExpiredPlan({
+  children,
 }: {
-  open: boolean
-  setOpen: (arg: boolean) => void
+  children: ReactNode
 }) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="flex min-w-[797px] min-h-[590px] gap-10 bg-[#18181B] sm:rounded-2xl">
         <div className="relative top-4 ">
           <Image

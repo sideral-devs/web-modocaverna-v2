@@ -6,7 +6,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { Zap } from 'lucide-react'
+import { Check, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
@@ -28,29 +28,39 @@ export function UpgradeDialogDuringSevenDays({
             alt="Imagens modo caverna"
           />
         </div>
-        <div className="flex flex-col  gap-6">
-          <div className="flex flex-col">
+        <div className="flex flex-col  gap-4">
+          <div className="flex flex-row ">
             <AlertTitle className="text-xl font-semibold text-white">
-              Imagino que você esteja curtindo sua
+              Parece que a sua avaliação gratuita de 7 dias ao Plano
+              Cavernoso&nbsp;
+              <span className="text-primary">expirou...</span>
             </AlertTitle>
-            <h1 className="text-xl font-semibold text-primary">
-              Avaliação gratuita do Plano Cavernoso! 🚀
-            </h1>
           </div>
-          <p className="text-normal pt-4 text-[#A0A0A9]">
-            Seu plano atual já oferece as ferramentas vitais do sistema.
+          <p className="text-xs pt-4 text-[#A0A0A9]">
+            O seu acesso ao Modo Caverna ainda está garantido, mas a sua
+            assinatura atual contempla apenas algumas funcionalidades...
           </p>
-          <p className="text-normal  text-[#A0A0A9]">
-            Ao fazer o upgrade de Plano, você desbloqueia a experiência completa
-            e todas as ferramentas para potencializar seus resultados.
-          </p>
-          <div className="flex flex-col items-center p-4 bg-[#453c1a] rounded-xl border border-yellow-300">
-            <p className="text-normal  text-white">
-              Garanta agora 50% de desconto ao fazer o upgrade e continue
-              aproveitando o Modo Caverna compl eto!
+          <ul className="flex flex-col py-8 gap-4">
+            <li className="flex items-center gap-4">
+              <Check size={16} className="text-primary" />
+              <span className="text-sm">Curso Modo Caverna</span>
+            </li>
+            <li className="flex items-center gap-4">
+              <Check size={16} className="text-primary" />
+              <span className="text-sm">Desafio Caverna</span>
+            </li>
+            <li className="flex items-center gap-4">
+              <Check size={16} className="text-primary" />
+              <span className="text-sm">Suporte via chat</span>
+            </li>
+            <p className="text-xs pt-4 text-[#A0A0A9]">
+              Gostaria de continuar utilizando todas as ferramentas do sistema?
+              Clique no botão abaixo e assine o Plano Cavernoso com 50% de
+              desconto!
             </p>
-          </div>
-          <div className="flex flex-col pt-4 w-full gap-2">
+          </ul>
+
+          <div className="flex flex-col w-full gap-2">
             <Link
               className="flex flex-col justify-center w-lg"
               href="/settings/plans"
@@ -62,7 +72,7 @@ export function UpgradeDialogDuringSevenDays({
             </Link>
             <div className=" flex py-2 items-center justify-center rounded">
               <AlertDialogCancel className="bg-black text-[#A0A0A9] rounded-lg w-[80%]">
-                Quero continuar com o Plano Caverna
+                Continuar com o Plano atual
               </AlertDialogCancel>
             </div>
           </div>
