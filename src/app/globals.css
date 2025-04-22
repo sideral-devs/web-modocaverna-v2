@@ -111,6 +111,23 @@
   }
 }
 
+@keyframes pulsate-shadow {
+  0% {
+    box-shadow: 0 0 0px rgba(255, 51, 51, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 10px 5px rgba(255, 51, 51, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 51, 51, 0.6);
+  }
+}
+
+.pulsating-shadow {
+  animation: pulsate-shadow 1.5s infinite;
+}
+
+
 .fc-theme-standard {
   @apply !border-0;
 }

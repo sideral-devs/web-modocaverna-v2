@@ -7,7 +7,9 @@ import dayjs from 'dayjs'
 import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { UpgradeDialogTrigger } from './UpgradeDialog'
+import { UpgradeDialogDuringSevenDays } from './UpgradeDialogDuringSevenDays'
+import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
+import { UpgradeDialogExpired } from './UpgradeDialogExpired'
 
 export function CentralHubHeader() {
   const { data: user } = useUser()
@@ -16,6 +18,13 @@ export function CentralHubHeader() {
   }
   const dataDeCompra = dayjs(user.data_de_compra)
   const dataMaisSeteDias = dataDeCompra.add(7, 'day')
+  const horasRestantes = dayjs(dataMaisSeteDias).diff(dayjs(), 'hour')
+  const diasRestantes = Math.ceil(horasRestantes / 24)
+  const horasRestantesTrial = dayjs(user.data_de_renovacao).diff(
+    dayjs(),
+    'hour',
+  )
+  const diasRestantesTrial = Math.ceil(horasRestantesTrial / 24)
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
@@ -66,10 +75,10 @@ export function CentralHubHeader() {
                   </div>
                 </Link>
                 <div className="px-2 py-2">
-                  <UpgradeDialogTrigger>
+                  <UpgradeDialogExpiredTrial>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary"
+                      className="hidden md:flex rounded-xl text-primary pulsating-shadow"
                     >
                       <Zap
                         fill="#FF3333"
@@ -79,7 +88,7 @@ export function CentralHubHeader() {
                       ></Zap>
                       UPGRADE
                     </Button>
-                  </UpgradeDialogTrigger>
+                  </UpgradeDialogExpiredTrial>
                 </div>
               </div>
             ) : (
@@ -91,13 +100,10 @@ export function CentralHubHeader() {
                     </div>
 
                     <div className="flex flex-col pl-4">
-                      <div className=" flex flex-row text-normal">
-                        <span className="text-normal"> Avaliação gratuita</span>
+                      <div className="flex flex-row text-normal">
+                        <span className="text-normal">Avaliação gratuita</span>
                         <span className="text-primary pl-1 font-semibold text-normal">
-                          {`encerra em ${dayjs(user.data_de_renovacao).diff(
-                            dayjs(),
-                            'days',
-                          )} dias`}
+                          {`encerra em ${diasRestantesTrial} dia${diasRestantesTrial > 1 ? 's' : ''}`}
                         </span>
                       </div>
                       <p className="text-xs ">
@@ -108,10 +114,10 @@ export function CentralHubHeader() {
                   </div>
                 </Link>
                 <div className="px-2 py-2">
-                  <UpgradeDialogTrigger>
+                  <UpgradeDialogDuringSevenDays>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary"
+                      className="hidden md:flex rounded-xl text-primary pulsating-shadow"
                     >
                       <Zap
                         fill="#FF3333"
@@ -121,7 +127,7 @@ export function CentralHubHeader() {
                       ></Zap>
                       UPGRADE
                     </Button>
-                  </UpgradeDialogTrigger>
+                  </UpgradeDialogDuringSevenDays>
                 </div>
               </div>
             )}
@@ -139,13 +145,10 @@ export function CentralHubHeader() {
                     </div>
 
                     <div className="flex flex-col pl-4">
-                      <div className=" flex flex-row text-normal">
-                        <span className="text-normal"> Avaliação gratuita</span>
+                      <div className="flex flex-row text-normal">
+                        <span className="text-normal">Avaliação gratuita</span>
                         <span className="text-primary pl-1 font-semibold text-normal">
-                          {`encerra em ${dayjs(dataMaisSeteDias).diff(
-                            dayjs(),
-                            'days',
-                          )} dias`}
+                          {`encerra em ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''}`}
                         </span>
                       </div>
                       <p className="text-xs ">
@@ -156,10 +159,10 @@ export function CentralHubHeader() {
                   </div>
                 </Link>
                 <div className="px-2 py-2">
-                  <UpgradeDialogTrigger>
+                  <UpgradeDialogDuringSevenDays>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary"
+                      className="hidden md:flex rounded-xl text-primary pulsating-shadow"
                     >
                       <Zap
                         fill="#FF3333"
@@ -169,7 +172,7 @@ export function CentralHubHeader() {
                       ></Zap>
                       UPGRADE
                     </Button>
-                  </UpgradeDialogTrigger>
+                  </UpgradeDialogDuringSevenDays>
                 </div>
               </div>
             ) : (
@@ -194,10 +197,10 @@ export function CentralHubHeader() {
                   </div>
                 </Link>
                 <div className="px-2 py-2">
-                  <UpgradeDialogTrigger>
+                  <UpgradeDialogExpiredTrial>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary"
+                      className="hidden md:flex rounded-xl text-primary pulsating-shadow"
                     >
                       <Zap
                         fill="#FF3333"
@@ -207,7 +210,7 @@ export function CentralHubHeader() {
                       ></Zap>
                       UPGRADE
                     </Button>
-                  </UpgradeDialogTrigger>
+                  </UpgradeDialogExpiredTrial>
                 </div>
               </div>
             )}
@@ -241,10 +244,10 @@ export function CentralHubHeader() {
                     </div>
                   </Link>
                   <div className="px-2 py-2">
-                    <UpgradeDialogTrigger>
+                    <UpgradeDialogExpired>
                       <Button
                         variant="secondary"
-                        className="hidden md:flex rounded-xl text-primary"
+                        className="hidden md:flex rounded-xl text-primary pulsating-shadow"
                       >
                         <Zap
                           fill="#FF3333"
@@ -254,7 +257,7 @@ export function CentralHubHeader() {
                         ></Zap>
                         UPGRADE
                       </Button>
-                    </UpgradeDialogTrigger>
+                    </UpgradeDialogExpired>
                   </div>
                 </div>
               )}

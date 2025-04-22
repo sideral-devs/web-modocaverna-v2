@@ -2,13 +2,12 @@ import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogFooter,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { VideoPlayer } from '@/components/video-player'
 import { videos } from '@/lib/constants'
 import Image from 'next/image'
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function TutorialAffiliateDialogTrigger() {
   const [open, setOpen] = useState(false)
