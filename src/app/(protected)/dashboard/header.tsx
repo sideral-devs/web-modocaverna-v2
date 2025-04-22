@@ -57,7 +57,7 @@ export function CentralHubHeader() {
             {user.data_de_renovacao &&
             dayjs(user.data_de_renovacao) < dayjs() ? (
               <div className="flex bg-[#503e04]  rounded-xl  px-1 gap-2 items-center justify-center">
-                <Link href="settings/plans">
+                <Link href="settings/plans" prefetch={false}>
                   <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
                     <div className="flex flex-col pl-4">
                       <div>
@@ -93,7 +93,7 @@ export function CentralHubHeader() {
               </div>
             ) : (
               <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
-                <Link href="settings/plans">
+                <Link href="settings/plans" prefetch={false}>
                   <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
                     <div className="pl-2">
                       <AlarmClock color="#e9b208" />
@@ -138,7 +138,7 @@ export function CentralHubHeader() {
           <>
             {user.data_de_compra && dataMaisSeteDias >= dayjs() ? (
               <div className="flex bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
-                <Link href="settings/plans">
+                <Link href="settings/plans" prefetch={false}>
                   <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
                     <div className="pl-2">
                       <AlarmClock color="#e9b208" />
@@ -177,7 +177,7 @@ export function CentralHubHeader() {
               </div>
             ) : (
               <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
-                <Link href="settings/plans">
+                <Link href="settings/plans" prefetch={false}>
                   <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
                     <div className="pl-2">
                       <AlarmClock color="#e9b208" />
@@ -224,7 +224,7 @@ export function CentralHubHeader() {
             {user.data_de_renovacao &&
               dayjs(user.data_de_renovacao) < dayjs() && (
                 <div className="flex bg-[#503e04]  rounded-lg  px-1 gap-2 items-center justify-center">
-                  <Link href="settings/plans">
+                  <Link href="settings/plans" prefetch={false}>
                     <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
                       <div className="pl-2">
                         <AlarmClock color="#e9b208" />
