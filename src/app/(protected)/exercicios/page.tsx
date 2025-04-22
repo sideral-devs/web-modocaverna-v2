@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { useWorkouts } from "@/hooks/queries/use-exercises";
 import { useShape } from "@/hooks/queries/use-shape";
@@ -20,7 +20,13 @@ import { WEEK_DAYS } from "@/lib/constants";
 import { Pencil, Plus, Smiley, SmileySad, Trash } from "@phosphor-icons/react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { AnimatePresence, Reorder, motion, useMotionValueEvent, useScroll } from "framer-motion";
+import {
+  AnimatePresence,
+  Reorder,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { BicepsFlexed } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -73,7 +79,6 @@ export default function Page() {
     deleteWorkout,
   } = useWorkouts();
 
-
   const {
     shapeRegistrations,
     // hasRegistration,
@@ -83,10 +88,7 @@ export default function Page() {
   const firstShapeRegistration = shapeRegistrations?.[0];
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1];
-  console.log(
-    "a",
-    lastShapeRegistration
-  );
+  console.log("a", lastShapeRegistration);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 0);
@@ -184,7 +186,13 @@ export default function Page() {
           <div className="flex justify-between items-center">
             <div className="mb-8">
               <p className="text-zinc-500 text-sm">
-                Última atualização · {formattedDate}
+                {lastShapeRegistration?.updated_at
+                  ? `Última atualização · ${format(
+                      new Date(lastShapeRegistration.updated_at),
+                      "dd 'de' MMMM',' yyyy",
+                      { locale: ptBR }
+                    )}.`
+                  : "Não atualizadas"}
               </p>
               <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
             </div>
@@ -201,7 +209,6 @@ export default function Page() {
 
           <div className="flex justify-between mb-16 gap-4">
             <div className="relative w-1/2 border border-zinc-700 bg-zinc-900 rounded-lg overflow-hidden">
-              
               {lastShapeRegistration?.fotos?.[0] ? (
                 <>
                   <div className="absolute top-0 left-0 right-0 flex justify-between gap-1 p-3 z-50">
