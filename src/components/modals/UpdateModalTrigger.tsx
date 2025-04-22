@@ -39,7 +39,6 @@ export const UpgradeModalTrigger = ({ children }: { children: ReactNode }) => {
     }
   }, [user])
   // verificação para o usuário reembolso
-  console.log(isOpen, user?.status_plan, user?.plan)
   return (
     <>
       {children}
