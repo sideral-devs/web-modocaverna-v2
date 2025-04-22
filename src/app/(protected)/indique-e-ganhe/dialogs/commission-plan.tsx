@@ -8,13 +8,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useUser } from '@/hooks/queries/use-user'
 import { ReactNode } from 'react'
+import { toast } from 'sonner'
 
 export function CommissionPlanDialogTrigger({
   children,
 }: {
   children: ReactNode
 }) {
+  const { data: user } = useUser()
+  const plan = user?.plan
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -97,15 +101,29 @@ export function CommissionPlanDialogTrigger({
                 </p>
               </div>
             </div>
-            <a
-              className="pt-2"
-              href="https://redirect.lifs.app/cc-afiliacao"
-              target="_blank"
-            >
-              <Button size={'sm'} className="w-52 text-sm">
+            {plan && plan !== 'DESAFIO' ? (
+              <a
+                className="pt-2"
+                href={plan ? 'https://redirect.lifs.app/cc-afiliacao' : ''}
+                target="_blank"
+              >
+                <Button size={'sm'} className="w-52 text-sm">
+                  Solicitar Afiliação
+                </Button>
+              </a>
+            ) : (
+              <Button
+                size={'sm'}
+                onClick={() => {
+                  toast.warning(
+                    'Assine o Plano Cavernoso para poder se afiliar a este produto.',
+                  )
+                }}
+                className="w-52 text-sm mt-2"
+              >
                 Solicitar Afiliação
               </Button>
-            </a>
+            )}
           </Card>
           <div className="bg-yellow-500 flex justify-between  bg-opacity-20 rounded-lg ">
             <div className="flex flex-row items-center justify-center p-4 pe-2 gap-2">
