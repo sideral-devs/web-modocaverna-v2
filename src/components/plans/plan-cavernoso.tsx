@@ -15,6 +15,7 @@ interface PlanCavernosoProps {
   setSelectedPlan: (plan: 'yearly' | 'monthly') => void
   isUpdatePlan: boolean
   getPlanUrl: () => string
+  isOnboarding?: boolean
 }
 
 const PLAN_FEATURES = [
@@ -42,6 +43,7 @@ export function PlanCavernoso({
   setSelectedPlan,
   isUpdatePlan,
   getPlanUrl,
+  isOnboarding,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
   const [showAllBenefits, setShowAllBenefits] = useState(false)
@@ -56,6 +58,7 @@ export function PlanCavernoso({
         'flex flex-col transition-all duration-700 h-[800px] overflow-hidden w-full bg-zinc-900  rounded-3xl border',
         showAllBenefits && 'h-auto',
         isAnnualPlan && 'h-auto',
+        isOnboarding && '3xl:h-[650px] h-[550px]',
       )}
     >
       <div className="flex flex-col relative gap-2">
@@ -112,7 +115,10 @@ export function PlanCavernoso({
           <div className="flex px-3 mb-3 items-center flex-col gap-2">
             <Button
               onClick={() => window.open(getPlanUrl(), '_blank')}
-              className="w-full text-base h-[70px]"
+              className={cn(
+                'w-full text-base h-[70px]',
+                isOnboarding && 'h-[60px]',
+              )}
             >
               Fazer upgrade <Lightning className="!w-4 !h-4" weight="fill" />{' '}
             </Button>
@@ -163,7 +169,12 @@ export function PlanCavernoso({
             </div>
           </div>
         )}
-        <ul className="flex flex-col gap-4 p-6">
+        <ul
+          className={cn(
+            'flex flex-col gap-4 p-6',
+            isOnboarding && 'overflow-y-auto scrollbar-minimal',
+          )}
+        >
           <h3 className="text-zinc-400 mb-2">
             {isAnnualPlan
               ? 'Ferramentas inclusas no seu plano:'
@@ -194,7 +205,7 @@ export function PlanCavernoso({
             </div>
           )}
         </ul>
-        {!showAllBenefits && !isAnnualPlan && (
+        {!showAllBenefits && !isAnnualPlan && !isOnboarding && (
           <div className="absolute flex items-end pb-8 justify-center bottom-0 w-full h-52 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent">
             <span
               onClick={() => setShowAllBenefits(true)}
