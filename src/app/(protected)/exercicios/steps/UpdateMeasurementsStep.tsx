@@ -397,7 +397,9 @@ export function UpdateMeasurementsStep({
       imc: numericData.imc,
       nivel_satisfacao: data.nivel_satisfacao,
       objetivo: lastShapeRegistration?.objetivo,
+      fotos: lastShapeRegistration?.fotos,
     }
+
 
     handleNext(finalData)
   }

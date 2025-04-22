@@ -26,7 +26,7 @@ interface ShapeFormData {
   nivel_satisfacao: string
   objetivo: string
   peso_meta: number
-  photos: string[]
+  fotos: string[]
 }
 
 interface ShapeFormStore {
@@ -61,7 +61,7 @@ const initialState: ShapeFormData = {
   nivel_satisfacao: '',
   objetivo: '',
   peso_meta: 0,
-  photos: [],
+  fotos: [],
 }
 
 export const useShapeFormStore = create<ShapeFormStore>((set) => ({

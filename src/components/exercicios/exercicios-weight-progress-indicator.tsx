@@ -8,8 +8,9 @@ type WeightData = {
 }
 
 type ProgressBarProps = {
+  currentWeight: number
+  targetWeight: number
   totalBars: number
-  completedBars: number
 }
 
 type WeightDisplayProps = {
@@ -19,37 +20,36 @@ type WeightDisplayProps = {
 }
 
 // Helper functions
-const calculateProgress = (firstRegistrationWeight: number, currentWeight: number, targetWeight: number, lastWeight?: number) => {
+const calculateProgress = (currentWeight: number, targetWeight: number) => {
   const totalBars = 50
-  const completedWeight = Math.abs(currentWeight - firstRegistrationWeight)
-  const totalWeightToGoal = Math.abs(targetWeight - firstRegistrationWeight)
-  const progressPercentage = (completedWeight / totalWeightToGoal) * 100
+  const startWeight = Math.max(currentWeight, targetWeight)
+  const weightDifference = Math.abs(currentWeight - targetWeight)
+  const progressPercentage = (weightDifference / startWeight) * 100
   const completedBars = Math.floor((progressPercentage / 100) * totalBars)
 
   return {
     totalBars,
-    completedBars,
-    progressPercentage
+    completedBars: totalBars - completedBars // Invert the completed bars since we want more yellow as we get closer
   }
 }
 
 // Components
-const ProgressBar = ({ totalBars, completedBars }: ProgressBarProps) => (
-  <div className="flex w-full gap-2 flex-row">
-    {Array.from({ length: totalBars }).map((_, i) => {
-      const progressPercent = (200 - 120) / (200 - 70) * 100 // Calculate progress from 200 to 70
-      const completedBars = Math.floor((progressPercent / 100) * totalBars)
-      return (
+const ProgressBar = ({ currentWeight, targetWeight, totalBars }: ProgressBarProps) => {
+  const { completedBars } = calculateProgress(currentWeight, targetWeight)
+  
+  return (
+    <div className="flex w-full gap-2 flex-row">
+      {Array.from({ length: totalBars }).map((_, i) => (
         <div
           key={i}
           className={`h-16 w-full rounded-full ${
             i < completedBars ? 'bg-yellow-500' : 'bg-zinc-700'
           }`}
         />
-      )
-    })}
-  </div>
-)
+      ))}
+    </div>
+  )
+}
 
 const WeightDisplay = ({ label, value, unit }: WeightDisplayProps) => (
   <div className="flex flex-col h-16 justify-between">
@@ -74,15 +74,7 @@ export function WeightProgressIndicator({
   targetWeight: number
 }) {
   const { shapeRegistrations } = useShape()
-  const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
-  const penultimateShapeRegistration = shapeRegistrations?.[shapeRegistrations.length - 2]
-
-  const { totalBars, completedBars } = calculateProgress(
-    currentWeight,
-    targetWeight,
-    penultimateShapeRegistration?.peso
-  )
 
   return (
     <div className="mt-8 bg-zinc-800/50 rounded-lg">
@@ -94,14 +86,15 @@ export function WeightProgressIndicator({
 
         <div className="flex-1 mx-12">
           <ProgressBar 
-            totalBars={totalBars} 
-            completedBars={completedBars} 
+            currentWeight={currentWeight}
+            targetWeight={targetWeight}
+            totalBars={50}
           />
         </div>
 
         <WeightDisplay 
           label="Meta" 
-          value={lastShapeRegistration?.peso_meta || 0} 
+          value={targetWeight || 0} 
           unit="kg" 
         />
       </div>

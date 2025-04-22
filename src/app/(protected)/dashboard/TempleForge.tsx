@@ -30,6 +30,8 @@ export function TempleForge({ value }: { value: string }) {
   const dayName = format(today, "EEEE", { locale: ptBR });
   const formattedTime = "12h30 - 14h10";
 
+
+
   // // Filter workouts for today
   const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex;
 
