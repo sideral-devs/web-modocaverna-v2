@@ -15,26 +15,28 @@ const schema = z.object({
   DDI: z
     .string({ required_error: 'Campo obrigatório' })
     .regex(/^\+[1-9]{1,3}$/, { message: 'Insira um DDI válido' }),
-  cellphone: z
-    .string({ required_error: 'Campo obrigatório' })
-    .regex(/^\([1-9]{2}\) (?:[2-8]|9[0-9])[0-9]{3}-[0-9]{4}$/, {
-      message: 'Insira um número válido',
-    })
-    .transform((value) => value.replace(/^\+55/, '').trim()),
+  cellphone: z.string({ required_error: 'Campo obrigatório' }),
 })
 
 type FormData = z.infer<typeof schema>
 
+function separarDdiENumero(telefone: string): { ddi: string; numero: string } {
+  const limpo = telefone.replace(/\D/g, '') // remove tudo que não é número
+  const ddi = `+${limpo.slice(0, 2)}`
+  const numero = limpo.slice(2)
+  return { ddi, numero }
+}
+
 export function CellphoneStep({ onNext }: { onNext: () => void }) {
   const { data: user } = useUser()
   const { setCellphone } = useOnboardingStore()
+  const telefone = user?.telefone || ''
+  const { ddi, numero } = separarDdiENumero(telefone)
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      DDI: '+55',
-      cellphone: cellphoneMask(
-        user?.telefone ? user.telefone.replace(/^\+55/, '').trim() : '',
-      ),
+      DDI: ddi,
+      cellphone: cellphoneMask(numero),
     },
   })
 
@@ -56,7 +58,10 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.status !== 500) {
-          throw err
+          setError('cellphone', {
+            message: 'Esse número de whatsapp não existe',
+          })
+          return
         }
       } else {
         toast.error('Erro inexperado ao atualizar dados do usuário!')

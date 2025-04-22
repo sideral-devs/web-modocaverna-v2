@@ -18,14 +18,11 @@ const schema = z.object({
       /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
       'Por favor, insira um e-mail válido',
     ),
+
   DDI: z
     .string({ required_error: 'Campo obrigatório' })
     .regex(/^\+[1-9]{1,3}$/, { message: 'Insira um DDI válido' }),
-  cellphone: z
-    .string({ required_error: 'Campo obrigatório ' })
-    .regex(/^\([1-9]{2}\) (?:[2-8]|9[0-9])[0-9]{3}-[0-9]{4}$/, {
-      message: 'Número inválido',
-    }),
+  cellphone: z.string({ required_error: 'Campo obrigatório' }),
 })
 
 type RegisterData = z.infer<typeof schema>
@@ -70,7 +67,10 @@ export function RegisterStep({
       } catch (err) {
         if (err instanceof AxiosError) {
           if (err.response?.status !== 500) {
-            throw err
+            setError('cellphone', {
+              message: 'Esse número de whatsapp não existe',
+            })
+            return
           }
         } else {
           toast.error('Erro inexperado ao atualizar dados do usuário!')
