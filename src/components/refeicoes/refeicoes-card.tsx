@@ -17,13 +17,7 @@ interface MealCardProps {
   isLast?: boolean
 }
 
-export function MealCard({
-  meal,
-  onEdit,
-  onDelete,
-  isFirst,
-  isLast,
-}: MealCardProps) {
+export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
   return (
     <div className="relative flex gap-8">
       {/* Timeline */}

@@ -2,7 +2,6 @@
 
 import { Meal } from '@/lib/api/meals'
 import { BowlFood } from '@phosphor-icons/react'
-import { useMotionValue } from 'framer-motion'
 
 interface MealCardProps {
   meal: Meal
@@ -10,9 +9,7 @@ interface MealCardProps {
   onEdit: () => void
 }
 
-export function MealCardHub({ meal, dayIndex, onEdit }: MealCardProps) {
-  const y = useMotionValue(0)
-
+export function MealCardHub({ meal }: MealCardProps) {
   return (
     <>
       <div className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800">

@@ -1,7 +1,7 @@
 'use client'
 
 import { Exercise } from '@/lib/api/exercises'
-import { useMotionValue } from 'framer-motion'
+// import { useMotionValue } from 'framer-motion'
 import { BicepsFlexed } from 'lucide-react'
 
 interface ExerciseCardProps {
@@ -12,10 +12,10 @@ interface ExerciseCardProps {
 
 export function ExerciseCardHub({
   exercise,
-  workoutIndex,
-  onEdit,
+  // workoutIndex,
+  // onEdit,
 }: ExerciseCardProps) {
-  const y = useMotionValue(0)
+  // const y = useMotionValue(0)
 
   return (
     <>

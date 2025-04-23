@@ -19,16 +19,15 @@ export function TempleForge({ value }: { value: string }) {
   const {
     shapeRegistrations,
     // hasRegistration,
-    isLoading: isLoadingShape,
   } = useShape()
 
-  const firstShapeRegistration = shapeRegistrations?.[0]
+  // const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1]
 
   const today = new Date()
   const dayName = format(today, 'EEEE', { locale: ptBR })
-  const formattedTime = '12h30 - 14h10'
+  // const formattedTime = '12h30 - 14h10'
 
   // // Filter workouts for today
   const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex

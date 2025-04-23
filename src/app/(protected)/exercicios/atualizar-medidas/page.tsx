@@ -1,8 +1,6 @@
 'use client'
 
 import { ProtectedRoute } from '@/components/protected-route'
-import { useUser } from '@/hooks/queries/use-user'
-import { useOnboardingStore } from '@/store/onboarding'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -16,11 +14,13 @@ import { useShape } from '@/hooks/queries/use-shape'
 export default function Page() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: user } = useUser()
-  const [isLoading, setIsLoading] = useState(false)
+  // const { data: user } = useUser()
+  // const [isLoading, setIsLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
-  const [measurementsData, setMeasurementsData] = useState<any>(null)
-  const { cellphone } = useOnboardingStore()
+  // @ts-expect-error: tipagem propositalmente ignorada (refatorar depois)
+  const [measurementsData, setMeasurementsData] = useState(null as any)
+
+  // const { cellphone } = useOnboardingStore()
   const { shapeRegistrations } = useShape()
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1]
@@ -56,7 +56,7 @@ export default function Page() {
 
   async function handlePhotosNext(data: any) {
     try {
-      setIsLoading(true)
+      // setIsLoading(true)
       // Merge measurements and photos data
       const finalData = {
         ...measurementsData,
@@ -69,7 +69,7 @@ export default function Page() {
       console.log(error)
       toast.error('Algo deu errado. Tente novamente.')
     } finally {
-      setIsLoading(false)
+      // setIsLoading(false)
     }
   }
 

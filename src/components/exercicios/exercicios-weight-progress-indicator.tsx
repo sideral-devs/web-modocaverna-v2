@@ -1,11 +1,11 @@
-import { useShape } from '@/hooks/queries/use-shape'
+// import { useShape } from '@/hooks/queries/use-shape'
 
 // Types
-type WeightData = {
-  currentWeight: number
-  targetWeight: number
-  lastWeight?: number
-}
+// type WeightData = {
+//   currentWeight: number
+//   targetWeight: number
+//   lastWeight?: number
+// }
 
 type ProgressBarProps = {
   currentWeight: number
@@ -86,9 +86,9 @@ export function WeightProgressIndicator({
   currentWeight: number
   targetWeight: number
 }) {
-  const { shapeRegistrations } = useShape()
-  const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1]
+  // const { shapeRegistrations } = useShape()
+  // const lastShapeRegistration =
+  //   shapeRegistrations?.[shapeRegistrations.length - 1]
 
   return (
     <div className="mt-8 bg-zinc-800/50 rounded-lg">

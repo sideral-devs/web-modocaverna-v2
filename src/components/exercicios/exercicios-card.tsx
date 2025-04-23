@@ -1,16 +1,7 @@
 'use client'
 
-import { DotsThree } from '@phosphor-icons/react'
 import { Reorder, useMotionValue } from 'framer-motion'
 import { Exercise } from '@/lib/api/exercises'
-import { useWorkouts } from '@/hooks/queries/use-exercises'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 import { BicepsFlexed } from 'lucide-react'
 
 interface ExerciseCardProps {
@@ -19,11 +10,7 @@ interface ExerciseCardProps {
   onEdit: () => void
 }
 
-export function ExerciseCard({
-  exercise,
-  workoutIndex,
-  onEdit,
-}: ExerciseCardProps) {
+export function ExerciseCard({ exercise }: ExerciseCardProps) {
   const y = useMotionValue(0)
 
   return (

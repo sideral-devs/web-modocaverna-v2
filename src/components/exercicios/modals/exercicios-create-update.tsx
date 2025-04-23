@@ -29,7 +29,7 @@ export function ExerciciosCreateUpdate({
   onClose,
   isEdit,
 }: ExerciciosCreateUpdateProps) {
-  const { workouts, isLoading: isLoadingWorkouts } = useWorkouts()
+  // const { workouts, isLoading: isLoadingWorkouts } = useWorkouts()
   const { createWorkout, updateWorkout } = useWorkouts()
   const [exercises, setExercises] = useState<Exercise[]>(
     workout?.exercicios || [],
