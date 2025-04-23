@@ -3,6 +3,7 @@ import { PostCard } from '@/components/community/post-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { SiInstagram } from '@icons-pack/react-simple-icons'
@@ -13,7 +14,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { use, useState } from 'react'
 import { EditProfileDialog } from './edit-profile-dialog'
-import { useUser } from '@/hooks/queries/use-user'
 
 export default function ProfilePage({
   params,
@@ -22,7 +22,7 @@ export default function ProfilePage({
 }) {
   const { id } = use(params)
   const [isOpen, setIsOpen] = useState(false)
-  const { data: user } = useUser()
+  const { data: currentUser } = useUser()
 
   const { data } = useQuery({
     queryKey: ['posts', id],
@@ -46,7 +46,7 @@ export default function ProfilePage({
     <div>
       <div className="grid grid-cols-1 xl:flex gap-6">
         <div className="h-fit xl:min-w-[390px] relative rounded-lg border overflow-hidden">
-          {profile && user && user.id === profile?.user_id && (
+          {profile && currentUser && currentUser.id === profile?.user_id && (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Pen
@@ -99,7 +99,7 @@ export default function ProfilePage({
             </div>
             {profile ? (
               <div className="flex flex-col w-full xl:items-center pt-10 gap-4">
-                <div className="flex flex-col xl:max-w-60  gap-4">
+                <div className="flex flex-col xl:max-w-60 gap-4">
                   <h2 className="text-xl font-semibold xl:text-center">
                     {profile.nickname}
                   </h2>

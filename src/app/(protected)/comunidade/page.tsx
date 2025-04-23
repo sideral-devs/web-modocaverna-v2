@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 
 export default function HomePage() {
   const queryClient = useQueryClient()
+  const [currentTab, setCurrentTab] = useState('Geral')
   const [buttonLoading, setButtonLoading] = useState(false)
   const [page, setPage] = useState(1)
 
@@ -27,6 +28,8 @@ export default function HomePage() {
 
   async function loadMore() {
     if (!data || isLoading) return
+
+    if (page >= data.last_page) return
 
     setButtonLoading(true)
     try {
@@ -48,6 +51,8 @@ export default function HomePage() {
     }
   }
 
+  console.log(JSON.stringify(data, null, 2))
+
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full flex-1 items-center">
@@ -57,33 +62,34 @@ export default function HomePage() {
           {data ? (
             <div>
               <Tabs
-                defaultValue="general"
+                value={currentTab}
+                onValueChange={setCurrentTab}
                 className="md:w-full overflow-x-scroll no-scrollbar"
               >
                 <TabsList className="w-full grid grid-cols-4 rounded-none border-b overflow-x-scroll no-scrollbar">
                   <TabsTrigger
-                    value="general"
+                    value="Geral"
                     className="p-4 min-w-24 relative data-[state=active]:bg-transparent group"
                   >
                     Geral
                     <div className="absolute w-0 h-[1px] bottom-0 bg-primary group-data-[state=active]:w-6 transition-all duration-200" />
                   </TabsTrigger>
                   <TabsTrigger
-                    value="experiences"
+                    value="Experiência"
                     className="p-4 min-w-24 relative data-[state=active]:bg-transparent group"
                   >
                     Experiências
                     <div className="absolute w-0 h-[1px] bottom-0 bg-primary group-data-[state=active]:w-6 transition-all duration-200" />
                   </TabsTrigger>
                   <TabsTrigger
-                    value="indications"
+                    value="Indicações"
                     className="p-4 min-w-24 relative data-[state=active]:bg-transparent group"
                   >
                     Indicações
                     <div className="absolute w-0 h-[1px] bottom-0 bg-primary group-data-[state=active]:w-6 transition-all duration-200" />
                   </TabsTrigger>
                   <TabsTrigger
-                    value="opportunities"
+                    value="Oportunidades"
                     className="p-4 min-w-24 relative data-[state=active]:bg-transparent group"
                   >
                     Oportunidades
@@ -91,7 +97,7 @@ export default function HomePage() {
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="general" className="mt-0">
+                <TabsContent value="Geral" className="mt-0">
                   <div>
                     {data.data.map((post) => (
                       <div key={post.id} className="border-b">
@@ -101,7 +107,7 @@ export default function HomePage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="experiences" className="mt-0">
+                <TabsContent value="Experiência" className="mt-0">
                   <div>
                     {data.data
                       .filter((post) => post.category === 'Experiência')
@@ -113,7 +119,7 @@ export default function HomePage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="indications" className="mt-0">
+                <TabsContent value="Indicações" className="mt-0">
                   <div>
                     {data.data
                       .filter((post) => post.category === 'Indicações')
@@ -125,7 +131,7 @@ export default function HomePage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="opportunities" className="mt-0">
+                <TabsContent value="Oportunidades" className="mt-0">
                   <div>
                     {data.data
                       .filter((post) => post.category === 'Oportunidades')
@@ -152,14 +158,21 @@ export default function HomePage() {
             </div>
           )}
         </div>
-        <Button
-          variant="outline"
-          onClick={loadMore}
-          className="mt-6"
-          disabled={buttonLoading}
-        >
-          Carregar mais
-        </Button>
+        {data &&
+          data.data.length > 0 &&
+          (currentTab === 'Geral' ||
+            data.data.filter((post) => post.category === currentTab).length >
+              0) &&
+          page < data.last_page && (
+            <Button
+              variant="outline"
+              onClick={loadMore}
+              className="mt-6"
+              disabled={buttonLoading}
+            >
+              Carregar mais
+            </Button>
+          )}
       </div>
     </UpgradeModalTrigger>
   )
