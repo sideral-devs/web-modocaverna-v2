@@ -32,12 +32,7 @@ export default function GoalCard({
     },
   })
   const messagesQuadroSonhos = [
-    'Adicione imagens que te inspirem e representem o que você quer conquistar, como momentos com a família.',
-    'Preencha com fotos que refletem suas aspirações, incluindo momentos importantes com a família.',
-    'Visualize o que você deseja alcançar com imagens que te inspirem, como a sua família.',
-    'Adicione fotos que representam o que você quer conquistar, como os laços familiares.',
-    'Adicione imagens que simbolizem o que te inspira, como momentos com quem você ama.',
-    'Adicione fotos que representem suas conquistas e o apoio da família.',
+    'Quero viver experiências enriquecedoras e conhecer diferentes culturas ao redor do mundo. Desejo viajar para países diversos e fazer amizades com pessoas de várias partes do globo.',
   ]
 
   useEffect(() => {
@@ -93,15 +88,24 @@ export default function GoalCard({
         </div>
       ) : (
         <div className="flex flex-col  flex-1 items-center justify-center md:justify-center md:pt-0">
-          <div className="flex flex-row max-w-80 items-center">
+          <div className=" flex flex-col max-w-80 items-start">
             <Image
               height={40}
               width={40}
               alt="Quote"
               src={'/icons/quote.svg'}
-              className="relative bottom-8 right-2"
+              className="relative  right-2"
             />
-            <p className="text-base text-center mt-2"> {dreamboardMessage} </p>
+            <p className="text-base w-80 text-center mt-2 line-clamp-5 overflow-hidden">
+              {dreamboardMessage}
+            </p>
+            <Image
+              className=" translate-x-72 bottom-5"
+              height={40}
+              width={40}
+              alt="Quote"
+              src={'/icons/quote-revers.svg'}
+            />
           </div>
         </div>
       )}
