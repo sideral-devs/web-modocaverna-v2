@@ -205,7 +205,7 @@ export default function Page() {
                 loading={isSubmitting}
                 onClick={handleSubmit(handleEditUser)}
               >
-                Salvar
+                Atualizar Dados
               </Button>
             ) : (
               <Button
@@ -213,7 +213,7 @@ export default function Page() {
                 loading={isSubmitting}
                 onClick={() => setIsEditing(true)}
               >
-                Atualizar dados
+              Alterar Dados
               </Button>
             )}
           </div>
