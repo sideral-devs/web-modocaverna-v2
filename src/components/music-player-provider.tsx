@@ -139,7 +139,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       {children}
       {allowedRoutes.includes(pathname)
         ? (!ruledRoutes.includes(pathname) ||
-            (ruledRoutes.includes(pathname) && currentSong)) && (
+            (ruledRoutes.includes(pathname) && currentSong && isPlaying)) && (
             <>
               <MusicPlayer />
               <PlaylistDialog />
