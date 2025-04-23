@@ -4,6 +4,17 @@ import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Info, Warning } from '@phosphor-icons/react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { useShapeFormStore } from '@/store/shape-form'
+
+import { toast } from 'sonner'
+import { api } from '@/lib/api'
+
+type IMCStatus = {
+  label: string
+  color: string
+  message: string
+  icon: React.ReactNode
+}
 
 export function AnalysisResultsStep({
   onBack,
@@ -23,7 +34,7 @@ export function AnalysisResultsStep({
         label: 'IMC NÃO DISPONÍVEL',
         color: 'red',
         message: 'Não foi possível calcular o IMC.',
-        icon: <Warning className="w-4 h-4 text-red-500" />, 
+        icon: <Warning className="w-4 h-4 text-red-500" />,
       }
     }
 
@@ -83,7 +94,7 @@ export function AnalysisResultsStep({
 
       // Set IMC to 0 if NaN
       if (isNaN(imc)) {
-        finalData.imc = 0.00
+        finalData.imc = 0.0
       }
 
       console.log(finalData)
@@ -100,7 +111,7 @@ export function AnalysisResultsStep({
   }
 
   return (
-    <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
+    <div className="flex flex-col w-[632px] flex-1 relative items-center p-4 3xl:pb-16 gap-12">
       <div className="flex items-start gap-16">
         <Image
           src={'/images/lobo/apresentando.png'}
@@ -120,12 +131,14 @@ export function AnalysisResultsStep({
 
           <div className="flex flex-col w-full max-w-3xl gap-4">
             <div className="flex w-full gap-4">
-              <div className="flex flex-1 items-center justify-between bg-red-950/50 pl-4 pr-8 py-6 rounded-lg border border-red-900/50">
+              <div
+                className={`flex flex-1 items-center justify-between bg-${imcStatus.color}-950/50 pl-4 pr-8 py-6 rounded-lg border border-${imcStatus.color}-900/50`}
+              >
                 <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-lg">
-                    <Warning className="w-4 h-4 text-red-500" />
-                  </div>
-                  <span className="text-red-500 font-medium">IMC ALTO.</span>
+                  <div className="p-2 rounded-lg">{imcStatus.icon}</div>
+                  <span className={`text-${imcStatus.color}-500 font-medium`}>
+                    {imcStatus.label}
+                  </span>
                 </div>
                 <span
                   className={`text-2xl text-${imcStatus.color}-500 font-medium`}
@@ -146,11 +159,26 @@ export function AnalysisResultsStep({
                   </span>
                 </div>
                 <span className="text-2xl text-yellow-500 font-medium">
-                  2140
+                  {Math.round(data.peso * 30)}
                 </span>
               </div>
             </div>
-            <span className="text-zinc-400">Posso te dar um conselho?</span>
+
+            <div className="flex w-full gap-4">
+              <div className="flex flex-1 items-center justify-between bg-zinc-950/20 pl-4 pr-8 py-6 rounded-lg border border-zinc-900/50">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 rounded-lg">
+                    <Info className="w-4 h-4 text-zinc-500" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-zinc-500 font-medium">
+                      {imcStatus.message}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex w-full gap-4">
               <div className="flex flex-1 items-center justify-between bg-yellow-950/20 pl-4 pr-8 py-6 rounded-lg border border-yellow-900/50">
                 <div className="flex items-center gap-4">
@@ -188,7 +216,7 @@ export function AnalysisResultsStep({
           >
             Voltar
           </Button>
-          <AutoSubmitButton onClick={onFinish}>
+          <AutoSubmitButton onClick={handleFinish}>
             Organizar exercícios
           </AutoSubmitButton>
         </div>

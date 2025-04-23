@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useShapeFormStore } from '@/store/shape-form'
 import { cn } from '@/lib/utils'
 import {
   Smiley,
@@ -30,10 +31,11 @@ interface ShapePhoto {
 }
 
 type FormData = {
-  photos: ShapePhoto[]
-  satisfaction: string
-  weightGoal: 'perder' | 'manter' | 'ganhar' | ''
-  targetWeight: string
+  fotos: ShapePhoto[]
+  nivel_satisfacao: string
+  objetivo: string
+  peso_meta: string
+  texto_meta: string
 }
 
 export function ShapeGoalsStep({
@@ -43,17 +45,20 @@ export function ShapeGoalsStep({
   onNext: () => void
   onBack: () => void
 }) {
+  const { setData } = useShapeFormStore()
+
   const form = useForm<FormData>({
     defaultValues: {
-      photos: [],
-      satisfaction: '',
-      weightGoal: '',
-      targetWeight: '',
+      fotos: [],
+      nivel_satisfacao: '',
+      objetivo: '',
+      peso_meta: '',
+      texto_meta: '',
     },
   })
 
   const { setValue, watch } = form
-  const { photos, satisfaction, weightGoal, targetWeight } = watch()
+  const { fotos, nivel_satisfacao, objetivo, peso_meta, texto_meta } = watch()
 
   const photoTypes: { type: PhotoType; label: string }[] = [
     { type: 'frontal', label: 'Frontal' },
@@ -63,15 +68,16 @@ export function ShapeGoalsStep({
   ]
 
   // Check if all required photos are uploaded
-  const hasAllPhotos = photoTypes.every(({ type }) => 
-    photos.some(photo => photo.type === type)
+  const hasAllPhotos = photoTypes.every(({ type }) =>
+    fotos.some((photo) => photo.type === type),
   )
 
-  const hasFilledAllFields = nivel_satisfacao && objetivo && peso_meta && texto_meta
+  const hasFilledAllFields =
+    nivel_satisfacao && objetivo && peso_meta && texto_meta
 
   async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)
-    
+
     // Convert to base64
     const base64 = await new Promise<string>((resolve) => {
       const reader = new FileReader()
@@ -82,8 +88,8 @@ export function ShapeGoalsStep({
       reader.readAsDataURL(file)
     })
 
-    const newPhotos = photos.filter((photo) => photo.type !== type)
-    setValue('photos', [...newPhotos, { url, type, base64 }])
+    const newPhotos = fotos.filter((photo) => photo.type !== type)
+    setValue('fotos', [...newPhotos, { url, type, base64 }])
   }
 
   function onSubmit(data: FormData) {
@@ -92,7 +98,7 @@ export function ShapeGoalsStep({
       objetivo: data.objetivo,
       peso_meta: parseFloat(data.peso_meta) || 0,
       texto_meta: data.texto_meta,
-      photos: data.photos.map(photo => photo.base64),
+      fotos: data.fotos.map((photo) => photo.base64),
     })
     onNext()
   }
@@ -104,18 +110,22 @@ export function ShapeGoalsStep({
           <div className="flex mb-4 flex-col gap-2">
             <h2 className="text-2xl font-medium">Registre seu progresso</h2>
             <p className="text-zinc-400 font-normal">
-              Faça upload do seu shape atual abaixo para comparação futura (todas as fotos são obrigatórias)
+              Faça upload do seu shape atual abaixo para comparação futura
+              (todas as fotos são obrigatórias)
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-0">
             <div className="flex justify-between gap-4">
-              {photoTypes.map((photoType) => (
-                <div key={photoType.type} className="flex flex-col gap-2">
+              {photoTypes.map((photoType, index) => (
+                <div
+                  key={index}
+                  className="flex w-full min-h-[200px] flex-col gap-2"
+                >
                   <div className="relative group w-28 h-32 aspect-square rounded-2xl border border-zinc-700 overflow-hidden">
-                    {photos.find((p) => p.type === photoType.type) ? (
+                    {fotos.find((p) => p.type === photoType.type) ? (
                       <Image
-                        src={photos.find((p) => p.type === photoType.type)!.url}
+                        src={fotos.find((p) => p.type === photoType.type)!.url}
                         alt={photoType.label}
                         fill
                         className="object-cover"
@@ -152,37 +162,40 @@ export function ShapeGoalsStep({
               Qual o nível de satisfação com seu shape?
             </h3>
             <Select
-              value={satisfaction}
-              onValueChange={(value) => setValue('satisfaction', value)}
+              value={nivel_satisfacao}
+              onValueChange={(value) => setValue('nivel_satisfacao', value)}
             >
               <SelectTrigger className="bg-zinc-800 border border-zinc-700 py-6 rounded-lg flex items-center gap-2">
                 <SelectValue placeholder="Selecione uma opção" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-800 border border-zinc-700">
-                <SelectItem value="not_satisfied" className="!hover:bg-red-500">
+                <SelectItem
+                  value="Não satisfeito"
+                  className="!hover:bg-red-500"
+                >
                   <div className="flex h-10 items-center gap-2">
                     <SmileyAngry className="w-6 h-6 text-zinc-500" />
                     <span>Não satisfeito</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="partially_satisfied">
+                {/* <SelectItem value="Parcialmente satisfeito">
                   <div className="flex items-center gap-2">
                     <SmileyMeh className="w-6 h-6 text-zinc-500" />
                     <span>Parcialmente satisfeito</span>
                   </div>
-                </SelectItem>
-                <SelectItem value="satisfied">
+                </SelectItem> */}
+                <SelectItem value="Satisfeito">
                   <div className="flex items-center gap-2">
                     <Smiley className="w-6 h-6 text-zinc-500" />
                     <span>Satisfeito</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="very_satisfied">
+                {/* <SelectItem value="Muito satisfeito">
                   <div className="flex items-center gap-2">
                     <SmileyWink className="w-6 h-6 text-zinc-500" />
                     <span>Muito satisfeito</span>
                   </div>
-                </SelectItem>
+                </SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -190,7 +203,7 @@ export function ShapeGoalsStep({
           <div
             className={cn(
               'flex flex-col gap-2 pb-6',
-              weightGoal ? ' border-b border-zinc-700' : 'border-b-0 pb-0',
+              objetivo ? ' border-b border-zinc-700' : 'border-b-0 pb-0',
             )}
           >
             <h3 className="text-normal font-medium">Qual seu objetivo?</h3>
@@ -199,18 +212,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'perder' && 'border-zinc-700',
+                  objetivo === 'Perder peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'perder')}
+                onClick={() => setValue('objetivo', 'Perder peso')}
               >
                 <span className="text-sm font-normal">Perder peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'perder' && 'border-red-500',
+                    objetivo === 'Perder peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'perder' && (
+                  {objetivo === 'Perder peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -219,18 +232,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'manter' && 'border-zinc-700',
+                  objetivo === 'Manter peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'manter')}
+                onClick={() => setValue('objetivo', 'Manter peso')}
               >
                 <span className="text-sm font-normal">Manter peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'manter' && 'border-red-500',
+                    objetivo === 'Manter peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'manter' && (
+                  {objetivo === 'Manter peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -239,18 +252,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'ganhar' && 'border-zinc-700',
+                  objetivo === 'Ganhar peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'ganhar')}
+                onClick={() => setValue('objetivo', 'Ganhar peso')}
               >
                 <span className="text-sm font-normal">Ganhar peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'ganhar' && 'border-red-500',
+                    objetivo === 'Ganhar peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'ganhar' && (
+                  {objetivo === 'Ganhar peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -258,20 +271,32 @@ export function ShapeGoalsStep({
             </div>
           </div>
 
-          {weightGoal && weightGoal !== 'manter' && (
+          {objetivo && objetivo !== 'Manter peso' && (
             <div className="flex flex-col gap-2">
-              <h3 className="text-normal font-medium">Qual sua meta de peso?</h3>
+              <h3 className="text-normal font-medium">
+                Qual sua meta de peso?
+              </h3>
               <InputWithSuffix
                 type="number"
-                value={targetWeight}
-                onChange={(e) => setValue('targetWeight', e.target.value)}
+                value={peso_meta}
+                onChange={(e) => setValue('peso_meta', e.target.value)}
                 className="bg-zinc-800 border-none max-w-[100px]"
                 suffix="kg"
               />
             </div>
           )}
 
-          <div className="flex justify-center fixed bg-black bottom-0 w-full border-t left-0 pb-4 pt-4">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-normal font-medium">Descreva sua meta</h3>
+            <textarea
+              value={texto_meta}
+              onChange={(e) => setValue('texto_meta', e.target.value)}
+              className="bg-zinc-800 border border-zinc-700 rounded-lg p-4 min-h-[100px] resize-none"
+              placeholder="Descreva aqui sua meta de forma detalhada..."
+            />
+          </div>
+
+          <div className="flex justify-center fixed bg-black bottom-0 w-full border-t left-0 py-4 pt-6">
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -282,7 +307,7 @@ export function ShapeGoalsStep({
               >
                 Voltar
               </Button>
-              <AutoSubmitButton 
+              <AutoSubmitButton
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={!hasAllPhotos || !hasFilledAllFields}
               >
