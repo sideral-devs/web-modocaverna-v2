@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { ExerciseCard } from "@/components/exercicios/exercicios-card";
-import { WeightProgressIndicator } from "@/components/exercicios/exercicios-weight-progress-indicator";
-import { ExerciciosCreateUpdate } from "@/components/exercicios/modals/exercicios-create-update";
-import { Header, HeaderClose } from "@/components/header";
-import { Button } from "@/components/ui/button";
+import { ExerciseCard } from '@/components/exercicios/exercicios-card'
+import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
+import { ExerciciosCreateUpdate } from '@/components/exercicios/modals/exercicios-create-update'
+import { Header, HeaderClose } from '@/components/header'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -12,93 +12,93 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useWorkouts } from "@/hooks/queries/use-exercises";
-import { useShape } from "@/hooks/queries/use-shape";
-import type { Exercise, Workout } from "@/lib/api/exercises";
-import { WEEK_DAYS } from "@/lib/constants";
-import { Pencil, Plus, Smiley, SmileySad, Trash } from "@phosphor-icons/react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+} from '@/components/ui/dialog'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { useShape } from '@/hooks/queries/use-shape'
+import type { Exercise, Workout } from '@/lib/api/exercises'
+import { WEEK_DAYS } from '@/lib/constants'
+import { Pencil, Plus, Smiley, SmileySad, Trash } from '@phosphor-icons/react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import {
   AnimatePresence,
   Reorder,
   motion,
   useMotionValueEvent,
   useScroll,
-} from "framer-motion";
-import { BicepsFlexed } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+} from 'framer-motion'
+import { BicepsFlexed } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export interface ShapeRegistration {
-  shape_id: number;
-  imc: number;
-  altura: number;
-  peso: number;
-  texto_meta: string | null;
-  classificacao: string;
-  satisfeito_fisico: number;
+  shape_id: number
+  imc: number
+  altura: number
+  peso: number
+  texto_meta: string | null
+  classificacao: string
+  satisfeito_fisico: number
   membros_superiores: {
-    ombro: number | null;
-    peito: number | null;
-    bicepsD: number | null;
-    bicepsE: number | null;
-  };
+    ombro: number | null
+    peito: number | null
+    bicepsD: number | null
+    bicepsE: number | null
+  }
   membros_inferiores: {
-    gluteos: number | null;
-    quadril: number | null;
-    quadricepsD: number | null;
-    quadricepsE: number | null;
-    panturrilhaD: number | null;
-    panturrilhaE: number | null;
-  };
-  fotos: string[] | null;
-  created_at: string;
-  updated_at: string;
+    gluteos: number | null
+    quadril: number | null
+    quadricepsD: number | null
+    quadricepsE: number | null
+    panturrilhaD: number | null
+    panturrilhaE: number | null
+  }
+  fotos: string[] | null
+  created_at: string
+  updated_at: string
 }
 
 export default function Page() {
-  const router = useRouter();
+  const router = useRouter()
   const [selectedDay, setSelectedDay] = useState(
-    WEEK_DAYS[new Date().getDay()].workoutIndex
-  );
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isCreateUpdateModal, setisCreateUpdateModal] = useState(false);
-  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
-  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null);
-  const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null);
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const { scrollY } = useScroll();
+    WEEK_DAYS[new Date().getDay()].workoutIndex,
+  )
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isCreateUpdateModal, setisCreateUpdateModal] = useState(false)
+  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null)
+  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null)
+  const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null)
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
+  const { scrollY } = useScroll()
 
   const {
     workouts,
     isLoading: isLoadingWorkouts,
     reorderExercises,
     deleteWorkout,
-  } = useWorkouts();
+  } = useWorkouts()
 
   const {
     shapeRegistrations,
     // hasRegistration,
     isLoading: isLoadingShape,
-  } = useShape();
+  } = useShape()
 
-  const firstShapeRegistration = shapeRegistrations?.[0];
+  const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1];
-  console.log("a", lastShapeRegistration);
+    shapeRegistrations?.[shapeRegistrations.length - 1]
+  console.log('a', lastShapeRegistration)
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 0);
-  });
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setIsScrolled(latest > 0)
+  })
 
   useEffect(() => {
     if (firstShapeRegistration?.fotos === null) {
-      router.push("/exercicios/steps?step=1");
+      router.push('/exercicios/steps?step=1')
     }
-  }, [firstShapeRegistration, isLoadingShape, router]);
+  }, [firstShapeRegistration, isLoadingShape, router])
 
   useEffect(() => {
     if (
@@ -107,38 +107,37 @@ export default function Page() {
     ) {
       const timer = setInterval(() => {
         setCurrentPhotoIndex(
-          (prevIndex) => (prevIndex + 1) % lastShapeRegistration.fotos.length
-        );
-      }, 6000);
+          (prevIndex) => (prevIndex + 1) % lastShapeRegistration.fotos.length,
+        )
+      }, 6000)
 
-      return () => clearInterval(timer);
+      return () => clearInterval(timer)
     }
-  }, [lastShapeRegistration?.fotos]);
+  }, [lastShapeRegistration?.fotos])
 
-  const currentDate = new Date();
+  const currentDate = new Date()
   const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
     locale: ptBR,
-  });
+  })
 
   // Get workouts for the selected day
   const currentWorkouts =
-    workouts?.filter((workout: Workout) => workout.indice === selectedDay) ||
-    [];
+    workouts?.filter((workout: Workout) => workout.indice === selectedDay) || []
 
   const handleDeleteWorkout = async (workout: Workout) => {
-    setWorkoutToDelete(workout);
-  };
+    setWorkoutToDelete(workout)
+  }
 
   const confirmDeleteWorkout = async () => {
-    if (!workoutToDelete) return;
+    if (!workoutToDelete) return
 
     try {
-      await deleteWorkout(workoutToDelete.ficha_id);
-      setWorkoutToDelete(null);
+      await deleteWorkout(workoutToDelete.ficha_id)
+      setWorkoutToDelete(null)
     } catch (error) {
-      console.error("Error deleting workout:", error);
+      console.error('Error deleting workout:', error)
     }
-  };
+  }
 
   if (isLoadingWorkouts || isLoadingShape) {
     return (
@@ -155,14 +154,14 @@ export default function Page() {
           transition={{ duration: 0.2 }}
         />
       </motion.div>
-    );
+    )
   }
 
   return (
     <>
       <motion.div
         style={{
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         }}
         animate={{
           opacity: isScrolled ? 0 : 1,
@@ -190,9 +189,9 @@ export default function Page() {
                   ? `Última atualização · ${format(
                       new Date(lastShapeRegistration.updated_at),
                       "dd 'de' MMMM',' yyyy",
-                      { locale: ptBR }
+                      { locale: ptBR },
                     )}.`
-                  : "Não atualizadas"}
+                  : 'Não atualizadas'}
               </p>
               <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
             </div>
@@ -200,7 +199,7 @@ export default function Page() {
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => router.push("/exercicios/atualizar-medidas")}
+              onClick={() => router.push('/exercicios/atualizar-medidas')}
             >
               <Pencil weight="fill" size={20} />
               Atualizar medidas
@@ -218,12 +217,12 @@ export default function Page() {
                           key={index}
                           className={`h-1 flex-1 rounded-full transition-colors duration-300 bg-white ${
                             index <= currentPhotoIndex
-                              ? "opacity-100"
-                              : "opacity-40"
+                              ? 'opacity-100'
+                              : 'opacity-40'
                           }`}
                           aria-label={`Photo ${index + 1} of ${lastShapeRegistration.fotos.length}`}
                         />
-                      )
+                      ),
                     )}
                   </div>
 
@@ -259,17 +258,17 @@ export default function Page() {
                 <div className="flex items-center flex-col gap-4 justify-center h-[456px]">
                   <BicepsFlexed size={100} className="text-zinc-500" />
                   <p className="text-zinc-500 text-sm">
-                    {" "}
-                    Nenhuma foto cadastrada{" "}
+                    {' '}
+                    Nenhuma foto cadastrada{' '}
                   </p>
                 </div>
               )}
 
               <div className="absolute bottom-4 right-4">
                 <span
-                  className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === "Satisfeito" ? "text-green-500" : "text-red-500"}`}
+                  className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? 'text-green-500' : 'text-red-500'}`}
                 >
-                  {lastShapeRegistration?.nivel_satisfacao === "Satisfeito" ? (
+                  {lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? (
                     <Smiley weight="bold" size={24} />
                   ) : (
                     <SmileySad weight="bold" size={24} />
@@ -282,7 +281,7 @@ export default function Page() {
                 size="sm"
                 className="absolute bottom-2 left-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors"
                 onClick={() =>
-                  router.push("/exercicios/atualizar-medidas?photos=true")
+                  router.push('/exercicios/atualizar-medidas?photos=true')
                 }
               >
                 Atualizar fotos
@@ -300,7 +299,7 @@ export default function Page() {
                       <p className="text-zinc-400 text-sm">Bíceps (D)</p>
                       <p className="text-sm">
                         {lastShapeRegistration?.membros_superiores
-                          .biceps_direito ?? "-"}{" "}
+                          .biceps_direito ?? '-'}{' '}
                         cm
                       </p>
                     </div>
@@ -308,21 +307,21 @@ export default function Page() {
                       <p className="text-zinc-400 text-sm">Bíceps (E)</p>
                       <p className="text-sm">
                         {lastShapeRegistration?.membros_superiores
-                          .biceps_esquerdo ?? "-"}{" "}
+                          .biceps_esquerdo ?? '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Peitoral</p>
                       <p className="text-sm">
-                        {lastShapeRegistration?.membros_superiores.peito ?? "-"}{" "}
+                        {lastShapeRegistration?.membros_superiores.peito ?? '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Ombro</p>
                       <p className="text-sm">
-                        {lastShapeRegistration?.membros_superiores.ombro ?? "-"}{" "}
+                        {lastShapeRegistration?.membros_superiores.ombro ?? '-'}{' '}
                         cm
                       </p>
                     </div>
@@ -342,7 +341,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Glúteos</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores.gluteos ??
-                            "-"}{" "}
+                            '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -350,7 +349,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Quadríceps (D)</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores
-                            .quadriceps_direito ?? "-"}{" "}
+                            .quadriceps_direito ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -358,7 +357,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Quadríceps (E)</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores
-                            .quadriceps_esquerdo ?? "-"}{" "}
+                            .quadriceps_esquerdo ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -368,7 +367,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Quadril</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores.quadril ??
-                            "-"}{" "}
+                            '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -376,7 +375,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Panturrilha (D)</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores
-                            .panturrilha_direita ?? "-"}{" "}
+                            .panturrilha_direita ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -384,7 +383,7 @@ export default function Page() {
                         <p className="text-zinc-400 text-sm">Panturrilha (E)</p>
                         <p className="text-sm">
                           {lastShapeRegistration?.membros_inferiores
-                            .panturrilha_esquerda ?? "-"}{" "}
+                            .panturrilha_esquerda ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -403,7 +402,7 @@ export default function Page() {
                       <p className="text-sm">
                         {lastShapeRegistration?.imc
                           ? lastShapeRegistration.imc.toFixed(1)
-                          : "-"}
+                          : '-'}
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -411,14 +410,14 @@ export default function Page() {
                       <p className="text-sm">
                         {lastShapeRegistration?.altura
                           ? lastShapeRegistration.altura
-                          : "-"}{" "}
+                          : '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Peso</p>
                       <p className="text-sm">
-                        {lastShapeRegistration?.peso ?? "-"} kg
+                        {lastShapeRegistration?.peso ?? '-'} kg
                       </p>
                     </div>
                   </div>
@@ -440,8 +439,8 @@ export default function Page() {
                 variant="secondary"
                 className="text-zinc-500 pl-4 py-0 pr-0 gap-2"
                 onClick={() => {
-                  setEditingWorkout(null);
-                  setisCreateUpdateModal(true);
+                  setEditingWorkout(null)
+                  setisCreateUpdateModal(true)
                 }}
               >
                 Novo treino
@@ -459,8 +458,8 @@ export default function Page() {
                   className={`px-6 py-4 w-full rounded-lg text-base font-medium transition-colors
                   ${
                     selectedDay === day.workoutIndex
-                      ? "bg-red-500 text-white"
-                      : "bg-zinc-800 text-zinc-400 hover:bg-zinc-800"
+                      ? 'bg-red-500 text-white'
+                      : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-800'
                   }
                 `}
                 >
@@ -483,8 +482,8 @@ export default function Page() {
                         <Button
                           size="sm"
                           onClick={() => {
-                            setisCreateUpdateModal(true);
-                            setEditingWorkout(workout);
+                            setisCreateUpdateModal(true)
+                            setEditingWorkout(workout)
                           }}
                           className="bg-zinc-700 hover:bg-red-800 px-2 py-1 gap-2"
                         >
@@ -519,8 +518,8 @@ export default function Page() {
                             exercise={exercise}
                             workoutIndex={workout.indice}
                             onEdit={() => {
-                              setEditingExercise(exercise);
-                              setisCreateUpdateModal(true);
+                              setEditingExercise(exercise)
+                              setisCreateUpdateModal(true)
                             }}
                           />
                         ))}
@@ -542,8 +541,8 @@ export default function Page() {
         <ExerciciosCreateUpdate
           isOpen={isCreateUpdateModal || !!editingExercise}
           onClose={() => {
-            setisCreateUpdateModal(false);
-            setEditingExercise(null);
+            setisCreateUpdateModal(false)
+            setEditingExercise(null)
           }}
           workout={editingWorkout || undefined}
         />
@@ -563,10 +562,10 @@ export default function Page() {
               Excluir treino
             </DialogTitle>
             <DialogDescription className="pt-4">
-              Tem certeza que deseja excluir o treino{" "}
+              Tem certeza que deseja excluir o treino{' '}
               <span className="text-red-500 font-bold">
                 &ldquo;{workoutToDelete?.titulo}&rdquo;
-              </span>{" "}
+              </span>{' '}
               ? Esta ação não pode ser desfeita.
             </DialogDescription>
           </DialogHeader>
@@ -589,5 +588,5 @@ export default function Page() {
         </DialogContent>
       </Dialog>
     </>
-  );
+  )
 }

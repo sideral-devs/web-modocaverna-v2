@@ -561,7 +561,7 @@ function AddMorningRitual({
               items={items.map((item) => item.id)}
               strategy={verticalListSortingStrategy}
             >
-              <ul>
+              <ul className="divide-y">
                 {items.map((item, index) => (
                   <SortableItem
                     key={index}
@@ -641,6 +641,7 @@ function AddNightRitual({
       </div>
     )
   }
+
   return (
     <div className="flex flex-col flex-1 divide-y overflow-y-auto scrollbar-minimal">
       <div className="flex items-center p-6 gap-6">
@@ -658,13 +659,8 @@ function AddNightRitual({
             <span className="px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
               {data.inicio_dormir.replace(':', 'h') + 'm'}
             </span>
-            <span className="flex px-2 py-0.5 bg-cyan-700 text-cyan-400 text-xs rounded-full">
-              {sumHours(sumHours(data.inicio_dormir, 8), 0.5).replace(
-                ':',
-                'h',
-              ) + 'm'}
-            </span>
           </span>
+
           <span className="text-zinc-400 text-xs">
             Adicione e organize sua rotina abaixo:
           </span>

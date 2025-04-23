@@ -22,7 +22,8 @@ export default function Page() {
   const [measurementsData, setMeasurementsData] = useState<any>(null)
   const { cellphone } = useOnboardingStore()
   const { shapeRegistrations } = useShape()
-  const lastShapeRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
+  const lastShapeRegistration =
+    shapeRegistrations?.[shapeRegistrations.length - 1]
 
   // Check if we should start with photos
   useEffect(() => {
@@ -38,7 +39,9 @@ export default function Page() {
           peso: lastShapeRegistration.peso,
           classificacao: lastShapeRegistration.classificacao,
           imc: lastShapeRegistration.imc,
-          nivel_satisfacao: lastShapeRegistration.satisfeito_fisico ? 'Satisfeito' : 'Não satisfeito',
+          nivel_satisfacao: lastShapeRegistration.satisfeito_fisico
+            ? 'Satisfeito'
+            : 'Não satisfeito',
           objetivo: lastShapeRegistration.objetivo,
           fotos: lastShapeRegistration.fotos,
         })

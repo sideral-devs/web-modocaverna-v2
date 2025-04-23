@@ -17,11 +17,7 @@ type FormData = {
   fotos: ShapePhoto[]
 }
 
-export function UpdatePhotosStep({
-  onNext,
-}: {
-  onNext: (data: any) => void
-}) {
+export function UpdatePhotosStep({ onNext }: { onNext: (data: any) => void }) {
   const form = useForm<FormData>({
     defaultValues: {
       fotos: [],
@@ -31,7 +27,9 @@ export function UpdatePhotosStep({
   const { setValue, watch } = form
   const { fotos } = watch()
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadingPhotoIndex, setUploadingPhotoIndex] = useState<number | null>(null)
+  const [uploadingPhotoIndex, setUploadingPhotoIndex] = useState<number | null>(
+    null,
+  )
 
   const REQUIRED_PHOTOS = 4
 
@@ -42,7 +40,7 @@ export function UpdatePhotosStep({
     try {
       setUploadingPhotoIndex(index)
       const url = URL.createObjectURL(file)
-      
+
       // Convert to base64
       const base64 = await new Promise<string>((resolve) => {
         const reader = new FileReader()
@@ -79,7 +77,7 @@ export function UpdatePhotosStep({
       }
 
       await onNext({
-        fotos: data.fotos.map(photo => photo.base64),
+        fotos: data.fotos.map((photo) => photo.base64),
       })
     } catch (error) {
       toast.error('Erro ao atualizar fotos')
@@ -97,14 +95,18 @@ export function UpdatePhotosStep({
           <div className="flex mb-4 flex-col gap-2">
             <h2 className="text-2xl font-medium">Atualize suas fotos</h2>
             <p className="text-zinc-400 font-normal">
-              Faça upload do seu shape atual abaixo para comparação futura (todas as fotos são obrigatórias)
+              Faça upload do seu shape atual abaixo para comparação futura
+              (todas as fotos são obrigatórias)
             </p>
           </div>
 
           <div className="flex flex-col gap-0">
             <div className="flex justify-between gap-4">
               {photoLabels.map((label, index) => (
-                <div key={index} className="flex w-full min-h-[200px] flex-col gap-2">
+                <div
+                  key={index}
+                  className="flex w-full min-h-[200px] flex-col gap-2"
+                >
                   <div className="relative group w-full h-full rounded-2xl border border-zinc-700 overflow-hidden">
                     {fotos[index] ? (
                       <>
@@ -159,9 +161,11 @@ export function UpdatePhotosStep({
 
           <div className="flex justify-center fixed bg-black bottom-0 w-full border-t left-0 py-4 pt-6">
             <div className="flex gap-2">
-              <AutoSubmitButton 
+              <AutoSubmitButton
                 onClick={form.handleSubmit(onSubmit)}
-                disabled={!hasAllPhotos || isLoading || uploadingPhotoIndex !== null}
+                disabled={
+                  !hasAllPhotos || isLoading || uploadingPhotoIndex !== null
+                }
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
@@ -178,4 +182,4 @@ export function UpdatePhotosStep({
       </FormProvider>
     </div>
   )
-} 
+}

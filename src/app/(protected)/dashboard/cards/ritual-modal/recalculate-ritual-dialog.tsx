@@ -123,7 +123,7 @@ export function RecalculateRitualDialog({ onClose }: { onClose: () => void }) {
       )}
     >
       <DialogHeader className="p-0 pt-4 gap-4">
-        <DialogTitle>Recalcular hábitos</DialogTitle>
+        <DialogTitle>Calculadora de Rituais</DialogTitle>
         <StepCounter current={currentStep} total={allSteps} />
       </DialogHeader>
 

@@ -34,7 +34,7 @@ export function AnalysisResultsStep({
         label: 'IMC NÃO DISPONÍVEL',
         color: 'red',
         message: 'Não foi possível calcular o IMC.',
-        icon: <Warning className="w-4 h-4 text-red-500" />, 
+        icon: <Warning className="w-4 h-4 text-red-500" />,
       }
     }
 
@@ -94,7 +94,7 @@ export function AnalysisResultsStep({
 
       // Set IMC to 0 if NaN
       if (isNaN(imc)) {
-        finalData.imc = 0.00
+        finalData.imc = 0.0
       }
 
       console.log(finalData)

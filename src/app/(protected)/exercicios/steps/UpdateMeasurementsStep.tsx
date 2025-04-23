@@ -400,7 +400,6 @@ export function UpdateMeasurementsStep({
       fotos: lastShapeRegistration?.fotos,
     }
 
-
     handleNext(finalData)
   }
 

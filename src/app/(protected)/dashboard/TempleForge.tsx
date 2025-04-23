@@ -1,49 +1,47 @@
-"use client";
+'use client'
 
-import { ExerciseCardHub } from "@/components/exercicios/exercicios-card-hub";
-import { MealCardHub } from "@/components/refeicoes/refeicoes-card-hub";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { TabsContent } from "@/components/ui/tabs";
-import { useWorkouts } from "@/hooks/queries/use-exercises";
-import { useMeals } from "@/hooks/queries/use-meals";
-import { useShape } from "@/hooks/queries/use-shape";
-import { WEEK_DAYS } from "@/lib/constants";
-import { SmileyAngry } from "@phosphor-icons/react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import Link from "next/link";
+import { ExerciseCardHub } from '@/components/exercicios/exercicios-card-hub'
+import { MealCardHub } from '@/components/refeicoes/refeicoes-card-hub'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { TabsContent } from '@/components/ui/tabs'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { useMeals } from '@/hooks/queries/use-meals'
+import { useShape } from '@/hooks/queries/use-shape'
+import { WEEK_DAYS } from '@/lib/constants'
+import { SmileyAngry } from '@phosphor-icons/react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import Link from 'next/link'
 
 export function TempleForge({ value }: { value: string }) {
-  const { workouts } = useWorkouts();
+  const { workouts } = useWorkouts()
   const {
     shapeRegistrations,
     // hasRegistration,
     isLoading: isLoadingShape,
-  } = useShape();
+  } = useShape()
 
-  const firstShapeRegistration = shapeRegistrations?.[0];
+  const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1];
+    shapeRegistrations?.[shapeRegistrations.length - 1]
 
-  const today = new Date();
-  const dayName = format(today, "EEEE", { locale: ptBR });
-  const formattedTime = "12h30 - 14h10";
-
-
+  const today = new Date()
+  const dayName = format(today, 'EEEE', { locale: ptBR })
+  const formattedTime = '12h30 - 14h10'
 
   // // Filter workouts for today
-  const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex;
+  const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex
 
   const todaysWorkouts = workouts?.filter((workout) => {
-    return workout.indice === todayIndex;
-  });
+    return workout.indice === todayIndex
+  })
 
   // Meals
-  const { meals } = useMeals();
+  const { meals } = useMeals()
   const todaysMeals = meals?.filter((meal) => {
-    return meal.dia_semana === todayIndex;
-  });
+    return meal.dia_semana === todayIndex
+  })
 
   return (
     <TabsContent value={value} className="flex-1">
@@ -64,10 +62,10 @@ export function TempleForge({ value }: { value: string }) {
               {lastShapeRegistration?.updated_at
                 ? `Medidas atualizadas em ${format(
                     new Date(lastShapeRegistration.updated_at),
-                    "dd MMM yyyy",
-                    { locale: ptBR }
+                    'dd MMM yyyy',
+                    { locale: ptBR },
                   )}.`
-                : "Não atualizadas"}
+                : 'Não atualizadas'}
             </span>
           </div>
 
@@ -135,10 +133,10 @@ export function TempleForge({ value }: { value: string }) {
                 <span className="text-sm font-medium text-zinc-300">
                   {todaysWorkouts && todaysWorkouts.length > 0
                     ? todaysWorkouts.length
-                    : 0}{" "}
+                    : 0}{' '}
                   {todaysWorkouts && todaysWorkouts.length > 1
-                    ? "treinos separados"
-                    : "treino"}
+                    ? 'treinos separados'
+                    : 'treino'}
                 </span>
               </div>
 
@@ -153,9 +151,7 @@ export function TempleForge({ value }: { value: string }) {
                               key={exercise.indice}
                               exercise={exercise}
                               workoutIndex={workout.indice}
-                              onEdit={() => {
-                                return;
-                              }}
+                              onEdit={() => {}}
                             />
                           ))}
                         </div>
@@ -195,7 +191,7 @@ export function TempleForge({ value }: { value: string }) {
               <div className="flex mb-4  gap-2 justify-between">
                 <div className="flex gap-1">
                   <h2 className="text-2xl font-medium">
-                    Confira suas{" "}
+                    Confira suas{' '}
                     <span className="text-zinc-400 mr-1">próximas</span>
                     refeições
                   </h2>
@@ -209,9 +205,7 @@ export function TempleForge({ value }: { value: string }) {
                       key={meal.horario_id}
                       meal={meal}
                       dayIndex={todayIndex}
-                      onEdit={() => {
-                        return;
-                      }}
+                      onEdit={() => {}}
                     />
                   ))
                 ) : (
@@ -229,5 +223,5 @@ export function TempleForge({ value }: { value: string }) {
         </div>
       </div>
     </TabsContent>
-  );
+  )
 }
