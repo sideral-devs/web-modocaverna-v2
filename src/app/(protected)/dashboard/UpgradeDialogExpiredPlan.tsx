@@ -28,35 +28,44 @@ export function UpgradeDialogExpiredPlan({
             alt="Imagens modo caverna"
           />
         </div>
-        <div className="flex flex-col w-[490px] h-[500px] pt-7">
+        <div className="flex flex-col w-[490px] h-[500px] pt-4">
           <div className="flex flex-row ">
             <AlertTitle className="text-2xl font-semibold text-white">
-              Parece que a sua avaliação gratuita de 7 dias ao Plano
-              Cavernoso&nbsp;
-              <span className="text-primary">expirou...</span>
+              Fala Caverna, sinto sua falta por aqui...
             </AlertTitle>
           </div>
           <p className="text-base pt-4 text-[#A0A0A9]">
-            O seu acesso ao Modo Caverna ainda está garantido, mas a sua
-            assinatura atual contempla apenas algumas funcionalidades...
+            Sua assinatura expirou, e por isso o acesso às ferramentas do seu
+            plano foi temporariamente desativado.
           </p>
-          <ul className="flex flex-col py-8 gap-4">
+          <p className="text-base pt-4 text-[#A0A0A9]">
+            Mas não se preocupe - nada foi perdido. Seus dados estão salvos, e
+            sua jornada pode continuar exatamente de onde parou.
+          </p>
+          <p className="text-base pt-4 text-[#A0A0A9]">
+            Ao renovar, você recupera:
+          </p>
+          <ul className="flex flex-col py-4 gap-4">
             <li className="flex items-center gap-4">
               <Check size={16} className="text-primary" />
-              <span className="text-base">Curso Modo Caverna</span>
+              <span className="text-base">
+                Todas as funcionalidades do seu plano
+              </span>
             </li>
             <li className="flex items-center gap-4">
               <Check size={16} className="text-primary" />
-              <span className="text-base">Desafio Caverna</span>
+              <span className="text-base">
+                Seu histórico, metas, rotinas e tudo mais
+              </span>
             </li>
             <li className="flex items-center gap-4">
               <Check size={16} className="text-primary" />
-              <span className="text-base">Suporte via chat</span>
+              <span className="text-base">
+                O meu apoio para seguir firme na missão
+              </span>
             </li>
             <p className="text-base pt-4 text-[#A0A0A9]">
-              Gostaria de continuar utilizando todas as ferramentas do sistema?
-              Clique no botão abaixo e assine o Plano Cavernoso com 50% de
-              desconto!
+              Clique abaixo para reativar seu acesso e continuar evoluindo
             </p>
           </ul>
 
@@ -66,7 +75,7 @@ export function UpgradeDialogExpiredPlan({
               href="/settings/plans"
             >
               <Button>
-                Eu quero ser Cavernoso
+                Quero renovar minha assinatura agora
                 <Zap color="#FFF" fill="#fff"></Zap>
               </Button>
             </Link>
@@ -76,7 +85,7 @@ export function UpgradeDialogExpiredPlan({
             >
               <div className=" flex py-2 items-center justify-center rounded">
                 <AlertDialogCancel className="bg-[#121215] text-[#A0A0A9] rounded-lg w-[80%] h-[41px]">
-                  Continuar com o Plano atual
+                  Continuar sem acesso (por enquanto)
                 </AlertDialogCancel>
               </div>
             </Link>
