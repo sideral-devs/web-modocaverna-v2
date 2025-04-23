@@ -51,8 +51,6 @@ export default function HomePage() {
     }
   }
 
-  console.log(JSON.stringify(data, null, 2))
-
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full flex-1 items-center">

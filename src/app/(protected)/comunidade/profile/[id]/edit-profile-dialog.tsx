@@ -1,4 +1,5 @@
 'use client'
+import { PhaseCounter } from '@/app/(public)/trial/sign-up/PhaseCounter'
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -73,6 +74,8 @@ export function EditProfileDialog({
   profile: UserProfile
   setIsOpen: (open: boolean) => void
 }) {
+  const [strength, setStrength] = useState(0)
+
   const form = useForm<RegisterData>({
     resolver: zodResolver(schema),
   })
@@ -241,6 +244,34 @@ export function EditProfileDialog({
     }
   }
 
+  useEffect(() => {
+    setStrength(0)
+
+    if (profile.nickname) {
+      setStrength((prev) => prev + 1)
+    }
+
+    if (profile.banner) {
+      setStrength((prev) => prev + 1)
+    }
+
+    if (profile.foto_perfil) {
+      setStrength((prev) => prev + 1)
+    }
+
+    if (profile.biography) {
+      setStrength((prev) => prev + 1)
+    }
+
+    if (profile.instagram) {
+      setStrength((prev) => prev + 1)
+    }
+
+    if (profile.linkedin) {
+      setStrength((prev) => prev + 1)
+    }
+  }, [profile])
+
   return (
     <DialogContent className="max-h-[85%] bg-zinc-900 overflow-y-auto scrollbar-minimal">
       <DialogHeader>
@@ -249,6 +280,20 @@ export function EditProfileDialog({
       <FormProvider {...form}>
         <div className="flex flex-col px-4 pb-8 gap-8 overflow-y-auto">
           <div className="flex flex-col gap-6">
+            {strength < 6 && (
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-xs text-zinc-400">
+                  Complete seu perfil {Math.floor((strength / 6) * 100)}%
+                </span>
+                <PhaseCounter
+                  total={6}
+                  current={strength}
+                  animate={{
+                    backgroundColor: strength > 3 ? '#F9CB15' : '#EE4444',
+                  }}
+                />
+              </div>
+            )}
             <div className="relative h-52 w-full">
               <div className="relative h-40 bg-muted rounded-xl group">
                 <NextImage
