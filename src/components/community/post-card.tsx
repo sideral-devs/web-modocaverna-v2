@@ -81,8 +81,6 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
           })
         }
       }
-
-      queryClient.invalidateQueries({ queryKey: ['posts'] })
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
       setLikeCount(likesRollback)
