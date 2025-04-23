@@ -1,22 +1,17 @@
-"use client";
+'use client'
 
-import { Meal } from "@/lib/api/meals";
-import { BowlFood } from "@phosphor-icons/react";
-import { useMotionValue } from "framer-motion";
-
+import { Meal } from '@/lib/api/meals'
+import { BowlFood } from '@phosphor-icons/react'
+import { useMotionValue } from 'framer-motion'
 
 interface MealCardProps {
-  meal: Meal;
-  dayIndex: number;
-  onEdit: () => void;
+  meal: Meal
+  dayIndex: number
+  onEdit: () => void
 }
 
-export function MealCardHub({
-  meal,
-  dayIndex,
-  onEdit,
-}: MealCardProps) {
-  const y = useMotionValue(0);
+export function MealCardHub({ meal, dayIndex, onEdit }: MealCardProps) {
+  const y = useMotionValue(0)
 
   return (
     <>
@@ -32,11 +27,9 @@ export function MealCardHub({
         </div>
 
         <div className="flex items-center gap-2">
-          <p className="text-sm text-zinc-500">
-            {meal.hora_refeicao}
-          </p>
+          <p className="text-sm text-zinc-500">{meal.hora_refeicao}</p>
         </div>
       </div>
     </>
-  );
+  )
 }
