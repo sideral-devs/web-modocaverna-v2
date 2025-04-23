@@ -56,7 +56,8 @@ export function UserDropdown() {
       <DropdownMenuContent className="-mt-4 mr-4 xl:mr-[50px] max-w-80 sm:w-80 border border-zinc-700">
         <div className="flex flex-col px-4 py-5 gap-5">
           <h3 className="text-sm">Meu perfil</h3>
-          <div className="flex items-center gap-3">
+          <div >
+          <Link href={'/settings'} className="flex items-center gap-3">
             {user.user_foto && !imageError ? (
               <Image
                 src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
@@ -79,6 +80,7 @@ export function UserDropdown() {
                 {user.email}
               </span>
             </div>
+            </Link>
           </div>
         </div>
         <DropdownMenuSeparator />

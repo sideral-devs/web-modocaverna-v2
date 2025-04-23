@@ -6,6 +6,7 @@ interface User {
   telefone: string
   email_verified_at: string | null
   user_foto: string
+  banner: string | null
   plataforma: string
   data_de_compra: string
   data_de_renovacao: string
