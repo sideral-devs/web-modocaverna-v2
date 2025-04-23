@@ -1,30 +1,36 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Pencil, Plus, SmileyAngry, Trash, X } from '@phosphor-icons/react'
-import { useState, useEffect } from 'react'
-import { Reorder, motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { Header, HeaderClose } from '@/components/header'
-import { WEEK_DAYS } from '@/lib/constants'
-import { useWorkouts } from '@/hooks/queries/use-exercises'
-import { useShape } from '@/hooks/queries/use-shape'
-import { useRouter } from 'next/navigation'
-import type { Exercise, Workout } from '@/lib/api/exercises'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import Image from 'next/image'
-import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
 import { ExerciseCard } from '@/components/exercicios/exercicios-card'
+import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
 import { ExerciciosCreateUpdate } from '@/components/exercicios/modals/exercicios-create-update'
+import { Header, HeaderClose } from '@/components/header'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { useShape } from '@/hooks/queries/use-shape'
+import type { Exercise, Workout } from '@/lib/api/exercises'
+import { WEEK_DAYS } from '@/lib/constants'
+import { Pencil, Plus, Smiley, SmileySad, Trash } from '@phosphor-icons/react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import {
+  AnimatePresence,
+  Reorder,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion'
+import { BicepsFlexed } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export interface ShapeRegistration {
   shape_id: number
@@ -63,6 +69,7 @@ export default function Page() {
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null)
   const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null)
   const [workoutToDelete, setWorkoutToDelete] = useState<Workout | null>(null)
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
   const { scrollY } = useScroll()
 
   const {
@@ -72,29 +79,41 @@ export default function Page() {
     deleteWorkout,
   } = useWorkouts()
 
-  console.log(workouts)
-
   const {
     shapeRegistrations,
-    hasRegistration,
+    // hasRegistration,
     isLoading: isLoadingShape,
   } = useShape()
-
-  console.log(shapeRegistrations)
 
   const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1]
+  console.log('a', lastShapeRegistration)
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0)
   })
 
   useEffect(() => {
-    if (firstShapeRegistration?.peso_meta === null) {
+    if (firstShapeRegistration?.fotos === null) {
       router.push('/exercicios/steps?step=1')
     }
   }, [firstShapeRegistration, isLoadingShape, router])
+
+  useEffect(() => {
+    if (
+      lastShapeRegistration?.fotos &&
+      lastShapeRegistration.fotos.length > 0
+    ) {
+      const timer = setInterval(() => {
+        setCurrentPhotoIndex(
+          (prevIndex) => (prevIndex + 1) % lastShapeRegistration.fotos.length,
+        )
+      }, 6000)
+
+      return () => clearInterval(timer)
+    }
+  }, [lastShapeRegistration?.fotos])
 
   const currentDate = new Date()
   const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
@@ -163,39 +182,107 @@ export default function Page() {
 
       <div className="min-h-screen pt-32 pb-[400px] bg-black text-white p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <p className="text-zinc-500 text-sm">
-              Última atualização · {formattedDate}
-            </p>
-            <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
+          <div className="flex justify-between items-center">
+            <div className="mb-8">
+              <p className="text-zinc-500 text-sm">
+                {lastShapeRegistration?.updated_at
+                  ? `Última atualização · ${format(
+                      new Date(lastShapeRegistration.updated_at),
+                      "dd 'de' MMMM',' yyyy",
+                      { locale: ptBR },
+                    )}.`
+                  : 'Não atualizadas'}
+              </p>
+              <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
+            </div>
+
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => router.push('/exercicios/atualizar-medidas')}
+            >
+              <Pencil weight="fill" size={20} />
+              Atualizar medidas
+            </Button>
           </div>
 
           <div className="flex justify-between mb-16 gap-4">
             <div className="relative w-1/2 border border-zinc-700 bg-zinc-900 rounded-lg overflow-hidden">
-              <Image
-                src="/placeholder-body.jpg"
-                alt="Foto do corpo"
-                width={600}
-                height={600}
-                className="w-full h-[456px] object-cover"
-              />
+              {lastShapeRegistration?.fotos?.[0] ? (
+                <>
+                  <div className="absolute top-0 left-0 right-0 flex justify-between gap-1 p-3 z-50">
+                    {lastShapeRegistration.fotos.map(
+                      (_: string, index: number) => (
+                        <div
+                          key={index}
+                          className={`h-1 flex-1 rounded-full transition-colors duration-300 bg-white ${
+                            index <= currentPhotoIndex
+                              ? 'opacity-100'
+                              : 'opacity-40'
+                          }`}
+                          aria-label={`Photo ${index + 1} of ${lastShapeRegistration.fotos.length}`}
+                        />
+                      ),
+                    )}
+                  </div>
 
-              <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black to-transparent" />
+                  <div className="relative w-full h-[456px]">
+                    <AnimatePresence
+                      initial={false}
+                      mode="wait"
+                      custom={currentPhotoIndex}
+                    >
+                      <motion.div
+                        key={currentPhotoIndex}
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0"
+                      >
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_PROD_URL}/${lastShapeRegistration.fotos[currentPhotoIndex]}`}
+                          alt="Foto do corpo"
+                          width={600}
+                          height={600}
+                          className="w-full h-[456px] object-cover"
+                          priority
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black to-transparent" />
+                  <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black to-transparent" />
+                </>
+              ) : (
+                <div className="flex items-center flex-col gap-4 justify-center h-[456px]">
+                  <BicepsFlexed size={100} className="text-zinc-500" />
+                  <p className="text-zinc-500 text-sm">
+                    {' '}
+                    Nenhuma foto cadastrada{' '}
+                  </p>
+                </div>
+              )}
 
               <div className="absolute bottom-4 right-4">
                 <span
-                  className={`flex items-center gap-2 text-base ${shapeRegistrations?.[0]?.satisfeito_fisico ? 'text-green-500' : 'text-red-500'}`}
+                  className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? 'text-green-500' : 'text-red-500'}`}
                 >
-                  <SmileyAngry weight="bold" size={24} />{' '}
-                  {shapeRegistrations?.[0]?.satisfeito_fisico
-                    ? 'Satisfeito'
-                    : 'Não satisfeito'}
+                  {lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? (
+                    <Smiley weight="bold" size={24} />
+                  ) : (
+                    <SmileySad weight="bold" size={24} />
+                  )}
+                  {lastShapeRegistration?.nivel_satisfacao}
                 </span>
               </div>
 
               <Button
                 size="sm"
                 className="absolute bottom-2 left-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors"
+                onClick={() =>
+                  router.push('/exercicios/atualizar-medidas?photos=true')
+                }
               >
                 Atualizar fotos
               </Button>
@@ -211,32 +298,30 @@ export default function Page() {
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Bíceps (D)</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.membros_superiores.bicepsD ??
-                          '-'}{' '}
+                        {lastShapeRegistration?.membros_superiores
+                          .biceps_direito ?? '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Bíceps (E)</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.membros_superiores.bicepsE ??
-                          '-'}{' '}
+                        {lastShapeRegistration?.membros_superiores
+                          .biceps_esquerdo ?? '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Peitoral</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.membros_superiores.peito ??
-                          '-'}{' '}
+                        {lastShapeRegistration?.membros_superiores.peito ?? '-'}{' '}
                         cm
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Ombro</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.membros_superiores.ombro ??
-                          '-'}{' '}
+                        {lastShapeRegistration?.membros_superiores.ombro ?? '-'}{' '}
                         cm
                       </p>
                     </div>
@@ -255,24 +340,24 @@ export default function Page() {
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Glúteos</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .gluteos ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores.gluteos ??
+                            '-'}{' '}
                           cm
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Quadríceps (D)</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .quadricepsD ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores
+                            .quadriceps_direito ?? '-'}{' '}
                           cm
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Quadríceps (E)</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .quadricepsE ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores
+                            .quadriceps_esquerdo ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -281,24 +366,24 @@ export default function Page() {
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Quadril</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .quadril ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores.quadril ??
+                            '-'}{' '}
                           cm
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Panturrilha (D)</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .panturrilhaD ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores
+                            .panturrilha_direita ?? '-'}{' '}
                           cm
                         </p>
                       </div>
                       <div className="flex flex-col gap-2">
                         <p className="text-zinc-400 text-sm">Panturrilha (E)</p>
                         <p className="text-sm">
-                          {shapeRegistrations?.[0]?.membros_inferiores
-                            .panturrilhaE ?? '-'}{' '}
+                          {lastShapeRegistration?.membros_inferiores
+                            .panturrilha_esquerda ?? '-'}{' '}
                           cm
                         </p>
                       </div>
@@ -315,16 +400,16 @@ export default function Page() {
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">IMC</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.imc
-                          ? shapeRegistrations[0].imc.toFixed(1)
+                        {lastShapeRegistration?.imc
+                          ? lastShapeRegistration.imc.toFixed(1)
                           : '-'}
                       </p>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Altura</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.altura
-                          ? shapeRegistrations[0].altura * 100
+                        {lastShapeRegistration?.altura
+                          ? lastShapeRegistration.altura
                           : '-'}{' '}
                         cm
                       </p>
@@ -332,7 +417,7 @@ export default function Page() {
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">Peso</p>
                       <p className="text-sm">
-                        {shapeRegistrations?.[0]?.peso ?? '-'} kg
+                        {lastShapeRegistration?.peso ?? '-'} kg
                       </p>
                     </div>
                   </div>
@@ -342,8 +427,8 @@ export default function Page() {
           </div>
 
           <WeightProgressIndicator
-            currentWeight={shapeRegistrations?.[0]?.peso || 0}
-            targetWeight={Number(shapeRegistrations?.[0]?.texto_meta) || 0}
+            currentWeight={lastShapeRegistration?.peso || 0}
+            targetWeight={Number(lastShapeRegistration?.peso_meta) || 0}
           />
 
           {/* Workouts section */}
