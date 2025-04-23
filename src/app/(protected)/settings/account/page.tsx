@@ -54,6 +54,7 @@ type UserData = z.infer<typeof schema>
 export default function Page() {
   const [profilePictureOpen, setProfilePictureOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [userBanner, setUserBanner] = useState<string | null>(null)
   const { data: user } = useUser()
   const form = useForm<UserData>({
     resolver: zodResolver(schema),
@@ -110,6 +111,7 @@ export default function Page() {
 
   useEffect(() => {
     if (user) {
+      setUserBanner((user.banner) ? env.NEXT_PUBLIC_PROD_URL+user.banner: '/images/perfil/background_perfil.png');
       form.reset({
         name: user.name,
         nickname: user.nickname,
@@ -134,8 +136,8 @@ export default function Page() {
         <div
           className="flex flex-col w-full p-10 pb-12 gap-6 bg-gradient-to-b from-[#353535] to-[#212121] rounded-lg"
           style={{
-            backgroundImage: ` url('/images/perfil/background_perfil.png')`,
-            backgroundPosition: 'top',
+            backgroundImage: ` url(${userBanner})`,
+            backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
