@@ -34,7 +34,12 @@ import {
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EllipsisIcon, GripHorizontal, PlusIcon } from 'lucide-react'
+import {
+  EllipsisIcon,
+  GripHorizontal,
+  ListChecks,
+  PlusIcon,
+} from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { toast } from 'sonner'
@@ -653,7 +658,7 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectPriorityOpen, setSelectPriorityOpen] = useState(false)
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false)
-
+  console.log(task)
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -778,6 +783,23 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
         <p className="w-full whitespace-pre-wrap text-sm line-clamp-2">
           {task.item}
         </p>
+        {task.checklists && task.checklists.length > 0 && (
+          <div className="flex flex-row items-end justify-end w-full  p-2 gap-1">
+            <ListChecks width={20} height={20} />
+            {task.checklists?.map((checklist, index) => {
+              const total = checklist.subtasks.length
+              const done = checklist.subtasks.filter(
+                (sub) => !!Number(sub.checked),
+              ).length
+
+              return (
+                <span key={index} className="text-sm text-white">
+                  {done}/{total}
+                </span>
+              )
+            })}
+          </div>
+        )}
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <EditTaskDialog

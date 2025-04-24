@@ -670,3 +670,11 @@ interface RitualResponseItem {
   created_at: string
   updated_at: string
 }
+
+interface Poup {
+  id: number
+  title: string
+  active: boolean
+  created_at: string
+  updated_at: string
+}

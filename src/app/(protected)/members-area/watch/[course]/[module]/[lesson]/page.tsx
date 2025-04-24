@@ -22,6 +22,7 @@ import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
 import { Comments } from './comments'
 import { useUser } from '@/hooks/queries/use-user'
+import dayjs from 'dayjs'
 
 export default function Page({
   params,
@@ -172,9 +173,9 @@ export default function Page({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row w-full justify-between">
+            <div className="flex flex-row  lg:w-full justify-between box-border  ">
               <div
-                className=" h-[165px] w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
+                className=" h-[165px] md:w-[260px] lg:w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
                 style={{
                   backgroundImage:
                     "url('/images/members-area/banners/cave_store.png')",
@@ -183,32 +184,41 @@ export default function Page({
                   backgroundSize: 'cover',
                 }}
               >
-                <div className="flex flex-col w-1/2 pt-2 ">
-                  <h1 className="text-l font-extrabold text-primary">
+                <div className="flex flex-col w-[70%] lg:w-1/2 pt-2 ">
+                  <h1 className="text-l  lg:bg-transparent font-extrabold text-primary">
                     Vista-se como um Lobo Cavernoso!
                   </h1>
-                  <p className="text-xs text-black font-semibold py-1">
+                  <p className="text-xs  lg:bg-transparent text-black font-semibold py-1">
                     Acesse a loja e garanta um super desconto com o cupom
                     “APLICATIVO”
                   </p>
                 </div>
                 <div>
-                  {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
-                  <Button
-                    className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
-                    color={'primary'}
-                    disabled
-                  >
-                    EM BREVE
-                  </Button>
-                  {/* </a> */}
+                  {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
+                    <a href="https://redirect.lifs.app/loja-mc" target="_blank">
+                      <Button
+                        className="w-[170px] mt-2 h-[36px] hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                        color="primary"
+                      >
+                        ACESSAR LOJA
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button
+                      className="w-[170px] mt-2 h-[36px] items-center justify-center"
+                      color="primary"
+                      disabled
+                    >
+                      EM BREVE
+                    </Button>
+                  )}
                 </div>
               </div>
               {![5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
                 Number(moduloId),
               ) && (
                 <div
-                  className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
+                  className="md:w-[260px] lg:w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
                   style={{
                     backgroundImage:
                       "url('/images/members-area/banners/indique.png')",
