@@ -32,7 +32,7 @@ export default function GoalCard({
     },
   })
   const messagesQuadroSonhos = [
-    'Quero viver experiências enriquecedoras e conhecer diferentes culturas ao redor do mundo. Desejo viajar para países diversos e fazer amizades com pessoas de várias partes do globo.',
+    'Comece agora a traçar seu novo caminho. Defina suas primeiras metas e objetivos!',
   ]
 
   useEffect(() => {
