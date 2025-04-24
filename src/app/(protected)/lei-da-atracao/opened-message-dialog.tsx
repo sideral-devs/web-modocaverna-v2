@@ -62,7 +62,7 @@ export function OpenedMessageDialog({ message }: { message: LockedMessage }) {
           Data de abertura
         </DialogTitle>
         <span className="w-fit px-3 py-2 rounded-full text-xs bg-cyan-800 text-cyan-400">
-          {dayjs(message.data_fechamento).format('DD [de] MMM[,] YYYY')}
+          {dayjs(message.data_abertura).format('DD [de] MMM[,] YYYY')}
         </span>
       </div>
       <div className="flex flex-col w-full min-h-[700px] flex-1 max-w-2xl items-center p-4 gap-16 mx-auto">
