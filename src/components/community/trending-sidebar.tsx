@@ -37,7 +37,7 @@ export function TrendingSidebar() {
 
         <Card className="bg-transparent border">
           <CardHeader className="p-4">
-            <CardTitle className="text-lg">Top 5 trending</CardTitle>
+            <CardTitle className="text-lg">Top 5 trending da semana</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {trendingTopics ? (
