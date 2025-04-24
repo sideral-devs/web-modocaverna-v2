@@ -27,9 +27,9 @@ export default function DialogCaveStore({
         </div>
         <DialogTitle className="text-2xl ">{poup.title}</DialogTitle>
         <div className="justify-center flex flex-col items-center gap-10">
-          <div className="w-full h-[354px] bg-gray-500 rounded-xl overflow-hidden">
+          <div className="w-full h-[354px]  rounded-xl overflow-hidden">
             <Image
-              src={'/images/members-area/cards/miniatura-mc.webp'}
+              src={'/images/dialogs/banner-loja.png'}
               alt="Banner"
               className=" object-cover w-full rounded-lg"
               width={630}
@@ -39,7 +39,7 @@ export default function DialogCaveStore({
         </div>
         <AlertDialogFooter className=" sm:justify-center flex flex-row sm:flex-row py-5 justify-center gap-20">
           <h3 className="w-[260px]">
-            Utilize o cupom &quot;<span className='text-primary'>APLICATIVO</span>&quot; para garantir um super
+            Utilize o cupom &quot;<span className='text-[#FFC803]'>APLICATIVO</span>&quot; para garantir um super
             desconto.
           </h3>
           <Link className='h-[46px]' href={`https://redirect.lifs.app/sejacaverna`} target="_blank">
