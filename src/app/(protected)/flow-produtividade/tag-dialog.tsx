@@ -23,12 +23,14 @@ export function TagDialog({
   tags,
   setTags,
   onUpdate,
+  onClose,
 }: {
   task: Task
   taskId: number
   tags: Tag[]
   setTags: (arg: Tag[]) => void
   onUpdate?: () => void
+  onClose?: () => void
 }) {
   const [mode, setMode] = useState<'view' | 'create' | 'edit'>('view')
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
@@ -59,6 +61,7 @@ export function TagDialog({
     }
     queryClient.refetchQueries({ queryKey: ['tasks'] })
     setIsTagDialogOpen(false)
+    onClose?.()
   }
   async function createTag(data: { name: string; color: string }) {
     const rollback = tags
@@ -97,10 +100,15 @@ export function TagDialog({
         checked: false,
       })
       setTags(
-        tags.map((t) =>
-          t.id === taskId ? { ...t, ticket_ids: selectedTickets } : t,
-        ),
+        allTickets
+          ?.filter((ticket) => selectedTickets.includes(ticket.id))
+          .map((ticket) => ({
+            id: ticket.id,
+            name: ticket.name,
+            color: ticket.color,
+          })) || [],
       )
+      setMode('view')
       toast.success('Etiquetas salvas com sucesso!')
       closeTagDialog()
       queryClient.invalidateQueries({ queryKey: ['tickets', 'tasks'] })
@@ -216,6 +224,7 @@ export function TagDialog({
               <Button
                 onClick={() => {
                   saveTagList()
+                  onClose?.()
                 }}
                 className="bg-primary text-white hover:bg-red-600"
               >
