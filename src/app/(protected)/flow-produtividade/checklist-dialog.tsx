@@ -39,9 +39,9 @@ export function ChecklistDialog({
     setOpen(false)
   }
 
-  function handleClose() {
-    setOpen(false)
-  }
+  // function handleClose() {
+  //   setOpen(false)
+  // }
 
   function handleSelect(id: number) {
     if (checkedItems.includes(id)) {
@@ -185,7 +185,7 @@ export function ChecklistDialog({
               </div>
             </div>
             <AlertDialogFooter className="mt-3">
-              <Button variant="ghost" onClick={handleClose}>
+              <Button variant="ghost" onClick={handleActivate}>
                 Pular
               </Button>
               <Button onClick={handleActivate}>Ativar Flow</Button>

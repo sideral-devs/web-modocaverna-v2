@@ -16,7 +16,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import {
@@ -63,6 +62,7 @@ export function EditTaskDialog({
   const [tags, setTags] = useState(task.task_tickets)
   const closeDialog = () => setIsOpen(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isTagDialogOpen, setIsTagDialogOpen] = useState(false)
   const queryClient = useQueryClient()
   const form = useForm<TaskData>({
     resolver: zodResolver(schema),
@@ -98,6 +98,8 @@ export function EditTaskDialog({
         ...task,
         ...data,
       })
+      queryClient.refetchQueries({ queryKey: ['tasks'] })
+      // queryClient.refetchQueries({ queryKey: ['tags'] })
       toast.success('Atualizado com sucesso')
       setIsOpen(false)
     } catch {
@@ -186,11 +188,29 @@ export function EditTaskDialog({
                     <span className="text-xs">{item.name}</span>
                   </div>
                 ))}
-                <Dialog>
+                {/* <Dialog>
                   <DialogTrigger asChild>
                     <PlusIcon className="text-primary cursor-pointer" />
                   </DialogTrigger>
                   <TagDialog
+                    onUpdate={refreshTags}
+                    task={task}
+                    tags={tags || []}
+                    setTags={setTags}
+                    taskId={Number(task.tarefa_id)}
+                  />
+                </Dialog> */}
+                <Dialog
+                  key={tags?.length}
+                  open={isTagDialogOpen}
+                  onOpenChange={setIsTagDialogOpen}
+                >
+                  <PlusIcon
+                    className="text-primary cursor-pointer"
+                    onClick={() => setIsTagDialogOpen(true)}
+                  />
+                  <TagDialog
+                    onClose={() => setIsTagDialogOpen(false)}
                     onUpdate={refreshTags}
                     task={task}
                     tags={tags || []}
