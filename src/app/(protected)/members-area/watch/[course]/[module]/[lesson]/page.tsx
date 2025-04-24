@@ -175,7 +175,7 @@ export default function Page({
             </div>
             <div className="flex flex-row  lg:w-full justify-between box-border  ">
               <div
-                className=" h-[165px] md:w-[230px] lg:w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
+                className=" h-[165px] md:w-[260px] lg:w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
                 style={{
                   backgroundImage:
                     "url('/images/members-area/banners/cave_store.png')",
@@ -184,17 +184,17 @@ export default function Page({
                   backgroundSize: 'cover',
                 }}
               >
-                <div className="flex flex-col lg:w-1/2 pt-2 ">
-                  <h1 className="text-l md:bg-zinc-100 lg:bg-transparent font-extrabold text-primary">
+                <div className="flex flex-col w-[70%] lg:w-1/2 pt-2 ">
+                  <h1 className="text-l  lg:bg-transparent font-extrabold text-primary">
                     Vista-se como um Lobo Cavernoso!
                   </h1>
-                  <p className="text-xs md:bg-zinc-100 lg:bg-transparent text-black font-semibold py-1">
+                  <p className="text-xs  lg:bg-transparent text-black font-semibold py-1">
                     Acesse a loja e garanta um super desconto com o cupom
                     “APLICATIVO”
                   </p>
                 </div>
                 <div>
-                  {dayjs().isAfter(dayjs('2025-04-24T19:49:59')) ? (
+                  {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
                     <a href="https://redirect.lifs.app/loja-mc" target="_blank">
                       <Button
                         className="w-[170px] mt-2 h-[36px] hover:cursor-pointer hover:bg-red-700 items-center justify-center"
@@ -218,7 +218,7 @@ export default function Page({
                 Number(moduloId),
               ) && (
                 <div
-                  className="md:w-[230px] lg:w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
+                  className="md:w-[260px] lg:w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
                   style={{
                     backgroundImage:
                       "url('/images/members-area/banners/indique.png')",

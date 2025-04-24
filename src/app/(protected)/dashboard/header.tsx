@@ -265,7 +265,7 @@ export function CentralHubHeader() {
         )}
       </div>
       <div className="flex items-center gap-3">
-        {dayjs().isAfter(dayjs('2025-04-24T19:49:59')) ? (
+        {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
           <a href="https://redirect.lifs.app/loja-mc" target="_blank">
             <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
               <StoreIcon className="text-red-500" size={20} />
