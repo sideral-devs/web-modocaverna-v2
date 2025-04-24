@@ -127,10 +127,10 @@ export default function Page() {
                           }}
                           key={index}
                         >
-                          <span className="flex w-fit h-fit relative bottom-2 right-2 p-[3px] rounded-lg bg-red-700 text-white text-xs">
+                          <span className="flex w-fit h-fit relative bottom-1 right-3 p-[3px] px-4 rounded-lg bg-red-700 text-white text-xs">
                             Criada em{' '}
                             {dayjs(message.data_fechamento).format(
-                              'DD MMM YYYY',
+                              'DD/MM/YYYY',
                             )}
                           </span>
                         </div>
@@ -152,10 +152,10 @@ export default function Page() {
                           }}
                           key={index}
                         >
-                          <span className="flex w-fit h-fit relative bottom-2 right-2 p-[3px] rounded-lg bg-red-700 text-white text-xs">
+                          <span className="flex w-fit h-fit relative bottom-3 right-3 p-[3px] px-4 rounded-lg bg-red-700 text-white text-xs">
                             Criada em{' '}
                             {dayjs(message.data_fechamento).format(
-                              'DD MMM YYYY',
+                              'DD/MM/YYYY',
                             )}
                           </span>
                         </div>
