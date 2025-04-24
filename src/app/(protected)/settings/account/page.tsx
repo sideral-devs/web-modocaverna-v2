@@ -67,7 +67,7 @@ export default function Page() {
     setError,
     formState: { errors, isSubmitting },
   } = form
-
+  const isExpired = user?.status_plan === 'EXPIRADO'
   async function handleEditUser(data: UserData) {
     try {
       await api.put('/users/update?save=true', {
@@ -187,12 +187,18 @@ export default function Page() {
           <p className="text-xs">
             {user.plan === 'TRIAL' ? 'Experiência' : 'Assinatura'}{' '}
             <span className="text-[#FA913C] lowercase">{user.plan}</span> ·{' '}
-            <span className="text-zinc-500">
-              {user.plan === 'TRIAL' ? 'Expira em' : 'Renovação em'}{' '}
-              {dayjs(user.data_de_renovacao).isValid()
-                ? dayjs(user.data_de_renovacao).format('DD [de] MMMM[,] YYYY')
-                : 'Indefinida'}
-            </span>
+            {!isExpired ? (
+              <span className="text-zinc-500">
+                {user.plan === 'TRIAL' ? 'Expira em' : 'Renovação em'}{' '}
+                {dayjs(user.data_de_renovacao).isValid()
+                  ? dayjs(user.data_de_renovacao).format('DD [de] MMMM[,] YYYY')
+                  : 'Indefinida'}
+              </span>
+            ) : (
+              <span className="text-red-500">
+                {user.plan === 'TRIAL' ? 'Expirou' : 'plano atual expirado'}
+              </span>
+            )}
           </p>
         </div>
       </section>
