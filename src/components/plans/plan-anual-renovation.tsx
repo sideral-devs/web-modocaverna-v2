@@ -22,8 +22,8 @@ export function PlanAnnualRenovation({
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-3xl font-medium mb-2">
-          {isAnnualPlan && 'Renove seu plano'}
+        <h2 className="text-2xl font-medium mb-2">
+          {isAnnualPlan && 'Renove seu Plano Cavernoso'}
         </h2>
       </div>
 
@@ -84,7 +84,7 @@ export function PlanAnnualRenovation({
                 <div className="flex items-center gap-4">
                   <RadioGroupItem value="yearly" id="yearly" />
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="monthly" className="text-lg">
+                    <Label htmlFor="yearly" className="text-lg">
                       Anual
                     </Label>
                     <div className="flex items-baseline gap-2">
@@ -92,6 +92,9 @@ export function PlanAnnualRenovation({
                       <span className="text-zinc-400">ou R$299/ano</span>
                     </div>
                   </div>
+                  <span className="text-yellow-500 absolute right-4 top-4 font-medium text-sm">
+                    Assinatura atual
+                  </span>
                 </div>
               </div>
             }
@@ -110,7 +113,7 @@ export function PlanAnnualRenovation({
             }
             className="w-full h-[40px] bg-red-500 hover:bg-red-600 text-white font-semibold"
           >
-            Ativar Plano {selectedPlan === 'yearly' ? 'Anual' : 'Mensal'}{' '}
+            Renovar Plano {selectedPlan === 'yearly' ? 'Anual' : 'Mensal'}{' '}
             <Lightning className="ml-2" weight="fill" />
           </Button>
         )}

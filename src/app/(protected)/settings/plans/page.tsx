@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { PlanAnnualRenovation } from '@/components/plans/plan-anual-renovation'
+import dayjs from 'dayjs'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -77,9 +78,9 @@ export default function Page() {
               />
               <AvatarFallback>MC</AvatarFallback>
             </Avatar>
-            <p className="text-lg text-white">{`${user.plan !== 'TRIAL' ? 'Seu período de assinatura expirou' : 'Sua avaliação gratuita expirou'}`}</p>
+            <p className="text-lg text-white">{`${user.plan !== 'TRIAL' ? `Sua Assinatura expirou em ${dayjs(user.data_de_renovacao).format('DD [de] MMMM [de] YYYY')}` : 'Sua avaliação gratuita expirou'}`}</p>
           </div>
-          <h3 className="text-red-500 font-bold">{`${user.plan !== 'TRIAL' ? 'Renovar' : 'Upgrade'}`}</h3>
+          <h3 className="text-red-500 font-bold">{`${user.plan !== 'TRIAL' ? '' : 'Upgrade'}`}</h3>
         </div>
       )}
 
