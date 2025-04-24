@@ -186,7 +186,10 @@ export default function Page() {
           <Crown strokeWidth={0} fill="#FA913C" />
           <p className="text-xs">
             {user.plan === 'TRIAL' ? 'Experiência' : 'Assinatura'}{' '}
-            <span className="text-[#FA913C] lowercase">{user.plan}</span> ·{' '}
+            <span className="text-[#FA913C] first-letter:uppercase first-letter:tracking-wide">
+              {user.plan}
+            </span>{' '}
+            ·{' '}
             {!isExpired ? (
               <span className="text-zinc-500">
                 {user.plan === 'TRIAL' ? 'Expira em' : 'Renovação em'}{' '}
@@ -196,7 +199,9 @@ export default function Page() {
               </span>
             ) : (
               <span className="text-red-500">
-                {user.plan === 'TRIAL' ? 'Expirou' : 'plano atual expirado'}
+                {user.plan === 'TRIAL'
+                  ? 'Expirou'
+                  : `Expirou em ${dayjs(user.data_de_renovacao).format('DD [de] MMMM [de] YYYY')}`}
               </span>
             )}
           </p>
