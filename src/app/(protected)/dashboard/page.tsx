@@ -9,6 +9,7 @@ import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
 import { OrdemNoCaos } from './OrdemNoCaos'
 import { TempleForge } from './TempleForge'
+import PageDialogs from './dialogs/PageDialog'
 
 export default function Page() {
   return (
@@ -25,6 +26,7 @@ function Content() {
 
   return (
     <ProtectedRoute>
+      <PageDialogs />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12">
         <CentralHubHeader />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
