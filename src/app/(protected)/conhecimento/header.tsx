@@ -50,7 +50,7 @@ export function KnowledgeHeader() {
             ))}
         </PopoverContent>
       </Popover>
-      <HeaderClose />
+      <HeaderClose to="ordem-no-caos" />
     </Header>
   )
 }

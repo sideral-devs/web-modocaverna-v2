@@ -25,7 +25,7 @@ export function MembersAreaHeader() {
       <button onClick={() => router.back()} className="focus:outline-none">
         <Image src="/images/logo.svg" alt="Logo" width={132} height={35} />
       </button>
-      <HeaderClose />
+      <HeaderClose to="cursos-e-conhecimentos" />
     </Header>
   )
 }

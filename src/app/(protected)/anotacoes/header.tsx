@@ -8,7 +8,7 @@ export function NotesHeader() {
         className="border-zinc-500"
         spanClassName="text-white"
       />
-      <HeaderClose />
+      <HeaderClose to="ordem-no-caos" />
     </Header>
   )
 }

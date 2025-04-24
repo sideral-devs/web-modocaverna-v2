@@ -4,7 +4,7 @@ export function CommunityHeader() {
   return (
     <Header containerClassName="max-w-7xl">
       <HeaderTitle title="Comunidade Alcateia" />
-      <HeaderClose />
+      <HeaderClose to="cursos-e-conhecimentos" />
     </Header>
   )
 }

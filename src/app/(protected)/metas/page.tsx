@@ -121,7 +121,7 @@ export default function Page() {
               Metas{' '}
             </span>
           </div>
-          <HeaderClose />
+          <HeaderClose to="ordem-no-caos" />
         </Header>
         <section className="flex flex-col items-center w-full gap-2 ">
           <div className="flex flex-row justify-between border-zinc-700 h-[360px] border-4 rounded-xl w-full max-w-8xl p-2 gap-4">
