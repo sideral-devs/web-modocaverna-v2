@@ -11,6 +11,7 @@ import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn, formatTimeAgo } from '@/lib/utils'
+import { PopoverClose } from '@radix-ui/react-popover'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { Ellipsis, MessageSquareMore, ThumbsUp } from 'lucide-react'
@@ -24,9 +25,14 @@ import { CategoryText } from './category-text'
 interface PostCardProps {
   post: Post
   isReply?: boolean
+  updatePosts?: (post: Post) => void
 }
 
-export function PostCard({ post, isReply = false }: PostCardProps) {
+export function PostCard({
+  post,
+  isReply = false,
+  updatePosts,
+}: PostCardProps) {
   const queryClient = useQueryClient()
   const [liked, setLiked] = useState(post.user_likeed)
   const [likeCount, setLikeCount] = useState(post.likes)
@@ -51,7 +57,7 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         toast.error(err.response.data.message)
       } else {
-        toast.error('Não foi possível deletar o post.')
+        toast.error('Não foi possível excluir o post.')
       }
     }
   }
@@ -88,9 +94,21 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function handleChangeCategory(_category: Post['category']) {
-    // TODO: Para o back-end: Não encontrei o endpoint para atualizar a categoria
+  async function handleChangeCategory(category: Post['category']) {
+    try {
+      await api.put('/posts/update/' + post.id, {
+        content: post.content,
+        midia: post.midia || undefined,
+        category,
+      })
+
+      if (updatePosts) {
+        updatePosts({ ...post, category })
+      }
+    } catch (err) {
+      console.log(err)
+      toast.error('Algo deu errado. Tente novamente.')
+    }
   }
 
   return (
@@ -253,15 +271,16 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
                         {['Experiência', 'Indicações', 'Oportunidades']
                           .filter((item) => item !== post.category)
                           .map((item, i) => (
-                            <p
-                              key={i}
-                              className="p-1.5 text-sm hover:bg-zinc-700 rounded cursor-pointer"
-                              onClick={() =>
-                                handleChangeCategory(item as Post['category'])
-                              }
-                            >
-                              {item}
-                            </p>
+                            <PopoverClose key={i}>
+                              <p
+                                className="p-1.5 text-sm hover:bg-zinc-700 rounded cursor-pointer"
+                                onClick={() =>
+                                  handleChangeCategory(item as Post['category'])
+                                }
+                              >
+                                {item}
+                              </p>
+                            </PopoverClose>
                           ))}
                       </PopoverContent>
                     </Popover>
