@@ -111,7 +111,11 @@ export default function Page() {
 
   useEffect(() => {
     if (user) {
-      setUserBanner((user.banner) ? env.NEXT_PUBLIC_PROD_URL+user.banner: '/images/perfil/background_perfil.png');
+      setUserBanner(
+        user.banner
+          ? env.NEXT_PUBLIC_PROD_URL + user.banner
+          : '/images/perfil/background_perfil.png',
+      )
       form.reset({
         name: user.name,
         nickname: user.nickname,
@@ -215,7 +219,7 @@ export default function Page() {
                 loading={isSubmitting}
                 onClick={() => setIsEditing(true)}
               >
-              Alterar Dados
+                Alterar Dados
               </Button>
             )}
           </div>
