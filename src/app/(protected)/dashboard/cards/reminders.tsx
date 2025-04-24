@@ -154,6 +154,11 @@ const reminderPositions = [
   { x: 65, y: 15, rotate: 4 },
 ]
 
+function randomNumber(min: number, max: number) {
+  console.log('random')
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 function ReminderCard({
   reminders,
   setSelected,
@@ -175,11 +180,19 @@ function ReminderCard({
       onHoverEnd={() => setIsHovered(false)}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-transparent from-[50%] to-card to-[90%] z-10" /> */}
-      {Array.from({ length: 7 }, (_, index) => {
-        const reminder = reminders[index]
-        if (!reminder) return null
-
+      {reminders.map((reminder, index) => {
         const position = reminderPositions[index]
+          ? reminderPositions[index]
+          : (() => {
+              const random = {
+                x: randomNumber(-10, 180),
+                y: randomNumber(10, 140),
+                rotate: randomNumber(-45, 45),
+              }
+
+              reminderPositions.push(random)
+              return random
+            })()
 
         return (
           <motion.div

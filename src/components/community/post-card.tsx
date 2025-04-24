@@ -88,6 +88,11 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function handleChangeCategory(_category: Post['category']) {
+    // TODO: Para o back-end: Não encontrei o endpoint para atualizar a categoria
+  }
+
   return (
     <Card
       onClick={(e) => {
@@ -239,7 +244,30 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
                   </Link>
                 </div>
                 <div className="flex items-end justify-items-start">
-                  <CategoryText category={post.category} />
+                  {user?.plan === 'ADMIN' ? (
+                    <Popover>
+                      <PopoverTrigger>
+                        <CategoryText category={post.category} />
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[140px] p-1">
+                        {['Experiência', 'Indicações', 'Oportunidades']
+                          .filter((item) => item !== post.category)
+                          .map((item, i) => (
+                            <p
+                              key={i}
+                              className="p-1.5 text-sm hover:bg-zinc-700 rounded cursor-pointer"
+                              onClick={() =>
+                                handleChangeCategory(item as Post['category'])
+                              }
+                            >
+                              {item}
+                            </p>
+                          ))}
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <CategoryText category={post.category} />
+                  )}
                 </div>
               </div>
             </div>
