@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { VideoPlayer } from '@/components/video-player'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn } from '@/lib/utils'
@@ -21,8 +22,6 @@ import { toast } from 'sonner'
 import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
 import { Comments } from './comments'
-import { useUser } from '@/hooks/queries/use-user'
-import dayjs from 'dayjs'
 
 export default function Page({
   params,
@@ -173,62 +172,43 @@ export default function Page({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row  lg:w-full justify-between box-border  ">
-              <div
-                className=" h-[165px] md:w-[260px] lg:w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
-                style={{
-                  backgroundImage:
-                    "url('/images/members-area/banners/cave_store.png')",
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                }}
-              >
-                <div className="flex flex-col w-[70%] lg:w-1/2 pt-2 ">
-                  <h1 className="text-l  lg:bg-transparent font-extrabold text-primary">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4">
+                <div className="flex flex-col max-w-80 xl:max-w-52 z-10 gap-3 xl:gap-0">
+                  <h1 className="text-lg xl:text-base font-extrabold text-primary">
                     Vista-se como um Lobo Cavernoso!
                   </h1>
-                  <p className="text-xs  lg:bg-transparent text-black font-semibold py-1">
+                  <p className="text-xs text-black font-semibold py-1">
                     Acesse a loja e garanta um super desconto com o cupom
                     “APLICATIVO”
                   </p>
-                </div>
-                <div>
-                  {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
-                    <a href="https://redirect.lifs.app/loja-mc" target="_blank">
-                      <Button
-                        className="w-[170px] mt-2 h-[36px] hover:cursor-pointer hover:bg-red-700 items-center justify-center"
-                        color="primary"
-                      >
-                        ACESSAR LOJA
-                      </Button>
-                    </a>
-                  ) : (
+
+                  <Link
+                    href="https://redirect.lifs.app/loja-mc"
+                    target="_blank"
+                    className="z-10"
+                  >
                     <Button
-                      className="w-[170px] mt-2 h-[36px] items-center justify-center"
+                      className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center text-xs"
                       color="primary"
-                      disabled
                     >
-                      EM BREVE
+                      ACESSAR LOJA
                     </Button>
-                  )}
+                  </Link>
                 </div>
+
+                <Image
+                  src={'/images/members-area/banners/cave_store.png'}
+                  alt="Cave Store"
+                  fill
+                />
               </div>
               {![5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
                 Number(moduloId),
               ) && (
-                <div
-                  className="md:w-[260px] lg:w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
-                  style={{
-                    backgroundImage:
-                      "url('/images/members-area/banners/indique.png')",
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  <div className="flex flex-col w-48 relative left-4  ">
-                    <h1 className="text-base font-extrabold text-yellow-400">
+                <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4 gap-2">
+                  <div className="flex flex-col w-80 xl:w-48 relative z-10  gap-3 xl:gap-0">
+                    <h1 className="text-lg xl:text-base font-extrabold text-yellow-400">
                       Faça parte do nosso programa de afiliados.
                     </h1>
                     {user?.plan === `"TRIAL"` ? (
@@ -241,12 +221,11 @@ export default function Page({
                         Ganhe comissões generosas indicando o Modo Caverna.
                       </p>
                     )}
-                  </div>
-                  <div>
+
                     {user?.plan === `"TRIAL"` ? (
                       <Link href="/settings/plans">
                         <Button
-                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           ADQUIRIR
@@ -255,7 +234,7 @@ export default function Page({
                     ) : (
                       <Link href="/indique-e-ganhe">
                         <Button
-                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           COMECE AGORA
@@ -263,6 +242,12 @@ export default function Page({
                       </Link>
                     )}
                   </div>
+
+                  <Image
+                    src={'/images/members-area/banners/indique.png'}
+                    alt="Cave Store"
+                    fill
+                  />
                 </div>
               )}
             </div>
