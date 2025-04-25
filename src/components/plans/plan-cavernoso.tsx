@@ -129,9 +129,14 @@ export function PlanCavernoso({
         )}
       </div>
 
-      <div className="relative flex flex-col h-fit border-t border-x border-b  bg-zinc-800 rounded-3xl">
+      <div
+        className={cn(
+          'relative flex flex-col h-flit border-t border-x border-b bg-zinc-800 rounded-3xl',
+          isOnboarding && 'h-auto overflow-hidden',
+        )}
+      >
         {!isAnnualPlan && (
-          <div className="border-b sticky top-0 bg-zinc-800 p-6 flex justify-between items-start">
+          <div className="border-b sticky top-0 p-6 flex justify-between items-start">
             <div className="flex items-start flex-col gap-2">
               {selectedPlan === 'yearly' && (
                 <Badge className="text-emerald-400 mb-2 bg-emerald-900">
@@ -165,7 +170,8 @@ export function PlanCavernoso({
         <ul
           className={cn(
             'flex flex-col gap-4 p-6',
-            isOnboarding && 'overflow-y-auto scrollbar-minimal',
+            isOnboarding &&
+              'overflow-y-auto scrollbar-minimal bg-gradient-to-t from-zinc-900 via-zinc-800 ',
           )}
         >
           <h3 className="text-zinc-400 mb-2">

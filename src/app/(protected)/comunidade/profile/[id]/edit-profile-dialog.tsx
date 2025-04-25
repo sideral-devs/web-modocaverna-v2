@@ -90,10 +90,10 @@ export function EditProfileDialog({
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const bannerFileInputRef = useRef<HTMLInputElement>(null)
-  const [previewProfile, setPreviewProfile] = useState<string | undefined>(
+  const [previewProfile, setPreviewProfile] = useState<string | null>(
     profile.foto_perfil
       ? `${env.NEXT_PUBLIC_PROD_URL}${profile.foto_perfil}`
-      : undefined,
+      : null,
   )
   const [previewBanner, setPreviewBanner] = useState<string | null>(
     profile.banner ? `${env.NEXT_PUBLIC_PROD_URL}${profile.banner}` : '',
@@ -142,9 +142,7 @@ export function EditProfileDialog({
     }
   }, [profile, reset])
 
-  function buildBookPayload(data: RegisterData, previewBanner: string | null) {
-    const isBannerBase64 = previewBanner?.startsWith('data:image/')
-
+  function buildBookPayload(data: RegisterData) {
     return {
       nickname: data.nickname,
       biography: data.biography,
@@ -156,18 +154,23 @@ export function EditProfileDialog({
         ? data.linkedin
         : 'https://' + data.linkedin
       ).toLowerCase(),
-      ...(isBannerBase64 || previewBanner == null
-        ? { banner: previewBanner }
-        : {}),
     }
   }
 
-  function buildPhotoProfile(previewProfile: string | undefined) {
-    if (!previewProfile) return { user_foto: null }
+  function buildUserImages() {
+    const isBannerBase64 = previewBanner?.startsWith('data:image/')
+    const isPhotoProfileBase64 = previewProfile?.startsWith('data:image/')
 
-    if (!previewProfile.startsWith('data:image/')) return {}
+    const result = {
+      ...(isBannerBase64 || previewBanner == null
+        ? { banner: previewBanner }
+        : {}),
+      ...(isPhotoProfileBase64 || previewProfile == null
+        ? { user_foto: previewProfile }
+        : {}),
+    }
 
-    return { user_foto: previewProfile }
+    return result
   }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -215,15 +218,12 @@ export function EditProfileDialog({
   }
 
   const handleRemoveClick = () => {
-    setPreviewProfile(undefined)
+    setPreviewProfile(null)
   }
 
   async function updatePhotoProfile() {
     try {
-      await api.put(
-        '/users/update?save=true',
-        buildPhotoProfile(previewProfile),
-      )
+      await api.put('/users/update?save=true', buildUserImages())
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         if (err.response.data.status === 500)
@@ -239,7 +239,7 @@ export function EditProfileDialog({
 
   async function handleRegister(data: RegisterData) {
     try {
-      const payload = buildBookPayload(data, previewBanner)
+      const payload = buildBookPayload(data)
       await api.put(`/perfil-comunidade/update/${profile.id}`, payload)
       await updatePhotoProfile()
 
@@ -357,7 +357,10 @@ export function EditProfileDialog({
                 {profile ? (
                   <>
                     <Avatar className="w-full h-full">
-                      <AvatarImage src={previewProfile} alt="Profile picture" />
+                      <AvatarImage
+                        src={previewProfile || undefined}
+                        alt="Profile picture"
+                      />
                       <AvatarFallback className="uppercase">
                         {profile.nickname?.charAt(0)}
                       </AvatarFallback>
