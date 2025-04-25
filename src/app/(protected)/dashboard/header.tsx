@@ -267,9 +267,12 @@ export function CentralHubHeader() {
       <div className="flex items-center gap-3">
         {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
           <a href="https://redirect.lifs.app/loja-mc" target="_blank">
-            <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-              <StoreIcon className="text-red-500" size={20} />
-              <span className="text-sm">Loja Caverna</span>
+            <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
+              <StoreIcon
+                className="text-red-500 group-hover:text-white"
+                size={20}
+              />
+              <span className="text-sm  ">Loja Caverna</span>
             </div>
           </a>
         ) : (
