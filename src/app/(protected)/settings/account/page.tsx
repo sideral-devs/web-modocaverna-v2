@@ -177,7 +177,7 @@ export default function Page() {
           }}
         >
           {/* Overlay com botões (aparece no hover) */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 z-50 group-hover:opacity-100 transition-opacity bg-black/50">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 z-40 group-hover:opacity-100 transition-opacity bg-black/50">
             <Button
               variant="ghost"
               size="icon"
@@ -209,7 +209,7 @@ export default function Page() {
             className="hidden"
           />
 
-          <div className="relative w-fit">
+          <div className="relative z-50 w-fit">
             <Avatar className="w-[72px] h-[72px] ">
               <AvatarImage
                 src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
@@ -237,7 +237,7 @@ export default function Page() {
               <Pen size={10} />
             </button>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex z-50 flex-col gap-2">
             <h2>{user.name}</h2>
             <span className="text-xs">
               <span className="text-zinc-500">Membro desde</span>{' '}
