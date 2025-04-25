@@ -56,7 +56,7 @@ export default function Page() {
   const [profilePictureOpen, setProfilePictureOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [userBanner, setUserBanner] = useState<string | null>(null)
-  const [shouldSaveBanner, setShouldSaveBanner] = useState(false);
+  const [shouldSaveBanner, setShouldSaveBanner] = useState(false)
   const bannerFileInputRef = useRef<HTMLInputElement>(null)
   const { data: user } = useUser()
   const form = useForm<UserData>({
@@ -72,7 +72,7 @@ export default function Page() {
   } = form
   const isExpired = user?.status_plan === 'EXPIRADO'
   async function handleEditUser(data: UserData) {
-    const isBannerBase64 = userBanner?.startsWith('data:image/');
+    const isBannerBase64 = userBanner?.startsWith('data:image/')
     try {
       await api.put('/users/update?save=true', {
         name: data.name,
@@ -82,9 +82,7 @@ export default function Page() {
           ? dayjs(data.birthdate, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss')
           : null,
         sexo: data.gender,
-        ...(isBannerBase64 || userBanner == null
-          ? { banner: userBanner }
-          : {}),
+        ...(isBannerBase64 || userBanner == null ? { banner: userBanner } : {}),
       })
       setIsEditing(false)
       toast.success('Dados atualizados!')
@@ -117,7 +115,7 @@ export default function Page() {
   }
 
   const handleEditBannerClick = () => {
-    bannerFileInputRef.current?.click();
+    bannerFileInputRef.current?.click()
   }
 
   const handleRemoveBannerClick = () => {
@@ -128,23 +126,19 @@ export default function Page() {
   const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-  
+
     const reader = new FileReader()
     reader.onload = (event) => {
       const result = event.target?.result as string
       setUserBanner(result)
-      setShouldSaveBanner(true) 
+      setShouldSaveBanner(true)
     }
     reader.readAsDataURL(file)
   }
 
   useEffect(() => {
     if (user) {
-      setUserBanner(
-        user.banner
-          ? env.NEXT_PUBLIC_PROD_URL + user.banner
-          : null,
-      )
+      setUserBanner(user.banner ? env.NEXT_PUBLIC_PROD_URL + user.banner : null)
       form.reset({
         name: user.name,
         nickname: user.nickname,
@@ -160,11 +154,10 @@ export default function Page() {
 
   useEffect(() => {
     if (shouldSaveBanner) {
-      handleEditUser(form.getValues());
-      setShouldSaveBanner(false);
+      handleEditUser(form.getValues())
+      setShouldSaveBanner(false)
     }
-  }, [shouldSaveBanner]);
-  
+  }, [shouldSaveBanner])
 
   if (!user) {
     return null
@@ -177,45 +170,45 @@ export default function Page() {
         <div
           className="flex flex-col relative w-full p-10 pb-12 gap-6 bg-gradient-to-b from-[#353535] to-[#212121] rounded-lg group"
           style={{
-            backgroundImage: ` url(${userBanner ? userBanner : "/images/perfil/background_perfil.png"})`,
+            backgroundImage: ` url(${userBanner || '/images/perfil/background_perfil.png'})`,
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
         >
-           {/* Overlay com botões (aparece no hover) */}
-           <div className="absolute inset-0 flex items-center justify-center opacity-0 z-50 group-hover:opacity-100 transition-opacity bg-black/50">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white"
-                    onClick={handleEditBannerClick}
-                    aria-label="Edit banner"
-                  >
-                    <Camera className="h-6 w-6" />
-                  </Button>
-                  {userBanner && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-white"
-                      onClick={handleRemoveBannerClick}
-                      aria-label="Remove banner"
-                    >
-                      <Trash2 className="h-6 w-6" />
-                    </Button>
-                  )}
-                </div>
+          {/* Overlay com botões (aparece no hover) */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 z-50 group-hover:opacity-100 transition-opacity bg-black/50">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white"
+              onClick={handleEditBannerClick}
+              aria-label="Edit banner"
+            >
+              <Camera className="h-6 w-6" />
+            </Button>
+            {userBanner && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white"
+                onClick={handleRemoveBannerClick}
+                aria-label="Remove banner"
+              >
+                <Trash2 className="h-6 w-6" />
+              </Button>
+            )}
+          </div>
 
-                {/* Input escondido para upload do banner */}
-                <input
-                  type="file"
-                  ref={bannerFileInputRef}
-                  onChange={handleBannerChange}
-                  accept="image/*"
-                  className="hidden"
-                />
-                
+          {/* Input escondido para upload do banner */}
+          <input
+            type="file"
+            ref={bannerFileInputRef}
+            onChange={handleBannerChange}
+            accept="image/*"
+            className="hidden"
+          />
+
           <div className="relative w-fit">
             <Avatar className="w-[72px] h-[72px] ">
               <AvatarImage
