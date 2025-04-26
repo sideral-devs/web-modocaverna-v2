@@ -8,13 +8,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useUser } from '@/hooks/queries/use-user'
 import { ReactNode } from 'react'
+import { toast } from 'sonner'
 
 export function CommissionPlanDialogTrigger({
   children,
 }: {
   children: ReactNode
 }) {
+  const { data: user } = useUser()
+  const isDesafioPlan = user?.plan === 'DESAFIO'
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -27,7 +31,11 @@ export function CommissionPlanDialogTrigger({
             <p className="text-white pb-4 text-lg">
               Cadastro na Plataforma de Vendas
             </p>
-            <a className="" href="https://redirect.lifs.app/cadastro-ticto">
+            <a
+              className=""
+              href="https://redirect.lifs.app/cadastro-ticto"
+              target="_blank"
+            >
               <Button size={'sm'} className="w-52 text-sm">
                 Clique aqui
               </Button>
@@ -89,23 +97,37 @@ export function CommissionPlanDialogTrigger({
                   Página de vendas:
                   <a
                     className="pl-2 text-primary"
-                    href="https://desafio.modocaverna.com/up-dc/"
-                    target="_blank"
+                    // href="https://desafio.modocaverna.com/up-dc/"
+                    // target="_blank"
                   >
-                    CLIQUE AQUI
+                    EM BREVE
                   </a>
                 </p>
               </div>
             </div>
-            <a
-              className="pt-2"
-              href="https://redirect.lifs.app/cc-afiliacao"
-              target="_blank"
-            >
-              <Button size={'sm'} className="w-52 text-sm">
-                Solicitar Afiliação
+            {!isDesafioPlan ? (
+              <a
+                className="pt-2"
+                href="https://redirect.lifs.app/cc-afiliacao"
+                target="_blank"
+              >
+                <Button size="sm" className="w-52 text-sm">
+                  Solicitar Afiliação
+                </Button>
+              </a>
+            ) : (
+              <Button
+                size="sm"
+                className="w-52 text-sm"
+                onClick={() => {
+                  toast.warning(
+                    'Assine o plano Cavernoso para se afiliar a esse produto',
+                  )
+                }}
+              >
+                Solicitar Afiliaçãol
               </Button>
-            </a>
+            )}
           </Card>
           <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
