@@ -29,7 +29,7 @@ export function PlanAnnualRenovation({
         <h2 className="text-2xl font-medium mb-2">
           {renovationDate < today
             ? 'Renove seu Plano Cavernoso'
-            : 'Confira seu plano'}
+            : 'Aproveite seu plano'}
         </h2>
       </div>
 
@@ -50,7 +50,7 @@ export function PlanAnnualRenovation({
                     </Label>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl ">R$299</span>
-                      <span className="">ou 12x de R$ 30</span>
+                      <span className="">/ano</span>
                     </div>
                   </div>
                   <span className="text-yellow-500 absolute right-4 top-4 font-medium text-sm">

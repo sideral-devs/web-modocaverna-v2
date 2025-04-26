@@ -18,6 +18,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { PlanAnnualRenovation } from '@/components/plans/plan-anual-renovation'
 import dayjs from 'dayjs'
+import { PlanCavernosoColumn } from '@/components/plans/plan-cavernoso-column'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -200,7 +201,7 @@ export default function Page() {
       <div className="flex flex-col justify-start items-start col-span-3 gap-10">
         {renderHeader()}
         {isExpired && renderExpiredAlert()}
-        <div className="flex items-start w-full gap-4">
+        {isExpired && (
           <PlanAnnualRenovation
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
@@ -208,11 +209,14 @@ export default function Page() {
             renovationDate={renovationDate}
             today={today}
           />
-          <PlanCavernoso
+        )}
+        <div className="flex items-start w-full gap-4">
+          <PlanCavernosoColumn
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
             isUpdatePlan={false}
             getPlanUrl={getPlanUrl}
+            isExpired={isExpired}
           />
         </div>
       </div>
