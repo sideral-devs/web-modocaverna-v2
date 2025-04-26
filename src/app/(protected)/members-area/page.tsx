@@ -1,7 +1,9 @@
 'use client'
 import { CourseSwiperData } from '@/components/course-swiper'
+import { ExpiredPlanPopup } from '@/components/modals/ExpiredPlanPopup'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { useQuery } from '@tanstack/react-query'
@@ -20,8 +22,9 @@ const DigitalMarketing = dynamic(() => import('./digital-marketing'), {
 
 export default function Page() {
   const [courses, setCourses] = useState<CourseSwiperData[] | null>(null)
-
-  const { data } = useQuery({
+  const [open, setOpen] = useState(true)
+  const { data: user } = useUser()
+  const { data, isLoading } = useQuery({
     queryKey: ['courses'],
     queryFn: async () => {
       const response = await api.get('/conteudos/find')
@@ -64,6 +67,13 @@ export default function Page() {
       setCourses(mapped)
     }
   }, [data])
+
+  if (user?.status_plan === 'EXPIRADO') {
+    return <ExpiredPlanPopup open={open} setOpen={setOpen} />
+  }
+  if (isLoading) {
+    return <Skeleton className="w-full h-[573px] 2xl:h-[calc(100vw/32*9)]" />
+  }
 
   return (
     <div className="flex flex-col w-full max-w-8xl pb-16 gap-14">
