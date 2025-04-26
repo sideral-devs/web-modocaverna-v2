@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { api } from '@/lib/api'
 
@@ -24,7 +25,7 @@ export default function GoalCard({
     const index = Math.floor(minutesOfDay / 20) % messages.length
     return messages[index]
   }
-  const { data: goals } = useQuery({
+  const { data: goals, isFetched } = useQuery({
     queryKey: ['goals'],
     queryFn: async () => {
       const response = await api.get('/metas/find')
@@ -46,6 +47,12 @@ export default function GoalCard({
       )
     }
   }, [goals])
+
+  if (!isFetched) {
+    return (
+      <Skeleton className="flex flex-col w-full h-full min-h-[300px] relative overflow-hidden" />
+    )
+  }
 
   return (
     <Card className="flex flex-col w-full h-full min-h-[300px] p-0 gap-4 relative overflow-hidden">
