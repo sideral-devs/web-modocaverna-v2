@@ -10,6 +10,52 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent } from '@/components/ui/card'
+import { env } from '@/lib/env'
+import { PinIcon } from 'lucide-react'
+
+function MockPostCard({ content }: { content: string }) {
+  return (
+    <Card className="border-x-0 rounded-none shadow-none bg-transparent relative">
+      <CardContent className="p-4 pb-12">
+        <div
+          className="appearance-none p-0 m-0 border-none bg-transparent w-full text-left cursor-inherit"
+          tabIndex={-1}
+          style={{ all: 'unset', width: '100%', display: 'block' }}
+          aria-label="Abrir post"
+        >
+          <div className="flex gap-3">
+            <Avatar>
+              <AvatarImage
+                src={`${env.NEXT_PUBLIC_PROD_URL}/storage/68004cb1d2407.webp`}
+              />
+              <AvatarFallback className="uppercase">C</AvatarFallback>
+            </Avatar>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between gap-3 w-full">
+                <div className="flex items-center gap-3 text-sm">
+                  Capitão Caverna
+                  <span className="flex items-center gap-1 text-muted-foreground">
+                    <PinIcon size={16} />
+                    Fixado
+                  </span>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="text-base whitespace-pre-wrap">
+                  <p>{content}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function HomePage() {
   const queryClient = useQueryClient()
   const [currentTab, setCurrentTab] = useState('Geral')
@@ -96,47 +142,62 @@ export default function HomePage() {
                 </TabsList>
 
                 <TabsContent value="Geral" className="mt-0">
-                  <div>
+                  <div className="divide-y">
+                    <MockPostCard
+                      content={`👊 Bem-vindo à Comunidade Alcateia.
+Aqui você vê tudo o que está acontecendo.
+Mas ao postar, escolha a aba certa.
+Organização é disciplina. Disciplina é transformação. 🔺🐺`}
+                    />
                     {data.data.map((post) => (
-                      <div key={post.id} className="border-b">
-                        <PostCard post={post} />
-                      </div>
+                      <PostCard post={post} key={post.id} />
                     ))}
                   </div>
                 </TabsContent>
 
                 <TabsContent value="Experiência" className="mt-0">
-                  <div>
+                  <div className="divide-y">
+                    <MockPostCard
+                      content={`🔥 Sua jornada fortalece a Alcateia.
+Compartilhe como você aplica o Modo Caverna na vida real:
+hábitos, rotinas, vitórias e renascimentos.
+Sua transformação acende o caminho para outros Cavernosos. 🔺🐺`}
+                    />
                     {data.data
                       .filter((post) => post.category === 'Experiência')
                       .map((post) => (
-                        <div key={post.id} className="border-b">
-                          <PostCard post={post} />
-                        </div>
+                        <PostCard key={post.id} post={post} />
                       ))}
                   </div>
                 </TabsContent>
 
                 <TabsContent value="Indicações" className="mt-0">
-                  <div>
+                  <div className="divide-y">
+                    <MockPostCard
+                      content={`📚 Descobriu algo que elevou sua mente ou sua rotina?
+Compartilhe aqui: livros, conteúdos e ferramentas.
+O que fortalece um, fortalece toda a Alcateia. 🔺🐺`}
+                    />
                     {data.data
                       .filter((post) => post.category === 'Indicações')
                       .map((post) => (
-                        <div key={post.id} className="border-b">
-                          <PostCard post={post} />
-                        </div>
+                        <PostCard key={post.id} post={post} />
                       ))}
                   </div>
                 </TabsContent>
 
                 <TabsContent value="Oportunidades" className="mt-0">
-                  <div>
+                  <div className="divide-y">
+                    <MockPostCard
+                      content={`🚀 A Caverna é solo fértil para novas alianças.
+Aqui você divulga vagas, projetos, parcerias, collabs e freelas.
+Se busca talentos, convoque. Se oferece valor, apresente suas habilidades.
+A Alcateia prospera quando cada lobo fortalece o outro. 🔺🐺`}
+                    />
                     {data.data
                       .filter((post) => post.category === 'Oportunidades')
                       .map((post) => (
-                        <div key={post.id} className="border-b">
-                          <PostCard post={post} />
-                        </div>
+                        <PostCard key={post.id} post={post} />
                       ))}
                   </div>
                 </TabsContent>
