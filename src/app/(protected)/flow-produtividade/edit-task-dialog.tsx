@@ -178,7 +178,7 @@ export function EditTaskDialog({
               <label htmlFor="tag" className="text-sm font-medium">
                 Etiqueta
               </label>
-              <div className="flex flex-wrap h-auto items-center gap-4">
+              <div className="flex flex-wrap h-auto items-center gap-2">
                 {tags?.map((item) => (
                   <div
                     key={item.id}

@@ -783,23 +783,33 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
         <p className="w-full whitespace-pre-wrap text-sm line-clamp-2">
           {task.item}
         </p>
-        {task.checklists && task.checklists.length > 0 && (
-          <div className="flex flex-row items-end justify-end w-full  p-2 gap-1">
-            <ListChecks width={20} height={20} />
-            {task.checklists?.map((checklist, index) => {
-              const total = checklist.subtasks.length
-              const done = checklist.subtasks.filter(
-                (sub) => !!Number(sub.checked),
-              ).length
+        <div className="flex flex-row items-center justify-end w-full p-1.5 gap-2">
+          {task.checklists && task.checklists.length > 0 && (
+            <span className="flex items-center gap-1">
+              <ListChecks width={20} height={20} />
+              {task.checklists?.map((checklist, index) => {
+                const total = checklist.subtasks.length
+                const done = checklist.subtasks.filter(
+                  (sub) => !!Number(sub.checked),
+                ).length
 
-              return (
-                <span key={index} className="text-sm text-white">
-                  {done}/{total}
-                </span>
-              )
-            })}
-          </div>
-        )}
+                return (
+                  <span key={index} className="text-sm text-white">
+                    {done}/{total}
+                  </span>
+                )
+              })}
+            </span>
+          )}
+          {task.task_tickets && task.task_tickets.length > 0 && (
+            <div
+              className="flex items-center justify-center px-4 py-1.5 h-auto gap-2 rounded-lg"
+              style={{ backgroundColor: task.task_tickets[0].color }}
+            >
+              <span className="text-xs">{task.task_tickets[0].name}</span>
+            </div>
+          )}
+        </div>
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <EditTaskDialog

@@ -194,7 +194,6 @@ export function TaskChecklist({ task }: { task: Task }) {
                     autoFocus
                     className="py-1 bg-transparent outline-border outline-1 w-full"
                     value={sub.name}
-                    maxLength={24}
                     onChange={(e) => {
                       handleEdit({
                         id: sub.id,
@@ -203,10 +202,12 @@ export function TaskChecklist({ task }: { task: Task }) {
                       })
                     }}
                     onBlur={() => {
+                      if (!sub.name) return
                       setEditingId(null)
                     }}
                     onKeyDown={(e) => {
                       if (e.key !== 'Enter') return
+                      if (!sub.name) return
                       setEditingId(null)
                     }}
                   />
