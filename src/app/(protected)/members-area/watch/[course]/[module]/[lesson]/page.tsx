@@ -28,6 +28,7 @@ export default function Page({
 }: {
   params: Promise<{ course: string; module: string; lesson: string }>
 }) {
+  console.log(params)
   const { course, module: moduloId, lesson: lessonId } = use(params)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -50,7 +51,6 @@ export default function Page({
       }),
     }),
   })
-
   const { data: lesson } = useQuery({
     queryKey: ['lesson', course, moduloId, lessonId],
     queryFn: async () => {

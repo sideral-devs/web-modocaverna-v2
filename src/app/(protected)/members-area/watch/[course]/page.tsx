@@ -1,5 +1,7 @@
 'use client'
+import { UpgradeDialogExpiredTrial } from '@/app/(protected)/dashboard/UpgradeDialogExpiredTrial'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { redirect } from 'next/navigation'
@@ -11,8 +13,9 @@ export default function Page({
   params: Promise<{ course: string }>
 }) {
   const { course } = use(params)
+  const { data: user } = useUser()
 
-  const { data } = useQuery({
+  const { data, error, isLoadingError, isRefetchError, isFetched } = useQuery({
     queryKey: ['course', course],
     queryFn: async () => {
       const res = await api.get('/conteudos/show/' + course)
@@ -30,6 +33,8 @@ export default function Page({
       }),
     }),
   })
+  console.log('isFetched', isFetched)
+  console.log('error', error, isLoadingError, isRefetchError, data)
 
   if (!data) {
     return (
@@ -58,6 +63,13 @@ export default function Page({
           </div>
         </div>
       </div>
+    )
+  }
+  if (user && user.plan === 'DESAFIO' && user?.status_plan === 'ATIVO') {
+    return (
+      <UpgradeDialogExpiredTrial>
+        <></>
+      </UpgradeDialogExpiredTrial>
     )
   }
 
