@@ -95,7 +95,6 @@ export function KnowledgeDocument({
           rel="noreferrer"
         >
           <Button
-            onClick={() => onMoveTo(id, 'pendente')}
             className="h-10 w-full ml-auto text-sm"
           >
             Acessar
