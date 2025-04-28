@@ -94,11 +94,7 @@ export function KnowledgeDocument({
           target="_blank"
           rel="noreferrer"
         >
-          <Button
-            className="h-10 w-full ml-auto text-sm"
-          >
-            Acessar
-          </Button>
+          <Button className="h-10 w-full ml-auto text-sm">Acessar</Button>
         </a>
       ) : status === 'desejos' ? (
         <Button

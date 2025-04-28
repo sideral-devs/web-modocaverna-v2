@@ -1,7 +1,7 @@
 'use client'
-import { UpgradeDialogExpiredTrial } from '@/app/(protected)/dashboard/UpgradeDialogExpiredTrial'
+
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { redirect } from 'next/navigation'
@@ -13,7 +13,6 @@ export default function Page({
   params: Promise<{ course: string }>
 }) {
   const { course } = use(params)
-  const { data: user } = useUser()
 
   const { data, error, isLoadingError, isRefetchError, isFetched } = useQuery({
     queryKey: ['course', course],
@@ -33,9 +32,18 @@ export default function Page({
       }),
     }),
   })
-  console.log('isFetched', isFetched)
   console.log('error', error, isLoadingError, isRefetchError, data)
-
+  if (isLoadingError || isRefetchError || (!data && isFetched)) {
+    return (
+      <UpgradeModalTrigger>
+        <div className="flex w-full h-full flex-1 items-center justify-center">
+          {/* <h1 className="text-zinc-400">
+            Adquira o Plano Cavernoso para acessar este Curso.
+          </h1> */}
+        </div>
+      </UpgradeModalTrigger>
+    )
+  }
   if (!data) {
     return (
       <div className="grid grid-cols-5 w-full max-w-8xl px-10 py-16 gap-12">
@@ -63,13 +71,6 @@ export default function Page({
           </div>
         </div>
       </div>
-    )
-  }
-  if (user && user.plan === 'DESAFIO' && user?.status_plan === 'ATIVO') {
-    return (
-      <UpgradeDialogExpiredTrial>
-        <></>
-      </UpgradeDialogExpiredTrial>
     )
   }
 
