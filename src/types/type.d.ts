@@ -57,6 +57,7 @@ interface Book {
   avaliacao: string
   status: string
   link: string
+  is_ebook: boolean
   deleted_at: unknown
   created_at: string
   updated_at: string

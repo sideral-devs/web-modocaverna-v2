@@ -38,6 +38,17 @@ export default function Page({
       const res = await api.get('/conteudos/show/' + course)
       return res.data as Conteudo
     },
+    select: (orig) => ({
+      ...orig,
+      modulos: orig.modulos.map((modulo) => {
+        if (modulo.modulo_id === 30) {
+          const primeiro = modulo.aulas.filter((a) => a.aula_id === 105)
+          const restantes = modulo.aulas.filter((a) => a.aula_id !== 105)
+          return { ...modulo, aulas: [...primeiro, ...restantes] }
+        }
+        return modulo
+      }),
+    }),
   })
 
   const { data: lesson } = useQuery({
