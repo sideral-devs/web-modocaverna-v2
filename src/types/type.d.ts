@@ -8,6 +8,7 @@ interface User {
   user_foto: string
   banner: string | null
   plataforma: string
+  isInTrialDesafio: boolean
   data_de_compra: string
   data_de_renovacao: string
   first_login: boolean

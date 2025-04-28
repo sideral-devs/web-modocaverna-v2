@@ -10,6 +10,8 @@ import { KnowledgeDocument } from '../document'
 import { KnowledgeHeader } from '../header'
 import { UploadBookNewModalTrigger } from './upload-book-new'
 import { useState } from 'react'
+import { AxiosError } from 'axios'
+import { useUser } from '@/hooks/queries/use-user'
 
 export default function Page() {
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
@@ -25,6 +27,10 @@ export default function Page() {
       return response.data as Book[]
     },
   })
+  const { data: user } = useUser()
+  const userAcess =
+    (user?.plan === 'DESAFIO' && user?.isInTrialDesafio) ||
+    (user?.plan !== 'DESAFIO' && user?.status_plan === 'ATIVO')
 
   async function handleRemoveBook(id: number) {
     const rollback = data
@@ -34,8 +40,16 @@ export default function Page() {
       )
       await api.delete(`/livros/destroy/${id}`)
       queryClient.refetchQueries({ queryKey: ['books'] })
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
+    } catch (err) {
+      if (
+        err instanceof AxiosError &&
+        err.response?.status !== 500 &&
+        err.response?.data?.message
+      ) {
+        toast.error(err.response?.data?.message)
+      } else {
+        toast.error('Erro inexperado ao atualizar dados do livro!')
+      }
       queryClient.setQueryData(['books'], rollback)
     }
   }
@@ -67,8 +81,16 @@ export default function Page() {
         status: option,
       })
       queryClient.refetchQueries({ queryKey: ['books'] })
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
+    } catch (err) {
+      if (
+        err instanceof AxiosError &&
+        err.response?.status !== 500 &&
+        err.response?.data?.message
+      ) {
+        toast.error(err.response?.data?.message)
+      } else {
+        toast.error('Erro inexperado ao atualizar dados do livro!')
+      }
       queryClient.setQueryData(['books'], rollback)
     }
   }
@@ -86,17 +108,19 @@ export default function Page() {
             <h1 className="text-2xl font-semibold">Minhas leituras</h1>
             <div className="flex w-full items-center justify-between">
               <p className="text-zinc-400">Gerencie seus livros e artigos</p>
-              <UploadBookNewModalTrigger
-                refetch={refetch}
-                mode={'create'}
-                isOpen={isModalCreateOpen}
-                status={selectedTab}
-                onClose={() => setIsModalCreateOpen(false)}
-              >
-                <Button onClick={() => setIsModalCreateOpen(true)}>
-                  <PlusIcon /> Novo
-                </Button>
-              </UploadBookNewModalTrigger>
+              {userAcess && (
+                <UploadBookNewModalTrigger
+                  refetch={refetch}
+                  mode={'create'}
+                  isOpen={isModalCreateOpen}
+                  status={selectedTab}
+                  onClose={() => setIsModalCreateOpen(false)}
+                >
+                  <Button onClick={() => setIsModalCreateOpen(true)}>
+                    <PlusIcon /> Novo
+                  </Button>
+                </UploadBookNewModalTrigger>
+              )}
             </div>
           </div>
           <Tabs
@@ -148,10 +172,12 @@ export default function Page() {
                         id={item.id}
                         key={item.id + index}
                         title={item.titulo}
-                        type="livro"
+                        type={item.is_ebook ? 'ebook' : 'livro'}
                         status="desejos"
                         author={item.autor || 'Autor • Nome do autor'}
+                        userAcess={userAcess}
                         src={item.capa}
+                        acessEbookLink={item.is_ebook ? item.link : null}
                         onRemove={handleRemoveBook}
                         onEdit={() => handleOpenEditModal()}
                         onMoveTo={handleMoveDocument}
@@ -180,10 +206,12 @@ export default function Page() {
                         id={item.id}
                         key={item.id}
                         title={item.titulo}
-                        type="livro"
+                        type={item.is_ebook ? 'ebook' : 'livro'}
                         status={item.status}
                         author={item.autor || 'Autor • Nome do autor'}
+                        userAcess={userAcess}
                         src={item.capa}
+                        acessEbookLink={item.is_ebook ? item.link : null}
                         onRemove={handleRemoveBook}
                         onEdit={() => handleOpenEditModal()}
                         onMoveTo={handleMoveDocument}
@@ -212,10 +240,12 @@ export default function Page() {
                         id={item.id}
                         key={item.id}
                         title={item.titulo}
-                        type="livro"
+                        type={item.is_ebook ? 'ebook' : 'livro'}
                         status="em_andamento"
                         author={item.autor || 'Autor • Nome do autor'}
+                        userAcess={userAcess}
                         src={item.capa}
+                        acessEbookLink={item.is_ebook ? item.link : null}
                         onRemove={handleRemoveBook}
                         onEdit={() => handleOpenEditModal()}
                         onMoveTo={handleMoveDocument}
@@ -244,10 +274,12 @@ export default function Page() {
                         id={item.id}
                         key={item.id}
                         title={item.titulo}
-                        type="livro"
+                        type={item.is_ebook ? 'ebook' : 'livro'}
                         status="concluido"
                         author={item.autor || 'Autor • Nome do autor'}
+                        userAcess={userAcess}
                         src={item.capa}
+                        acessEbookLink={item.is_ebook ? item.link : null}
                         onRemove={handleRemoveBook}
                         onEdit={() => handleOpenEditModal()}
                         onMoveTo={handleMoveDocument}

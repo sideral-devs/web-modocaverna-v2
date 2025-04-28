@@ -10,11 +10,16 @@ import { KnowledgeDocument } from '../document'
 import { KnowledgeHeader } from '../header'
 import { UploadVideoModalTrigger } from './upload-video'
 import { useState } from 'react'
+import { useUser } from '@/hooks/queries/use-user'
 
 export default function Page() {
   const queryClient = useQueryClient()
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
   const [isModalCreateOpen, setIsModalCreateOpen] = useState(false)
+  const { data: user } = useUser()
+  const userAcess =
+    (user?.plan === 'DESAFIO' && user?.isInTrialDesafio) ||
+    (user?.plan !== 'DESAFIO' && user?.status_plan === 'ATIVO')
   const [selectedTab, setSelectedTab] = useState<
     'pendente' | 'em_andamento' | 'concluido' | 'desejos'
   >('pendente')
@@ -85,17 +90,19 @@ export default function Page() {
               <p className="text-zinc-400">
                 Gerencie todos os vídeos do seu interesse
               </p>
-              <UploadVideoModalTrigger
-                refetch={refetch}
-                mode={'create'}
-                isOpen={isModalCreateOpen}
-                status={selectedTab}
-                onClose={() => setIsModalCreateOpen(false)}
-              >
-                <Button onClick={() => setIsModalCreateOpen(true)}>
-                  <PlusIcon /> Novo
-                </Button>
-              </UploadVideoModalTrigger>
+              {userAcess && (
+                <UploadVideoModalTrigger
+                  refetch={refetch}
+                  mode={'create'}
+                  isOpen={isModalCreateOpen}
+                  status={selectedTab}
+                  onClose={() => setIsModalCreateOpen(false)}
+                >
+                  <Button onClick={() => setIsModalCreateOpen(true)}>
+                    <PlusIcon /> Novo
+                  </Button>
+                </UploadVideoModalTrigger>
+              )}
             </div>
           </div>
           <Tabs
@@ -148,6 +155,7 @@ export default function Page() {
                         id={item.id}
                         title={item.titulo}
                         author={item.link || ''}
+                        userAcess={userAcess}
                         type="video"
                         status="desejos"
                         src={item.capa}
@@ -180,6 +188,7 @@ export default function Page() {
                         id={item.id}
                         title={item.titulo}
                         author={item.link || ''}
+                        userAcess={userAcess}
                         type="video"
                         status="em_andamento"
                         src={item.capa}
@@ -212,6 +221,7 @@ export default function Page() {
                         id={item.id}
                         title={item.titulo}
                         author={item.link || ''}
+                        userAcess={userAcess}
                         type="video"
                         status={item.status}
                         src={item.capa}
@@ -243,6 +253,7 @@ export default function Page() {
                         id={item.id}
                         title={item.titulo}
                         author={item.link || ''}
+                        userAcess={userAcess}
                         type="video"
                         status="concluido"
                         src={item.capa}
