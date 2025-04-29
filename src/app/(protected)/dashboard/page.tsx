@@ -5,11 +5,11 @@ import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
+import PageDialogs from './dialogs/PageDialog'
 import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
 import { OrdemNoCaos } from './OrdemNoCaos'
 import { TempleForge } from './TempleForge'
-import PageDialogs from './dialogs/PageDialog'
 
 export default function Page() {
   return (
@@ -34,7 +34,7 @@ function Content() {
             defaultValue={to || 'central-caverna'}
             className="flex flex-col flex-1 w-full h-full gap-5"
           >
-            <TabsList className="overflow-x-auto min-h-fit">
+            <TabsList className="overflow-x-auto min-h-8">
               <TabsTrigger value="central-caverna">Central Caverna</TabsTrigger>
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
               <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
