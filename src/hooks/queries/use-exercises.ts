@@ -104,7 +104,7 @@ export function useWorkouts() {
     workouts,
     isLoading,
     createWorkout: createWorkoutMutation.mutate,
-    updateWorkout: updateWorkoutMutation.mutate,
+    updateWorkout: updateWorkoutMutation.mutateAsync,
     deleteWorkout: deleteWorkoutMutation.mutate,
     createExercise: createExerciseMutation.mutate,
     updateExercise: updateExerciseMutation.mutate,
