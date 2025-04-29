@@ -187,13 +187,11 @@ export function MealFormModal({
                       type="text"
                       value={alimento.quantidade}
                       onChange={(e) => {
-                        const onlyNumbers = e.target.value.replace(
-                          /[^0-9]/g,
-                          '',
-                        )
                         setAlimentos(
                           alimentos.map((a, i) =>
-                            i === index ? { ...a, quantidade: onlyNumbers } : a,
+                            i === index
+                              ? { ...a, quantidade: e.target.value }
+                              : a,
                           ),
                         )
                       }}
@@ -261,13 +259,11 @@ export function MealFormModal({
                       type="text"
                       value={suplemento.comprado}
                       onChange={(e) => {
-                        const onlyNumbers = e.target.value.replace(
-                          /[^0-9]/g,
-                          '',
-                        )
                         setSuplementos(
                           suplementos.map((s, i) =>
-                            i === index ? { ...s, comprado: onlyNumbers } : s,
+                            i === index
+                              ? { ...s, comprado: e.target.value }
+                              : s,
                           ),
                         )
                       }}
