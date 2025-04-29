@@ -161,7 +161,7 @@ Organização é disciplina. Disciplina é transformação. 🔺🐺`}
                       content={`🔥 Sua jornada fortalece a Alcateia.
 Compartilhe como você aplica o Modo Caverna na vida real:
 hábitos, rotinas, vitórias e renascimentos.
-Sua transformação acende o caminho para outros Cavernosos. 🔺🐺`}
+Sua transformação acende o caminho para outros Cavernosos.`}
                     />
                     {data.data
                       .filter((post) => post.category === 'Experiência')
@@ -191,7 +191,8 @@ O que fortalece um, fortalece toda a Alcateia. 🔺🐺`}
                     <MockPostCard
                       content={`🚀 A Caverna é solo fértil para novas alianças.
 Aqui você divulga vagas, projetos, parcerias, collabs e freelas.
-Se busca talentos, convoque. Se oferece valor, apresente suas habilidades.
+Se busca talentos, convoque. 
+Se oferece valor, apresente suas habilidades.
 A Alcateia prospera quando cada lobo fortalece o outro. 🔺🐺`}
                     />
                     {data.data
