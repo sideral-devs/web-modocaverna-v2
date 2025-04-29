@@ -1,5 +1,8 @@
 'use client'
+
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { redirect } from 'next/navigation'
@@ -11,8 +14,8 @@ export default function Page({
   params: Promise<{ course: string }>
 }) {
   const { course } = use(params)
-
-  const { data } = useQuery({
+  const { data: user } = useUser()
+  const { data, isLoading } = useQuery({
     queryKey: ['course', course],
     queryFn: async () => {
       const res = await api.get('/conteudos/show/' + course)
@@ -30,8 +33,20 @@ export default function Page({
       }),
     }),
   })
+  if (
+    user?.plan === 'DESAFIO' &&
+    !user?.isInTrialDesafio &&
+    !data &&
+    !isLoading
+  ) {
+    return (
+      <UpgradeModalTrigger>
+        <div className="flex w-full h-full flex-1 items-center justify-center"></div>
+      </UpgradeModalTrigger>
+    )
+  }
 
-  if (!data) {
+  if (!data && isLoading) {
     return (
       <div className="grid grid-cols-5 w-full max-w-8xl px-10 py-16 gap-12">
         <div className="flex flex-col col-span-3 gap-20">
@@ -61,7 +76,7 @@ export default function Page({
     )
   }
 
-  if (!data.modulos.length || !data.modulos[0].aulas.length) {
+  if (!data?.modulos.length || !data?.modulos[0].aulas.length) {
     return (
       <div className="flex w-full h-full flex-1 items-center justify-center">
         <h1 className="text-zinc-400">
