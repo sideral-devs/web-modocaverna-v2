@@ -1,35 +1,43 @@
 import { api } from '@/lib/api'
 
 export interface ShapeRegistration {
-  membros_superiores: {
-    ombro: number
-    peito: number
-    biceps_direito: number
-    biceps_esquerdo: number
-    triceps_esquerdo: number
-    triceps_direito: number
-  }
-  membros_inferiores: {
-    gluteos: number
-    quadril: number
-    quadriceps_direito: number
-    quadriceps_esquerdo: number
-    panturrilha_esquerda: number
-    panturrilha_direita: number
-  }
-  satisfeito_fisico: number
-  classificacao: string
+  id: number
+  shape_id: number
   imc: number
   altura: number
   peso: number
-  texto_meta: string
+  texto_meta: string | null
+  classificacao: string
+  satisfeito_fisico: number
+  membros_superiores: {
+    ombro: number | null
+    peito: number | null
+    biceps_direito: number | null
+    biceps_esquerdo: number | null
+    triceps_direito: number | null
+    triceps_esquerdo: number | null
+  }
+  membros_inferiores: {
+    gluteos: number | null
+    quadril: number | null
+    quadriceps_direito: number | null
+    quadriceps_esquerdo: number | null
+    panturrilha_direita: number | null
+    panturrilha_esquerda: number | null
+  }
+  fotos: string[] | null
+  created_at: string
+  updated_at: string
   nivel_satisfacao: string
   objetivo: string
   peso_meta: number
-  fotos: string[]
 }
 
-export interface CreateShapeRegistrationRequest extends ShapeRegistration {}
+export interface CreateShapeRegistrationRequest
+  extends Omit<
+    ShapeRegistration,
+    'id' | 'shape_id' | 'created_at' | 'updated_at'
+  > {}
 
 // Shape Registration endpoints
 export const getShapeRegistrations = async () => {

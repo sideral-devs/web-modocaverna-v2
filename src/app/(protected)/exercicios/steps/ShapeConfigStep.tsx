@@ -38,7 +38,6 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
       quadril: '',
       panturrilhaD: '',
       panturrilhaE: '',
-      idade: '27',
       altura: '',
       peso: '',
     },
@@ -238,23 +237,11 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
             </div>
 
             <div className="flex flex-col gap-4">
-              <div className="flex mb-4 items-center justify-between">
+              <div className="flex mb-4 items-center">
                 <h3 className="text-yellow-500 w-full">Dados</h3>
                 <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
               </div>
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm">Idade</label>
-                  <InputWithSuffix
-                    type="number"
-                    disabled
-                    value={measurements.idade}
-                    onChange={(e) => handleInputChange('idade', e.target.value)}
-                    className="bg-zinc-900 !border !border-zinc-700"
-                    suffix="anos"
-                    suffixClassName="text-zinc-400"
-                  />
-                </div>
+              <div className="flex items-center gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Altura</label>
                   <InputWithSuffix

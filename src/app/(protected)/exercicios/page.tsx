@@ -203,7 +203,8 @@ export default function Page() {
     ) {
       const timer = setInterval(() => {
         setCurrentPhotoIndex(
-          (prevIndex) => (prevIndex + 1) % lastShapeRegistration.fotos.length,
+          (prevIndex) =>
+            (prevIndex + 1) % (lastShapeRegistration.fotos?.length || 0),
         )
       }, 6000)
 
@@ -312,7 +313,7 @@ export default function Page() {
                               ? 'opacity-100'
                               : 'opacity-40'
                           }`}
-                          aria-label={`Photo ${index + 1} of ${lastShapeRegistration.fotos.length}`}
+                          aria-label={`Photo ${index + 1} of ${lastShapeRegistration?.fotos?.length}`}
                         />
                       ),
                     )}
