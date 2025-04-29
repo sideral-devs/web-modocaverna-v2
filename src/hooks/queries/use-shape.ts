@@ -1,11 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-  getShapeRegistrations,
+  ShapeRegistration,
   createShapeRegistration,
-  updateShapeRegistration,
   deleteShapeRegistration,
+  getShapeRegistrationById,
+  getShapeRegistrations,
+  updateShapeRegistration,
 } from '@/lib/api/shape'
-import { ShapeRegistration } from '@/app/(protected)/exercicios/page'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useShape() {
   const queryClient = useQueryClient()
@@ -14,7 +15,7 @@ export function useShape() {
     data: shapeRegistrations,
     isLoading,
     error,
-  } = useQuery({
+  } = useQuery<ShapeRegistration[]>({
     queryKey: ['shape-registrations'],
     queryFn: getShapeRegistrations,
   })
@@ -33,7 +34,7 @@ export function useShape() {
     }: {
       id: number
       data: Partial<ShapeRegistration>
-    }) => updateShapeRegistration(id.toString(), data),
+    }) => updateShapeRegistration(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shape-registrations'] })
     },

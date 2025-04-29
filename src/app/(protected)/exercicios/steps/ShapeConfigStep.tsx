@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { InputWithSuffix } from '@/components/ui/input-with-suffix'
 import { useUser } from '@/hooks/queries/use-user'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useShapeFormStore } from '@/store/shape-form'
 
 type Measurements = {
   bicepsD: string
@@ -24,6 +25,7 @@ type Measurements = {
 
 export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
   const { data: user } = useUser()
+  const { setData } = useShapeFormStore()
   const form = useForm<Measurements>({
     defaultValues: {
       bicepsD: '',
@@ -51,7 +53,27 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
   }
 
   const onSubmit = (data: Measurements) => {
-    console.log(data)
+    // Save the data to the store before moving to the next step
+    setData({
+      altura: Number(data.altura),
+      peso: Number(data.peso),
+      membros_superiores: {
+        biceps_direito: Number(data.bicepsD) || 0,
+        biceps_esquerdo: Number(data.bicepsE) || 0,
+        peito: Number(data.peitoral) || 0,
+        ombro: 0,
+        triceps_direito: 0,
+        triceps_esquerdo: 0,
+      },
+      membros_inferiores: {
+        gluteos: Number(data.gluteos) || 0,
+        quadril: Number(data.quadril) || 0,
+        quadriceps_direito: Number(data.quadricepsD) || 0,
+        quadriceps_esquerdo: Number(data.quadricepsE) || 0,
+        panturrilha_direita: Number(data.panturrilhaD) || 0,
+        panturrilha_esquerda: Number(data.panturrilhaE) || 0,
+      },
+    })
     onNext()
   }
 
@@ -80,6 +102,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
               <div className="flex items-center justify-between gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Bíceps (D)</label>
+                  <InputWithSuffix
+                    type="number"
+                    value={measurements.bicepsD}
+                    onChange={(e) =>
+                      handleInputChange('bicepsD', e.target.value.slice(0, 3))
+                    }
+                    className="bg-zinc-800"
+                    suffix="cm"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm">Bíceps (E)</label>
                   <InputWithSuffix
                     type="number"
                     value={measurements.bicepsE}
@@ -249,7 +283,7 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
 
           <div className="flex justify-center fixed bottom-0 w-full border-t left-0 pb-10 pt-10">
             <div className="flex gap-2">
-              <Button
+              {/* <Button
                 variant="outline"
                 className="bg-transparent"
                 onClick={() => {
@@ -257,8 +291,24 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 }}
               >
                 Pular
-              </Button>
-              <AutoSubmitButton onClick={handleSubmit(onSubmit)}>
+              </Button> */}
+              <AutoSubmitButton
+                disabled={
+                  !measurements.bicepsD ||
+                  !measurements.bicepsE ||
+                  !measurements.peitoral ||
+                  !measurements.cintura ||
+                  !measurements.gluteos ||
+                  !measurements.quadricepsD ||
+                  !measurements.quadricepsE ||
+                  !measurements.quadril ||
+                  !measurements.panturrilhaD ||
+                  !measurements.panturrilhaE ||
+                  !measurements.altura ||
+                  !measurements.peso
+                }
+                onClick={handleSubmit(onSubmit)}
+              >
                 Continuar
               </AutoSubmitButton>
             </div>
