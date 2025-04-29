@@ -20,6 +20,7 @@ import {
 import { Camera } from 'lucide-react'
 import Image from 'next/image'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useShapeFormStore } from '@/store/shape-form'
 
 type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
 
@@ -29,31 +30,33 @@ interface ShapePhoto {
   base64: string
 }
 
-type FormData = {
-  photos: ShapePhoto[]
-  satisfaction: string
-  weightGoal: 'perder' | 'manter' | 'ganhar' | ''
-  targetWeight: string
+interface FormData {
+  fotos: ShapePhoto[]
+  satisfacao: string
+  objetivo: 'Perder peso' | 'Manter peso' | 'Ganhar peso' | ''
+  pesoMeta: string
+  textoMeta: string
 }
 
-export function ShapeGoalsStep({
-  onNext,
-  onBack,
-}: {
-  onNext: () => void
+interface ShapeGoalsStepProps {
+  onNext: (data: FormData) => void
   onBack: () => void
-}) {
+}
+
+export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
+  const { setData } = useShapeFormStore()
   const form = useForm<FormData>({
     defaultValues: {
-      photos: [],
-      satisfaction: '',
-      weightGoal: '',
-      targetWeight: '',
+      fotos: [],
+      satisfacao: '',
+      objetivo: '',
+      pesoMeta: '',
+      textoMeta: '',
     },
   })
 
   const { setValue, watch } = form
-  const { photos, satisfaction, weightGoal, targetWeight } = watch()
+  const { fotos, satisfacao, objetivo, pesoMeta, textoMeta } = watch()
 
   const photoTypes: { type: PhotoType; label: string }[] = [
     { type: 'frontal', label: 'Frontal' },
@@ -64,11 +67,15 @@ export function ShapeGoalsStep({
 
   // Check if all required photos are uploaded
   const hasAllPhotos = photoTypes.every(({ type }) =>
-    photos.some((photo) => photo.type === type),
+    fotos.some((photo) => photo.type === type),
   )
 
-  const hasFilledAllFields =
-    nivel_satisfacao && objetivo && peso_meta && texto_meta
+  const hasFilledAllFields = satisfacao && objetivo && pesoMeta
+
+  console.log('satisfacao', satisfacao)
+  console.log('objetivo', objetivo)
+  console.log('pesoMeta', pesoMeta)
+  console.log('textooo', textoMeta)
 
   async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)
@@ -83,19 +90,29 @@ export function ShapeGoalsStep({
       reader.readAsDataURL(file)
     })
 
-    const newPhotos = photos.filter((photo) => photo.type !== type)
-    setValue('photos', [...newPhotos, { url, type, base64 }])
+    const newPhotos = fotos.filter((photo) => photo.type !== type)
+    setValue('fotos', [...newPhotos, { url, type, base64 }])
   }
 
   function onSubmit(data: FormData) {
+    // Map satisfaction levels to match API expectations
+    const satisfactionMap: Record<string, string> = {
+      not_satisfied: 'Não satisfeito',
+      satisfied: 'Satisfeito',
+    }
+
+    // Save the data to the store before moving to the next step
     setData({
-      nivel_satisfacao: data.nivel_satisfacao,
+      fotos: data.fotos.map((photo) => photo.base64),
+      nivel_satisfacao: satisfactionMap[data.satisfacao],
       objetivo: data.objetivo,
-      peso_meta: parseFloat(data.peso_meta) || 0,
-      texto_meta: data.texto_meta,
+      peso_meta: Number(data.pesoMeta),
+      texto_meta: data.textoMeta,
     })
-    onNext()
+    onNext(data)
   }
+
+  console.log('objetivo', objetivo)
 
   return (
     <div className="flex select-none w-[632px] overflow-y-auto px-1 flex-col flex-1 items-center gap-8">
@@ -114,13 +131,45 @@ export function ShapeGoalsStep({
               {photoTypes.map((photoType) => (
                 <div key={photoType.type} className="flex flex-col gap-2">
                   <div className="relative group w-28 h-32 aspect-square rounded-2xl border border-zinc-700 overflow-hidden">
-                    {photos.find((p) => p.type === photoType.type) ? (
-                      <Image
-                        src={photos.find((p) => p.type === photoType.type)!.url}
-                        alt={photoType.label}
-                        fill
-                        className="object-cover"
-                      />
+                    {fotos.find((p) => p.type === photoType.type) ? (
+                      <div className="relative w-full h-full group">
+                        <Image
+                          src={
+                            fotos.find((p) => p.type === photoType.type)!.url
+                          }
+                          alt={photoType.label}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              const newPhotos = fotos.filter(
+                                (p) => p.type !== photoType.type,
+                              )
+                              setValue('fotos', newPhotos)
+                            }}
+                            className="text-white bg-red-500 hover:bg-red-600 transition-colors p-2 rounded-full"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M3 6h18" />
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     ) : (
                       <label
                         htmlFor={`photo-${photoType.type}`}
@@ -153,8 +202,8 @@ export function ShapeGoalsStep({
               Qual o nível de satisfação com seu shape?
             </h3>
             <Select
-              value={satisfaction}
-              onValueChange={(value) => setValue('satisfaction', value)}
+              value={satisfacao}
+              onValueChange={(value) => setValue('satisfacao', value)}
             >
               <SelectTrigger className="bg-zinc-800 border border-zinc-700 py-6 rounded-lg flex items-center gap-2">
                 <SelectValue placeholder="Selecione uma opção" />
@@ -166,22 +215,10 @@ export function ShapeGoalsStep({
                     <span>Não satisfeito</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="partially_satisfied">
-                  <div className="flex items-center gap-2">
-                    <SmileyMeh className="w-6 h-6 text-zinc-500" />
-                    <span>Parcialmente satisfeito</span>
-                  </div>
-                </SelectItem>
                 <SelectItem value="satisfied">
                   <div className="flex items-center gap-2">
                     <Smiley className="w-6 h-6 text-zinc-500" />
                     <span>Satisfeito</span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="very_satisfied">
-                  <div className="flex items-center gap-2">
-                    <SmileyWink className="w-6 h-6 text-zinc-500" />
-                    <span>Muito satisfeito</span>
                   </div>
                 </SelectItem>
               </SelectContent>
@@ -191,7 +228,7 @@ export function ShapeGoalsStep({
           <div
             className={cn(
               'flex flex-col gap-2 pb-6',
-              weightGoal ? ' border-b border-zinc-700' : 'border-b-0 pb-0',
+              objetivo ? 'border-b border-zinc-700' : 'border-b-0 pb-0',
             )}
           >
             <h3 className="text-normal font-medium">Qual seu objetivo?</h3>
@@ -200,18 +237,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'perder' && 'border-zinc-700',
+                  objetivo === 'Perder peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'perder')}
+                onClick={() => setValue('objetivo', 'Perder peso')}
               >
                 <span className="text-sm font-normal">Perder peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'perder' && 'border-red-500',
+                    objetivo === 'Perder peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'perder' && (
+                  {objetivo === 'Perder peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -220,18 +257,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'manter' && 'border-zinc-700',
+                  objetivo === 'Manter peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'manter')}
+                onClick={() => setValue('objetivo', 'Manter peso')}
               >
                 <span className="text-sm font-normal">Manter peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'manter' && 'border-red-500',
+                    objetivo === 'Manter peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'manter' && (
+                  {objetivo === 'Manter peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -240,18 +277,18 @@ export function ShapeGoalsStep({
                 variant="outline"
                 className={cn(
                   'flex items-center justify-between border w-full bg-zinc-800 hover:bg-zinc-900 border-zinc-800',
-                  weightGoal === 'ganhar' && 'border-zinc-700',
+                  objetivo === 'Ganhar peso' && 'border-zinc-700',
                 )}
-                onClick={() => setValue('weightGoal', 'ganhar')}
+                onClick={() => setValue('objetivo', 'Ganhar peso')}
               >
                 <span className="text-sm font-normal">Ganhar peso</span>
                 <div
                   className={cn(
                     'w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700',
-                    weightGoal === 'ganhar' && 'border-red-500',
+                    objetivo === 'Ganhar peso' && 'border-red-500',
                   )}
                 >
-                  {weightGoal === 'ganhar' && (
+                  {objetivo === 'Ganhar peso' && (
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   )}
                 </div>
@@ -259,15 +296,15 @@ export function ShapeGoalsStep({
             </div>
           </div>
 
-          {weightGoal && weightGoal !== 'manter' && (
+          {objetivo && objetivo !== 'Manter peso' && (
             <div className="flex flex-col gap-2">
               <h3 className="text-normal font-medium">
                 Qual sua meta de peso?
               </h3>
               <InputWithSuffix
                 type="number"
-                value={targetWeight}
-                onChange={(e) => setValue('targetWeight', e.target.value)}
+                value={pesoMeta}
+                onChange={(e) => setValue('pesoMeta', e.target.value)}
                 className="bg-zinc-800 border-none max-w-[100px]"
                 suffix="kg"
               />
@@ -279,9 +316,7 @@ export function ShapeGoalsStep({
               <Button
                 variant="outline"
                 className="bg-transparent"
-                onClick={() => {
-                  onBack()
-                }}
+                onClick={onBack}
               >
                 Voltar
               </Button>

@@ -1,0 +1,21 @@
+
+NEXT_PUBLIC_ENVIRONMENT=dev
+NEXT_PUBLIC_PROD_URL=http://localhost/
+NEXT_PUBLIC_DEV_URL=http://localhost/api/
+NEXT_PUBLIC_API_URL=http://localhost/api/
+
+
+# NEXT_PUBLIC_ENVIRONMENT=dev
+# NEXT_PUBLIC_PROD_URL=https:api.modocaverna.com/
+# NEXT_PUBLIC_DEV_URL=https:api.modocaverna.com/api/
+# NEXT_PUBLIC_API_URL=https:api.modocaverna.com/api/
+
+
+NEXT_PUBLIC_YEARLY_PLAN = https://payment.ticto.app/O628CE9EE?utm_source=sistema
+NEXT_PUBLIC_MONTHLY_PLAN = https://payment.ticto.app/O0D5DAC98?utm_source=sistema
+
+AUTH_SECRET=18b68bbc0e12cb0837188255ac80bcff7cd242e779c35c0319caecac5c85132e
+
+AUTH_URL=http://localhost:3000
+AUTH_GOOGLE_ID=54148985442-ft6qicjvete6agnd54hnbug20lf00nt1.apps.googleusercontent.com
+AUTH_GOOGLE_SECRET=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

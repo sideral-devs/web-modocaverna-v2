@@ -100,7 +100,9 @@ export function AnalysisResultsStep({
       console.log(finalData)
 
       // Submit to API
-      await api.post('/registro-de-shape/store', finalData)
+      await api.post('/registro-de-shape/store', finalData).then((res) => {
+        toast.success('Shape registrado com sucesso!')
+      })
 
       // Reset form and proceed
       reset()
