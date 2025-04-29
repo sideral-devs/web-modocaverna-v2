@@ -33,7 +33,6 @@ export default function Page({
       }),
     }),
   })
-  console.log(!user?.isInTrialDesafio, user?.plan)
   if (
     user?.plan === 'DESAFIO' &&
     !user?.isInTrialDesafio &&
