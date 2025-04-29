@@ -13,12 +13,17 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Meal } from '@/lib/api/meals'
 import Image from 'next/image'
+import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
+import { toast } from 'sonner'
 
 export default function Page() {
-  const [selectedDay, setSelectedDay] = useState(0)
+  const [selectedDay, setSelectedDay] = useState(
+    new Date().getDay() === 0 ? 6 : new Date().getDay() - 1,
+  )
   const [isScrolled, setIsScrolled] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedMeal, setSelectedMeal] = useState<Meal | undefined>()
+  const [mealToDelete, setMealToDelete] = useState<Meal | null>(null)
 
   const { scrollY } = useScroll()
   const currentDate = new Date()
@@ -152,10 +157,7 @@ export default function Page() {
                   key={meal.horario_id}
                   meal={meal}
                   onEdit={() => handleOpenModal(meal)}
-                  onDelete={() => {
-                    // TODO: Add confirmation dialog
-                    deleteMeal(meal.horario_id)
-                  }}
+                  onDelete={() => setMealToDelete(meal)}
                 />
               ))
             ) : (
@@ -198,6 +200,19 @@ export default function Page() {
         onOpenChange={setIsModalOpen}
         onSubmit={handleSubmit}
         initialData={selectedMeal}
+      />
+
+      <DeleteMealDialog
+        open={!!mealToDelete}
+        onOpenChange={(open) => !open && setMealToDelete(null)}
+        meal={mealToDelete}
+        onConfirm={() => {
+          if (mealToDelete) {
+            deleteMeal(mealToDelete.horario_id)
+            toast.success('Refeição deletada com sucesso')
+            setMealToDelete(null)
+          }
+        }}
       />
     </>
   )

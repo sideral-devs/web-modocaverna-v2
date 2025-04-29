@@ -184,12 +184,12 @@ export default function Page() {
   const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
     shapeRegistrations?.[shapeRegistrations.length - 1]
-  console.log('a', lastShapeRegistration)
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0)
   })
 
+  // Redirect to the first step if no photos are uploaded
   useEffect(() => {
     if (firstShapeRegistration?.fotos === null) {
       router.push('/exercicios/steps?step=1')
