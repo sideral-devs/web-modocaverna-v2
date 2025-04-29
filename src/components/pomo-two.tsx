@@ -25,6 +25,8 @@ type Phase = 'focus' | 'shortBreak' | 'longBreak'
 export default function PomodoroTimer() {
   const [timeLeft, setTimeLeft] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
+  const [startTime, setStartTime] = useState<number | null>(null)
+  const [duration, setDuration] = useState<number>(0)
   const queryClient = useQueryClient()
   const [currentPhase, setCurrentPhase] = useState<Phase>('focus')
   const [phaseCount, setPhaseCount] = useState(0)
@@ -69,6 +71,7 @@ export default function PomodoroTimer() {
   }
 
   const moveToNextPhase = () => {
+    if (!pomodoro) return
     let newPhaseCount = phaseCount + 1
 
     if (newPhaseCount === 4) {
@@ -92,11 +95,19 @@ export default function PomodoroTimer() {
       setCurrentPhase('focus')
     }
 
-    const timeout = setTimeout(() => {
+    setTimeout(() => {
+      setStartTime(Date.now())
+      setDuration(() => {
+        if (currentPhase === 'focus') {
+          return newPhaseCount === 3
+            ? Number(pomodoro?.intervalo_longo || 0) * 1000
+            : Number(pomodoro?.intervalo_curto || 0) * 1000
+        } else {
+          return Number(pomodoro?.minutagem_produtividade || 0) * 1000
+        }
+      })
       setIsRunning(true)
     }, 1500)
-
-    return () => clearTimeout(timeout)
   }
 
   const handleStartPause = () => {
@@ -106,7 +117,8 @@ export default function PomodoroTimer() {
   const handleReset = () => {
     setIsRunning(false)
     clearInterval(intervalRef.current as NodeJS.Timeout)
-
+    setStartTime(null)
+    setDuration(0)
     setCurrentPhase('focus')
     setTimeLeft(pomodoro ? Number(pomodoro.minutagem_produtividade) : 0)
     setPhaseCount(0)
@@ -127,12 +139,20 @@ export default function PomodoroTimer() {
 
   function handleStartFocus() {
     startSoundRef.current?.play()
-    handleStartPause()
+    setStartTime(Date.now())
+    setDuration(timeLeft * 1000)
+    setIsRunning(true)
   }
 
   function handlePause() {
     stopSoundRef.current?.play()
-    handleStartPause()
+    if (startTime) {
+      const elapsed = Date.now() - startTime
+      const remaining = Math.max(duration - elapsed, 0)
+      setTimeLeft(Math.ceil(remaining / 1000))
+    }
+    setIsRunning(false)
+    setStartTime(null)
   }
 
   useEffect(() => {
@@ -153,30 +173,27 @@ export default function PomodoroTimer() {
           setShowBreakDialog(true)
           break
       }
+      setDuration(0)
+      setStartTime(null)
     }
   }, [currentPhase, pomodoro])
 
   useEffect(() => {
-    if (isRunning) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
+    if (!isRunning || startTime === null) return
 
-      intervalRef.current = setInterval(() => {
-        setTimeLeft((prevTime) => Math.max(prevTime - 1, 0))
-      }, 1000)
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-    }
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const remaining = Math.max(duration - elapsed, 0)
+      setTimeLeft(Math.ceil(remaining / 1000))
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+      if (remaining <= 0) {
+        clearInterval(interval)
+        safeMoveToNextPhase()
       }
-    }
-  }, [isRunning])
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [isRunning, startTime, duration])
 
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {

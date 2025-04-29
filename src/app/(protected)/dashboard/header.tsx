@@ -8,8 +8,8 @@ import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogDuringSevenDays } from './UpgradeDialogDuringSevenDays'
-import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
 import { UpgradeDialogExpired } from './UpgradeDialogExpired'
+import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
 
 export function CentralHubHeader() {
   const { data: user } = useUser()
@@ -28,13 +28,7 @@ export function CentralHubHeader() {
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
-        <Link
-          href="#"
-          onClick={(e) => {
-            e.preventDefault()
-            window.location.reload()
-          }}
-        >
+        <Link href="/dashboard?to=central-caverna">
           <div className="flex h-11 items-center justify-center px-3 rounded-xl">
             <Image
               src={'/icons/logo-completo.svg'}
