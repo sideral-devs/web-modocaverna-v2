@@ -14,8 +14,6 @@ export interface Supplement {
   horario_id: number
   nome: string
   comprado: string
-  created_at: string
-  updated_at: string
 }
 
 export interface Meal {
@@ -23,8 +21,6 @@ export interface Meal {
   nome_refeicao: string
   hora_refeicao: string
   observacoes: string | null
-  created_at: string
-  updated_at: string
   dia_semana: number
   alimentos: Food[]
   suplementos: Supplement[]
@@ -47,7 +43,10 @@ export async function createMeal(
   return response.data as Meal
 }
 
-export async function updateMeal(id: number, data: Partial<Meal>) {
+export async function updateMeal(
+  id: number,
+  data: Omit<Meal, 'horario_id' | 'created_at' | 'updated_at'>,
+) {
   const response = await api.put(`/refeicoes/update/${id}`, data)
   return response.data as Meal
 }
