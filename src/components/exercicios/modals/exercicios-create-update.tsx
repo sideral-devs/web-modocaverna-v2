@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Exercise, Workout } from '@/lib/api/exercises'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { WEEK_DAYS } from '@/lib/constants'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Trash, X } from '@phosphor-icons/react'
 
 interface ExerciciosCreateUpdateProps {
@@ -30,18 +30,24 @@ export function ExerciciosCreateUpdate({
 }: ExerciciosCreateUpdateProps) {
   const { workouts, isLoading: isLoadingWorkouts } = useWorkouts()
   const { createWorkout, updateWorkout } = useWorkouts()
-  const [exercises, setExercises] = useState<Exercise[]>(
-    workout?.exercicios || [],
-  )
-  const [selectedDay, setSelectedDay] = useState(workout?.indice || 0)
-  const [workoutTitle, setWorkoutTitle] = useState(workout?.titulo || '')
+  const [exercises, setExercises] = useState<Exercise[]>([])
+  const [selectedDay, setSelectedDay] = useState(0)
+  const [workoutTitle, setWorkoutTitle] = useState('')
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     nome: '',
     series: '0',
     repeticoes: '0',
     carga: '0',
-    indice: exercises.length,
+    indice: 0,
   })
+
+  useEffect(() => {
+    if (workout) {
+      setExercises(workout.exercicios || [])
+      setSelectedDay(workout.indice || 0)
+      setWorkoutTitle(workout.titulo || '')
+    }
+  }, [workout])
 
   const handleAddExercise = (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,7 +76,10 @@ export function ExerciciosCreateUpdate({
     setExercises(newExercises)
   }
 
-  console.log(workout)
+  const handleDayClick = (index: number) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    setSelectedDay(index)
+  }
 
   const handleSaveWorkout = async () => {
     try {
@@ -82,12 +91,6 @@ export function ExerciciosCreateUpdate({
           carga: exercise.carga.toString(),
           indice: index,
         }))
-        console.log('IS UPDATING', {
-          ficha_id: workout.ficha_id,
-          titulo: workoutTitle,
-          indice: selectedDay,
-          exercicios: sanitizedExercises,
-        })
         await updateWorkout({
           ficha_id: workout.ficha_id,
           titulo: workoutTitle,
@@ -95,15 +98,17 @@ export function ExerciciosCreateUpdate({
           exercicios: sanitizedExercises,
         })
       } else {
-        console.log('asiadsia', {
-          titulo: workoutTitle,
-          indice: selectedDay,
-          exercicios: exercises,
-        })
+        const sanitizedExercises = exercises.map((exercise, index) => ({
+          nome: exercise.nome,
+          series: exercise.series.toString(),
+          repeticoes: exercise.repeticoes.toString(),
+          carga: exercise.carga.toString(),
+          indice: index,
+        }))
         await createWorkout({
           titulo: workoutTitle,
           indice: selectedDay,
-          exercicios: exercises,
+          exercicios: sanitizedExercises,
         })
       }
       onClose()
@@ -111,13 +116,6 @@ export function ExerciciosCreateUpdate({
       console.error('Error saving workout:', error)
     }
   }
-
-  const handleDayClick = (index: number) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    setSelectedDay(index)
-  }
-
-  console.log(selectedDay)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -259,27 +257,91 @@ export function ExerciciosCreateUpdate({
                 </label>
                 <div className="space-y-2">
                   {exercises.map((ex, index) => (
-                    <div
-                      key={index}
-                      className="flex overflow-y-auto items-center justify-between bg-zinc-800 py-2 rounded-full px-4"
-                    >
-                      <span className="text-zinc-300 text-sm truncate">
-                        {ex.nome}
-                      </span>
-                      <div className="flex items-center gap-4">
-                        <span className="text-zinc-500 text-sm">
-                          {ex.series} séries x {ex.repeticoes} reps ({ex.carga}
-                          kg)
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-zinc-400 hover:text-zinc-100"
-                          onClick={() => handleRemoveExercise(index)}
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
+                    <div className="flex items-center w-full gap-2" key={index}>
+                      <div
+                        key={index}
+                        className="flex w-full overflow-y-auto items-center justify-between bg-zinc-800 py-2 rounded-lg px-4"
+                      >
+                        <div className="flex gap-1">
+                          <Input
+                            type="text"
+                            value={ex.nome}
+                            onChange={(e) => {
+                              const newExercises = [...exercises]
+                              newExercises[index].nome = e.target.value
+                              setExercises(newExercises)
+                            }}
+                            className="bg-transparent border-none p-0 text-zinc-300 text-sm focus-visible:ring-0"
+                          />
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Input
+                                type="number"
+                                value={ex.series}
+                                onChange={(e) => {
+                                  const newExercises = [...exercises]
+                                  const value = Math.min(
+                                    99,
+                                    Math.max(0, parseInt(e.target.value) || 0),
+                                  )
+                                  newExercises[index].series = value.toString()
+                                  setExercises(newExercises)
+                                }}
+                                className="w-6 bg-transparent border-none p-0 text-zinc-400 text-sm focus-visible:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              />
+                              <span className="text-zinc-500 text-sm">
+                                séries
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Input
+                                type="number"
+                                value={ex.repeticoes}
+                                onChange={(e) => {
+                                  const newExercises = [...exercises]
+                                  const value = Math.min(
+                                    99,
+                                    Math.max(0, parseInt(e.target.value) || 0),
+                                  )
+                                  newExercises[index].repeticoes =
+                                    value.toString()
+                                  setExercises(newExercises)
+                                }}
+                                className="w-6 bg-transparent border-none p-0 text-zinc-400 text-sm focus-visible:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              />
+                              <span className="text-zinc-500 text-sm">
+                                reps
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Input
+                                type="number"
+                                value={ex.carga}
+                                placeholder="0"
+                                onChange={(e) => {
+                                  const newExercises = [...exercises]
+                                  const value = Math.min(
+                                    999,
+                                    Math.max(0, parseInt(e.target.value) || 0),
+                                  )
+                                  newExercises[index].carga = value.toString()
+                                  setExercises(newExercises)
+                                }}
+                                className="w-8 bg-transparent border-none p-0 text-zinc-400 text-sm focus-visible:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              />
+                              <span className="text-zinc-500 text-sm">kg</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-zinc-400 hover:text-zinc-100"
+                        onClick={() => handleRemoveExercise(index)}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
                     </div>
                   ))}
                 </div>
