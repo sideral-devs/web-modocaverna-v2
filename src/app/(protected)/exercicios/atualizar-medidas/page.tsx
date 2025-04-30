@@ -30,7 +30,7 @@ export default function Page() {
             />
           </div>
 
-          <CloseButton onClick={() => router.back()} />
+          <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
         </header>
         {showPhotos ? <UpdatePhotosStep /> : <UpdateMeasurementsStep />}
       </div>
