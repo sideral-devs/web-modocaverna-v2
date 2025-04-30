@@ -393,7 +393,7 @@ export default function Page() {
             <div className="bg-zinc-800 w-1/2 rounded-lg p-6">
               <div className="space-y-8 flex flex-col justify-between h-full">
                 <div>
-                  <h2 className="text-red-500 font-medium mb-4">
+                  <h2 className="text-yellow-500 font-medium mb-4">
                     Circunferência superior
                   </h2>
                   <div className="flex items-center px-4 justify-between gap-4">
@@ -432,7 +432,7 @@ export default function Page() {
 
                 <div className="flex flex-col flex-1">
                   <div className="flex mb-4 items-center justify-between">
-                    <h3 className="text-red-500 w-full">
+                    <h3 className="text-yellow-500 w-full">
                       Circunferência inferior
                     </h3>
                     <div className="w-full h-px bg-gradient-to-tl from-zinc-500 via-transparent to-transparent"></div>
@@ -495,15 +495,29 @@ export default function Page() {
 
                 <div>
                   <div className="flex mb-4 items-center justify-between">
-                    <h3 className="text-red-500 w-full">Dados</h3>
+                    <h3 className="text-yellow-500 w-full">Dados</h3>
                     <div className="w-full h-px bg-gradient-to-tl from-zinc-500 via-transparent to-transparent"></div>
                   </div>
                   <div className="flex items-center px-4 justify-between gap-4">
                     <div className="flex flex-col gap-2">
                       <p className="text-zinc-400 text-sm">IMC</p>
-                      <p className="text-sm">
+                      <p
+                        className={`text-sm ${
+                          Number(lastShapeRegistration?.imc.toFixed(1)) >= 25
+                            ? 'text-red-500'
+                            : Number(lastShapeRegistration?.imc.toFixed(1)) <=
+                                18.5
+                              ? 'text-red-500'
+                              : 'text-green-500'
+                        }`}
+                      >
                         {lastShapeRegistration?.imc
-                          ? lastShapeRegistration.imc.toFixed(1)
+                          ? Number(lastShapeRegistration.imc.toFixed(1)) > 25
+                            ? 'Sobrepeso'
+                            : Number(lastShapeRegistration.imc.toFixed(1)) <
+                                18.5
+                              ? 'Abaixo do peso'
+                              : 'Peso normal'
                           : '-'}
                       </p>
                     </div>
