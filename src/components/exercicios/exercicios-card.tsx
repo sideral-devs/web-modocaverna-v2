@@ -75,29 +75,6 @@ export function ExerciseCard({
 
       <div className="flex items-center gap-2">
         <span className="text-sm text-zinc-400">{exercise.carga} kg</span>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-zinc-400 hover:text-white"
-            >
-              <DotsThree weight="bold" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="bg-zinc-900 border-zinc-800"
-          >
-            <DropdownMenuItem
-              onClick={handleDelete}
-              className="text-red-500 hover:text-red-400 cursor-pointer"
-            >
-              Excluir
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </Reorder.Item>
   )

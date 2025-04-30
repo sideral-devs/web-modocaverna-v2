@@ -20,22 +20,21 @@ export interface Workout {
   ficha_id: number
   titulo: string
   indice: number
+  horario: string
   exercicios: Exercise[]
 }
 
 export interface WorkoutDTO {
   treino_id: number
   chave: string // Day of the week (1-7)
-  inicio: string
-  fim: string
+  horario: string
   metadata: string[]
-  created_at?: string
-  updated_at?: string
 }
 
 export interface CreateWorkoutRequest {
   titulo: string
   indice: number
+  horario: string
   exercicios: Exercise[]
 }
 
@@ -85,6 +84,7 @@ function mapWorkoutFromDTO(dto: WorkoutDTO): Workout {
     indice: Number(dto.chave),
     ficha_id: dto.treino_id,
     exercicios: [],
+    horario: dto.horario,
   }
 }
 
