@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CategoryText } from './category-text'
+import { EditPostForm } from './edit-post-form'
 
 interface PostCardProps {
   post: Post
@@ -34,6 +35,7 @@ export function PostCard({
   updatePosts,
 }: PostCardProps) {
   const queryClient = useQueryClient()
+  const [editingId, setEditingId] = useState<null | number>(null)
   const [liked, setLiked] = useState(post.user_likeed)
   const [likeCount, setLikeCount] = useState(post.likes)
   const { data: user } = useUser()
@@ -111,6 +113,24 @@ export function PostCard({
     }
   }
 
+  async function handleUpdate() {
+    setEditingId(null)
+  }
+
+  function handleStopEditing() {
+    setEditingId(null)
+  }
+
+  if (editingId) {
+    return (
+      <EditPostForm
+        post={post}
+        onUpdate={handleUpdate}
+        onExit={handleStopEditing}
+      />
+    )
+  }
+
   return (
     <Card
       onClick={(e) => {
@@ -176,12 +196,14 @@ export function PostCard({
                         align="end"
                         className="w-52 p-1 bg-zinc-800 rounded-lg text-xs"
                       >
-                        {/* <button
-                      onClick={handleDestroyPost}
-                      className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
-                    >
-                      Editar
-                    </button> */}
+                        {post.perfil_id === author?.id && (
+                          <button
+                            onClick={() => setEditingId(post.id)}
+                            className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                          >
+                            Editar
+                          </button>
+                        )}
 
                         <button
                           onClick={handleDestroyPost}
@@ -267,19 +289,19 @@ export function PostCard({
                       <PopoverTrigger>
                         <CategoryText category={post.category} />
                       </PopoverTrigger>
-                      <PopoverContent className="w-[140px] p-1">
+                      <PopoverContent className="w-[140px] p-1 bg-zinc-800 rounded-lg text-xs">
                         {['Experiência', 'Indicações', 'Oportunidades']
                           .filter((item) => item !== post.category)
                           .map((item, i) => (
-                            <PopoverClose key={i}>
-                              <p
-                                className="p-1.5 text-sm hover:bg-zinc-700 rounded cursor-pointer"
+                            <PopoverClose key={i} className="w-full">
+                              <button
+                                className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
                                 onClick={() =>
                                   handleChangeCategory(item as Post['category'])
                                 }
                               >
                                 {item}
-                              </p>
+                              </button>
                             </PopoverClose>
                           ))}
                       </PopoverContent>
