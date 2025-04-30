@@ -72,7 +72,6 @@ export function EditTaskDialog({
       descricao: task.descricao,
     },
   })
-
   const handleDeleteTask = async (id: number) => {
     try {
       await api.delete(`/tarefas/destroy/${id}`)

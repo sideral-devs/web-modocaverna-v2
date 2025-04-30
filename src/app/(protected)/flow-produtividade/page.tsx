@@ -15,6 +15,7 @@ import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(true)
 
   useEffect(() => {
     const lastOpenedTimestamp = localStorage.getItem('checklistModalLastOpened')
@@ -77,7 +78,7 @@ export default function Page() {
             <div className="position-relative">
               <div className="w-full absolute left-0 h-[2px] bg-zinc-800" />
             </div>
-            <Board />
+            <Board isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
           </section>
           <ChecklistDialog open={isOpen} setOpen={setIsOpen} />
         </div>

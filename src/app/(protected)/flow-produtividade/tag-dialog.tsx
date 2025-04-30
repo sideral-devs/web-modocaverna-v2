@@ -115,7 +115,7 @@ export function TagDialog({
       toast.success('Etiquetas salvas com sucesso!')
       closeTagDialog()
       queryClient.invalidateQueries({ queryKey: ['tickets', 'tasks'] })
-      queryClient.refetchQueries({ queryKey: ['tasks'] })
+      queryClient.refetchQueries({ queryKey: ['tasks', 'tickets'] })
     } catch (err) {
       queryClient.invalidateQueries({ queryKey: ['tickets'] })
       setTags(rollback)
@@ -146,11 +146,13 @@ export function TagDialog({
     try {
       setTags(tags.filter((t) => t.id !== tag.id))
       await api.delete(`/task-tickets/destroy/${id}`)
+      queryClient.refetchQueries({ queryKey: ['tickets'] })
       queryClient.invalidateQueries({ queryKey: ['tickets'] })
       toast.success('Etiqueta excluída com sucesso!')
     } catch {
       toast.error('Não foi possível excluir a etiqueta!')
       setTags(rollback)
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
     }
   }
 
@@ -266,6 +268,7 @@ export function TagDialog({
                 if (deletingTag) {
                   deleteTag(deletingTag)
                   setShowDeleteDialog(false)
+                  handleGoBack()
                 }
               }}
               size="sm"
