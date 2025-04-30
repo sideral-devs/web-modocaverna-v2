@@ -84,8 +84,6 @@ export default function Page() {
     updateWorkout,
   } = useWorkouts()
 
-  console.log(initialWorkouts)
-
   // Add debounce ref for exercises
   const updateTimeoutRef = useRef<NodeJS.Timeout>()
 

@@ -16,6 +16,7 @@ import Image from 'next/image'
 type Measurements = {
   altura: string
   peso: string
+  peso_meta: string
   ombro: number
   peito: number
   biceps_direito: number
@@ -41,10 +42,10 @@ export function UpdateMeasurementsStep() {
   const lastRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
   const [currentStep, setCurrentStep] = useState<Step>('measurements')
   const [satisfactionLevel, setSatisfactionLevel] = useState<
-    'Satisfeito' | 'Insatisfeito'
+    'Satisfeito' | 'Não satisfeito'
   >(
-    (lastRegistration?.nivel_satisfacao as 'Satisfeito' | 'Insatisfeito') ||
-      'Insatisfeito',
+    (lastRegistration?.nivel_satisfacao as 'Satisfeito' | 'Não satisfeito') ||
+      'Não satisfeito',
   )
 
   const form = useForm<Measurements>({
@@ -93,6 +94,7 @@ export function UpdateMeasurementsStep() {
       altura: lastRegistration?.altura?.toString() || '',
       peso: lastRegistration?.peso?.toString() || '',
       imc: Number(lastRegistration?.imc?.toString() || '0'),
+      peso_meta: lastRegistration?.peso_meta?.toString() || '',
     },
   })
 
@@ -285,22 +287,22 @@ export function UpdateMeasurementsStep() {
                 Satisfeito
               </Button>
               <Button
-                onClick={() => setSatisfactionLevel('Insatisfeito')}
+                onClick={() => setSatisfactionLevel('Não satisfeito')}
                 className={`flex-1 gap-2 ${
-                  satisfactionLevel === 'Insatisfeito'
+                  satisfactionLevel === 'Não satisfeito'
                     ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-zinc-800 hover:bg-zinc-700'
                 }`}
               >
                 <SmileySad weight="bold" size={24} />
-                Insatisfeito
+                Não satisfeito
               </Button>
             </div>
           </div>
           {/* Peso comparison */}
           <div className="flex flex-col gap-4">
             <div className="flex mb-4 items-center justify-between">
-              <h3 className="text-yellow-500 w-full">Peso</h3>
+              <h3 className="text-yellow-500 w-full">Peso atual</h3>
               <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
             </div>
             <div className="flex items-center gap-2">
@@ -315,6 +317,54 @@ export function UpdateMeasurementsStep() {
                         ? '-'
                         : '+'
                     }${Math.abs(Number(measurements.peso) - Number(lastRegistration.peso))} kg)`
+                  : ''}
+              </span>
+            </div>
+          </div>
+          {/* Altura comparison */}
+          <div className="flex flex-col gap-4">
+            <div className="flex mb-4 items-center justify-between">
+              <h3 className="text-yellow-500 w-full">Altura</h3>
+              <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-white">{measurements.altura} cm</span>
+              <span className="text-zinc-400">
+                {lastRegistration?.altura &&
+                measurements.altura !== lastRegistration.altura.toString()
+                  ? `(${
+                      Number(measurements.altura) -
+                        Number(lastRegistration.altura) <
+                      0
+                        ? '-'
+                        : '+'
+                    }${Math.abs(Number(measurements.altura) - Number(lastRegistration.altura))} cm)`
+                  : ''}
+              </span>
+            </div>
+          </div>
+          {/* Objetivo comparison */}
+          <div className="flex flex-col gap-4">
+            <div className="flex mb-4 items-center justify-between">
+              <h3 className="text-yellow-500 w-full">Objetivo</h3>
+              <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-white">{measurements.peso_meta} kg</span>
+              <span className="text-zinc-400">
+                {shapeRegistrations[0]?.peso_meta &&
+                measurements.peso_meta !==
+                  shapeRegistrations[0].peso_meta.toString()
+                  ? `(${
+                      Number(measurements.peso_meta) -
+                        Number(shapeRegistrations[0].peso_meta) <
+                      0
+                        ? '-'
+                        : '+'
+                    }${Math.abs(
+                      Number(measurements.peso_meta) -
+                        Number(shapeRegistrations[0].peso_meta),
+                    )} kg)`
                   : ''}
               </span>
             </div>
@@ -336,6 +386,34 @@ export function UpdateMeasurementsStep() {
     }
 
     try {
+      console.log({
+        id: lastRegistration.shape_id,
+        data: {
+          membros_superiores: {
+            ombro: Number(data.ombro),
+            peito: Number(data.peito),
+            biceps_direito: Number(data.biceps_direito),
+            biceps_esquerdo: Number(data.biceps_esquerdo),
+            triceps_direito: Number(data.triceps_direito),
+            triceps_esquerdo: Number(data.triceps_esquerdo),
+          },
+          membros_inferiores: {
+            gluteos: Number(data.gluteos),
+            quadril: Number(data.quadril),
+            quadriceps_direito: Number(data.quadriceps_direito),
+            quadriceps_esquerdo: Number(data.quadriceps_esquerdo),
+            panturrilha_direita: Number(data.panturrilha_direita),
+            panturrilha_esquerda: Number(data.panturrilha_esquerda),
+          },
+          altura: Number(data.altura),
+          peso: Number(data.peso),
+          imc: Number(data.imc),
+          objetivo: shapeRegistrations[0].objetivo,
+          peso_meta: Number(data.peso_meta) || shapeRegistrations[0].peso_meta,
+          classificacao: shapeRegistrations[0].classificacao,
+          nivel_satisfacao: satisfactionLevel,
+        },
+      })
       await updateShapeRegistration({
         id: lastRegistration.shape_id,
         data: {
@@ -359,6 +437,7 @@ export function UpdateMeasurementsStep() {
           peso: Number(data.peso),
           imc: Number(data.imc),
           objetivo: shapeRegistrations[0].objetivo,
+          peso_meta: Number(data.peso_meta) || shapeRegistrations[0].peso_meta,
           classificacao: shapeRegistrations[0].classificacao,
           nivel_satisfacao: satisfactionLevel,
         },
@@ -410,6 +489,7 @@ export function UpdateMeasurementsStep() {
                       suffix="cm"
                     />
                   </div>
+
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Bíceps (E)</label>
                     <InputWithSuffix
@@ -438,6 +518,18 @@ export function UpdateMeasurementsStep() {
                       suffix="cm"
                     />
                   </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm">Ombro</label>
+                    <InputWithSuffix
+                      type="number"
+                      value={measurements.ombro.toString()}
+                      onChange={(e) =>
+                        handleInputChange('ombro', e.target.value)
+                      }
+                      className="bg-zinc-800"
+                      suffix="cm"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -462,6 +554,7 @@ export function UpdateMeasurementsStep() {
                       suffix="cm"
                     />
                   </div>
+
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Quadríceps (D)</label>
                     <InputWithSuffix
@@ -535,27 +628,40 @@ export function UpdateMeasurementsStep() {
                   <h3 className="text-yellow-500 w-full">Dados</h3>
                   <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm">Altura</label>
-                    <InputWithSuffix
-                      type="number"
-                      disabled
-                      value={measurements.altura}
-                      onChange={(e) =>
-                        handleInputChange('altura', e.target.value)
-                      }
-                      className="bg-zinc-800"
-                      suffix="cm"
-                    />
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm">Altura</label>
+                      <InputWithSuffix
+                        type="number"
+                        value={measurements.altura}
+                        onChange={(e) =>
+                          handleInputChange('altura', e.target.value)
+                        }
+                        className="bg-zinc-800"
+                        suffix="cm"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm">Peso atual</label>
+                      <InputWithSuffix
+                        type="number"
+                        value={measurements.peso}
+                        onChange={(e) =>
+                          handleInputChange('peso', e.target.value)
+                        }
+                        className="bg-zinc-800"
+                        suffix="kg"
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm">Peso</label>
+                    <label className="text-sm">Objetivo</label>
                     <InputWithSuffix
                       type="number"
-                      value={measurements.peso}
+                      value={measurements.peso_meta}
                       onChange={(e) =>
-                        handleInputChange('peso', e.target.value)
+                        handleInputChange('peso_meta', e.target.value)
                       }
                       className="bg-zinc-800"
                       suffix="kg"
