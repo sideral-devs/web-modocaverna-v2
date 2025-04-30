@@ -287,13 +287,13 @@ export default function Page() {
           <div className="flex justify-between items-center">
             <div className="mb-8">
               <p className="text-zinc-500 text-sm">
-                {/* {lastShapeRegistration?.updated_at
+                {lastShapeRegistration?.updated_at
                   ? `Última atualização · ${format(
                       new Date(lastShapeRegistration.updated_at),
                       "dd 'de' MMMM',' yyyy",
                       { locale: ptBR },
                     )}.`
-                  : 'Não atualizadas'} */}
+                  : 'Não atualizadas'}
               </p>
               <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
             </div>
