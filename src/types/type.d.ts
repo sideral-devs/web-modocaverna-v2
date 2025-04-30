@@ -389,6 +389,7 @@ interface Conteudo {
 }
 
 interface Comentario {
+  user_id: string
   comentario_id: number
   texto: string
   status: string
