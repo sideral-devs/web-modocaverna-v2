@@ -5,10 +5,15 @@ import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 import { CategoryText } from './category-text'
+import { RulesDialog } from './rules-dialog'
 
 export function TrendingSidebar() {
+  const [rulesDialogOpen, setRulesDialogOpen] = useState(false)
+
   const pathname = usePathname()
   const isProfilePage = pathname.startsWith('/comunidade/profile')
 
@@ -91,6 +96,13 @@ export function TrendingSidebar() {
             )}
           </CardContent>
         </Card>
+
+        <div className="flex w-full justify-center">
+          <Button variant="link" onClick={() => setRulesDialogOpen(true)}>
+            Regras de Uso
+          </Button>
+          <RulesDialog open={rulesDialogOpen} setOpen={setRulesDialogOpen} />
+        </div>
       </div>
     </div>
   )
