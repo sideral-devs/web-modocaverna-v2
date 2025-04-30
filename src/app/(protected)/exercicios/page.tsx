@@ -84,6 +84,8 @@ export default function Page() {
     updateWorkout,
   } = useWorkouts()
 
+  console.log(initialWorkouts)
+
   // Add debounce ref for exercises
   const updateTimeoutRef = useRef<NodeJS.Timeout>()
 
@@ -93,7 +95,16 @@ export default function Page() {
   // Initialize local workouts state from initial workouts
   useEffect(() => {
     if (initialWorkouts) {
-      setLocalWorkouts(initialWorkouts)
+      // Sort workouts by horario within each day
+      const sortedWorkouts = [...initialWorkouts].sort((a, b) => {
+        // First sort by day (indice)
+        if (a.indice !== b.indice) {
+          return a.indice - b.indice
+        }
+        // Then sort by horario within the same day
+        return a.horario.localeCompare(b.horario)
+      })
+      setLocalWorkouts(sortedWorkouts)
     }
   }, [initialWorkouts])
 
@@ -113,8 +124,7 @@ export default function Page() {
                 ficha_id: workout.ficha_id,
                 titulo: workout.titulo,
                 indice: selectedDay,
-                // todo: adicionar ordem
-                // ordem: index,
+                horario: workout.horario,
                 exercicios: workout.exercicios.map((exercise) => ({
                   nome: exercise.nome,
                   series: exercise.series.toString(),
@@ -147,6 +157,7 @@ export default function Page() {
           ficha_id: workout.ficha_id,
           titulo: workout.titulo,
           indice: workout.indice,
+          horario: workout.horario,
           exercicios: exercises.map((exercise) => ({
             nome: exercise.nome,
             series: exercise.series.toString(),
@@ -561,148 +572,115 @@ export default function Page() {
               ))}
             </div>
 
-            <div className="space-y-8">
-              <Reorder.Group
-                axis="y"
-                values={localWorkouts.filter(
-                  (workout) => workout.indice === selectedDay,
-                )}
-                onReorder={(newItems: Workout[]) => {
-                  // Get all workouts from other days
-                  const otherDayWorkouts = localWorkouts.filter(
-                    (workout) => workout.indice !== selectedDay,
-                  )
-
-                  // Combine the reordered current day workouts with other days' workouts
-                  const updatedWorkouts = [
-                    ...newItems,
-                    ...otherDayWorkouts,
-                  ].sort((a, b) => {
-                    // If workouts are from different days, maintain their day order
-                    if (a.indice !== b.indice) {
-                      return a.indice - b.indice
-                    }
-                    // If workouts are from the same day, use their position in the array
-                    return 0
-                  })
-
-                  // Update local state
-                  setLocalWorkouts(updatedWorkouts)
-
-                  // Update the API without triggering a refetch
-                  if (newItems.length > 0) {
-                    debouncedWorkoutUpdate(newItems)
-                  }
-                }}
-              >
+            <div>
+              <div className="flex flex-col">
                 {localWorkouts.filter(
                   (workout) => workout.indice === selectedDay,
                 ).length > 0 ? (
                   localWorkouts
                     .filter((workout) => workout.indice === selectedDay)
                     .map((workout) => (
-                      <Reorder.Item
-                        dragControls={dragControls}
+                      <div
                         key={workout.ficha_id}
-                        value={workout}
-                        className="space-y-4 mb-8"
+                        className="relative flex w-full mb-8"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-base flex items-center gap-2 text-zinc-300">
-                              <GripVertical
-                                size={16}
-                                onPointerDown={(e) => {
-                                  e.currentTarget.style.cursor = 'grabbing'
-                                  dragControls.start(e)
-                                }}
-                                onPointerUp={(e) => {
-                                  e.currentTarget.style.cursor = 'grab'
-                                }}
-                                className="reorder-handle cursor-grab text-zinc-400"
-                              />{' '}
-                              {workout.titulo}
-                            </h3>
+                        <div className="relative translate-y-0.5 flex flex-col items-center">
+                          <div className="text-red-500 font-medium whitespace-nowrap">
+                            {workout.horario}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => {
-                                setisCreateUpdateModal(true)
-                                setEditingWorkout(workout)
-                              }}
-                              className="bg-zinc-700 hover:bg-red-800 px-2 py-1 gap-2"
-                            >
-                              Editar treino
-                              <Pencil weight="fill" size={20} />
-                            </Button>
-                            <Button
-                              onClick={() => handleDeleteWorkout(workout)}
-                              variant="destructive"
-                              className="bg-transparent aspect-square hover:bg-red-900 p-2"
-                            >
-                              <Trash size={20} />
-                            </Button>
-                          </div>
+                          <div className="w-px h-full absolute top-8 bg-zinc-800" />
+                          <div className="w-2 h-2 rounded-full bg-red-500 mt-2 relative z-10" />
                         </div>
 
-                        <AnimatePresence>
-                          {workout.exercicios.length > 0 && (
-                            <Reorder.Group
-                              axis="y"
-                              values={workout.exercicios}
-                              onReorder={(newExercises: Exercise[]) => {
-                                const updatedWorkouts = localWorkouts.map(
-                                  (w) => {
-                                    if (w.ficha_id === workout.ficha_id) {
-                                      return {
-                                        ...w,
-                                        exercicios: newExercises,
+                        <div className="flex flex-col gap-4 ml-4 w-full">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-base flex items-center gap-2 text-zinc-300">
+                                {workout.titulo}
+                              </h3>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => {
+                                  setisCreateUpdateModal(true)
+                                  setEditingWorkout(workout)
+                                }}
+                                className="bg-zinc-700 hover:bg-red-800 px-2 py-1 gap-2"
+                              >
+                                Editar treino
+                                <Pencil weight="fill" size={20} />
+                              </Button>
+                              <Button
+                                onClick={() => handleDeleteWorkout(workout)}
+                                variant="destructive"
+                                className="bg-transparent aspect-square hover:bg-red-900 p-2"
+                              >
+                                <Trash size={20} />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <AnimatePresence>
+                            {workout.exercicios.length > 0 && (
+                              <Reorder.Group
+                                axis="y"
+                                values={workout.exercicios}
+                                onReorder={(newExercises: Exercise[]) => {
+                                  const updatedWorkouts = localWorkouts.map(
+                                    (w) => {
+                                      if (w.ficha_id === workout.ficha_id) {
+                                        return {
+                                          ...w,
+                                          exercicios: newExercises,
+                                        }
                                       }
-                                    }
-                                    return w
-                                  },
-                                )
-                                setLocalWorkouts(updatedWorkouts)
-
-                                // Get the updated workout
-                                const updatedWorkout = updatedWorkouts.find(
-                                  (w) => w.ficha_id === workout.ficha_id,
-                                )
-
-                                // Call the debounced update if we have the workout
-                                if (updatedWorkout) {
-                                  debouncedUpdate(
-                                    workout,
-                                    updatedWorkout.exercicios,
+                                      return w
+                                    },
                                   )
-                                }
-                              }}
-                              className="space-y-6"
-                              style={{ position: 'relative' }}
-                            >
-                              {workout.exercicios.map((exercise: Exercise) => (
-                                <ExerciseCard
-                                  key={`${workout.indice}-${exercise.indice}`}
-                                  exercise={exercise}
-                                  workoutIndex={workout.indice}
-                                  onEdit={() => {
-                                    setEditingExercise(exercise)
-                                    setisCreateUpdateModal(true)
-                                  }}
-                                />
-                              ))}
-                            </Reorder.Group>
-                          )}
-                        </AnimatePresence>
-                      </Reorder.Item>
+                                  setLocalWorkouts(updatedWorkouts)
+
+                                  // Get the updated workout
+                                  const updatedWorkout = updatedWorkouts.find(
+                                    (w) => w.ficha_id === workout.ficha_id,
+                                  )
+
+                                  // Call the debounced update if we have the workout
+                                  if (updatedWorkout) {
+                                    debouncedUpdate(
+                                      workout,
+                                      updatedWorkout.exercicios,
+                                    )
+                                  }
+                                }}
+                                className="space-y-6"
+                                style={{ position: 'relative' }}
+                              >
+                                {workout.exercicios.map(
+                                  (exercise: Exercise) => (
+                                    <ExerciseCard
+                                      key={`${workout.indice}-${exercise.indice}`}
+                                      exercise={exercise}
+                                      workoutIndex={workout.indice}
+                                      onEdit={() => {
+                                        setEditingExercise(exercise)
+                                        setisCreateUpdateModal(true)
+                                      }}
+                                    />
+                                  ),
+                                )}
+                              </Reorder.Group>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </div>
                     ))
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
                     <p>Nenhum treino cadastrado para este dia</p>
                   </div>
                 )}
-              </Reorder.Group>
+              </div>
             </div>
           </div>
         </div>

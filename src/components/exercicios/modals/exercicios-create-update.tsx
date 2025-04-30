@@ -13,7 +13,8 @@ import { Exercise, Workout } from '@/lib/api/exercises'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { WEEK_DAYS } from '@/lib/constants'
 import { useState, useEffect } from 'react'
-import { Plus, Trash, X } from '@phosphor-icons/react'
+import { Clock, Plus, Trash, X } from '@phosphor-icons/react'
+import { toast } from 'sonner'
 
 interface ExerciciosCreateUpdateProps {
   workout?: Workout
@@ -32,6 +33,7 @@ export function ExerciciosCreateUpdate({
   const { createWorkout, updateWorkout } = useWorkouts()
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [selectedDay, setSelectedDay] = useState(0)
+  const [workoutHorario, setWorkoutHorario] = useState('')
   const [workoutTitle, setWorkoutTitle] = useState('')
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     nome: '',
@@ -46,6 +48,7 @@ export function ExerciciosCreateUpdate({
       setExercises(workout.exercicios || [])
       setSelectedDay(workout.indice || 0)
       setWorkoutTitle(workout.titulo || '')
+      setWorkoutHorario(workout.horario || '')
     }
   }, [workout])
 
@@ -89,14 +92,17 @@ export function ExerciciosCreateUpdate({
           series: exercise.series.toString(),
           repeticoes: exercise.repeticoes.toString(),
           carga: exercise.carga.toString(),
+          horario: workout.horario,
           indice: index,
         }))
         await updateWorkout({
           ficha_id: workout.ficha_id,
           titulo: workoutTitle,
           indice: selectedDay,
+          horario: workoutHorario,
           exercicios: sanitizedExercises,
         })
+        toast.success('Treino atualizado com sucesso')
       } else {
         const sanitizedExercises = exercises.map((exercise, index) => ({
           nome: exercise.nome,
@@ -108,14 +114,18 @@ export function ExerciciosCreateUpdate({
         await createWorkout({
           titulo: workoutTitle,
           indice: selectedDay,
+          horario: workoutHorario,
           exercicios: sanitizedExercises,
         })
+        toast.success('Treino criado com sucesso')
       }
       onClose()
     } catch (error) {
       console.error('Error saving workout:', error)
     }
   }
+
+  const isDisabled = workoutTitle === '' || workoutHorario === ''
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -167,6 +177,43 @@ export function ExerciciosCreateUpdate({
               className="bg-zinc-800 border-zinc-700"
               placeholder="Ex: Treino de Peito"
             />
+          </div>
+
+          <div className="space-y-2 px-4">
+            <label className="block text-sm text-zinc-400 mb-2">Horário</label>
+            <div className="relative">
+              <Input
+                type="time"
+                value={workoutHorario}
+                onChange={(e) => setWorkoutHorario(e.target.value)}
+                className="w-full bg-zinc-800 rounded-lg pl-10 pr-4 py-3 border-none appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden"
+                required
+              />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                    stroke="#71717A"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 4.5V8L10 9"
+                    stroke="#71717A"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-zinc-700" />
@@ -355,6 +402,7 @@ export function ExerciciosCreateUpdate({
             type="button"
             variant="outline"
             className="bg-red-500 hover:bg-red-600"
+            disabled={isDisabled}
             onClick={handleSaveWorkout}
           >
             {workout ? 'Salvar treino' : 'Criar treino'}
