@@ -6,13 +6,16 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { HTMLAttributes, useEffect } from 'react'
 
-export function CloseButton({ className }: HTMLAttributes<HTMLDivElement>) {
+export function CloseButton({
+  className,
+  escapeTo,
+}: HTMLAttributes<HTMLDivElement> & { escapeTo?: string }) {
   const router = useRouter()
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        router.push('/')
+        router.push(escapeTo || '/')
       }
     }
 
