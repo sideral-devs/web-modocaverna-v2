@@ -28,7 +28,7 @@ export function MealFormModal({
   initialData,
 }: MealFormModalProps) {
   const [loading, setLoading] = useState(false)
-  const [selectedDay, setSelectedDay] = useState(initialData?.dia_semana ?? 0)
+  const [selectedDay, setSelectedDay] = useState(new Date().getDay())
 
   const [nome, setNome] = useState(initialData?.nome_refeicao ?? '')
   const [horario, setHorario] = useState(initialData?.hora_refeicao ?? '')
@@ -89,7 +89,7 @@ export function MealFormModal({
       setObservacoes('')
       setAlimentos([{ nome_alimento: '', quantidade: '' }])
       setSuplementos([])
-      setSelectedDay(0)
+      setSelectedDay(new Date().getDay())
     } else if (initialData) {
       setNome(initialData.nome_refeicao)
       setHorario(initialData.hora_refeicao)

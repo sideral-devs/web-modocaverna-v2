@@ -32,7 +32,7 @@ export function ExerciciosCreateUpdate({
   const { workouts, isLoading: isLoadingWorkouts } = useWorkouts()
   const { createWorkout, updateWorkout } = useWorkouts()
   const [exercises, setExercises] = useState<Exercise[]>([])
-  const [selectedDay, setSelectedDay] = useState(0)
+  const [selectedDay, setSelectedDay] = useState(new Date().getDay())
   const [workoutHorario, setWorkoutHorario] = useState('')
   const [workoutTitle, setWorkoutTitle] = useState('')
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
