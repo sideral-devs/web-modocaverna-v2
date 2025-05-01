@@ -200,7 +200,11 @@ export default function Page() {
 
   // Redirect to the first step if no photos are uploaded
   useEffect(() => {
-    if (firstShapeRegistration?.fotos === null) {
+    if (
+      firstShapeRegistration === undefined ||
+      firstShapeRegistration === null ||
+      firstShapeRegistration?.fotos === null
+    ) {
       router.push('/exercicios/steps?step=1')
     }
   }, [firstShapeRegistration, isLoadingShape, router])
