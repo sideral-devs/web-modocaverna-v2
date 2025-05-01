@@ -76,7 +76,26 @@ export function TaskChecklist({ task }: { task: Task }) {
     }
   }
 
-  async function handleEdit({
+  function handleEditText({
+    id,
+    name,
+    checked,
+  }: {
+    id: number
+    name: string
+    checked: boolean
+  }) {
+    if (!checklist) return
+
+    setChecklist({
+      ...checklist,
+      subtasks: checklist.subtasks.map((st) =>
+        st.id === id ? { ...st, name, checked: checked ? '1' : '0' } : st,
+      ),
+    })
+  }
+
+  async function updateChecklist({
     id,
     name,
     checked,
@@ -91,17 +110,22 @@ export function TaskChecklist({ task }: { task: Task }) {
       setChecklist({
         ...checklist,
         subtasks: checklist.subtasks.map((st) =>
-          st.id === id ? { ...st, name, checked: checked ? '1' : '0' } : st,
+          st.id === id
+            ? {
+                ...st,
+                name: name || 'Sem título',
+                checked: checked ? '1' : '0',
+              }
+            : st,
         ),
       })
 
       if (debounceRef.current) clearTimeout(debounceRef.current)
 
       debounceRef.current = setTimeout(async () => {
-        if (!name) return
         await api
           .put(`/task-subtasks/update/${id}`, {
-            name,
+            name: name || 'Sem título',
             checked,
             checklist_id: checklist.id,
           })
@@ -185,7 +209,7 @@ export function TaskChecklist({ task }: { task: Task }) {
                 checked={!!Number(sub.checked)}
                 onCheckedChange={(val) => {
                   const checked = val.valueOf() === true || false
-                  handleEdit({ ...sub, checked })
+                  updateChecklist({ ...sub, checked })
                 }}
               />
               <div className="flex w-full justify-between">
@@ -195,19 +219,27 @@ export function TaskChecklist({ task }: { task: Task }) {
                     className="py-1 bg-transparent outline-border outline-1 w-full"
                     value={sub.name}
                     onChange={(e) => {
-                      handleEdit({
+                      handleEditText({
                         id: sub.id,
                         name: e.target.value,
                         checked: !!Number(sub.checked),
                       })
                     }}
                     onBlur={() => {
-                      if (!sub.name) return
+                      updateChecklist({
+                        id: sub.id,
+                        name: sub.name,
+                        checked: !!Number(sub.checked),
+                      })
                       setEditingId(null)
                     }}
                     onKeyDown={(e) => {
                       if (e.key !== 'Enter') return
-                      if (!sub.name) return
+                      updateChecklist({
+                        id: sub.id,
+                        name: sub.name,
+                        checked: !!Number(sub.checked),
+                      })
                       setEditingId(null)
                     }}
                   />
