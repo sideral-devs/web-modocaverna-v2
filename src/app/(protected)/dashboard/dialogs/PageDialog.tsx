@@ -18,6 +18,7 @@ export default function PageDialog() {
       const res = await api.get('/poups/user/active')
       return res.data as Poup[]
     },
+    retry: 0,
   })
 
   const currentPopup = poups?.[currentIndex]
