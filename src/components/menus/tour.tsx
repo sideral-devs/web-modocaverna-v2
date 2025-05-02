@@ -14,6 +14,7 @@ import {
 } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 import { VideoPlayer } from '../video-player'
+import { useOnboardingStore } from '@/store/onboarding'
 
 export function TourMenu() {
   const { open, setOpen } = useTourMenu()
@@ -134,6 +135,23 @@ function FirstStep({
 }
 
 function SecondStep({ onNext }: { onNext: () => void }) {
+  const [isLoading, setIsLoading] = useState(false)
+  const { cellphone } = useOnboardingStore()
+  async function handleFinish() {
+    try {
+      setIsLoading(true)
+      await api.put('/users/update?save=true', {
+        tutorial_complete: true,
+        telefone: cellphone,
+      })
+      window.location.href = '/dashboard'
+    } catch {
+      toast.error('Algo deu errado. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="flex flex-col relative justify-between items-center gap-16">
       <div className="flex items-start gap-6">
@@ -173,7 +191,9 @@ function SecondStep({ onNext }: { onNext: () => void }) {
         </div>
       </div>
       <AlertDialogFooter>
-        <Button onClick={onNext}>Ativar Modo Caverna</Button>
+        <Button loading={isLoading} onClick={handleFinish}>
+          Ativar Modo Caverna
+        </Button>
       </AlertDialogFooter>
     </div>
   )

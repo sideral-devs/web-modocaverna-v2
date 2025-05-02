@@ -1,4 +1,5 @@
 'use client'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { modals } from '@/lib/constants'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -22,10 +23,11 @@ export default function PageDialog() {
   })
 
   const currentPopup = poups?.[currentIndex]
+  const { data: user } = useUser()
   const ModalComponent = currentPopup ? modals[currentPopup.title] : null
 
   useEffect(() => {
-    if (!isOpen && currentPopup) {
+    if (!isOpen && currentPopup && Number(user?.tutorial_complete)) {
       api
         .put(`/poups/user/read/${currentPopup.id}`)
         .then(() => {
@@ -44,7 +46,14 @@ export default function PageDialog() {
     }
   }, [isOpen])
 
-  if (isLoading || isError || !currentPopup || !ModalComponent) return null
+  if (
+    isLoading ||
+    isError ||
+    !currentPopup ||
+    !ModalComponent ||
+    !Number(user?.tutorial_complete)
+  )
+    return null
 
   return (
     <ModalComponent isOpen={isOpen} setOpen={setIsOpen} poup={currentPopup} />
