@@ -1,12 +1,10 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
 import { useUser } from '@/hooks/queries/use-user'
-import { api } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboarding'
 import Image from 'next/image'
 import { redirect, useRouter } from 'next/navigation'
 import { ReactNode, useState } from 'react'
-import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { CellphoneStep } from './CellphoneStep'
@@ -21,7 +19,6 @@ export default function Page() {
   const { data: user } = useUser()
   const [isLoading, setIsLoading] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(1)
-  const { cellphone } = useOnboardingStore()
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
   const passosTotal = isDesafioPlan ? 7 : 6
@@ -50,18 +47,8 @@ export default function Page() {
   }
 
   async function handleFinish() {
-    try {
-      setIsLoading(true)
-      await api.put('/users/update?save=true', {
-        tutorial_complete: true,
-        telefone: cellphone,
-      })
-      router.replace('/dashboard/tour')
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
-    } finally {
-      setIsLoading(false)
-    }
+    router.replace('/dashboard/tour')
+    setIsLoading(false)
   }
 
   if (user && !!Number(user.tutorial_complete)) {

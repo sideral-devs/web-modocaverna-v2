@@ -65,9 +65,9 @@ export default function Page() {
 
   const {
     register,
-    handleSubmit,
     setValue,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = form
   const isExpired = user?.status_plan === 'EXPIRADO'
@@ -85,6 +85,7 @@ export default function Page() {
         ...(isBannerBase64 || userBanner == null ? { banner: userBanner } : {}),
       })
       setIsEditing(false)
+      clearErrors()
       toast.success('Dados atualizados!')
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data) {
@@ -283,7 +284,7 @@ export default function Page() {
               <Button
                 size="sm"
                 loading={isSubmitting}
-                onClick={handleSubmit(handleEditUser)}
+                onClick={() => handleEditUser(form.getValues())}
               >
                 Atualizar Dados
               </Button>

@@ -127,8 +127,15 @@ function Comment({
             </span>
           </div>
         </div>
-        <div>{CommentEllipsisMenu(comment, user, handleDestroyComentario, isDeleteDialogOpen,
-                              setIsDeleteDialogOpen)}</div>
+        <div>
+          {CommentEllipsisMenu(
+            comment,
+            user,
+            handleDestroyComentario,
+            isDeleteDialogOpen,
+            setIsDeleteDialogOpen,
+          )}
+        </div>
       </div>
       <div className="w-full pl-6 z-40 relative bottom-8">
         {/* <div className={cn('flex  p-2 bg-black w-[600px] h-[200px] overflow-y-scroll scrollbar-minimal rounded-lg')}>
@@ -218,7 +225,7 @@ function Comment({
                               user,
                               handleDestroyComentario,
                               isDeleteDialogOpen,
-                              setIsDeleteDialogOpen
+                              setIsDeleteDialogOpen,
                             )}
                           </div>
                         </>
@@ -260,7 +267,7 @@ function Comment({
                               user,
                               handleDestroyComentario,
                               isDeleteDialogOpen,
-                              setIsDeleteDialogOpen
+                              setIsDeleteDialogOpen,
                             )}
                           </div>
                         </>
