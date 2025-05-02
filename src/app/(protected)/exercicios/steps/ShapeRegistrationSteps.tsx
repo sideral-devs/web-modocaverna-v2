@@ -16,6 +16,7 @@ import { Camera } from 'lucide-react'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import { createShapeRegistration } from '@/lib/api/shape'
+import { useShape } from '@/hooks/queries/use-shape'
 
 type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
 
@@ -58,6 +59,9 @@ export function ShapeRegistrationSteps() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [photos, setPhotos] = useState<ShapePhoto[]>([])
+  const { skipShapeRegistration, shapeRegistrations } = useShape()
+  const lastShapeRegistration =
+    shapeRegistrations?.[shapeRegistrations.length - 1]
   const [formData, setFormData] = useState<FormData>({
     membros_superiores: {
       ombro: 0,
@@ -113,6 +117,7 @@ export function ShapeRegistrationSteps() {
       const formDataWithPhotos = {
         ...formData,
         fotos: photos.map((photo) => photo.base64),
+        is_skipped: 0,
       }
       submitShapeRegistration(formDataWithPhotos)
     }
@@ -146,6 +151,21 @@ export function ShapeRegistrationSteps() {
       ...prev,
       [field]: value,
     }))
+  }
+
+  const handleSkip = async () => {
+    try {
+      if (lastShapeRegistration) {
+        await skipShapeRegistration({
+          id: lastShapeRegistration.shape_id,
+          isSkipped: true,
+        })
+      }
+      router.push('/exercicios')
+    } catch (error) {
+      console.error('Error skipping shape registration:', error)
+      toast.error('Erro ao pular registro de shape. Tente novamente.')
+    }
   }
 
   return (
@@ -321,11 +341,13 @@ export function ShapeRegistrationSteps() {
       )}
 
       <div className="flex justify-end gap-4 mt-8">
-        {currentStep > 1 && (
-          <Button variant="outline" onClick={handleBack}>
-            Voltar
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          className="bg-transparent"
+          onClick={handleSkip}
+        >
+          Pular
+        </Button>
         <Button onClick={handleNext} disabled={isPending}>
           {currentStep === 3 ? 'Finalizar' : 'Próximo'}
         </Button>

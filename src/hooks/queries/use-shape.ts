@@ -5,6 +5,7 @@ import {
   getShapeRegistrationById,
   getShapeRegistrations,
   updateShapeRegistration,
+  skipShapeRegistration,
 } from '@/lib/api/shape'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -47,6 +48,14 @@ export function useShape() {
     },
   })
 
+  const skipShapeRegistrationMutation = useMutation({
+    mutationFn: ({ id, isSkipped }: { id: number; isSkipped: boolean }) =>
+      skipShapeRegistration(id, isSkipped),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shape-registrations'] })
+    },
+  })
+
   return {
     shapeRegistrations,
     isLoading,
@@ -55,5 +64,6 @@ export function useShape() {
     createShapeRegistration: createShapeRegistrationMutation.mutate,
     updateShapeRegistration: updateShapeRegistrationMutation.mutate,
     deleteShapeRegistration: deleteShapeRegistrationMutation.mutate,
+    skipShapeRegistration: skipShapeRegistrationMutation.mutate,
   }
 }

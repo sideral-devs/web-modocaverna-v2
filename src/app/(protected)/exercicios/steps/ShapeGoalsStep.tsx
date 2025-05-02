@@ -72,11 +72,6 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
 
   const hasFilledAllFields = satisfacao && objetivo && pesoMeta
 
-  console.log('satisfacao', satisfacao)
-  console.log('objetivo', objetivo)
-  console.log('pesoMeta', pesoMeta)
-  console.log('textooo', textoMeta)
-
   async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)
 
@@ -111,8 +106,6 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
     })
     onNext(data)
   }
-
-  console.log('objetivo', objetivo)
 
   return (
     <div className="flex select-none w-[632px] overflow-y-auto px-1 flex-col flex-1 items-center gap-8">
@@ -316,9 +309,17 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
               <Button
                 variant="outline"
                 className="bg-transparent"
-                onClick={onBack}
+                onClick={() => {
+                  onNext({
+                    fotos,
+                    satisfacao,
+                    objetivo,
+                    pesoMeta,
+                    textoMeta,
+                  })
+                }}
               >
-                Voltar
+                Pular
               </Button>
               <AutoSubmitButton
                 onClick={form.handleSubmit(onSubmit)}

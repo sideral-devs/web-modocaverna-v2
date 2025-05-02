@@ -187,6 +187,7 @@ export default function Page() {
   const {
     shapeRegistrations,
     // hasRegistration,
+
     isLoading: isLoadingShape,
   } = useShape()
 
@@ -198,13 +199,20 @@ export default function Page() {
     setIsScrolled(latest > 0)
   })
 
+  console.log(
+    shapeRegistrations,
+    'the first shape registration is: ',
+    firstShapeRegistration,
+  )
+
   // Redirect to the first step if no photos are uploaded
   useEffect(() => {
     if (
-      firstShapeRegistration === undefined ||
-      firstShapeRegistration === null ||
-      firstShapeRegistration?.fotos === null
+      (firstShapeRegistration?.is_skipped === 0 &&
+        firstShapeRegistration.imc === 0) ||
+      (!firstShapeRegistration && !isLoadingShape)
     ) {
+      console.log('redirecting to the first step')
       router.push('/exercicios/steps?step=1')
     }
   }, [firstShapeRegistration, isLoadingShape, router])
@@ -305,7 +313,11 @@ export default function Page() {
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => router.push('/exercicios/atualizar-medidas')}
+              onClick={() =>
+                firstShapeRegistration?.imc !== 0
+                  ? router.push('/exercicios/atualizar-medidas')
+                  : router.push('/exercicios/steps?step=1')
+              }
             >
               <Pencil weight="fill" size={20} />
               Atualizar medidas
@@ -387,7 +399,11 @@ export default function Page() {
                 size="sm"
                 className="absolute bottom-2 left-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors"
                 onClick={() =>
-                  router.push('/exercicios/atualizar-medidas?photos=true')
+                  firstShapeRegistration?.imc !== 0 &&
+                  firstShapeRegistration?.fotos &&
+                  firstShapeRegistration?.fotos.length > 0
+                    ? router.push('/exercicios/atualizar-medidas?photos=true')
+                    : router.push('/exercicios/steps?step=1')
                 }
               >
                 Atualizar fotos

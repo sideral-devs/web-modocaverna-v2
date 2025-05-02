@@ -240,13 +240,18 @@ export function ExerciciosCreateUpdate({
                 <Input
                   id="series"
                   type="number"
+                  min="0"
                   value={currentExercise.series}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const value = Math.max(
+                      0,
+                      parseInt(e.target.value) || 0,
+                    ).toString()
                     setCurrentExercise({
                       ...currentExercise,
-                      series: e.target.value,
+                      series: value,
                     })
-                  }
+                  }}
                   className="bg-zinc-800 border-zinc-700"
                 />
               </div>
@@ -257,12 +262,16 @@ export function ExerciciosCreateUpdate({
                   id="repeticoes"
                   type="number"
                   value={currentExercise.repeticoes}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const value = Math.max(
+                      0,
+                      parseInt(e.target.value) || 0,
+                    ).toString()
                     setCurrentExercise({
                       ...currentExercise,
-                      repeticoes: e.target.value,
+                      repeticoes: value,
                     })
-                  }
+                  }}
                   className="bg-zinc-800 border-zinc-700"
                 />
               </div>
@@ -274,12 +283,16 @@ export function ExerciciosCreateUpdate({
                 id="carga"
                 type="number"
                 value={currentExercise.carga}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const value = Math.max(
+                    0,
+                    parseInt(e.target.value) || 0,
+                  ).toString()
                   setCurrentExercise({
                     ...currentExercise,
-                    carga: e.target.value,
+                    carga: value,
                   })
-                }
+                }}
                 className="bg-zinc-800 border-zinc-700"
               />
             </div>
@@ -337,7 +350,11 @@ export function ExerciciosCreateUpdate({
                                 className="w-6 bg-transparent border-none p-0 text-zinc-400 text-sm focus-visible:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               />
                               <span className="text-zinc-500 text-sm">
-                                séries
+                                {ex.series === '0'
+                                  ? 'séries'
+                                  : ex.series === '1'
+                                    ? 'série'
+                                    : 'séries'}
                               </span>
                             </div>
                             <div className="flex items-center gap-1">

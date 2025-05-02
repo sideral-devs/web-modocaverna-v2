@@ -4,16 +4,25 @@ import { useUser } from '@/hooks/queries/use-user'
 import { useOnboardingStore } from '@/store/onboarding'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { CloseButton } from '../../settings/CloseButton'
 import { AnalysisResultsStep } from './AnalysisResultsStep'
 import { ShapeConfigStep } from './ShapeConfigStep'
 import { ShapeGoalsStep } from './ShapeGoalsStep'
+import { useShape } from '@/hooks/queries/use-shape'
 
 export default function Page() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const {
+    shapeRegistrations,
+    // hasRegistration,
+
+    isLoading: isLoadingShape,
+  } = useShape()
+
+  const firstShapeRegistration = shapeRegistrations?.[0]
   const { data: user } = useUser()
   const [isLoading, setIsLoading] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(
@@ -42,24 +51,16 @@ export default function Page() {
   }
 
   async function handleFinish() {
-    // try {
-    //   setIsLoading(true)
-    //   await api.put('/users/update?save=true', {
-    //     tutorial_complete: true,
-    //     telefone: cellphone,
-    //   })
-    //   router.replace('/dashboard/tour')
-    // } catch {
-    //   toast.error('Algo deu errado. Tente novamente.')
-    // } finally {
-    //   setIsLoading(false)
-    // }
-    router.replace('/exercicios')
+    router.push('/exercicios')
   }
 
-  // if (user && !!Number(user.tutorial_complete)) {
-  //   return redirect('/dashboard')
-  // }
+  console.log(firstShapeRegistration, 'the first shape registration is: ')
+
+  useEffect(() => {
+    if (firstShapeRegistration?.imc !== 0) {
+      router.push('/exercicios')
+    }
+  }, [firstShapeRegistration, router])
 
   return (
     <ProtectedRoute>
@@ -78,7 +79,7 @@ export default function Page() {
             <PhaseCounter current={currentPhase} total={passosTotal} />
           </div>
 
-          <CloseButton />
+          <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
         </header>
         {STEPS[currentPhase as keyof typeof STEPS]}
       </div>

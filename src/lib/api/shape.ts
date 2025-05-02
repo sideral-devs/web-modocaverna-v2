@@ -6,6 +6,7 @@ export interface ShapeRegistration {
   imc: number
   altura: number
   peso: number
+  is_skipped: boolean | number
   texto_meta: string | null
   classificacao: string
   satisfeito_fisico: number
@@ -67,5 +68,12 @@ export const updateShapeRegistration = async (
 
 export const deleteShapeRegistration = async (id: number) => {
   const response = await api.delete(`/registro-de-shape/destroy/${id}`)
+  return response.data
+}
+
+export const skipShapeRegistration = async (id: number, isSkipped: boolean) => {
+  const response = await api.post(`/registro-de-shape/skip/${id}`, {
+    is_skipped: isSkipped,
+  })
   return response.data
 }

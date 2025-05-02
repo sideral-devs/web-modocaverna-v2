@@ -270,7 +270,7 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
 
           <div className="flex justify-center fixed bottom-0 w-full border-t left-0 pb-10 pt-10">
             <div className="flex gap-2">
-              {/* <Button
+              <Button
                 variant="outline"
                 className="bg-transparent"
                 onClick={() => {
@@ -278,7 +278,7 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 }}
               >
                 Pular
-              </Button> */}
+              </Button>
               <AutoSubmitButton
                 disabled={
                   !measurements.bicepsD ||

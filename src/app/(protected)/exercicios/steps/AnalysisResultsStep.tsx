@@ -8,6 +8,9 @@ import { useShapeFormStore } from '@/store/shape-form'
 
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
+import { useShape } from '@/hooks/queries/use-shape'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 type IMCStatus = {
   label: string
@@ -23,10 +26,20 @@ export function AnalysisResultsStep({
   onBack: () => void
   onFinish: () => void
 }) {
+  const router = useRouter()
   const { data, reset } = useShapeFormStore()
 
   const alturaEmMetros = data.altura / 100
   const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
+
+  const {
+    shapeRegistrations,
+    // hasRegistration,
+
+    isLoading: isLoadingShape,
+  } = useShape()
+
+  const firstShapeRegistration = shapeRegistrations?.[0]
 
   const getIMCStatus = (imc: number): IMCStatus => {
     if (isNaN(imc)) {
@@ -76,7 +89,12 @@ export function AnalysisResultsStep({
   const imcStatus = getIMCStatus(imc)
 
   async function handleFinish() {
+    let isSkipped = 0
     try {
+      if (isNaN(imc)) {
+        isSkipped = 1
+      }
+
       // Prepare the final data
       const finalData = {
         ...data,
@@ -89,7 +107,10 @@ export function AnalysisResultsStep({
               ? 'Peso normal'
               : imc < 30
                 ? 'Sobrepeso'
-                : 'Obesidade',
+                : 'Não informado',
+        is_skipped: isSkipped,
+        objetivo: data.objetivo || 'Indefinido',
+        nivel_satisfacao: data.nivel_satisfacao || 'Indefinido',
       }
 
       // Set IMC to 0 if NaN
@@ -99,10 +120,29 @@ export function AnalysisResultsStep({
 
       console.log(finalData)
 
+      const isUpdated = firstShapeRegistration?.imc === 0
+
+      console.log(
+        isUpdated,
+        'is updated with the first shape registration',
+        firstShapeRegistration,
+        'and the new data is',
+        finalData,
+      )
+
       // Submit to API
-      await api.post('/registro-de-shape/store', finalData).then((res) => {
-        toast.success('Shape registrado com sucesso!')
-      })
+      isUpdated
+        ? await api
+            .put(
+              `/registro-de-shape/update/${firstShapeRegistration?.shape_id}`,
+              finalData,
+            )
+            .then((res) => {
+              toast.success('Shape e objetivo atualizados com sucesso!')
+            })
+        : await api.post('/registro-de-shape/store', finalData).then((res) => {
+            toast.success('Shape registrado com sucesso!')
+          })
 
       // Reset form and proceed
       reset()
