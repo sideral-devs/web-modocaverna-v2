@@ -11,6 +11,7 @@ import { api } from '@/lib/api'
 import { useShape } from '@/hooks/queries/use-shape'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 
 type IMCStatus = {
   label: string
@@ -28,7 +29,7 @@ export function AnalysisResultsStep({
 }) {
   const router = useRouter()
   const { data, reset } = useShapeFormStore()
-
+  const queryClient = useQueryClient()
   const alturaEmMetros = data.altura / 100
   const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
 
@@ -118,35 +119,30 @@ export function AnalysisResultsStep({
         finalData.imc = 0.0
       }
 
-      console.log(finalData)
-
       const isUpdated = firstShapeRegistration?.imc === 0
 
-      console.log(
-        isUpdated,
-        'is updated with the first shape registration',
-        firstShapeRegistration,
-        'and the new data is',
-        finalData,
-      )
+      console.log(finalData)
 
       // Submit to API
-      isUpdated
-        ? await api
-            .put(
-              `/registro-de-shape/update/${firstShapeRegistration?.shape_id}`,
-              finalData,
-            )
-            .then((res) => {
-              toast.success('Shape e objetivo atualizados com sucesso!')
-            })
-        : await api.post('/registro-de-shape/store', finalData).then((res) => {
-            toast.success('Shape registrado com sucesso!')
-          })
+      if (isUpdated) {
+        await api.put(
+          `/registro-de-shape/update/${firstShapeRegistration?.shape_id}`,
+          finalData,
+        )
+        toast.success('Shape e objetivo atualizados com sucesso!')
+      } else {
+        await api.post('/registro-de-shape/store', finalData)
+        toast.success('Shape registrado com sucesso!')
+      }
 
-      // Reset form and proceed
+      // Refetch data and wait for it to complete
+      await queryClient.refetchQueries({ queryKey: ['shape-registrations'] })
+
+      // Reset form
       reset()
-      onFinish()
+
+      // Navigate using replace to avoid back button issues
+      router.replace('/exercicios')
     } catch (error) {
       toast.error('Algo deu errado. Tente novamente.')
     }

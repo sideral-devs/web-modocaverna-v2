@@ -51,16 +51,10 @@ export default function Page() {
   }
 
   async function handleFinish() {
-    router.push('/exercicios')
+    // Navigation is handled in AnalysisResultsStep
   }
 
   console.log(firstShapeRegistration, 'the first shape registration is: ')
-
-  useEffect(() => {
-    if (firstShapeRegistration?.imc !== 0) {
-      router.push('/exercicios')
-    }
-  }, [firstShapeRegistration, router])
 
   return (
     <ProtectedRoute>

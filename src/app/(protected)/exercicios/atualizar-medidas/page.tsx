@@ -20,8 +20,9 @@ export default function Page() {
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-screen overflow-y-auto pb-[400px] items-center gap-6 bg-zinc-900">
-        <header className="flex w-full pt-4 items-center justify-between ">
-          <div className="flex flex-col w-full max-w-3xl mx-auto items-center gap-6">
+        <header className="flex w-full pt-4 px-4 items-center justify-between ">
+          <div className="w-1/3 "></div>
+          <div className="flex flex-col w-1/3 justify-center max-w-3xl mx-auto items-center gap-6">
             <Image
               src={'/images/logo-icon.svg'}
               alt="Logo"
@@ -30,7 +31,12 @@ export default function Page() {
             />
           </div>
 
-          <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
+          <div className="w-1/3 justify-end flex">
+            <CloseButton
+              onClick={() => router.push('/exercicios')}
+              escapeTo="/exercicios"
+            />
+          </div>
         </header>
         {showPhotos ? <UpdatePhotosStep /> : <UpdateMeasurementsStep />}
       </div>

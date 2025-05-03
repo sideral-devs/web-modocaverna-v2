@@ -155,13 +155,12 @@ export function ShapeRegistrationSteps() {
 
   const handleSkip = async () => {
     try {
-      if (lastShapeRegistration) {
-        await skipShapeRegistration({
-          id: lastShapeRegistration.shape_id,
-          isSkipped: true,
-        })
-      }
-      router.push('/exercicios')
+      // if (lastShapeRegistration) {
+      //   await skipShapeRegistration({
+      //     id: lastShapeRegistration.shape_id,
+      //     isSkipped: true,
+      //   })
+      // }
     } catch (error) {
       console.error('Error skipping shape registration:', error)
       toast.error('Erro ao pular registro de shape. Tente novamente.')

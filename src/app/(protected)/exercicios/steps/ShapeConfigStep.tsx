@@ -47,8 +47,10 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
   const measurements = watch()
 
   function handleInputChange(field: keyof Measurements, value: string) {
-    if (value.length > 3) return
-    setValue(field, value)
+    // Only allow empty string or numbers
+    if (value === '' || /^\d{0,3}$/.test(value)) {
+      setValue(field, value)
+    }
   }
 
   const onSubmit = (data: Measurements) => {
@@ -80,8 +82,11 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col flex-1 items-center gap-4 ">
       <div className="flex mb-10 flex-col gap-2">
         <h2 className="text-2xl font-medium">
-          Olá <span className="text-white">{user?.name}</span>, vamos registrar
-          seu shape atual?
+          Olá{' '}
+          <span className="text-white">
+            {user?.name?.split(' ')[0] || user?.name}
+          </span>
+          , vamos atualizar suas medidas?
         </h2>
         <p className="text-zinc-400 font-normal">
           Digite abaixo seus dados para gerarmos seu treino
@@ -102,10 +107,17 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Bíceps (D)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.bicepsD}
                     onChange={(e) =>
-                      handleInputChange('bicepsD', e.target.value.slice(0, 3))
+                      handleInputChange(
+                        'bicepsD',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(0, parseInt(e.target.value) || 0)
+                              .toString()
+                              .slice(0, 3),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -114,10 +126,17 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Bíceps (E)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.bicepsE}
                     onChange={(e) =>
-                      handleInputChange('bicepsE', e.target.value.slice(0, 3))
+                      handleInputChange(
+                        'bicepsE',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(0, parseInt(e.target.value) || 0)
+                              .toString()
+                              .slice(0, 3),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -126,10 +145,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Peitoral</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.peitoral}
                     onChange={(e) =>
-                      handleInputChange('peitoral', e.target.value)
+                      handleInputChange(
+                        'peitoral',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -138,10 +165,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Cintura</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.cintura}
                     onChange={(e) =>
-                      handleInputChange('cintura', e.target.value)
+                      handleInputChange(
+                        'cintura',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -162,10 +197,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Glúteos</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.gluteos}
                     onChange={(e) =>
-                      handleInputChange('gluteos', e.target.value)
+                      handleInputChange(
+                        'gluteos',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -174,10 +217,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Quadríceps (D)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.quadricepsD}
                     onChange={(e) =>
-                      handleInputChange('quadricepsD', e.target.value)
+                      handleInputChange(
+                        'quadricepsD',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -186,10 +237,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Quadríceps (E)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.quadricepsE}
                     onChange={(e) =>
-                      handleInputChange('quadricepsE', e.target.value)
+                      handleInputChange(
+                        'quadricepsE',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -200,10 +259,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Quadril</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.quadril}
                     onChange={(e) =>
-                      handleInputChange('quadril', e.target.value)
+                      handleInputChange(
+                        'quadril',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -212,10 +279,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Panturrilha (D)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.panturrilhaD}
                     onChange={(e) =>
-                      handleInputChange('panturrilhaD', e.target.value)
+                      handleInputChange(
+                        'panturrilhaD',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -224,10 +299,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Panturrilha (E)</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.panturrilhaE}
                     onChange={(e) =>
-                      handleInputChange('panturrilhaE', e.target.value)
+                      handleInputChange(
+                        'panturrilhaE',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -245,10 +328,18 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Altura</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.altura}
                     onChange={(e) =>
-                      handleInputChange('altura', e.target.value)
+                      handleInputChange(
+                        'altura',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
                     }
                     className="bg-zinc-800"
                     suffix="cm"
@@ -257,9 +348,19 @@ export function ShapeConfigStep({ onNext }: { onNext: () => void }) {
                 <div className="flex flex-col gap-2">
                   <label className="text-sm">Peso</label>
                   <InputWithSuffix
-                    type="number"
+                    type="text"
                     value={measurements.peso}
-                    onChange={(e) => handleInputChange('peso', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(
+                        'peso',
+                        e.target.value === '-'
+                          ? ''
+                          : Math.max(
+                              0,
+                              parseInt(e.target.value) || 0,
+                            ).toString(),
+                      )
+                    }
                     className="bg-zinc-800"
                     suffix="kg"
                   />

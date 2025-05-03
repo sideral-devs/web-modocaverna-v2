@@ -39,9 +39,8 @@ export interface CreateShapeRegistrationRequest
     ShapeRegistration,
     'id' | 'shape_id' | 'created_at' | 'updated_at'
   > {}
-
 // Shape Registration endpoints
-export const getShapeRegistrations = async () => {
+export const getShapeRegistrations = async (): Promise<ShapeRegistration[]> => {
   const response = await api.get('/registro-de-shape/find')
   return response.data
 }

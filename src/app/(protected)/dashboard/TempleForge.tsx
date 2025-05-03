@@ -9,9 +9,11 @@ import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { useMeals } from '@/hooks/queries/use-meals'
 import { useShape } from '@/hooks/queries/use-shape'
 import { WEEK_DAYS } from '@/lib/constants'
-import { SmileyAngry } from '@phosphor-icons/react'
+import { cn } from '@/lib/utils'
+import { BowlFood, Smiley, SmileyAngry, SmileySad } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { BicepsFlexed, ScanFace } from 'lucide-react'
 import Link from 'next/link'
 export function TempleForge({ value }: { value: string }) {
   const { workouts } = useWorkouts()
@@ -38,6 +40,7 @@ export function TempleForge({ value }: { value: string }) {
 
   // Meals
   const { meals } = useMeals()
+
   const todaysMeals = meals?.filter((meal) => {
     return meal.dia_semana === todayIndex
   })
@@ -57,14 +60,13 @@ export function TempleForge({ value }: { value: string }) {
 
           <div className="absolute right-4 top-4">
             <span className="text-xs text-zinc-400">
-              *
               {lastShapeRegistration?.updated_at
-                ? `Medidas atualizadas em ${format(
+                ? `* Medidas atualizadas em ${format(
                     new Date(lastShapeRegistration.updated_at),
                     'dd MMM yyyy',
                     { locale: ptBR },
                   )}.`
-                : 'Não atualizadas'}
+                : ''}
             </span>
           </div>
 
@@ -75,7 +77,9 @@ export function TempleForge({ value }: { value: string }) {
                 <div className="flex flex-col gap-2">
                   <span className="text-sm text-zinc-400">Peso atual</span>
                   <span className="text-lg font-medium">
-                    {lastShapeRegistration?.peso}KG
+                    {lastShapeRegistration?.peso
+                      ? `${lastShapeRegistration.peso}KG`
+                      : 'Não cadastrado'}
                   </span>
                 </div>
               </div>
@@ -87,21 +91,46 @@ export function TempleForge({ value }: { value: string }) {
                 <div className="flex flex-col gap-2">
                   <span className="text-base text-zinc-400">Objetivo</span>
                   <span className="text-base font-medium">
-                    {lastShapeRegistration?.peso_meta}KG
+                    {lastShapeRegistration?.peso_meta
+                      ? `${lastShapeRegistration.peso_meta}KG`
+                      : 'Não cadastrado'}
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Card de Shape */}
-            <div className="flex flex-col w-full pl-4 border-l-4 border-l-red-500 border-y-0 border-r-0">
+            <div
+              className={cn(
+                'flex flex-col w-full pl-4 border-l-4 border-l-red-500 border-y-0 border-r-0',
+                lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
+                  ? 'border-l-green-500'
+                  : 'border-l-red-500',
+              )}
+            >
               <div className="flex flex-col h-full">
                 <div className="flex flex-col gap-2">
                   <span className="text-lg text-zinc-400">Shape</span>
-                  <div className="flex items-center gap-2 text-red-500">
-                    <SmileyAngry className="w-6 h-6" />
-                    <span className="text-base font-medium">
-                      Não satisfeito
+                  <div
+                    className={cn(
+                      'flex items-center gap-2',
+                      lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
+                        ? 'text-green-500'
+                        : 'text-red-500',
+                    )}
+                  >
+                    <span
+                      className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? 'text-green-500' : 'text-red-500'}`}
+                    >
+                      {lastShapeRegistration?.nivel_satisfacao ===
+                      'Satisfeito' ? (
+                        <Smiley weight="bold" size={24} />
+                      ) : (
+                        <SmileySad weight="bold" size={24} />
+                      )}
+                      {lastShapeRegistration?.nivel_satisfacao
+                        ? lastShapeRegistration.nivel_satisfacao
+                        : 'Não definido'}
                     </span>
                   </div>
                 </div>
@@ -126,16 +155,15 @@ export function TempleForge({ value }: { value: string }) {
                       </Badge>
                     ))
                   ) : (
-                    <Badge variant="outline">Nenhum treino cadastrado</Badge>
+                    <>
+                      <Badge variant="outline">Nenhum treino cadastrado</Badge>
+                    </>
                   )}
                 </div>
                 <span className="text-sm font-medium text-zinc-300">
-                  {todaysWorkouts && todaysWorkouts.length > 0
-                    ? todaysWorkouts.length
-                    : 0}{' '}
-                  {todaysWorkouts && todaysWorkouts.length > 1
-                    ? 'treinos separados'
-                    : 'treino'}
+                  {todaysWorkouts?.length === 0
+                    ? 'Nenhum treino cadastrado'
+                    : `${todaysWorkouts?.length || 0} ${todaysWorkouts?.length === 1 ? 'treino' : 'treinos separados'}`}
                 </span>
               </div>
 
@@ -157,8 +185,14 @@ export function TempleForge({ value }: { value: string }) {
                       )}
                     </div>
                   ))
+                ) : !firstShapeRegistration ? (
+                  <div className="flex flex-col gap-8 items-center justify-center py-16 text-zinc-500">
+                    <ScanFace size={56} />
+                    <p>Comece a registrar suas medidas para ver os treinos</p>
+                  </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
+                  <div className="flex flex-col gap-8 items-center justify-center py-16 text-zinc-500">
+                    <BicepsFlexed size={56} />
                     <p>Nenhum treino cadastrado para este dia</p>
                   </div>
                 )}
@@ -167,7 +201,9 @@ export function TempleForge({ value }: { value: string }) {
             </div>
           </div>
           <Link className="absolute right-4 bottom-4" href="/exercicios">
-            <Button size="sm">Acessar</Button>
+            <Button size="sm">
+              {!firstShapeRegistration ? 'Começar a registrar' : 'Acessar'}
+            </Button>
           </Link>
         </div>
 
@@ -182,22 +218,24 @@ export function TempleForge({ value }: { value: string }) {
           </div>
 
           {/* Refeições do Dia */}
-          <div className="md:col-span-3  flex flex-col w-full p-6 pt-2 border-0">
+          <div className="md:col-span-3 flex flex-col w-full pt-2 border-0">
             <div className="flex flex-col gap-1">
-              <span className="text-sm text-zinc-400">
-                Hoje é <span className="font-medium">{dayName}</span>.
-              </span>
-              <div className="flex mb-4  gap-2 justify-between">
-                <div className="flex gap-1">
-                  <h2 className="text-2xl font-medium">
-                    Confira suas{' '}
-                    <span className="text-zinc-400 mr-1">próximas</span>
-                    refeições
-                  </h2>
+              <div className="flex mt-2 px-6 flex-col gap-2 border-b border-zinc-700 pb-4">
+                <span className="text-sm text-zinc-400">
+                  Hoje é <span className="font-medium">{dayName}</span>.
+                </span>
+                <div className="flex border-zinc-700 pb-4 gap-2 justify-between">
+                  <div className="flex gap-1">
+                    <h2 className="text-2xl font-medium">
+                      Confira suas{' '}
+                      <span className="text-zinc-400 mr-1">próximas</span>
+                      refeições
+                    </h2>
+                  </div>
                 </div>
               </div>
 
-              <div className="h-[500px] pb-24 overflow-y-auto">
+              <div className="h-[500px] p-6 pb-24 overflow-y-auto">
                 {todaysMeals && todaysMeals.length > 0 ? (
                   todaysMeals.map((meal) => (
                     <MealCardHub
@@ -208,9 +246,12 @@ export function TempleForge({ value }: { value: string }) {
                     />
                   ))
                 ) : (
-                  <p className="text-zinc-500">
-                    Nenhuma refeição cadastrada para este dia
-                  </p>
+                  <div className="flex flex-col h-full gap-8 items-center justify-center py-16 text-zinc-500">
+                    <BowlFood size={56} />
+                    <p className="text-zinc-500">
+                      Nenhuma refeição cadastrada para este dia
+                    </p>
+                  </div>
                 )}
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent pointer-events-none" />
               </div>

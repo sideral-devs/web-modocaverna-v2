@@ -295,9 +295,14 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
                 Qual sua meta de peso?
               </h3>
               <InputWithSuffix
-                type="number"
+                type="text"
                 value={pesoMeta}
-                onChange={(e) => setValue('pesoMeta', e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value
+                  if (value === '' || /^\d*$/.test(value)) {
+                    setValue('pesoMeta', value)
+                  }
+                }}
                 className="bg-zinc-800 border-none max-w-[100px]"
                 suffix="kg"
               />

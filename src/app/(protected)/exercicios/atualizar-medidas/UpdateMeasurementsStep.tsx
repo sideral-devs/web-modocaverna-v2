@@ -102,8 +102,9 @@ export function UpdateMeasurementsStep() {
   const measurements = watch()
 
   const handleInputChange = (field: keyof Measurements, value: string) => {
-    const numericValue = Number(value)
-    setValue(field, numericValue.toString())
+    // Only allow empty string or numbers (up to 3 digits)
+    const sanitized = value.replace(/\D/g, '').slice(0, 3)
+    setValue(field, sanitized)
   }
 
   const handleAgeChange = (value: string) => {
@@ -457,8 +458,11 @@ export function UpdateMeasurementsStep() {
           <div className="flex flex-col w-full max-w-3xl gap-6 bg-zinc-900">
             <div className="flex mb-10 flex-col gap-2">
               <h2 className="text-2xl font-medium">
-                Olá <span className="text-white">{user?.name}</span>, vamos
-                atualizar suas medidas?
+                Olá{' '}
+                <span className="text-white">
+                  {user?.name?.split(' ')[0] || user?.name}
+                </span>
+                , vamos atualizar suas medidas?
               </h2>
               <p className="text-zinc-400 font-normal">
                 Digite abaixo seus dados atualizados
@@ -477,13 +481,10 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Bíceps (D)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.biceps_direito.toString()}
                       onChange={(e) =>
-                        handleInputChange(
-                          'biceps_direito',
-                          e.target.value.slice(0, 3),
-                        )
+                        handleInputChange('biceps_direito', e.target.value)
                       }
                       className="bg-zinc-800"
                       suffix="cm"
@@ -493,13 +494,10 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Bíceps (E)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.biceps_esquerdo.toString()}
                       onChange={(e) =>
-                        handleInputChange(
-                          'biceps_esquerdo',
-                          e.target.value.slice(0, 3),
-                        )
+                        handleInputChange('biceps_esquerdo', e.target.value)
                       }
                       className="bg-zinc-800"
                       suffix="cm"
@@ -508,7 +506,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Peitoral</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.peito.toString()}
                       onChange={(e) =>
                         handleInputChange('peito', e.target.value)
@@ -521,7 +519,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Ombro</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.ombro.toString()}
                       onChange={(e) =>
                         handleInputChange('ombro', e.target.value)
@@ -545,7 +543,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Glúteos</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.gluteos.toString()}
                       onChange={(e) =>
                         handleInputChange('gluteos', e.target.value)
@@ -558,7 +556,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Quadríceps (D)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.quadriceps_direito.toString()}
                       onChange={(e) =>
                         handleInputChange('quadriceps_direito', e.target.value)
@@ -570,7 +568,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Quadríceps (E)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.quadriceps_esquerdo.toString()}
                       onChange={(e) =>
                         handleInputChange('quadriceps_esquerdo', e.target.value)
@@ -584,7 +582,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Quadril</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.quadril.toString()}
                       onChange={(e) =>
                         handleInputChange('quadril', e.target.value)
@@ -596,7 +594,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Panturrilha (D)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.panturrilha_direita.toString()}
                       onChange={(e) =>
                         handleInputChange('panturrilha_direita', e.target.value)
@@ -608,7 +606,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Panturrilha (E)</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.panturrilha_esquerda.toString()}
                       onChange={(e) =>
                         handleInputChange(
@@ -633,7 +631,7 @@ export function UpdateMeasurementsStep() {
                     <div className="flex flex-col gap-2">
                       <label className="text-sm">Altura</label>
                       <InputWithSuffix
-                        type="number"
+                        type="text"
                         value={measurements.altura}
                         onChange={(e) =>
                           handleInputChange('altura', e.target.value)
@@ -645,7 +643,7 @@ export function UpdateMeasurementsStep() {
                     <div className="flex flex-col gap-2">
                       <label className="text-sm">Peso atual</label>
                       <InputWithSuffix
-                        type="number"
+                        type="text"
                         value={measurements.peso}
                         onChange={(e) =>
                           handleInputChange('peso', e.target.value)
@@ -658,7 +656,7 @@ export function UpdateMeasurementsStep() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm">Objetivo</label>
                     <InputWithSuffix
-                      type="number"
+                      type="text"
                       value={measurements.peso_meta}
                       onChange={(e) =>
                         handleInputChange('peso_meta', e.target.value)

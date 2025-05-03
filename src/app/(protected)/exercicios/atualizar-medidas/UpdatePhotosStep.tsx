@@ -9,7 +9,7 @@ import { useShape } from '@/hooks/queries/use-shape'
 import { toast } from 'sonner'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 
-type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
+type PhotoType = 'frontal' | 'lateral esquerda' | 'costas' | 'lateral direita'
 
 interface ShapePhoto {
   url: string
@@ -37,9 +37,9 @@ export function UpdatePhotosStep() {
 
   const photoTypes: { type: PhotoType; label: string }[] = [
     { type: 'frontal', label: 'Frontal' },
-    { type: 'lateral', label: 'Lateral' },
+    { type: 'lateral esquerda', label: 'Lateral esquerda' },
     { type: 'costas', label: 'Costas' },
-    { type: 'lateral2', label: 'Lateral' },
+    { type: 'lateral direita', label: 'Lateral direita' },
   ]
 
   // Check if at least one photo is uploaded
@@ -116,10 +116,12 @@ export function UpdatePhotosStep() {
       <FormProvider {...form}>
         <div className="flex flex-col w-full max-w-3xl gap-8">
           <div className="flex mb-4 flex-col gap-2">
-            <h2 className="text-2xl font-medium">Atualize suas fotos</h2>
+            <h2 className="text-2xl font-medium">
+              Documente sua evolução física
+            </h2>
             <p className="text-zinc-400 font-normal">
-              Faça upload do seu shape atual abaixo para comparação futura
-              (todas as fotos são obrigatórias)
+              Envie fotos do seu shape atual para acompanhar sua evolução. (As 4
+              fotos são obrigatórias)
             </p>
           </div>
 

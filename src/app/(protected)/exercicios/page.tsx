@@ -207,11 +207,8 @@ export default function Page() {
 
   // Redirect to the first step if no photos are uploaded
   useEffect(() => {
-    if (
-      (firstShapeRegistration?.is_skipped === 0 &&
-        firstShapeRegistration.imc === 0) ||
-      (!firstShapeRegistration && !isLoadingShape)
-    ) {
+    if (!firstShapeRegistration && !isLoadingShape) {
+      // No registration at all
       console.log('redirecting to the first step')
       router.push('/exercicios/steps?step=1')
     }

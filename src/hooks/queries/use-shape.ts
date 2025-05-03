@@ -53,6 +53,7 @@ export function useShape() {
       skipShapeRegistration(id, isSkipped),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shape-registrations'] })
+      queryClient.refetchQueries({ queryKey: ['shape-registrations'] })
     },
   })
 

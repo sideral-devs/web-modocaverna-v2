@@ -17,9 +17,7 @@ import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
 import { toast } from 'sonner'
 
 export default function Page() {
-  const [selectedDay, setSelectedDay] = useState(
-    new Date().getDay() === 0 ? 6 : new Date().getDay() - 1,
-  )
+  const [selectedDay, setSelectedDay] = useState(new Date().getDay())
   const [isScrolled, setIsScrolled] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedMeal, setSelectedMeal] = useState<Meal | undefined>()
