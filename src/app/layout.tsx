@@ -1,7 +1,8 @@
+import FormbricksLoader from '@/components/formbricks'
+import MobileAlert from '@/components/MobileAlert'
 import { GlobalProviders } from '@/components/providers'
 import type { Metadata } from 'next'
 import { Rubik } from 'next/font/google'
-import MobileAlert from '@/components/MobileAlert'
 import './globals.css'
 
 const rubik = Rubik({
@@ -31,6 +32,7 @@ export default function RootLayout({
     <html lang="pt_BR">
       <body className={`${rubik.className} antialiased`}>
         <MobileAlert />
+        <FormbricksLoader />
         <GlobalProviders>{children}</GlobalProviders>
       </body>
     </html>
