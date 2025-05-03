@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import {
+  CameraPlus,
   Smiley,
   SmileyAngry,
   SmileyMeh,
@@ -22,7 +23,7 @@ import Image from 'next/image'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useShapeFormStore } from '@/store/shape-form'
 
-type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
+type PhotoType = 'frontal' | 'perfil esquerdo' | 'costas' | 'perfil direito'
 
 interface ShapePhoto {
   url: string
@@ -43,34 +44,46 @@ interface ShapeGoalsStepProps {
   onBack: () => void
 }
 
+const photoTypes: { type: PhotoType; label: string }[] = [
+  { type: 'frontal', label: 'Frontal' },
+  { type: 'perfil esquerdo', label: 'Perfil esquerdo' },
+  { type: 'costas', label: 'Costas' },
+  { type: 'perfil direito', label: 'Perfil direito' },
+]
+
 export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
-  const { setData } = useShapeFormStore()
+  const { setData, data: storeData } = useShapeFormStore()
   const form = useForm<FormData>({
     defaultValues: {
-      fotos: [],
-      satisfacao: '',
-      objetivo: '',
-      pesoMeta: '',
-      textoMeta: '',
+      fotos: storeData.fotos.map((base64, index) => ({
+        url: URL.createObjectURL(new Blob([base64], { type: 'image/jpeg' })),
+        type: photoTypes[index].type,
+        base64,
+      })),
+      satisfacao:
+        storeData.nivel_satisfacao === 'Satisfeito'
+          ? 'satisfied'
+          : 'not_satisfied',
+      objetivo: storeData.objetivo as
+        | 'Perder peso'
+        | 'Manter peso'
+        | 'Ganhar peso'
+        | '',
+      pesoMeta: storeData.peso_meta?.toString() || '',
+      textoMeta: storeData.texto_meta || '',
     },
   })
 
   const { setValue, watch } = form
   const { fotos, satisfacao, objetivo, pesoMeta, textoMeta } = watch()
 
-  const photoTypes: { type: PhotoType; label: string }[] = [
-    { type: 'frontal', label: 'Frontal' },
-    { type: 'lateral', label: 'Lateral' },
-    { type: 'costas', label: 'Costas' },
-    { type: 'lateral2', label: 'Lateral' },
-  ]
-
   // Check if all required photos are uploaded
   const hasAllPhotos = photoTypes.every(({ type }) =>
     fotos.some((photo) => photo.type === type),
   )
 
-  const hasFilledAllFields = satisfacao && objetivo && pesoMeta
+  const hasFilledAllFields =
+    (satisfacao && objetivo === 'Manter peso') || (pesoMeta && objetivo)
 
   async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)
@@ -115,7 +128,6 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
             <h2 className="text-2xl font-medium">Registre seu progresso</h2>
             <p className="text-zinc-400 font-normal">
               Faça upload do seu shape atual abaixo para comparação futura
-              (todas as fotos são obrigatórias)
             </p>
           </div>
 
@@ -166,9 +178,24 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
                     ) : (
                       <label
                         htmlFor={`photo-${photoType.type}`}
-                        className="flex flex-col items-center justify-center w-full h-full cursor-pointer"
+                        className="flex relative flex-col items-center justify-center w-full h-full cursor-pointer"
                       >
-                        <Camera className="group-hover:text-white w-6 h-6 text-white" />
+                        <CameraPlus className="absolute bottom-2 right-2 w-6 h-6 text-white" />
+                        <div className="relative w-24 h-24">
+                          <Image
+                            src={
+                              photoType.type === 'frontal'
+                                ? '/images/frente.png'
+                                : photoType.type === 'perfil esquerdo'
+                                  ? '/images/perfilesquerdo.png'
+                                  : photoType.type === 'costas'
+                                    ? '/images/costas.png'
+                                    : '/images/perfildireito.png'
+                            }
+                            alt="Camera"
+                            fill
+                          />
+                        </div>
                       </label>
                     )}
                     <input
@@ -309,8 +336,8 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
             </div>
           )}
 
-          <div className="flex justify-center fixed bg-black bottom-0 w-full border-t left-0 pb-4 pt-4">
-            <div className="flex gap-2">
+          <div className="flex justify-between fixed bg-black bottom-0 w-full border-t left-0 pb-4 pt-4">
+            <div className="w-1/3">
               <Button
                 variant="outline"
                 className="bg-transparent"
@@ -326,13 +353,26 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
               >
                 Pular
               </Button>
+            </div>
+            <div className="w-1/3 flex justify-center gap-4">
+              <Button
+                variant="outline"
+                className="bg-transparent"
+                onClick={() => {
+                  setData({ fotos: [] })
+                  onBack()
+                }}
+              >
+                Voltar
+              </Button>
               <AutoSubmitButton
                 onClick={form.handleSubmit(onSubmit)}
-                disabled={!hasAllPhotos || !hasFilledAllFields}
+                disabled={!hasFilledAllFields}
               >
                 Continuar
               </AutoSubmitButton>
             </div>
+            <div className="w-1/3"></div>
           </div>
         </div>
       </FormProvider>

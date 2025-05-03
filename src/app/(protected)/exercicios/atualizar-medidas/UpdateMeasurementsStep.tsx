@@ -105,6 +105,20 @@ export function UpdateMeasurementsStep() {
     // Only allow empty string or numbers (up to 3 digits)
     const sanitized = value.replace(/\D/g, '').slice(0, 3)
     setValue(field, sanitized)
+
+    // Calculate IMC when height or weight changes
+    if (field === 'altura' || field === 'peso') {
+      const alturaEmMetros = Number(sanitized) / 100
+      const peso =
+        field === 'peso' ? Number(sanitized) : Number(measurements.peso)
+      const altura =
+        field === 'altura' ? alturaEmMetros : Number(measurements.altura) / 100
+
+      if (peso && altura) {
+        const imc = Number((peso / (altura * altura)).toFixed(2))
+        setValue('imc', imc)
+      }
+    }
   }
 
   const handleAgeChange = (value: string) => {
@@ -125,6 +139,54 @@ export function UpdateMeasurementsStep() {
     if (!lastRegistration) return null
 
     const previousRegistration = lastRegistration
+    const alturaEmMetros = Number(measurements.altura) / 100
+    const imc = Number(
+      (Number(measurements.peso) / (alturaEmMetros * alturaEmMetros)).toFixed(
+        2,
+      ),
+    )
+
+    const getIMCStatus = (imc: number) => {
+      if (isNaN(imc)) {
+        return {
+          label: 'IMC NÃO DISPONÍVEL',
+          color: 'red',
+          message: 'Não foi possível calcular o IMC.',
+        }
+      }
+
+      if (imc < 18.5) {
+        return {
+          label: 'IMC BAIXO',
+          color: 'yellow',
+          message:
+            'Seu IMC indica que você está abaixo do peso ideal. Vamos trabalhar para ganhar massa muscular de forma saudável.',
+        }
+      } else if (imc < 25) {
+        return {
+          label: 'IMC IDEAL',
+          color: 'green',
+          message:
+            'Seu IMC está dentro da faixa considerada saudável. Vamos manter esse equilíbrio e focar em ganhar massa muscular.',
+        }
+      } else if (imc < 30) {
+        return {
+          label: 'IMC ELEVADO',
+          color: 'orange',
+          message:
+            'Seu IMC indica sobrepeso. Vamos trabalhar para reduzir o percentual de gordura e ganhar massa muscular.',
+        }
+      } else {
+        return {
+          label: 'IMC ALTO',
+          color: 'red',
+          message:
+            'Seu IMC indica obesidade. Vamos focar em reduzir o percentual de gordura de forma saudável e sustentável.',
+        }
+      }
+    }
+
+    const imcStatus = getIMCStatus(imc)
 
     return (
       <div className="flex flex-col min-h-screen w-full gap-8 max-w-4xl">
@@ -136,6 +198,41 @@ export function UpdateMeasurementsStep() {
         </div>
 
         <div className="flex flex-col gap-8">
+          {/* IMC Status */}
+          <div className="flex flex-col gap-4">
+            <div className="flex mb-4 items-center justify-between">
+              <h3 className="text-yellow-500 w-full">
+                Índice de Massa Corporal (IMC)
+              </h3>
+              <div className="w-full h-px bg-gradient-to-tl from-yellow-500 via-transparent to-transparent"></div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div
+                className={`flex items-center justify-between bg-${imcStatus.color}-950/50 pl-4 pr-8 py-6 rounded-lg border border-${imcStatus.color}-900/50`}
+              >
+                <div className="flex items-center gap-4">
+                  <span className={`text-${imcStatus.color}-500 font-medium`}>
+                    {imcStatus.label}
+                  </span>
+                </div>
+                <span
+                  className={`text-2xl text-${imcStatus.color}-500 font-medium`}
+                >
+                  {!isNaN(imc) ? imc.toFixed(2) : 'Não disponível'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between bg-zinc-950/20 pl-4 pr-8 py-6 rounded-lg border border-zinc-900/50">
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-zinc-500 font-medium">
+                      {imcStatus.message}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Superior measurements comparison */}
           <div className="flex flex-col gap-4">
             <div className="flex mb-4 items-center justify-between">
@@ -385,6 +482,9 @@ export function UpdateMeasurementsStep() {
       setCurrentStep('analysis')
       return
     }
+    console.log(data)
+
+    const imc = Number(data.peso) / (Number(data.altura) * Number(data.altura))
 
     try {
       console.log({
@@ -411,7 +511,14 @@ export function UpdateMeasurementsStep() {
           imc: Number(data.imc),
           objetivo: shapeRegistrations[0].objetivo,
           peso_meta: Number(data.peso_meta) || shapeRegistrations[0].peso_meta,
-          classificacao: shapeRegistrations[0].classificacao,
+          classificacao:
+            Number(imc) < 18.5
+              ? 'Abaixo do peso'
+              : Number(imc) < 25
+                ? 'Peso normal'
+                : Number(imc) < 30
+                  ? 'Sobrepeso'
+                  : 'Obesidade',
           nivel_satisfacao: satisfactionLevel,
         },
       })
@@ -439,7 +546,14 @@ export function UpdateMeasurementsStep() {
           imc: Number(data.imc),
           objetivo: shapeRegistrations[0].objetivo,
           peso_meta: Number(data.peso_meta) || shapeRegistrations[0].peso_meta,
-          classificacao: shapeRegistrations[0].classificacao,
+          classificacao:
+            Number(imc) < 18.5
+              ? 'Abaixo do peso'
+              : Number(imc) < 25
+                ? 'Peso normal'
+                : Number(imc) < 30
+                  ? 'Sobrepeso'
+                  : 'Obesidade',
           nivel_satisfacao: satisfactionLevel,
         },
       })

@@ -28,7 +28,7 @@ export function AnalysisResultsStep({
   onFinish: () => void
 }) {
   const router = useRouter()
-  const { data, reset } = useShapeFormStore()
+  const { data, reset, setData } = useShapeFormStore()
   const queryClient = useQueryClient()
   const alturaEmMetros = data.altura / 100
   const imc = Number((data.peso / (alturaEmMetros * alturaEmMetros)).toFixed(2))
@@ -249,6 +249,7 @@ export function AnalysisResultsStep({
             variant="outline"
             className="bg-transparent"
             onClick={() => {
+              setData({ fotos: [] })
               onBack()
             }}
           >

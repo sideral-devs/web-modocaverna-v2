@@ -10,6 +10,7 @@ import { CloseButton } from '../../settings/CloseButton'
 import { AnalysisResultsStep } from './AnalysisResultsStep'
 import { ShapeConfigStep } from './ShapeConfigStep'
 import { ShapeGoalsStep } from './ShapeGoalsStep'
+import { HeightWeightStep } from './HeightWeightStep'
 import { useShape } from '@/hooks/queries/use-shape'
 
 export default function Page() {
@@ -30,12 +31,13 @@ export default function Page() {
   )
   const { cellphone } = useOnboardingStore()
 
-  const passosTotal = 3
+  const passosTotal = 4
 
   const STEPS = {
-    1: <ShapeConfigStep onNext={nextPhase} />,
-    2: <ShapeGoalsStep onNext={nextPhase} onBack={backPhase} />,
-    3: <AnalysisResultsStep onBack={backPhase} onFinish={handleFinish} />,
+    1: <HeightWeightStep onNext={nextPhase} />,
+    2: <ShapeConfigStep onNext={nextPhase} onBack={backPhase} />,
+    3: <ShapeGoalsStep onNext={nextPhase} onBack={backPhase} />,
+    4: <AnalysisResultsStep onBack={backPhase} onFinish={handleFinish} />,
   }
 
   function nextPhase() {
@@ -60,10 +62,10 @@ export default function Page() {
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-screen items-center gap-6 bg-zinc-900">
         <header className="flex w-full pt-4 items-center justify-between p-6">
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm w-1/3 text-muted-foreground">
             Passo {currentPhase} de {passosTotal}
           </span>
-          <div className="flex flex-col w-full max-w-2xl items-center gap-6">
+          <div className="flex flex-col w-2/3 justify-center max-w-2xl items-center gap-6">
             <Image
               src={'/images/logo-icon.svg'}
               alt="Logo"
@@ -72,8 +74,9 @@ export default function Page() {
             />
             <PhaseCounter current={currentPhase} total={passosTotal} />
           </div>
-
-          <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
+          <div className="flex w-1/3 justify-end">
+            <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
+          </div>
         </header>
         {STEPS[currentPhase as keyof typeof STEPS]}
       </div>

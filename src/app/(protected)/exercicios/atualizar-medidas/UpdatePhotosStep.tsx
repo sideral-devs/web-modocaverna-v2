@@ -9,7 +9,7 @@ import { useShape } from '@/hooks/queries/use-shape'
 import { toast } from 'sonner'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 
-type PhotoType = 'frontal' | 'lateral esquerda' | 'costas' | 'lateral direita'
+type PhotoType = 'frontal' | 'perfil esquerdo' | 'costas' | 'perfil direito'
 
 interface ShapePhoto {
   url: string
@@ -37,9 +37,9 @@ export function UpdatePhotosStep() {
 
   const photoTypes: { type: PhotoType; label: string }[] = [
     { type: 'frontal', label: 'Frontal' },
-    { type: 'lateral esquerda', label: 'Lateral esquerda' },
+    { type: 'perfil esquerdo', label: 'Perfil esquerdo' },
     { type: 'costas', label: 'Costas' },
-    { type: 'lateral direita', label: 'Lateral direita' },
+    { type: 'perfil direito', label: 'Perfil direito' },
   ]
 
   // Check if at least one photo is uploaded
@@ -120,8 +120,7 @@ export function UpdatePhotosStep() {
               Documente sua evolução física
             </h2>
             <p className="text-zinc-400 font-normal">
-              Envie fotos do seu shape atual para acompanhar sua evolução. (As 4
-              fotos são obrigatórias)
+              Envie fotos do seu shape atual para acompanhar sua evolução.{' '}
             </p>
           </div>
 
@@ -175,7 +174,21 @@ export function UpdatePhotosStep() {
                           htmlFor={`photo-${photoType.type}`}
                           className="w-full h-full flex items-center justify-center cursor-pointer hover:bg-zinc-800/50 transition-colors"
                         >
-                          <Camera className="w-6 h-6 text-zinc-400" />
+                          <div className="relative w-12 h-12">
+                            <Image
+                              src={
+                                photoType.type === 'frontal'
+                                  ? '/images/frente.png'
+                                  : photoType.type === 'perfil esquerdo'
+                                    ? '/images/perfilesquerdo.png'
+                                    : photoType.type === 'costas'
+                                      ? '/images/costas.png'
+                                      : '/images/perfildireito.png'
+                              }
+                              alt="Camera"
+                              fill
+                            />
+                          </div>
                         </label>
                       )}
                       <input

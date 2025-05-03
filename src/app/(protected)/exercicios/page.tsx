@@ -529,12 +529,11 @@ export default function Page() {
                         }`}
                       >
                         {lastShapeRegistration?.imc
-                          ? Number(lastShapeRegistration.imc.toFixed(1)) > 25
-                            ? 'Sobrepeso'
-                            : Number(lastShapeRegistration.imc.toFixed(1)) <
-                                18.5
-                              ? 'Abaixo do peso'
-                              : 'Peso normal'
+                          ? Number(lastShapeRegistration.imc.toFixed(1)) < 18.5
+                            ? 'Abaixo do peso'
+                            : Number(lastShapeRegistration.imc.toFixed(1)) < 25
+                              ? 'Peso normal'
+                              : 'Sobrepeso'
                           : '-'}
                       </p>
                     </div>
