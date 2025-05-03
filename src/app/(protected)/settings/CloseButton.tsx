@@ -28,7 +28,7 @@ export function CloseButton({
 
   return (
     <div className={cn('flex flex-col items-center gap-2', className)}>
-      <Link href={'/'}>
+      <Link href={escapeTo || '/'}>
         <Button
           variant="outline"
           className="w-10 h-10 rounded-full text-zinc-500"
