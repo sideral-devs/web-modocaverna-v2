@@ -1,6 +1,10 @@
 {
   "extends": [
-    "@rocketseat/eslint-config/next", 
     "next/core-web-vitals"
-  ]
+  ],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "@typescript-eslint/no-require-imports": "warn"
+  }
 }
