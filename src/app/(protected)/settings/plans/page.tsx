@@ -1,5 +1,4 @@
 'use client'
-
 import { useUser } from '@/hooks/queries/use-user'
 import { env } from '@/lib/env'
 import { useState } from 'react'
@@ -16,10 +15,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import dayjs from 'dayjs'
 import { PlanCavernosoActive } from '@/components/plans/cavernoso/plan-cavernoso-active'
-import { PlanCavernosoExpired } from '@/components/plans/cavernoso/plan-cavernoso-expired'
+import { PlanCavernosoYearlyExpired } from '@/components/plans/cavernoso/plan-cavernoso-expired'
 import { PlanCavernosoUpdate } from '@/components/plans/cavernoso/plan-update-for-annual'
 import { PlanCavernosoNonOnboarding } from '@/components/plans/cavernoso/plan-cavernoso-nonOnboarding'
 import { PlanCavernaNonOnboarding } from '@/components/plans/caverna/plan-caverna-nonOnboarding'
+import { PlanCavernosoMonthlyExpired } from '@/components/plans/cavernoso/plan-cavernoso-monthly-expired '
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -180,12 +180,16 @@ export default function Page() {
           <h2 className="text-3xl font-medium">Aproveite seu plano</h2>
         )}
         <div className="flex items-start w-full gap-4">
-          <PlanUpdateToAnnual
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            getPlanUrl={getPlanUrl}
-          />
-          <PlanCavernosoNonOnboarding
+          <div className="w-full">
+            <div className="w-[85%]">
+              <PlanUpdateToAnnual
+                selectedPlan={selectedPlan}
+                setSelectedPlan={setSelectedPlan}
+                getPlanUrl={getPlanUrl}
+              />
+            </div>
+          </div>
+          <PlanCavernosoMonthlyExpired
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
             isUpdatePlan={true}
@@ -220,7 +224,7 @@ export default function Page() {
           {renderExpiredAlert()}
           <div className="w-full flex flex-row">
             <div className="w-full">
-              <div className="w-[80%]">
+              <div className="w-[85%]">
                 <PlanCavernosoUpdate
                   selectedPlan={selectedPlan}
                   setSelectedPlan={setSelectedPlan}
@@ -228,7 +232,7 @@ export default function Page() {
                 />
               </div>
             </div>
-            <PlanCavernosoExpired
+            <PlanCavernosoYearlyExpired
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
               isUpdatePlan={false}

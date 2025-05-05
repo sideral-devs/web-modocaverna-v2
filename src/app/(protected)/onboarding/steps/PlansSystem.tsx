@@ -1,4 +1,4 @@
-import { PlanCavernoso } from '@/components/plans/cavernoso/plan-cavernoso'
+import { PlanCavernosoOnboarding } from '@/components/plans/cavernoso/plan-cavernoso-onboarding'
 import { PlanDesafio } from '@/components/plans/caverna/leftCollumn/plan-desafio'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { useUser } from '@/hooks/queries/use-user'
@@ -41,7 +41,7 @@ export function PlansSystem({ onNext }: { onNext: () => void }) {
           <div className="flex flex-col relative w-[911px] 3xl:p-4 p-4 gap-6 border border-zinc-700 rounded-lg">
             <div className="flex justify-between gap-5">
               <PlanDesafio />
-              <PlanCavernoso
+              <PlanCavernosoOnboarding
                 selectedPlan={selectedPlan}
                 setSelectedPlan={setSelectedPlan}
                 isUpdatePlan={isMonthlyPlan}

@@ -44,3 +44,5 @@ next-env.d.ts
 /src/app/test/*
 
 next.config.ts
+
+pnpm-lock.yaml

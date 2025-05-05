@@ -1,7 +1,6 @@
 'use client'
 
 import { Check, ToggleLeft } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
 
@@ -12,7 +11,7 @@ export function PlanDesafio({ isTrial }: { isTrial?: boolean }) {
     user && dayjs(user.data_de_compra).add(8, 'day').diff(dayjs(), 'days')
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full gap-3">
       <div className="flex mb-4 flex-col h-auto bg-zinc-900 rounded-2xl border">
         <div className="flex flex-col gap-2 p-6 pb-0 mb-4">
           <ToggleLeft size={20} className="text-zinc-400" />
@@ -55,16 +54,16 @@ export function PlanDesafio({ isTrial }: { isTrial?: boolean }) {
 
       {/* TODO: Use when the user is on the free trial */}
       {isTrial && (
-        <div className="flex flex-col rounded-xl w-full bg-red-900/20 border border-red-500">
+        <div className="flex flex-col py-5 rounded-3xl w-full bg-red-900/20 border border-red-500">
           <div className="flex flex-col gap-2">
-            <div className="flex p-6 pb-2 flex-col gap-2">
-              <Avatar className="w-8 h-8 mb-2 rounded-none">
+            <div className="flex px-6 pb-2 flex-col gap-2">
+              {/* <Avatar className="w-8 h-8 mb-2 rounded-none">
                 <AvatarImage
                   src={'/images/logo-icon.svg'}
                   className="object-contain"
                 />
                 <AvatarFallback>MC</AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <div className="flex flex-col">
                 <div className="flex gap-2 pr-4 justify-between items-center">
                   <div>
