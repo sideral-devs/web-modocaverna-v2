@@ -1,5 +1,5 @@
-import { PlanCavernoso } from '@/components/plans/plan-cavernoso'
-import { PlanDesafio } from '@/components/plans/plan-desafio'
+import { PlanCavernoso } from '@/components/plans/cavernoso/plan-cavernoso'
+import { PlanDesafio } from '@/components/plans/caverna/leftCollumn/plan-desafio'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { useUser } from '@/hooks/queries/use-user'
 import { env } from '@/lib/env'

@@ -41,7 +41,7 @@ const PLAN_FEATURES = [
   'Suporte via chat',
 ] as const
 
-export function PlanCavernosoColumn({
+export function PlanCavernosoActive({
   selectedPlan,
   setSelectedPlan,
   isUpdatePlan,

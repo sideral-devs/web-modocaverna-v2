@@ -25,6 +25,8 @@ const PLAN_FEATURES = [
   'Agenda de compromissos',
   'Gerenciamento de Rotina',
   'Rituais',
+  'Treinos',
+  'Refeições',
   'Gestão de Finanças',
   'Registro de Metas',
   'Lei da atração',
@@ -38,7 +40,7 @@ const PLAN_FEATURES = [
   'Suporte via chat',
 ] as const
 
-export function PlanCavernoso({
+export function PlanCavernaNonOnboarding({
   selectedPlan,
   setSelectedPlan,
   isUpdatePlan,
@@ -62,35 +64,32 @@ export function PlanCavernoso({
       )}
     >
       <div className="flex flex-col relative gap-2">
-        {isOnTrial ||
-          (isInactive && (
-            <div className="flex absolute top-4  border border-zinc-700 right-4 items-center bg-zinc-800 rounded-full p-1 w-fit">
-              <button
-                onClick={() => setSelectedPlan('yearly')}
-                className={cn(
-                  'px-6 py-2 rounded-full text-sm font-medium transition-all',
-                  selectedPlan === 'yearly'
-                    ? 'bg-white text-zinc-900'
-                    : 'text-zinc-400 hover:text-zinc-200',
-                )}
-              >
-                Anual
-              </button>
-              {!isUpdatePlan && (
-                <button
-                  onClick={() => setSelectedPlan('monthly')}
-                  className={cn(
-                    'px-6 py-2 rounded-full text-sm font-medium transition-all',
-                    selectedPlan === 'monthly'
-                      ? 'bg-white text-zinc-900'
-                      : 'text-zinc-400 hover:text-zinc-200',
-                  )}
-                >
-                  Mensal
-                </button>
+        {
+          <div className="flex absolute top-4  border border-zinc-700 right-4 items-center bg-zinc-800 rounded-full p-1 w-fit">
+            <button
+              onClick={() => setSelectedPlan('yearly')}
+              className={cn(
+                'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                selectedPlan === 'yearly'
+                  ? 'bg-white text-zinc-900'
+                  : 'text-zinc-400 hover:text-zinc-200',
               )}
-            </div>
-          ))}
+            >
+              Anual
+            </button>
+            <button
+              onClick={() => setSelectedPlan('monthly')}
+              className={cn(
+                'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                selectedPlan === 'monthly'
+                  ? 'bg-white text-zinc-900'
+                  : 'text-zinc-400 hover:text-zinc-200',
+              )}
+            >
+              Mensal
+            </button>
+          </div>
+        }
         <div
           className={cn(
             'w-full gap-2 flex p-6 pb-0 flex-col',
@@ -120,7 +119,8 @@ export function PlanCavernoso({
                 isOnboarding && 'h-[60px]',
               )}
             >
-              Fazer upgrade <Lightning className="!w-4 !h-4" weight="fill" />{' '}
+              Fazer upgrade
+              <Lightning className="!w-4 !h-4" weight="fill" />{' '}
             </Button>
             {selectedPlan === 'yearly' && (
               <span className="text-zinc-400 font-normal text-xs">

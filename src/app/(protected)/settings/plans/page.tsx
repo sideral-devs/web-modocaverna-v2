@@ -3,10 +3,8 @@
 import { useUser } from '@/hooks/queries/use-user'
 import { env } from '@/lib/env'
 import { useState } from 'react'
-
-import { PlanCavernoso } from '@/components/plans/plan-cavernoso'
-import { PlanDesafio } from '@/components/plans/plan-desafio'
-import { PlanUpdateToAnnual } from '@/components/plans/plan-update-to-annual'
+import { PlanDesafio } from '@/components/plans/caverna/leftCollumn/plan-desafio'
+import { PlanUpdateToAnnual } from '@/components/plans/cavernoso/plan-update-to-annual'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,9 +14,12 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { PlanAnnualRenovation } from '@/components/plans/plan-anual-renovation'
 import dayjs from 'dayjs'
-import { PlanCavernosoColumn } from '@/components/plans/plan-cavernoso-column'
+import { PlanCavernosoActive } from '@/components/plans/cavernoso/plan-cavernoso-active'
+import { PlanCavernosoExpired } from '@/components/plans/cavernoso/plan-cavernoso-expired'
+import { PlanCavernosoUpdate } from '@/components/plans/cavernoso/plan-update-for-annual'
+import { PlanCavernosoNonOnboarding } from '@/components/plans/cavernoso/plan-cavernoso-nonOnboarding'
+import { PlanCavernaNonOnboarding } from '@/components/plans/caverna/plan-caverna-nonOnboarding'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
@@ -124,7 +125,7 @@ export default function Page() {
         {renderHeader()}
         {isExpired && renderExpiredAlert()}
         <PlanDesafio />
-        <PlanCavernoso
+        <PlanCavernosoNonOnboarding
           selectedPlan={selectedPlan}
           setSelectedPlan={setSelectedPlan}
           isUpdatePlan={false}
@@ -140,7 +141,7 @@ export default function Page() {
         {renderHeader()}
         <div className="flex flex-row gap-8 w-full">
           <PlanDesafio isTrial={challengeTrial} />
-          <PlanCavernoso
+          <PlanCavernaNonOnboarding
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
             isUpdatePlan={false}
@@ -158,7 +159,7 @@ export default function Page() {
           : renderTrialExpiredAlert()}
         <div className="flex flex-row gap-8 w-full">
           <PlanDesafio />
-          <PlanCavernoso
+          <PlanCavernaNonOnboarding
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
             isUpdatePlan={false}
@@ -184,7 +185,7 @@ export default function Page() {
             setSelectedPlan={setSelectedPlan}
             getPlanUrl={getPlanUrl}
           />
-          <PlanCavernoso
+          <PlanCavernosoNonOnboarding
             selectedPlan={selectedPlan}
             setSelectedPlan={setSelectedPlan}
             isUpdatePlan={true}
@@ -197,30 +198,46 @@ export default function Page() {
 
   // Caso: Plano Anual
   if (isAnnualPlan) {
-    return (
-      <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        {renderHeader()}
-        {isExpired && renderExpiredAlert()}
-        {isExpired && (
-          <PlanAnnualRenovation
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            getPlanUrl={getPlanUrl}
-            renovationDate={renovationDate}
-            today={today}
-          />
-        )}
-        <div className="flex items-start w-full gap-4">
-          <PlanCavernosoColumn
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            isUpdatePlan={false}
-            getPlanUrl={getPlanUrl}
-            isExpired={isExpired}
-          />
+    if (!isExpired) {
+      return (
+        <div className="flex flex-col justify-start items-start col-span-3 gap-10">
+          {renderHeader()}
+          <div className="flex items-start w-full gap-4">
+            <PlanCavernosoActive
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
+              isUpdatePlan={false}
+              getPlanUrl={getPlanUrl}
+              isExpired={isExpired}
+            />
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className="flex flex-col  justify-start items-start col-span-3 gap-10">
+          {renderHeader()}
+          {renderExpiredAlert()}
+          <div className="w-full flex flex-row">
+            <div className="w-full">
+              <div className="w-[80%]">
+                <PlanCavernosoUpdate
+                  selectedPlan={selectedPlan}
+                  setSelectedPlan={setSelectedPlan}
+                  getPlanUrl={getPlanUrl}
+                />
+              </div>
+            </div>
+            <PlanCavernosoExpired
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
+              isUpdatePlan={false}
+              getPlanUrl={getPlanUrl}
+            />
+          </div>
+        </div>
+      )
+    }
   }
 
   // Fallback (caso nenhum plano seja identificado)
