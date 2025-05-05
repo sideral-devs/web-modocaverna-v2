@@ -5,23 +5,32 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { VideoPlayer } from '@/components/video-player'
+import { useUser } from '@/hooks/queries/use-user'
+import { api } from '@/lib/api'
 import { videos } from '@/lib/constants'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export function TutorialAffiliateDialogTrigger() {
   const [open, setOpen] = useState(false)
+  const { data: user } = useUser()
 
   useEffect(() => {
-    const storedValue = localStorage.getItem('video-affiliate')
-    if (!storedValue) {
+    if (!Number(user?.indique_tutorial)) {
       setOpen(true)
     }
   }, [])
 
-  function handleCheckboxChange() {
-    setOpen(false)
-    localStorage.setItem('video-affiliate', 'true')
+  async function handleCheckboxChange() {
+    try {
+      await api.put('/users/update?save=true', {
+        indique_tutorial: true,
+      })
+      setOpen(false)
+    } catch {
+      toast.error('Algo deu errado. Tente novamente.')
+    }
   }
 
   return (
