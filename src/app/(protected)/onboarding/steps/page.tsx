@@ -1,7 +1,6 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
 import { useUser } from '@/hooks/queries/use-user'
-import { useOnboardingStore } from '@/store/onboarding'
 import Image from 'next/image'
 import { redirect, useRouter } from 'next/navigation'
 import { ReactNode, useState } from 'react'

@@ -26,6 +26,7 @@ interface User {
   codigo_indicacao: string | null
   my_affiliate_code: string | null
   tutorial_complete: string
+  indique_tutorial: string
   login_streak: string
   score: string
   login_tag: string
