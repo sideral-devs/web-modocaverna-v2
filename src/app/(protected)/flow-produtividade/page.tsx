@@ -1,6 +1,7 @@
 'use client'
 import { ProductivityChart } from '@/components/charts/productivity'
 import { Header, HeaderClose } from '@/components/header'
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import PomodoroTimer from '@/components/pomo-two'
 import { ProtectedRoute } from '@/components/protected-route'
 import { Button } from '@/components/ui/button'
@@ -11,7 +12,6 @@ import { useEffect, useState } from 'react'
 import { ChecklistDialog } from './checklist-dialog'
 import { ConfigPomodoroDialogTrigger } from './config-pomodoro'
 import { Board } from './tasks'
-import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)

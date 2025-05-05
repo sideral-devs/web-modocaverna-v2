@@ -124,7 +124,8 @@ interface Checklist {
   subtasks: {
     id: number
     name: string
-    checked: string
+    checked: boolean
+    position: number
   }[]
 }
 interface Tag {
