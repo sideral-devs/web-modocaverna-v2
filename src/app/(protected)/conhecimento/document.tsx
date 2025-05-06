@@ -13,24 +13,28 @@ export function KnowledgeDocument({
   id,
   title,
   author,
+  userAcess,
   onEdit,
   onRemove,
   editModal,
   type,
   status,
   src,
+  acessEbookLink,
   options,
   onMoveTo,
 }: {
   id: number
   title: string
   author: string
-  type: 'livro' | 'curso' | 'video'
+  userAcess: boolean
+  type: 'livro' | 'curso' | 'video' | 'ebook'
   status: string
   onEdit: () => void
   onRemove: (id: number) => void
   editModal: ReactNode
   src?: string | null
+  acessEbookLink?: string | null
   options: { value: string; label: string; color: string }[]
   onMoveTo: (id: number, value: string) => void
 }) {
@@ -45,8 +49,24 @@ export function KnowledgeDocument({
 
   return (
     <div className="flex flex-col w-full h-[378px] items-center px-4 pt-7 pb-3 pr-3 gap-6 border rounded-lg relative">
-      <div className="w-40 h-48 relative rounded-lg overflow-hidden">
-        {src && !imageError ? (
+      <div className="w-40 h-52 relative rounded-lg transition-all duration-300 group">
+        {src && !imageError && type === 'ebook' ? (
+          <a
+            href={acessEbookLink || undefined}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Image
+              src={
+                src.startsWith('https') ? src : env.NEXT_PUBLIC_PROD_URL + src
+              }
+              alt="Capa do livro"
+              className="object-cover object-center hover:-translate-y-5 transition-all duration-300 cursor-pointer"
+              fill
+              onError={() => setImageError(true)}
+            />
+          </a>
+        ) : src && !imageError ? (
           <Image
             src={src.startsWith('https') ? src : env.NEXT_PUBLIC_PROD_URL + src}
             alt="Capa do livro"
@@ -67,14 +87,26 @@ export function KnowledgeDocument({
         <p className="truncate">{title}</p>
         <span className="text-xs text-zinc-400 truncate">{author} </span>
       </div>
-      {status === 'desejos' ? (
+      {!userAcess && type === 'ebook' ? (
+        <a
+          href={acessEbookLink || undefined}
+          className="w-full"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Button className="h-10 w-full ml-auto text-sm">Acessar</Button>
+        </a>
+      ) : status === 'desejos' ? (
         <Button
           onClick={() => onMoveTo(id, 'pendente')}
           className="h-10 ml-auto text-xs"
+          disabled={!userAcess}
         >
           {(() => {
             switch (type) {
               case 'livro':
+                return 'Adicionar à biblioteca'
+              case 'ebook':
                 return 'Adicionar à biblioteca'
               case 'curso':
                 return 'Adicionar aos Meus Cursos'
@@ -88,7 +120,10 @@ export function KnowledgeDocument({
       ) : (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button className={`h-10 ml-auto text-xs ${optionValue?.color}`}>
+            <Button
+              className={`h-10 ml-auto text-xs ${optionValue?.color}`}
+              disabled={!userAcess}
+            >
               {optionValue?.label} <ChevronDown />
             </Button>
           </PopoverTrigger>
@@ -110,14 +145,16 @@ export function KnowledgeDocument({
       )}
 
       <Popover>
-        <PopoverTrigger asChild>
-          <button
-            ref={triggerRef}
-            className="absolute top-2 right-2 cursor-pointer"
-          >
-            <Ellipsis />
-          </button>
-        </PopoverTrigger>
+        {userAcess && type !== 'ebook' && (
+          <PopoverTrigger asChild>
+            <button
+              ref={triggerRef}
+              className="absolute top-2 right-2 cursor-pointer"
+            >
+              <Ellipsis />
+            </button>
+          </PopoverTrigger>
+        )}
         <PopoverContent
           align="start"
           className="w-52 p-1 bg-zinc-800 rounded-lg text-xs flex flex-col gap-1"

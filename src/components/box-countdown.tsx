@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
+import { Check, Lock, MailOpen } from 'lucide-react'
 dayjs.extend(duration)
 
 export function BoxCountdown({
@@ -50,20 +51,29 @@ export function BoxCountdown({
   if (dayjs(targetDate).isBefore(dayjs())) {
     return (
       <div className="flex flex-col w-full items-left px-6 py-3 gap-3 rounded-2xl">
+        <div className="flex flex-row">
+          <Check color="#FF3333" width={16} height={16} />
+          <p className="text-primary text-xs pl-2">Pronta para leitura</p>
+        </div>
         <h1 className="text-2xl">
           {dayjs(targetDate).format('D [de] MMMM, YYYY')}
         </h1>
         <p className="text-base text-zinc-400">Sua carta já pode ser aberta!</p>
-        <Button className="w-full bg-primary " onClick={onClick}>
-          Revelar Carta
+        <Button className="w-full font-normal bg-primary " onClick={onClick}>
+          Revelar carta
+          <MailOpen className="mb-1" />
         </Button>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col w-full items-center  px-6 py-3 gap-3 rounded-2xl">
-      <div className="flex flex-col min-w-full items-left px-6 py-3 gap-3 rounded-2xl ">
+    <div className="flex flex-col w-full items-start  px-6 py-3 gap-3 rounded-2xl">
+      <div className="flex flex-row">
+        <Lock color="#a0a0a9" width={16} height={16} />
+        <p className="text-zinc-400 text-xs pl-2">Bloqueada </p>
+      </div>
+      <div className="flex flex-col items-start  rounded-2xl ">
         <h1 className="text-2xl">
           {dayjs(targetDate).format('D [de] MMMM, YYYY')}
         </h1>

@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { VideoPlayer } from '@/components/video-player'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn } from '@/lib/utils'
@@ -21,13 +22,13 @@ import { toast } from 'sonner'
 import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
 import { Comments } from './comments'
-import { useUser } from '@/hooks/queries/use-user'
 
 export default function Page({
   params,
 }: {
   params: Promise<{ course: string; module: string; lesson: string }>
 }) {
+  console.log(params)
   const { course, module: moduloId, lesson: lessonId } = use(params)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -38,8 +39,18 @@ export default function Page({
       const res = await api.get('/conteudos/show/' + course)
       return res.data as Conteudo
     },
+    select: (orig) => ({
+      ...orig,
+      modulos: orig.modulos.map((modulo) => {
+        if (modulo.modulo_id === 30) {
+          const primeiro = modulo.aulas.filter((a) => a.aula_id === 105)
+          const restantes = modulo.aulas.filter((a) => a.aula_id !== 105)
+          return { ...modulo, aulas: [...primeiro, ...restantes] }
+        }
+        return modulo
+      }),
+    }),
   })
-
   const { data: lesson } = useQuery({
     queryKey: ['lesson', course, moduloId, lessonId],
     queryFn: async () => {
@@ -172,53 +183,43 @@ export default function Page({
                 </div>
               </div>
             </div>
-            <div className="flex flex-row w-full justify-between">
-              <div
-                className=" h-[165px] w-[385px] rounded-lg flex flex-col items-end p-2 pr-6"
-                style={{
-                  backgroundImage:
-                    "url('/images/members-area/banners/cave_store.png')",
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                }}
-              >
-                <div className="flex flex-col w-1/2 pt-2 ">
-                  <h1 className="text-l font-extrabold text-primary">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4">
+                <div className="flex flex-col max-w-80 xl:max-w-52 z-10 gap-3 xl:gap-0">
+                  <h1 className="text-lg xl:text-base font-extrabold text-primary">
                     Vista-se como um Lobo Cavernoso!
                   </h1>
                   <p className="text-xs text-black font-semibold py-1">
                     Acesse a loja e garanta um super desconto com o cupom
                     “APLICATIVO”
                   </p>
-                </div>
-                <div>
-                  {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
-                  <Button
-                    className="w-[170px] mt-2 h-[36px] hover:cursor-pointer  hover:bg-red-700 items-center justify-center"
-                    color={'primary'}
-                    disabled
+
+                  <Link
+                    href="https://redirect.lifs.app/loja-mc"
+                    target="_blank"
+                    className="z-10"
                   >
-                    EM BREVE
-                  </Button>
-                  {/* </a> */}
+                    <Button
+                      className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center text-xs"
+                      color="primary"
+                    >
+                      ACESSAR LOJA
+                    </Button>
+                  </Link>
                 </div>
+
+                <Image
+                  src={'/images/members-area/banners/cave_store.png'}
+                  alt="Cave Store"
+                  fill
+                />
               </div>
               {![5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
                 Number(moduloId),
               ) && (
-                <div
-                  className="w-[385px] h-[165px] rounded-lg flex flex-col items-end p-2 pr-6"
-                  style={{
-                    backgroundImage:
-                      "url('/images/members-area/banners/indique.png')",
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                  }}
-                >
-                  <div className="flex flex-col w-48 relative left-4  ">
-                    <h1 className="text-base font-extrabold text-yellow-400">
+                <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4 gap-2">
+                  <div className="flex flex-col w-80 xl:w-48 relative z-10  gap-3 xl:gap-0">
+                    <h1 className="text-lg xl:text-base font-extrabold text-yellow-400">
                       Faça parte do nosso programa de afiliados.
                     </h1>
                     {user?.plan === `"TRIAL"` ? (
@@ -231,12 +232,11 @@ export default function Page({
                         Ganhe comissões generosas indicando o Modo Caverna.
                       </p>
                     )}
-                  </div>
-                  <div>
+
                     {user?.plan === `"TRIAL"` ? (
                       <Link href="/settings/plans">
                         <Button
-                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           ADQUIRIR
@@ -245,7 +245,7 @@ export default function Page({
                     ) : (
                       <Link href="/indique-e-ganhe">
                         <Button
-                          className="w-[170px] max-h-[36px] mt-3  hover:cursor-pointer hover:bg-red-700 items-center justify-center"
+                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           COMECE AGORA
@@ -253,6 +253,12 @@ export default function Page({
                       </Link>
                     )}
                   </div>
+
+                  <Image
+                    src={'/images/members-area/banners/indique.png'}
+                    alt="Cave Store"
+                    fill
+                  />
                 </div>
               )}
             </div>
@@ -261,7 +267,7 @@ export default function Page({
                 className="text-white py-4 px-4 text-normal"
                 dangerouslySetInnerHTML={{ __html: lesson.descricao }}
               />
-              <LessonMaterial aulaId={lessonId} />
+              <LessonMaterial aulaId={lessonId} aula={lesson} />
             </div>
             <CommentField lessonId={lessonId} />
           </section>
@@ -434,6 +440,58 @@ function ClassLink({
   )
 }
 // eslint-disable-next-line
-function LessonMaterial({ aulaId }: { aulaId: string }) {
+function LessonMaterial({ aulaId, aula }: { aulaId: string , aula?: Aula }) {
+
+  // MODELO DE MATERIAL PARA ADICIONAR NO FINAL DA DESCRIÇÃO DA AULA NO BANCO DE DADOS NÃO EXCLUIR
+  // const htmlContent = `
+  // <br>
+  // <br>
+  // <div style="margin-bottom: 22px; background-color: rgba(255, 51, 51, 0.06); border-radius: 10px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+  //   <div style= "border-left:4px solid #ff3333; padding: 16px 20px; fontSize: 16px; font-weight: 600; background-color:rgba(255, 51, 51, 0.15); paddingLeft: 1rem; paddingRight: 1rem; paddingTop: 14px; paddingBottom: 14px;">
+  //     MATERIAL COMPLEMENTAR:
+  //   </div>
+  //   <div style="padding: 15px 20px;">
+  //     <a
+  //       href="https://redirect.lifs.app/cavefocus-a9"
+  //       target="_blank"
+  //       style="display: flex; align-items: center; background-color: rgba(255, 51, 51, 0.8); color: white; padding: 0; border-radius: 8px; font-weight: 500; text-decoration: none; transition: all 0.3s ease; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12); max-width: 350px; width: 100%; margin: 0 auto;"
+  //       onmouseover="this.style.backgroundColor='rgba(255, 51, 51, 0.95)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 12px rgba(0, 0, 0, 0.18)';"
+  //       onmouseout="this.style.backgroundColor='rgba(255, 51, 51, 0.8)';this.style.transform='';this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.12)';"
+  //       onmousedown="this.style.transform='translateY(1px)';this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.12)';"
+  //       onmouseup="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 12px rgba(0, 0, 0, 0.18)';"
+  //     >
+  //       <div style="display: flex; justify-content: center; align-items: center; background-color: transparent; width: 56px; height: 56px; flex-shrink: 0; transition: background-color 0.3s ease;">
+  //         <svg
+  //           style="width: 24px; height: 24px; stroke: white; stroke-width: 2;"
+  //           xmlns="http://www.w3.org/2000/svg"
+  //           viewBox="0 0 24 24"
+  //           fill="none"
+  //           stroke="currentColor"
+  //           stroke-linecap="round"
+  //           stroke-linejoin="round"
+  //         >
+  //           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+  //            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+  //             <circle cx="8.5" cy="8.5" r="1.5"></circle>
+  //             <polyline points="21 15 16 10 5 21"></polyline>
+  //         </svg>
+  //       </div>
+  //       <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 16px; width: 100%;">
+  //         <span style="font-weight: 600; font-size: 14px; color: #18181b; background-color: rgba(255, 255, 255, 0.95); padding: 5px 10px; border-radius: 4px; letter-spacing: 0.4px; margin-bottom: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); display: inline-block; text-align: center; width: 100%;">
+  //          GUIA PRÁTICO PARA DEFINIÇÃO DE METAS.PDF
+  //         </span>
+  //         <span style="font-size: 12px; color: rgba(255, 255, 255, 0.9); font-weight: 500; letter-spacing: 0.5px; transition: padding 0.3s ease; display: flex; align-items: center; justify-content: center; text-align: center;">
+  //           CLIQUE AQUI PARA ACESSAR
+  //           <span style="content: '→'; margin-left: 6px; font-size: 14px; opacity: 0.8;"></span>
+  //         </span>
+  //       </div>
+  //       <div style="visibility: hidden; width: auto; min-width: 140px; background-color: #18181b; color: #fff; text-align: center; border-radius: 6px; padding: 8px 12px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%) translateY(10px); opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; font-size: 12px; border: 1px solid rgba(255, 51, 51, 0.5); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); pointer-events: none;">
+  //        Baixar PDF: GUIA PRÁTICO PARA DEFINIÇÃO DE METAS.PDF
+  //         <span style="content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: rgba(255, 51, 51, 0.5) transparent transparent transparent;"></span>
+  //       </div>
+  //     </a>
+  //   </div>
+  // </div>
+  // `
   return <></>
 }

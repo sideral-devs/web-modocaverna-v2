@@ -3,7 +3,7 @@ import { CreatePostForm } from '@/components/community/create-post-form'
 import { PostCard } from '@/components/community/post-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { use, useEffect } from 'react'
@@ -14,9 +14,11 @@ export default function PostPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
-  const router = useRouter()
 
-  const { data: post } = useQuery({
+  const router = useRouter()
+  const queryClient = useQueryClient()
+
+  const { data: post, refetch } = useQuery({
     queryKey: ['post', id],
     queryFn: async () => {
       const response = await api.get(`/posts/show/${id}`)
@@ -33,6 +35,11 @@ export default function PostPage({
     },
     enabled: !!id,
   })
+
+  function onPostUpdate(post: Post) {
+    queryClient.setQueryData(['post', id], post)
+    refetch()
+  }
 
   useEffect(() => {
     if (post && !post.user_viewed) {
@@ -55,7 +62,11 @@ export default function PostPage({
         </div>
       </div>
 
-      {post ? <PostCard post={post} /> : <Skeleton className="w-full h-2" />}
+      {post ? (
+        <PostCard post={post} updatePosts={onPostUpdate} />
+      ) : (
+        <Skeleton className="w-full h-2" />
+      )}
 
       <CreatePostForm replyToId={id} placeholder="Digite sua resposta" />
 

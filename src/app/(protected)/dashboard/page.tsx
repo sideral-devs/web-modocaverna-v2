@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
+import PageDialogs from './dialogs/PageDialog'
 import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
 import { OrdemNoCaos } from './OrdemNoCaos'
@@ -25,6 +26,7 @@ function Content() {
 
   return (
     <ProtectedRoute>
+      <PageDialogs />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12">
         <CentralHubHeader />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
@@ -32,7 +34,7 @@ function Content() {
             defaultValue={to || 'central-caverna'}
             className="flex flex-col flex-1 w-full h-full gap-5"
           >
-            <TabsList className="overflow-x-auto min-h-fit">
+            <TabsList className="overflow-x-auto min-h-8">
               <TabsTrigger value="central-caverna">Central Caverna</TabsTrigger>
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
               <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>

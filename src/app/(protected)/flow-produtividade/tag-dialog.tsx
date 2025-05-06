@@ -9,13 +9,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Dialog } from '@radix-ui/react-dialog'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Dialog } from '@radix-ui/react-dialog'
 
 export function TagDialog({
   task,
@@ -23,12 +23,14 @@ export function TagDialog({
   tags,
   setTags,
   onUpdate,
+  onClose,
 }: {
   task: Task
   taskId: number
   tags: Tag[]
   setTags: (arg: Tag[]) => void
   onUpdate?: () => void
+  onClose?: () => void
 }) {
   const [mode, setMode] = useState<'view' | 'create' | 'edit'>('view')
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
@@ -37,6 +39,7 @@ export function TagDialog({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [deletingTag, setDeletingTag] = useState<Tag | null>(null)
   const [isTagDialogOpen, setIsTagDialogOpen] = useState(true)
+
   const { data: allTickets } = useQuery({
     queryKey: ['tickets'],
     queryFn: async () => {
@@ -44,6 +47,7 @@ export function TagDialog({
       return response.data as Tags[]
     },
   })
+
   useEffect(() => {
     if (allTickets && taskId) {
       const associatedTickets = allTickets
@@ -59,7 +63,9 @@ export function TagDialog({
     }
     queryClient.refetchQueries({ queryKey: ['tasks'] })
     setIsTagDialogOpen(false)
+    onClose?.()
   }
+
   async function createTag(data: { name: string; color: string }) {
     const rollback = tags
     try {
@@ -97,14 +103,19 @@ export function TagDialog({
         checked: false,
       })
       setTags(
-        tags.map((t) =>
-          t.id === taskId ? { ...t, ticket_ids: selectedTickets } : t,
-        ),
+        allTickets
+          ?.filter((ticket) => selectedTickets.includes(ticket.id))
+          .map((ticket) => ({
+            id: ticket.id,
+            name: ticket.name,
+            color: ticket.color,
+          })) || [],
       )
+      setMode('view')
       toast.success('Etiquetas salvas com sucesso!')
       closeTagDialog()
       queryClient.invalidateQueries({ queryKey: ['tickets', 'tasks'] })
-      queryClient.refetchQueries({ queryKey: ['tasks'] })
+      queryClient.refetchQueries({ queryKey: ['tasks', 'tickets'] })
     } catch (err) {
       queryClient.invalidateQueries({ queryKey: ['tickets'] })
       setTags(rollback)
@@ -113,9 +124,6 @@ export function TagDialog({
     }
   }
 
-  if (!isTagDialogOpen) {
-    return null
-  }
   async function editTag(tag: Tag) {
     const rollback = tags
     try {
@@ -138,11 +146,13 @@ export function TagDialog({
     try {
       setTags(tags.filter((t) => t.id !== tag.id))
       await api.delete(`/task-tickets/destroy/${id}`)
+      queryClient.refetchQueries({ queryKey: ['tickets'] })
       queryClient.invalidateQueries({ queryKey: ['tickets'] })
       toast.success('Etiqueta excluída com sucesso!')
     } catch {
       toast.error('Não foi possível excluir a etiqueta!')
       setTags(rollback)
+      queryClient.invalidateQueries({ queryKey: ['tickets'] })
     }
   }
 
@@ -150,18 +160,23 @@ export function TagDialog({
     setMode('view')
     setEditingTag(null)
   }
+
+  if (!isTagDialogOpen) {
+    return null
+  }
+
   return (
     <>
       {mode === 'view' ? (
-        <DialogContent className="max-w-[400px] max-h-1/2 bg-zinc-900">
+        <DialogContent className="max-w-[400px] h-fit max-h-1/2 bg-zinc-900">
           <DialogHeader>
             <DialogTitle>Etiquetas</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col px-4 py-8 gap-3 overflow-y-auto">
+          <div className="flex flex-col p-4 gap-6 overflow-y-auto">
             <span className="text-sm font-medium text-zinc-400">
               Etiquetas Disponíveis
             </span>
-            <div className="flex flex-col w-full gap-6 h-[400px] overflow-y-scroll scrollbar-minimal rounded">
+            <div className="flex flex-col w-full gap-3 overflow-y-scroll scrollbar-minimal rounded">
               {allTickets?.map((ticket) => {
                 const isChecked = selectedTickets.includes(ticket.id)
 
@@ -212,23 +227,20 @@ export function TagDialog({
                 )
               })}
             </div>
-            <div className="flex gap-2 mt-4">
-              <Button
-                onClick={() => {
-                  saveTagList()
-                }}
-                className="bg-primary text-white hover:bg-red-600"
-              >
-                Salvar
-              </Button>
-              <Button
-                className="bg-zinc-700 text-white hover:bg-zinc-800"
-                onClick={() => setMode('create')}
-              >
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setMode('create')}>
                 <PlusIcon />
                 Criar nova etiqueta
               </Button>
-            </div>
+              <Button
+                onClick={() => {
+                  saveTagList()
+                  onClose?.()
+                }}
+              >
+                Salvar
+              </Button>
+            </DialogFooter>
           </div>
         </DialogContent>
       ) : mode === 'edit' && editingTag ? (
@@ -243,15 +255,11 @@ export function TagDialog({
           </DialogHeader>
           <div className="p-4">
             <p className="text-zinc-400">
-              {`Tem certeza que deseja deletar a etiqueta " ${deletingTag?.name} " ?`}
+              {`Tem certeza que deseja excluir a etiqueta " ${deletingTag?.name} " ?`}
             </p>
           </div>
           <DialogFooter className="gap-2 p-4">
-            <Button
-              variant="ghost"
-              onClick={() => setShowDeleteDialog(false)}
-              className="text-zinc-400 hover:bg-zinc-800 mb-4"
-            >
+            <Button variant="ghost" onClick={() => setShowDeleteDialog(false)}>
               Cancelar
             </Button>
             <Button
@@ -260,11 +268,12 @@ export function TagDialog({
                 if (deletingTag) {
                   deleteTag(deletingTag)
                   setShowDeleteDialog(false)
+                  handleGoBack()
                 }
               }}
-              className="bg-red-600 hover:bg-red-700"
+              size="sm"
             >
-              Deletar
+              Excluir
             </Button>
           </DialogFooter>
         </DialogContent>

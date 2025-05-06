@@ -11,8 +11,10 @@ import {
 } from '@/components/ui/dialog'
 import { Pencil } from 'lucide-react'
 
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import {
   closestCenter,
@@ -36,11 +38,10 @@ import { ConfigRitualDialog } from './ritual-modal/config-ritual-dialog'
 import { EditRitualDialog } from './ritual-modal/edit-ritual-dialog'
 import { RecalculateRitualDialog } from './ritual-modal/recalculate-ritual-dialog'
 import { SortableItem } from './ritual-modal/sortable-item'
-import { useUser } from '@/hooks/queries/use-user'
-import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
+
 export default function RitualsCard() {
   const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
-    new Date().getHours() >= 15 ? 'noturno' : 'matinal',
+    new Date().getHours() >= 12 ? 'noturno' : 'matinal',
   )
   const [stepsDialogOpen, setStepsDialogOpen] = useState(false)
   const [finishDialogOpen, setFinishDialogOpen] = useState(false)

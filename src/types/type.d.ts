@@ -6,7 +6,9 @@ interface User {
   telefone: string
   email_verified_at: string | null
   user_foto: string
+  banner: string | null
   plataforma: string
+  isInTrialDesafio: boolean
   data_de_compra: string
   data_de_renovacao: string
   first_login: boolean
@@ -24,6 +26,7 @@ interface User {
   codigo_indicacao: string | null
   my_affiliate_code: string | null
   tutorial_complete: string
+  indique_tutorial: string
   login_streak: string
   score: string
   login_tag: string
@@ -56,6 +59,7 @@ interface Book {
   avaliacao: string
   status: string
   link: string
+  is_ebook: boolean
   deleted_at: unknown
   created_at: string
   updated_at: string
@@ -120,7 +124,8 @@ interface Checklist {
   subtasks: {
     id: number
     name: string
-    checked: string
+    checked: boolean
+    position: number
   }[]
 }
 interface Tag {
@@ -386,6 +391,7 @@ interface Conteudo {
 }
 
 interface Comentario {
+  user_id: string
   comentario_id: number
   texto: string
   status: string
@@ -669,6 +675,7 @@ interface RitualResponseItem {
   created_at: string
   updated_at: string
 }
+
 // Exercícios
 export interface Exercise {
   id: string
@@ -690,4 +697,12 @@ export interface Workout {
   exercises: Exercise[]
   created_at?: string
   updated_at?: string
+}
+
+interface Poup {
+  id: number
+  title: string
+  active: boolean
+  created_at: string
+  updated_at: string
 }

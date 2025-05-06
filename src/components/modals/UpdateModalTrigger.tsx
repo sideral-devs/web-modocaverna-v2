@@ -9,6 +9,9 @@ import { RefundedPlanPopup } from './RefundedPlanPopup'
 export const UpgradeModalTrigger = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsopen] = useState(false)
   const { data: user } = useUser()
+  // const isCliente = user?.roles.some(role => role.name === "CLIENTE")
+  // const isDesafio = user?.roles.some(role => role.name === "DESAFIO")
+
   dayjs.locale('pt-br')
   // usecase#1: verificação para o usuário desafio
   useEffect(() => {
@@ -38,7 +41,7 @@ export const UpgradeModalTrigger = ({ children }: { children: ReactNode }) => {
       setIsopen(true)
     }
   }, [user])
-  // verificação para o usuário reembolso
+  // TODO MODAL DE PLANO EXPIRADO VER NO FIGMA
   return (
     <>
       {children}

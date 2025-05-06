@@ -34,7 +34,12 @@ import {
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EllipsisIcon, GripHorizontal, PlusIcon } from 'lucide-react'
+import {
+  EllipsisIcon,
+  GripHorizontal,
+  ListChecks,
+  PlusIcon,
+} from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { toast } from 'sonner'
@@ -52,6 +57,8 @@ interface TaskProps {
 interface ColumnContainerProps {
   column: TaskList
   tasks: Task[]
+  isExpanded: boolean
+  setIsExpanded: (isExpanded: boolean) => void
   deleteColumn: (id: number) => void
   updateColumn: (id: number, data: { title: string; position: number }) => void
   createTask: (card_id: number) => void
@@ -68,7 +75,13 @@ interface ColumnContainerProps {
   }) => Promise<void>
 }
 
-export function Board() {
+export function Board({
+  isExpanded,
+  setIsExpanded,
+}: {
+  isExpanded: boolean
+  setIsExpanded: (isExpanded: boolean) => void
+}) {
   const queryClient = useQueryClient()
   const [activeColumn, setActiveColumn] = useState<TaskList | null>(null)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
@@ -82,7 +95,6 @@ export function Board() {
   const debounceTaskRef = useRef<NodeJS.Timeout | null>(null)
   const [isColumnDragging, setIsColumnDragging] = useState(false)
   const [isReordering, setIsReordering] = useState(false)
-
   const preventMultiDrag: Modifier = ({ transform }) => {
     return transform
   }
@@ -314,9 +326,14 @@ export function Board() {
   })
   const { mutateAsync: updateTaskFn } = useMutation({
     mutationFn: async (data: Task) => {
+      const ticketsToSave = data?.task_tickets?.length
+        ? data.task_tickets.map((t) => t.id)
+        : undefined
+
       await api.put(`/tarefas/update/${data.tarefa_id}`, {
         ...data,
         checked: false,
+        ...(ticketsToSave && { tickets: ticketsToSave }),
       })
       queryClient.refetchQueries({ queryKey: ['tasks'] })
     },
@@ -566,6 +583,8 @@ export function Board() {
 
               return (
                 <ColumnContainer
+                  isExpanded={isExpanded}
+                  setIsExpanded={setIsExpanded}
                   key={`column-${col.id}`} // Key mais explícita
                   column={col}
                   deleteColumn={handleDeleteColumn}
@@ -595,6 +614,8 @@ export function Board() {
           <DragOverlay>
             {activeColumn && (
               <ColumnContainer
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
                 column={activeColumn}
                 deleteColumn={handleDeleteColumn}
                 updateColumn={handleUpdateColumn}
@@ -609,6 +630,8 @@ export function Board() {
             )}
             {activeTask && (
               <TaskCard
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
                 task={activeTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
@@ -625,6 +648,8 @@ export function Board() {
 
 interface TaskProps {
   task: Task
+  isExpanded: boolean
+  setIsExpanded: (isExpanded: boolean) => void
   updateTask: (task: Task) => Promise<void>
   deleteTask: (taskId: number) => Promise<void>
   reorderTask: ({
@@ -638,7 +663,14 @@ interface TaskProps {
   }) => Promise<void>
 }
 
-function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
+function TaskCard({
+  task,
+  updateTask,
+  deleteTask,
+  reorderTask,
+  isExpanded,
+  setIsExpanded,
+}: TaskProps) {
   const {
     setNodeRef,
     attributes,
@@ -653,7 +685,6 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectPriorityOpen, setSelectPriorityOpen] = useState(false)
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false)
-
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -775,9 +806,61 @@ function TaskCard({ task, updateTask, deleteTask, reorderTask }: TaskProps) {
             </ContextMenuContent>
           </ContextMenu>
         </div>
+        {task.task_tickets && task.task_tickets.length > 0 && (
+          <div className="flex flex-wrap py-2 w-full gap-2">
+            {task.task_tickets?.map((tag) => {
+              return (
+                <div
+                  key={tag.id}
+                  className={`rounded-full text-xs font-medium text-white transition-all duration-300 overflow-hidden ${
+                    isExpanded ? 'px-2 py-1' : 'w-3 h-3'
+                  } flex items-center justify-center`}
+                  style={{
+                    backgroundColor: tag.color,
+                    minWidth: isExpanded ? '' : '2.75rem',
+                  }}
+                  onClick={(e) => {
+                    setIsExpanded(!isExpanded)
+                    e.stopPropagation()
+                  }}
+                >
+                  <span
+                    className={`whitespace-nowrap ${isExpanded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+                  >
+                    {tag.name}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )}
         <p className="w-full whitespace-pre-wrap text-sm line-clamp-2">
           {task.item}
         </p>
+
+        {task.checklists && task.checklists.length > 0 && (
+          <div className="flex flex-row items-end justify-end w-full  p-2 gap-1">
+            {task.checklists?.map((checklist, index) => {
+              const total = checklist.subtasks.length
+              const done = checklist.subtasks.filter(
+                (sub) => !!Number(sub.checked),
+              ).length
+
+              return (
+                <>
+                  {checklist.subtasks.length > 0 && (
+                    <>
+                      <ListChecks width={20} height={20} />
+                      <span key={index} className="text-sm text-white">
+                        {done}/{total}
+                      </span>
+                    </>
+                  )}
+                </>
+              )
+            })}
+          </div>
+        )}
       </div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <EditTaskDialog
@@ -819,6 +902,8 @@ function ColumnContainer({
   deleteTask,
   updateTask,
   reorderTask,
+  isExpanded,
+  setIsExpanded,
 }: ColumnContainerProps) {
   const [editMode, setEditMode] = useState(false)
   const tasksIds = useMemo(() => {
@@ -893,6 +978,8 @@ function ColumnContainer({
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
+              isExpanded={isExpanded}
+              setIsExpanded={setIsExpanded}
               key={task.tarefa_id}
               task={task}
               deleteTask={deleteTask}

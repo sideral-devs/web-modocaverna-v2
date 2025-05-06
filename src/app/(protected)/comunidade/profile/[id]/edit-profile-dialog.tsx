@@ -37,10 +37,24 @@ const schema = z.object({
     .transform((val) => (val === '' ? undefined : val))
     .optional()
     .refine(
-      (value) =>
-        !value ||
-        (z.string().url().safeParse(value).success &&
-          value.includes('instagram.com')),
+      (value) => {
+        if (value?.toLowerCase().includes('https://')) {
+          return (
+            z.string().url().safeParse(value.toLowerCase().trim()).success &&
+            value.includes('instagram.com')
+          )
+        } else if (value) {
+          return (
+            z
+              .string()
+              .url()
+              .safeParse('https://' + value.toLowerCase().trim()).success &&
+            value.includes('instagram.com')
+          )
+        } else {
+          return false
+        }
+      },
       {
         message:
           'A URL deve ser válida e do Instagram (ex: https://instagram.com/usuario)',
@@ -51,16 +65,10 @@ const schema = z.object({
     .string()
     .transform((val) => (val === '' ? undefined : val))
     .optional()
-    .refine(
-      (value) =>
-        !value ||
-        (z.string().url().safeParse(value).success &&
-          value.includes('linkedin.com')),
-      {
-        message:
-          'A URL deve ser válida e do LinkedIn (ex: https://linkedin.com/in/usuario)',
-      },
-    ),
+    .refine((value) => value?.toLowerCase().includes('linkedin.com'), {
+      message:
+        'A URL deve ser válida e do LinkedIn (ex: https://linkedin.com/in/usuario)',
+    }),
 })
 
 type RegisterData = z.infer<typeof schema>
@@ -82,10 +90,10 @@ export function EditProfileDialog({
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const bannerFileInputRef = useRef<HTMLInputElement>(null)
-  const [previewProfile, setPreviewProfile] = useState<string | undefined>(
+  const [previewProfile, setPreviewProfile] = useState<string | null>(
     profile.foto_perfil
       ? `${env.NEXT_PUBLIC_PROD_URL}${profile.foto_perfil}`
-      : undefined,
+      : null,
   )
   const [previewBanner, setPreviewBanner] = useState<string | null>(
     profile.banner ? `${env.NEXT_PUBLIC_PROD_URL}${profile.banner}` : '',
@@ -134,26 +142,35 @@ export function EditProfileDialog({
     }
   }, [profile, reset])
 
-  function buildBookPayload(data: RegisterData, previewBanner: string | null) {
-    const isBannerBase64 = previewBanner?.startsWith('data:image/')
-
+  function buildBookPayload(data: RegisterData) {
     return {
       nickname: data.nickname,
       biography: data.biography,
-      instagram: data.instagram,
-      linkedin: data.linkedin,
-      ...(isBannerBase64 || previewBanner == null
-        ? { banner: previewBanner }
-        : {}),
+      instagram: (data.instagram && data.instagram.startsWith('https://')
+        ? data.instagram
+        : 'https://' + data.instagram
+      ).toLowerCase(),
+      linkedin: (data.linkedin && data.linkedin.startsWith('https://')
+        ? data.linkedin
+        : 'https://' + data.linkedin
+      ).toLowerCase(),
     }
   }
 
-  function buildPhotoProfile(previewProfile: string | undefined) {
-    if (!previewProfile) return { user_foto: null }
+  function buildUserImages() {
+    const isBannerBase64 = previewBanner?.startsWith('data:image/')
+    const isPhotoProfileBase64 = previewProfile?.startsWith('data:image/')
 
-    if (!previewProfile.startsWith('data:image/')) return {}
+    const result = {
+      ...(isBannerBase64 || previewBanner == null
+        ? { banner: previewBanner }
+        : {}),
+      ...(isPhotoProfileBase64 || previewProfile == null
+        ? { user_foto: previewProfile }
+        : {}),
+    }
 
-    return { user_foto: previewProfile }
+    return result
   }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -201,15 +218,12 @@ export function EditProfileDialog({
   }
 
   const handleRemoveClick = () => {
-    setPreviewProfile(undefined)
+    setPreviewProfile(null)
   }
 
   async function updatePhotoProfile() {
     try {
-      await api.put(
-        '/users/update?save=true',
-        buildPhotoProfile(previewProfile),
-      )
+      await api.put('/users/update?save=true', buildUserImages())
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         if (err.response.data.status === 500)
@@ -225,13 +239,13 @@ export function EditProfileDialog({
 
   async function handleRegister(data: RegisterData) {
     try {
-      const payload = buildBookPayload(data, previewBanner)
+      const payload = buildBookPayload(data)
       await api.put(`/perfil-comunidade/update/${profile.id}`, payload)
       await updatePhotoProfile()
 
       refetch()
       setIsOpen(false)
-      toast.success('Perfl atualizado com sucesso!')
+      toast.success('Perfil atualizado com sucesso!')
       await queryClient.invalidateQueries({ queryKey: ['user-profile-user'] })
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data?.message) {
@@ -343,7 +357,10 @@ export function EditProfileDialog({
                 {profile ? (
                   <>
                     <Avatar className="w-full h-full">
-                      <AvatarImage src={previewProfile} alt="Profile picture" />
+                      <AvatarImage
+                        src={previewProfile || undefined}
+                        alt="Profile picture"
+                      />
                       <AvatarFallback className="uppercase">
                         {profile.nickname?.charAt(0)}
                       </AvatarFallback>

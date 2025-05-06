@@ -10,6 +10,7 @@ import { UploadCourseModalTrigger } from './upload-course'
 import React, { useState } from 'react'
 import { PlusIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useUser } from '@/hooks/queries/use-user'
 
 export default function Page() {
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false)
@@ -18,6 +19,10 @@ export default function Page() {
     'pendente' | 'em_andamento' | 'concluido' | 'desejos'
   >('pendente')
   const queryClient = useQueryClient()
+  const { data: user } = useUser()
+  const userAcess =
+    (user?.plan === 'DESAFIO' && user?.isInTrialDesafio) ||
+    (user?.plan !== 'DESAFIO' && user?.status_plan === 'ATIVO')
 
   const { data, refetch } = useQuery({
     queryKey: ['courses'],
@@ -85,17 +90,19 @@ export default function Page() {
               <p className="text-zinc-400">
                 Gerencie todos os cursos de seu interesse
               </p>
-              <UploadCourseModalTrigger
-                refetch={refetch}
-                mode={'create'}
-                isOpen={isModalCreateOpen}
-                status={selectedTab}
-                onClose={() => setIsModalCreateOpen(false)}
-              >
-                <Button onClick={() => setIsModalCreateOpen(true)}>
-                  <PlusIcon /> Novo
-                </Button>
-              </UploadCourseModalTrigger>
+              {userAcess && (
+                <UploadCourseModalTrigger
+                  refetch={refetch}
+                  mode={'create'}
+                  isOpen={isModalCreateOpen}
+                  status={selectedTab}
+                  onClose={() => setIsModalCreateOpen(false)}
+                >
+                  <Button onClick={() => setIsModalCreateOpen(true)}>
+                    <PlusIcon /> Novo
+                  </Button>
+                </UploadCourseModalTrigger>
+              )}
             </div>
           </div>
           <Tabs
@@ -150,6 +157,7 @@ export default function Page() {
                         type="curso"
                         status="desejos"
                         author={item.link || ''}
+                        userAcess={userAcess}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -181,6 +189,7 @@ export default function Page() {
                         type="curso"
                         status={item.status}
                         author={item.link || ''}
+                        userAcess={userAcess}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -212,6 +221,7 @@ export default function Page() {
                         type="curso"
                         status="em_andamento"
                         author={item.link || ''}
+                        userAcess={userAcess}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}
@@ -243,6 +253,7 @@ export default function Page() {
                         type="curso"
                         status="concluido"
                         author={item.link || ''}
+                        userAcess={userAcess}
                         src={item.capa}
                         onRemove={handleRemoveCourse}
                         onMoveTo={handleMoveCourse}

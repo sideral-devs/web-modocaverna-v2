@@ -56,29 +56,31 @@ export function UserDropdown() {
       <DropdownMenuContent className="-mt-4 mr-4 xl:mr-[50px] max-w-80 sm:w-80 border border-zinc-700">
         <div className="flex flex-col px-4 py-5 gap-5">
           <h3 className="text-sm">Meu perfil</h3>
-          <div className="flex items-center gap-3">
-            {user.user_foto && !imageError ? (
-              <Image
-                src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
-                width={36}
-                height={36}
-                className="rounded-xl"
-                objectFit="cover"
-                objectPosition="center"
-                alt="Foto do usuário"
-                onError={() => setImageError(true)}
-              />
-            ) : (
-              <div className="flex w-9 h-9 items-center justify-center bg-primary px-3 rounded-xl cursor-pointer">
-                <span className="text-2xl">{user.name[0]}</span>
+          <div>
+            <Link href={'/settings'} className="flex items-center gap-3">
+              {user.user_foto && !imageError ? (
+                <Image
+                  src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
+                  width={36}
+                  height={36}
+                  className="rounded-xl"
+                  objectFit="cover"
+                  objectPosition="center"
+                  alt="Foto do usuário"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div className="flex w-9 h-9 items-center justify-center bg-primary px-3 rounded-xl cursor-pointer">
+                  <span className="text-2xl">{user.name[0]}</span>
+                </div>
+              )}
+              <div className="flex flex-col gap-1">
+                <p className="text-xs">{user.name}</p>
+                <span className="text-[10px] text-muted-foreground">
+                  {user.email}
+                </span>
               </div>
-            )}
-            <div className="flex flex-col gap-1">
-              <p className="text-xs">{user.name}</p>
-              <span className="text-[10px] text-muted-foreground">
-                {user.email}
-              </span>
-            </div>
+            </Link>
           </div>
         </div>
         <DropdownMenuSeparator />

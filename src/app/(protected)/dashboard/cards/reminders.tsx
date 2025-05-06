@@ -143,16 +143,21 @@ interface ReminderCardProps {
 }
 
 const reminderPositions = [
-  { x: -5, y: 30, rotate: -18 },
-  { x: -6, y: 95, rotate: 40 },
-  { x: 120, y: 125, rotate: -3 },
-  { x: 40, y: 120, rotate: -12 },
-  { x: 160, y: 66, rotate: 22 },
-  { x: 50, y: 66, rotate: -10 },
   { x: 95, y: 66, rotate: 23 },
+  { x: 50, y: 66, rotate: -10 },
   { x: 120, y: 25, rotate: -5 },
   { x: 65, y: 15, rotate: 4 },
+  { x: 120, y: 125, rotate: -3 },
+  { x: 160, y: 66, rotate: 22 },
+  { x: 40, y: 120, rotate: -12 },
+  { x: -6, y: 95, rotate: 40 },
+  { x: -5, y: 30, rotate: -18 },
 ]
+
+function randomNumber(min: number, max: number) {
+  console.log('random')
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 function ReminderCard({
   reminders,
@@ -175,11 +180,19 @@ function ReminderCard({
       onHoverEnd={() => setIsHovered(false)}
     >
       {/* <div className="absolute inset-0 bg-gradient-to-br from-transparent from-[50%] to-card to-[90%] z-10" /> */}
-      {Array.from({ length: 7 }, (_, index) => {
-        const reminder = reminders[index]
-        if (!reminder) return null
-
+      {reminders.map((reminder, index) => {
         const position = reminderPositions[index]
+          ? reminderPositions[index]
+          : (() => {
+              const random = {
+                x: randomNumber(-10, 180),
+                y: randomNumber(10, 140),
+                rotate: randomNumber(-45, 45),
+              }
+
+              reminderPositions.push(random)
+              return random
+            })()
 
         return (
           <motion.div

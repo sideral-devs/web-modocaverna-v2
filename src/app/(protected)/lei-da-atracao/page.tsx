@@ -59,7 +59,7 @@ export default function Page() {
               Lei da Atração
             </span>
           </div>
-          <HeaderClose />
+          <HeaderClose to="ordem-no-caos" />
         </Header>
         <section className="flex flex-col items-center w-full  h-full  gap-4">
           <div className="grid grid-1 flex-1 w-full max-w-8xl  min-h-[740px]  md:h-[740px] p-4 gap-4">
@@ -97,7 +97,7 @@ export default function Page() {
                         className="flex  w-[876px]  justify-between py-4"
                         key={index}
                       >
-                        <div className="flex flex-row  w-[40%]   align-middle py-4 pl-10 ">
+                        <div className="flex flex-row  w-[40%]  align-middle py-4 pl-10  relative  left-6">
                           <BoxCountdown
                             targetDate={dayjs(message.data_abertura).toDate()}
                             onClick={() => {
@@ -106,18 +106,18 @@ export default function Page() {
                             }}
                           />
                         </div>
-                        <div className="w-[10%] relative flex flex-col items-center py-4">
+                        <div className="w-[10%] relative flex flex-col items-center py-3">
                           {/* Linha central da timeline */}
-                          <div className="absolute left-1/2 -translate-x-1/2 w-[2px] h-[110%] bg-gradient-to-b from-red-500 to-secondary" />
+                          <div className="absolute left-1/2 -translate-x-1/2 w-[1px] h-[112%] bg-gradient-to-b from-red-500 to-[#3f3f46]" />
 
                           {/* Ponto 1 */}
                           <div className="relative bottom-3 z-10 flex items-center mb-10">
-                            <div className="w-[12px] h-[12px] rounded-full bg-red-500 " />
+                            <div className="w-[11px] h-[11px] rounded-full bg-red-500 " />
                           </div>
                         </div>
                         <div
-                          className="flex flex-col justify-end items-end min-w-[380px] min-h-[380px] py-4 h-72 p-2 bg-zinc-900 rounded-3xl
-                        bg-cover bg-center bg-no-repeat border-red-500 border-2"
+                          className="flex flex-col justify-end items-end min-w-[380px] min-h-[380px] py-4  p-2 bg-zinc-900 rounded-3xl
+                        bg-cover bg-center bg-no-repeat border-red-500 border relative left-4"
                           style={{
                             backgroundImage: `url(${
                               dayjs(message.data_abertura).toDate() < new Date()
@@ -127,22 +127,22 @@ export default function Page() {
                           }}
                           key={index}
                         >
-                          <span className="flex w-fit h-fit p-[3px] rounded bg-cyan-700 text-white text-xs">
+                          <span className="flex w-fit h-fit relative bottom-1 right-3 p-[3px] px-4 rounded-lg bg-red-700 text-white text-xs">
                             Criada em{' '}
                             {dayjs(message.data_fechamento).format(
-                              'DD MMM YYYY',
+                              'DD/MM/YYYY',
                             )}
                           </span>
                         </div>
                       </div>
                     ) : (
                       <div
-                        className="flex  w-[876px] justify-between py-5"
+                        className="flex  w-[872px] justify-between py-5"
                         key={index}
                       >
                         <div
-                          className="flex flex-col min-w-[380px] min-h-[380px] justify-end items-end h-72 p-2 bg-zinc-900 rounded-3xl
-                        bg-cover bg-center bg-no-repeat border-red-500 border-2 relative right-4 top-4"
+                          className="flex flex-col w-[380px] h-[380px] justify-end items-end p-2 bg-zinc-900 rounded-3xl
+                        bg-cover bg-center bg-no-repeat  border  border-[#a0a0a9] relative right-8 bottom-4 "
                           style={{
                             backgroundImage: `url(${
                               dayjs(message.data_abertura).toDate() < new Date()
@@ -152,23 +152,23 @@ export default function Page() {
                           }}
                           key={index}
                         >
-                          <span className="flex w-fit h-fit p-[3px] rounded bg-cyan-700 text-white text-xs">
+                          <span className="flex w-fit h-fit relative bottom-3 right-3 p-[3px] px-4 rounded-lg bg-red-700 text-white text-xs">
                             Criada em{' '}
                             {dayjs(message.data_fechamento).format(
-                              'DD MMM YYYY',
+                              'DD/MM/YYYY',
                             )}
                           </span>
                         </div>
                         <div className="w-[10%] relative flex flex-col items-start py-4">
                           {/* Linha central da timeline */}
-                          <div className="absolute left-4 -translate-x-1/2 w-[2px] h-[110%] bg-gradient-to-b from-secondary to-zinc-500" />
+                          <div className="absolute left-[14px] top-[2px] -translate-x-1/2 w-[1px] h-[110%] bg-gradient-to-b from-[#3f3f46] to-zinc-500" />
 
                           {/* Ponto 1 */}
-                          <div className="relative z-10 flex items-center mb-10">
-                            <div className="w-[14px] h-[14px] rounded-full bg-red border-2 border-zinc-700  relative bottom-8 left-2 " />
+                          <div className="relative right-[2px] z-10 flex items-center mb-10">
+                            <div className="w-[11px] h-[11px]  rounded-full bg-red border border-[#3f3f46]  relative bottom-[34px] left-[10px] " />
                           </div>
                         </div>
-                        <div className="flex flex-row  w-[40%]    align-middle py-4 pl-10 ">
+                        <div className="flex flex-row  w-[40%]   align-middle py-4 pl-10 relative right-20">
                           <BoxCountdown
                             targetDate={dayjs(message.data_abertura).toDate()}
                             onClick={() => {
@@ -185,7 +185,7 @@ export default function Page() {
                     onOpenChange={setNewMessageDialogOpen}
                   >
                     <DialogTrigger asChild>
-                      <button className="flex flex-col text-center w-[56px] h-[56px] items-center justify-center border-2 border-white rounded-full relative bottom-4 right-3">
+                      <button className="flex flex-col text-center w-[56px] h-[56px] items-center justify-center border-2 border-white rounded-full relative bottom-7 right-[14px]">
                         <PlusIcon size={20} color="#FFF" />
                       </button>
                     </DialogTrigger>
@@ -201,7 +201,7 @@ export default function Page() {
                       <OpenedMessageDialog message={currentMessage} />
                     </Dialog>
                   )}
-                  <span className="relative bottom-14 right-3 text-base">
+                  <span className="relative bottom-14 right-3 text-normal">
                     Nova Carta
                   </span>
                 </div>

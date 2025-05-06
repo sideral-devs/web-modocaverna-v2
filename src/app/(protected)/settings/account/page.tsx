@@ -19,8 +19,8 @@ import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { AlertTriangleIcon, Crown, Pen } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { AlertTriangleIcon, Camera, Crown, Pen, Trash2 } from 'lucide-react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -32,6 +32,7 @@ dayjs.extend(customParseFormat)
 
 const schema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório' }),
+  banner: z.string().nullable(),
   nickname: z.string().min(1, { message: 'Nome de usuário é obrigatório' }),
   email: z.string().email().min(1, { message: 'Email é obrigatório' }),
   telefone: z.string().min(1, { message: 'Celular é obrigatório' }),
@@ -54,6 +55,9 @@ type UserData = z.infer<typeof schema>
 export default function Page() {
   const [profilePictureOpen, setProfilePictureOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [userBanner, setUserBanner] = useState<string | null>(null)
+  const [shouldSaveBanner, setShouldSaveBanner] = useState(false)
+  const bannerFileInputRef = useRef<HTMLInputElement>(null)
   const { data: user } = useUser()
   const form = useForm<UserData>({
     resolver: zodResolver(schema),
@@ -61,13 +65,14 @@ export default function Page() {
 
   const {
     register,
-    handleSubmit,
     setValue,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = form
-
+  const isExpired = user?.status_plan === 'EXPIRADO'
   async function handleEditUser(data: UserData) {
+    const isBannerBase64 = userBanner?.startsWith('data:image/')
     try {
       await api.put('/users/update?save=true', {
         name: data.name,
@@ -77,8 +82,10 @@ export default function Page() {
           ? dayjs(data.birthdate, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss')
           : null,
         sexo: data.gender,
+        ...(isBannerBase64 || userBanner == null ? { banner: userBanner } : {}),
       })
       setIsEditing(false)
+      clearErrors()
       toast.success('Dados atualizados!')
     } catch (err) {
       if (err instanceof AxiosError && err.response?.data) {
@@ -108,8 +115,31 @@ export default function Page() {
     }
   }
 
+  const handleEditBannerClick = () => {
+    bannerFileInputRef.current?.click()
+  }
+
+  const handleRemoveBannerClick = () => {
+    setUserBanner(null)
+    setShouldSaveBanner(true)
+  }
+
+  const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = event.target?.result as string
+      setUserBanner(result)
+      setShouldSaveBanner(true)
+    }
+    reader.readAsDataURL(file)
+  }
+
   useEffect(() => {
     if (user) {
+      setUserBanner(user.banner ? env.NEXT_PUBLIC_PROD_URL + user.banner : null)
       form.reset({
         name: user.name,
         nickname: user.nickname,
@@ -123,6 +153,13 @@ export default function Page() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (shouldSaveBanner) {
+      handleEditUser(form.getValues())
+      setShouldSaveBanner(false)
+    }
+  }, [shouldSaveBanner])
+
   if (!user) {
     return null
   }
@@ -132,15 +169,48 @@ export default function Page() {
       <h1 className="font-semibold">Informações da conta</h1>
       <section className="flex flex-col w-full gap-1">
         <div
-          className="flex flex-col w-full p-10 pb-12 gap-6 bg-gradient-to-b from-[#353535] to-[#212121] rounded-lg"
+          className="flex flex-col relative w-full p-10 pb-12 gap-6 bg-gradient-to-b from-[#353535] to-[#212121] rounded-lg group"
           style={{
-            backgroundImage: ` url('/images/perfil/background_perfil.png')`,
-            backgroundPosition: 'top',
+            backgroundImage: ` url(${userBanner || '/images/perfil/background_perfil.png'})`,
+            backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
           }}
         >
-          <div className="relative w-fit">
+          {/* Overlay com botões (aparece no hover) */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 z-40 group-hover:opacity-100 transition-opacity bg-black/50">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white"
+              onClick={handleEditBannerClick}
+              aria-label="Edit banner"
+            >
+              <Camera className="h-6 w-6" />
+            </Button>
+            {userBanner && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white"
+                onClick={handleRemoveBannerClick}
+                aria-label="Remove banner"
+              >
+                <Trash2 className="h-6 w-6" />
+              </Button>
+            )}
+          </div>
+
+          {/* Input escondido para upload do banner */}
+          <input
+            type="file"
+            ref={bannerFileInputRef}
+            onChange={handleBannerChange}
+            accept="image/*"
+            className="hidden"
+          />
+
+          <div className="relative z-50 w-fit">
             <Avatar className="w-[72px] h-[72px] ">
               <AvatarImage
                 src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}
@@ -168,7 +238,7 @@ export default function Page() {
               <Pen size={10} />
             </button>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex z-50 flex-col gap-2">
             <h2>{user.name}</h2>
             <span className="text-xs">
               <span className="text-zinc-500">Membro desde</span>{' '}
@@ -180,13 +250,24 @@ export default function Page() {
           <Crown strokeWidth={0} fill="#FA913C" />
           <p className="text-xs">
             {user.plan === 'TRIAL' ? 'Experiência' : 'Assinatura'}{' '}
-            <span className="text-[#FA913C] lowercase">{user.plan}</span> ·{' '}
-            <span className="text-zinc-500">
-              {user.plan === 'TRIAL' ? 'Expira em' : 'Renovação em'}{' '}
-              {dayjs(user.data_de_renovacao).isValid()
-                ? dayjs(user.data_de_renovacao).format('DD [de] MMMM[,] YYYY')
-                : 'Indefinida'}
-            </span>
+            <span className="text-[#FA913C] first-letter:uppercase first-letter:tracking-wide">
+              {user.plan}
+            </span>{' '}
+            ·{' '}
+            {!isExpired ? (
+              <span className="text-zinc-500">
+                {user.plan === 'TRIAL' ? 'Expira em' : 'Renovação em'}{' '}
+                {dayjs(user.data_de_renovacao).isValid()
+                  ? dayjs(user.data_de_renovacao).format('DD [de] MMMM[,] YYYY')
+                  : 'Indefinida'}
+              </span>
+            ) : (
+              <span className="text-red-500">
+                {user.plan === 'TRIAL'
+                  ? 'Expirou'
+                  : `Expirou em ${dayjs(user.data_de_renovacao).format('DD [de] MMMM [de] YYYY')}`}
+              </span>
+            )}
           </p>
         </div>
       </section>
@@ -203,9 +284,9 @@ export default function Page() {
               <Button
                 size="sm"
                 loading={isSubmitting}
-                onClick={handleSubmit(handleEditUser)}
+                onClick={() => handleEditUser(form.getValues())}
               >
-                Salvar
+                Atualizar Dados
               </Button>
             ) : (
               <Button
@@ -213,7 +294,7 @@ export default function Page() {
                 loading={isSubmitting}
                 onClick={() => setIsEditing(true)}
               >
-                Atualizar dados
+                Alterar Dados
               </Button>
             )}
           </div>

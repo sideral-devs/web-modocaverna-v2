@@ -2,11 +2,110 @@
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { api } from '@/lib/api'
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { XIcon } from 'lucide-react'
+import { EllipsisIcon, XIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
+
+function SortableSubtask({
+  sub,
+  editingId,
+  setEditingId,
+  updateChecklist,
+  handleEditText,
+  handleDeleteSubtask,
+}: {
+  sub: Checklist['subtasks'][number]
+  editingId: number | null
+  setEditingId: (id: number | null) => void
+  updateChecklist: ({
+    id,
+    name,
+    checked,
+  }: Checklist['subtasks'][number]) => void
+  handleEditText: (data: { id: number; name: string; checked: boolean }) => void
+  handleDeleteSubtask: (id: number) => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: sub.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      className="flex w-full items-center gap-3 text-sm text-zinc-400"
+      style={style}
+    >
+      <EllipsisIcon {...attributes} {...listeners} />
+      <Checkbox
+        checked={!!Number(sub.checked)}
+        onCheckedChange={(val) => {
+          const checked = val.valueOf() === true || false
+          updateChecklist({ ...sub, checked })
+        }}
+      />
+      <div className="flex w-full justify-between">
+        {editingId === sub.id ? (
+          <input
+            autoFocus
+            className="py-1 bg-transparent outline-border outline-1 w-full"
+            value={sub.name}
+            onChange={(e) => {
+              handleEditText({
+                id: sub.id,
+                name: e.target.value,
+                checked: !!Number(sub.checked),
+              })
+            }}
+            onBlur={() => {
+              updateChecklist(sub)
+              setEditingId(null)
+            }}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return
+              updateChecklist(sub)
+              setEditingId(null)
+            }}
+          />
+        ) : (
+          <>
+            <span
+              className={Number(sub.checked) ? 'line-through p-1' : 'p-1'}
+              onClick={() => setEditingId(sub.id)}
+            >
+              {sub.name}
+            </span>
+            <XIcon
+              size={14}
+              className="text-zinc-600 cursor-pointer"
+              onClick={() => handleDeleteSubtask(sub.id)}
+            />
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export function TaskChecklist({ task }: { task: Task }) {
   const queryClient = useQueryClient()
@@ -15,6 +114,43 @@ export function TaskChecklist({ task }: { task: Task }) {
   )
   const [editingId, setEditingId] = useState<number | null>(null)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
+  const sensors = useSensors(useSensor(PointerSensor))
+
+  const [subtasksOrder, setSubtasksOrder] = useState(
+    checklist?.subtasks
+      .sort((a, b) => a.position - b.position)
+      .map((sub) => sub.id) ?? [],
+  )
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (active.id !== over?.id) {
+      setSubtasksOrder((items) => {
+        const oldIndex = items.indexOf(active.id as number)
+        const newIndex = items.indexOf(over?.id as number)
+        const newOrder = arrayMove(items, oldIndex, newIndex)
+        const reordered = newOrder.map((id) =>
+          checklist?.subtasks.find((s) => s.id === id),
+        )
+
+        api
+          .put(
+            '/task-subtasks/reorder',
+            reordered.map((i, idx) => ({ ...i, position: idx })),
+          )
+          .then(() => {
+            queryClient.refetchQueries({ queryKey: ['tasks'] })
+          })
+          .catch(() => {
+            const lastOrder = arrayMove(items, newIndex, oldIndex)
+            setSubtasksOrder(lastOrder)
+          })
+
+        return newOrder
+      })
+    }
+  }
 
   async function createChecklist() {
     try {
@@ -53,7 +189,8 @@ export function TaskChecklist({ task }: { task: Task }) {
       const created = {
         checklist_id: tempChecklist.id,
         name: 'Sem título',
-        checked: '0',
+        checked: false,
+        position: tempChecklist.subtasks.length,
       }
       const randomId = Math.random() * 1000
 
@@ -61,6 +198,7 @@ export function TaskChecklist({ task }: { task: Task }) {
         ...rollback,
         subtasks: [...rollback.subtasks, { ...created, id: randomId }],
       })
+      setSubtasksOrder((order) => [...order, randomId])
       const res = await api.post(`/task-subtasks/store`, created)
       const data = res.data as { data: { id: number } }
 
@@ -69,6 +207,11 @@ export function TaskChecklist({ task }: { task: Task }) {
         subtasks: [...rollback.subtasks, { ...created, id: data.data.id }],
       })
 
+      setSubtasksOrder((order) => [
+        ...order.filter((id) => id !== randomId),
+        data.data.id,
+      ])
+
       queryClient.refetchQueries({ queryKey: ['tasks'] })
     } catch {
       setChecklist(rollback)
@@ -76,7 +219,7 @@ export function TaskChecklist({ task }: { task: Task }) {
     }
   }
 
-  async function handleEdit({
+  function handleEditText({
     id,
     name,
     checked,
@@ -86,24 +229,48 @@ export function TaskChecklist({ task }: { task: Task }) {
     checked: boolean
   }) {
     if (!checklist) return
+
+    setChecklist({
+      ...checklist,
+      subtasks: checklist.subtasks.map((st) =>
+        st.id === id ? { ...st, name, checked } : st,
+      ),
+    })
+  }
+
+  async function updateChecklist({
+    id,
+    name,
+    checked,
+    position,
+  }: Checklist['subtasks'][number]) {
+    if (!checklist) return
     const rollback = checklist
+
     try {
       setChecklist({
         ...checklist,
         subtasks: checklist.subtasks.map((st) =>
-          st.id === id ? { ...st, name, checked: checked ? '1' : '0' } : st,
+          st.id === id
+            ? {
+                id,
+                position,
+                name: name || 'Sem título',
+                checked,
+              }
+            : st,
         ),
       })
 
       if (debounceRef.current) clearTimeout(debounceRef.current)
 
       debounceRef.current = setTimeout(async () => {
-        if (!name) return
         await api
           .put(`/task-subtasks/update/${id}`, {
-            name,
+            name: name || 'Sem título',
             checked,
             checklist_id: checklist.id,
+            position,
           })
           .catch(() => {
             toast.error('Algo deu errado. Tente novamente.')
@@ -126,6 +293,7 @@ export function TaskChecklist({ task }: { task: Task }) {
         ...checklist,
         subtasks: checklist.subtasks.filter((st) => st.id !== taskId),
       })
+      setSubtasksOrder((order) => order.filter((id) => id !== taskId))
 
       await api.delete(`/task-subtasks/destroy/${taskId}`)
 
@@ -135,6 +303,8 @@ export function TaskChecklist({ task }: { task: Task }) {
       setChecklist(rollback)
     }
   }
+
+  console.log(subtasksOrder)
 
   return (
     <div className="flex flex-col w-full gap-2">
@@ -175,61 +345,34 @@ export function TaskChecklist({ task }: { task: Task }) {
         </div>
       </div>
       <div className="flex flex-col py-6 gap-4">
-        {checklist &&
-          checklist.subtasks.map((sub) => (
-            <div
-              key={sub.id}
-              className="flex w-full items-center gap-3 text-sm text-zinc-400"
+        {checklist && (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={subtasksOrder}
+              strategy={verticalListSortingStrategy}
             >
-              <Checkbox
-                checked={!!Number(sub.checked)}
-                onCheckedChange={(val) => {
-                  const checked = val.valueOf() === true || false
-                  handleEdit({ ...sub, checked })
-                }}
-              />
-              <div className="flex w-full justify-between">
-                {editingId === sub.id ? (
-                  <input
-                    autoFocus
-                    className="py-1 bg-transparent outline-border outline-1 w-full"
-                    value={sub.name}
-                    maxLength={24}
-                    onChange={(e) => {
-                      handleEdit({
-                        id: sub.id,
-                        name: e.target.value,
-                        checked: !!Number(sub.checked),
-                      })
-                    }}
-                    onBlur={() => {
-                      setEditingId(null)
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key !== 'Enter') return
-                      setEditingId(null)
-                    }}
+              {subtasksOrder.map((id) => {
+                const sub = checklist.subtasks.find((s) => s.id === id)
+                if (!sub) return null
+                return (
+                  <SortableSubtask
+                    key={sub.id}
+                    sub={sub}
+                    editingId={editingId}
+                    setEditingId={setEditingId}
+                    updateChecklist={updateChecklist}
+                    handleEditText={handleEditText}
+                    handleDeleteSubtask={handleDeleteSubtask}
                   />
-                ) : (
-                  <>
-                    <span
-                      className={
-                        Number(sub.checked) ? 'line-through p-1' : 'p-1'
-                      }
-                      onClick={() => setEditingId(sub.id)}
-                    >
-                      {sub.name}
-                    </span>
-                    <XIcon
-                      size={14}
-                      className="text-zinc-600 cursor-pointer"
-                      onClick={() => handleDeleteSubtask(sub.id)}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
+                )
+              })}
+            </SortableContext>
+          </DndContext>
+        )}
       </div>
       <Button
         variant="secondary"

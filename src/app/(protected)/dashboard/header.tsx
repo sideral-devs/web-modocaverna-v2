@@ -8,8 +8,8 @@ import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { UpgradeDialogDuringSevenDays } from './UpgradeDialogDuringSevenDays'
-import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
 import { UpgradeDialogExpired } from './UpgradeDialogExpired'
+import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
 
 export function CentralHubHeader() {
   const { data: user } = useUser()
@@ -28,13 +28,7 @@ export function CentralHubHeader() {
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-3">
-        <Link
-          href="#"
-          onClick={(e) => {
-            e.preventDefault()
-            window.location.reload()
-          }}
-        >
+        <Link href="/dashboard?to=central-caverna">
           <div className="flex h-11 items-center justify-center px-3 rounded-xl">
             <Image
               src={'/icons/logo-completo.svg'}
@@ -265,15 +259,25 @@ export function CentralHubHeader() {
         )}
       </div>
       <div className="flex items-center gap-3">
-        {/* <a href="https://redirect.lifs.app/loja-mc" target="_blank"> */}
-        <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-          <StoreIcon className="text-red-500" size={20} />
-          <span className="text-sm">Loja Caverna</span>
-          <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
-            <span className="text-[10px] text-red-500">EM BREVE</span>
+        {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
+          <a href="https://redirect.lifs.app/loja-mc" target="_blank">
+            <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
+              <StoreIcon
+                className="text-red-500 group-hover:text-white"
+                size={20}
+              />
+              <span className="text-sm  ">Loja Caverna</span>
+            </div>
+          </a>
+        ) : (
+          <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
+            <StoreIcon className="text-red-500" size={20} />
+            <span className="text-sm">Loja Caverna</span>
+            <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
+              <span className="text-[10px] text-red-500">EM BREVE</span>
+            </div>
           </div>
-        </div>
-        {/* </a> */}
+        )}
         <UserDropdown />
       </div>
     </header>

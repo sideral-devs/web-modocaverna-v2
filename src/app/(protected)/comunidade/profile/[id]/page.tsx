@@ -42,6 +42,15 @@ export default function ProfilePage({
     enabled: !!id,
   })
 
+  const { data: user } = useQuery({
+    queryKey: ['user', profile?.user_id],
+    queryFn: async () => {
+      const res = await api.get('/users/show/' + profile?.user_id)
+      return res.data as User
+    },
+    enabled: !!profile?.user_id,
+  })
+
   return (
     <div>
       <div className="grid grid-cols-1 xl:flex gap-6">
@@ -103,6 +112,16 @@ export default function ProfilePage({
                   <h2 className="text-xl font-semibold xl:text-center">
                     {profile.nickname}
                   </h2>
+                  {user && (
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-center text-sm text-zinc-600">
+                        {user.email}
+                      </span>
+                      <span className="text-center text-sm text-zinc-600">
+                        {user.telefone}
+                      </span>
+                    </div>
+                  )}
                   <p className="text-xs xl:text-sm text-zinc-400 xl:text-center">
                     {profile.biography || (
                       <span className="text-[10px] text-zinc-600">

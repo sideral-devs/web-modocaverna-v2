@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { api } from '@/lib/api'
 
@@ -24,7 +25,7 @@ export default function GoalCard({
     const index = Math.floor(minutesOfDay / 20) % messages.length
     return messages[index]
   }
-  const { data: goals } = useQuery({
+  const { data: goals, isFetched } = useQuery({
     queryKey: ['goals'],
     queryFn: async () => {
       const response = await api.get('/metas/find')
@@ -32,12 +33,7 @@ export default function GoalCard({
     },
   })
   const messagesQuadroSonhos = [
-    'Adicione imagens que te inspirem e representem o que você quer conquistar, como momentos com a família.',
-    'Preencha com fotos que refletem suas aspirações, incluindo momentos importantes com a família.',
-    'Visualize o que você deseja alcançar com imagens que te inspirem, como a sua família.',
-    'Adicione fotos que representam o que você quer conquistar, como os laços familiares.',
-    'Adicione imagens que simbolizem o que te inspira, como momentos com quem você ama.',
-    'Adicione fotos que representem suas conquistas e o apoio da família.',
+    'Comece agora a traçar seu novo caminho. Defina suas primeiras metas e objetivos!',
   ]
 
   useEffect(() => {
@@ -51,6 +47,12 @@ export default function GoalCard({
       )
     }
   }, [goals])
+
+  if (!isFetched) {
+    return (
+      <Skeleton className="flex flex-col w-full h-full min-h-[300px] relative overflow-hidden" />
+    )
+  }
 
   return (
     <Card className="flex flex-col w-full h-full min-h-[300px] p-0 gap-4 relative overflow-hidden">
@@ -93,15 +95,24 @@ export default function GoalCard({
         </div>
       ) : (
         <div className="flex flex-col  flex-1 items-center justify-center md:justify-center md:pt-0">
-          <div className="flex flex-row max-w-80 items-center">
+          <div className=" flex flex-col max-w-80 items-start">
             <Image
               height={40}
               width={40}
               alt="Quote"
               src={'/icons/quote.svg'}
-              className="relative bottom-8 right-2"
+              className="relative  right-2"
             />
-            <p className="text-base text-center mt-2"> {dreamboardMessage} </p>
+            <p className="text-base w-80 text-center mt-2 line-clamp-5 overflow-hidden">
+              {dreamboardMessage}
+            </p>
+            <Image
+              className=" translate-x-72 bottom-5"
+              height={40}
+              width={40}
+              alt="Quote"
+              src={'/icons/quote-revers.svg'}
+            />
           </div>
         </div>
       )}

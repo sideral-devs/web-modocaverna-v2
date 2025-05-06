@@ -7,7 +7,7 @@ export function AffiliatesHeader() {
         Indique e Ganhe{' '}
       </h1> */}
       <HeaderTitle className="relative left-4" title="Indique e ganhe" />
-      <HeaderClose />
+      <HeaderClose to="area-de-beneficios" />
     </Header>
   )
 }

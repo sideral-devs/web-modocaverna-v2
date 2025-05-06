@@ -11,6 +11,7 @@ import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn, formatTimeAgo } from '@/lib/utils'
+import { PopoverClose } from '@radix-ui/react-popover'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { Ellipsis, MessageSquareMore, ThumbsUp } from 'lucide-react'
@@ -20,14 +21,21 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { CategoryText } from './category-text'
+import { EditPostForm } from './edit-post-form'
 
 interface PostCardProps {
   post: Post
   isReply?: boolean
+  updatePosts?: (post: Post) => void
 }
 
-export function PostCard({ post, isReply = false }: PostCardProps) {
+export function PostCard({
+  post,
+  isReply = false,
+  updatePosts,
+}: PostCardProps) {
   const queryClient = useQueryClient()
+  const [editingId, setEditingId] = useState<null | number>(null)
   const [liked, setLiked] = useState(post.user_likeed)
   const [likeCount, setLikeCount] = useState(post.likes)
   const { data: user } = useUser()
@@ -51,7 +59,7 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
       if (err instanceof AxiosError && err.response?.data?.message) {
         toast.error(err.response.data.message)
       } else {
-        toast.error('Não foi possível deletar o post.')
+        toast.error('Não foi possível excluir o post.')
       }
     }
   }
@@ -86,6 +94,41 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
       setLikeCount(likesRollback)
       setLiked(likedRollback)
     }
+  }
+
+  async function handleChangeCategory(category: Post['category']) {
+    try {
+      await api.put('/posts/update/' + post.id, {
+        content: post.content,
+        midia: post.midia || undefined,
+        category,
+      })
+
+      if (updatePosts) {
+        updatePosts({ ...post, category })
+      }
+    } catch (err) {
+      console.log(err)
+      toast.error('Algo deu errado. Tente novamente.')
+    }
+  }
+
+  async function handleUpdate() {
+    setEditingId(null)
+  }
+
+  function handleStopEditing() {
+    setEditingId(null)
+  }
+
+  if (editingId) {
+    return (
+      <EditPostForm
+        post={post}
+        onUpdate={handleUpdate}
+        onExit={handleStopEditing}
+      />
+    )
   }
 
   return (
@@ -153,12 +196,14 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
                         align="end"
                         className="w-52 p-1 bg-zinc-800 rounded-lg text-xs"
                       >
-                        {/* <button
-                      onClick={handleDestroyPost}
-                      className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
-                    >
-                      Editar
-                    </button> */}
+                        {post.perfil_id === author?.id && (
+                          <button
+                            onClick={() => setEditingId(post.id)}
+                            className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                          >
+                            Editar
+                          </button>
+                        )}
 
                         <button
                           onClick={handleDestroyPost}
@@ -239,7 +284,31 @@ export function PostCard({ post, isReply = false }: PostCardProps) {
                   </Link>
                 </div>
                 <div className="flex items-end justify-items-start">
-                  <CategoryText category={post.category} />
+                  {user?.plan === 'ADMIN' ? (
+                    <Popover>
+                      <PopoverTrigger>
+                        <CategoryText category={post.category} />
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[140px] p-1 bg-zinc-800 rounded-lg text-xs">
+                        {['Experiência', 'Indicações', 'Oportunidades']
+                          .filter((item) => item !== post.category)
+                          .map((item, i) => (
+                            <PopoverClose key={i} className="w-full">
+                              <button
+                                className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                                onClick={() =>
+                                  handleChangeCategory(item as Post['category'])
+                                }
+                              >
+                                {item}
+                              </button>
+                            </PopoverClose>
+                          ))}
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <CategoryText category={post.category} />
+                  )}
                 </div>
               </div>
             </div>
