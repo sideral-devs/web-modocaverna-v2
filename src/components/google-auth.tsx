@@ -1,13 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query'
-import { ChevronRight } from 'lucide-react'
-import { signIn, signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
-import { useEffect } from 'react'
-import { toast } from 'sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +11,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { api } from '@/lib/api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { ChevronRight } from 'lucide-react'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 export function GoogleAuth() {
   const session = useSession()

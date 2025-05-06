@@ -1,3 +1,4 @@
+import FormbricksLoader from '@/components/formbricks'
 import { MusicPlayerProvider } from '@/components/music-player-provider'
 import { ProtectedRoute } from '@/components/protected-route'
 import { SessionProvider } from 'next-auth/react'
@@ -9,11 +10,13 @@ export default function ProtectedLayout({
   children: React.ReactNode
 }>) {
   const CrispWithNoSSR = dynamic(() => import('../../components/crisp'))
+
   return (
     <ProtectedRoute>
       <MusicPlayerProvider>
         <SessionProvider>
           <CrispWithNoSSR />
+          <FormbricksLoader />
           {children}
         </SessionProvider>
       </MusicPlayerProvider>

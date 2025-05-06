@@ -30,6 +30,9 @@ export const useAuthStore = create<AuthStoreData>()(
 
       logout: async () => {
         await api.post('/auth/logout')
+        if (window.formbricks) {
+          window.formbricks.logout()
+        }
 
         set({ token: null })
 
