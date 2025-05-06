@@ -27,11 +27,9 @@ export default function FormbricksLoader() {
 
                 window.formbricks.setUserId("${user.id}");
                 window.formbricks.setAttribute("email", "${user.email}");
-
-                window.formbricks.identify("${user.id}", {
-                  email: "${user.email}",
-                  name: "${user.name}"
-                });
+                window.formbricks.setAttribute("name", "${user.name}");
+                window.formbricks.setAttribute("telefone", "${user.telefone}");
+                window.formbricks.setAttribute("plan", "${user.plan}");
               } else {
                 console.error("Formbricks não está definido após carregar o script");
               }
