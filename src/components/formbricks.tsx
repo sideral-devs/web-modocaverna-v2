@@ -26,7 +26,7 @@ export default function FormbricksLoader() {
                 });
 
                 window.formbricks.setUserId("${user.id}");
-                window.formbricks.setAttribute("email", ${user.email}");
+                window.formbricks.setAttribute("email", "${user.email}");
 
                 window.formbricks.identify("${user.id}", {
                   email: "${user.email}",
