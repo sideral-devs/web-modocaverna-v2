@@ -53,10 +53,7 @@ export default function Page() {
       console.log(selectedMeal.horario_id, data)
       await updateMeal({ id: selectedMeal.horario_id, data })
     } else {
-      await createMeal({
-        ...data,
-        dia_semana: selectedDay,
-      } as Meal)
+      await createMeal(data as Meal)
     }
   }
 

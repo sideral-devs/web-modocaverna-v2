@@ -75,7 +75,7 @@ export default function Page() {
             <PhaseCounter current={currentPhase} total={passosTotal} />
           </div>
           <div className="flex w-1/3 justify-end">
-            <CloseButton onClick={() => router.back()} escapeTo="/exercicios" />
+            <CloseButton onClick={() => router.push('/')} escapeTo="/" />
           </div>
         </header>
         {STEPS[currentPhase as keyof typeof STEPS]}
