@@ -41,7 +41,7 @@ export default function GoalsGrid({
   goals: Goal[] | undefined
 }) {
   const queryClient = useQueryClient()
-  function handleCheckGoal(index: number, checked: boolean) {
+  async function handleCheckGoal(index: number, checked: boolean) {
     if (!goal) return
     // const rollback = goal
     try {
@@ -54,7 +54,7 @@ export default function GoalsGrid({
         valor: found.valor,
         completo: checked ? 1 : 0,
       }
-      api.put(`/metas/update/${goal.ano}`, {
+      await api.put(`/metas/update/${goal.ano}`, {
         ano: found.ano,
         metas_anuais: data,
       })
