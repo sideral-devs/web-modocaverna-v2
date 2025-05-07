@@ -15,9 +15,21 @@ import {
   GuitarIcon,
   PersonStanding,
   PlusIcon,
+  XIcon,
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -29,7 +41,6 @@ export default function GoalsGrid({
   goals: Goal[] | undefined
 }) {
   const queryClient = useQueryClient()
-
   async function handleCheckGoal(index: number, checked: boolean) {
     if (!goal) return
     // const rollback = goal
@@ -103,9 +114,28 @@ export default function GoalsGrid({
       })
       queryClient.refetchQueries({ queryKey: ['goals'] })
       toast.success('Meta atualizada com sucesso!')
-    } catch {
-      toast.error('Erro ao atualizar meta. Tente novamente.')
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
+    } catch (error) {
+      console.error(error)
+      queryClient.refetchQueries({ queryKey: ['goals'] })
+      toast.error('Não foi possível atualizar a Meta.')
+    }
+  }
+  async function deleteGoal(tipo: string, position: number) {
+    if (!goal) return
+    console.log('tipo', tipo, position)
+    try {
+      await api.delete(`/metas/delete-one-goal/${goal.metas_id}`, {
+        data: {
+          tipo,
+          position,
+        },
+      })
+      queryClient.refetchQueries({ queryKey: ['goals'] })
+      toast.success('Meta excluída com sucesso!')
+    } catch (error) {
+      console.error(error)
+      queryClient.refetchQueries({ queryKey: ['goals'] })
+      toast.error('Não foi possível excluir a Meta.')
     }
   }
 
@@ -127,6 +157,7 @@ export default function GoalsGrid({
           onCheckedChange={handleCheckGoal}
           onCreateGoal={createGoal}
           onUpdateGoal={editGoal}
+          onDeleteGoal={deleteGoal}
         />
       ))}
     </div>
@@ -139,12 +170,14 @@ function GoalColumn({
   onCheckedChange,
   onCreateGoal,
   onUpdateGoal,
+  onDeleteGoal,
 }: {
   goal: Goal
   item: (typeof values)[number]
   onCheckedChange: (index: number, checked: boolean) => void
   onCreateGoal: (newGoal: { tipo: string; valor: string }) => Promise<void>
   onUpdateGoal: (index: number, value: string) => void
+  onDeleteGoal: (tipo: string, position: number) => Promise<void>
 }) {
   const [isCreating, setIsCreating] = useState(false)
   const Icon = item.icon
@@ -182,14 +215,17 @@ function GoalColumn({
                 tipo: yearGoal.tipo,
                 label: yearGoal.valor || '',
                 checked: !!yearGoal.completo,
+                position: yearGoal.position,
                 onCheckedChange: (checked: boolean) =>
                   onCheckedChange(index, checked),
                 onUpdateLabel: (newLabel: string) =>
                   onUpdateGoal(index, newLabel),
+                onDeleteLabel: (tipo: string, position: number) =>
+                  onDeleteGoal(tipo, position),
               }))
               .filter((yearGoal) => yearGoal.tipo === item.value)
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              .map(({ tipo, ...yearGoal }, index) => (
+              .map(({ ...yearGoal }, index) => (
                 <GoalItem
                   key={`goal-${goal.ano}-${index}`}
                   disabled={Number(goal.ano) < dayjs().year()}
@@ -210,21 +246,26 @@ function GoalColumn({
 }
 
 function GoalItem({
+  tipo,
+  position,
   label,
   checked,
   onCheckedChange,
   disabled = false,
   onUpdateLabel,
+  onDeleteLabel,
 }: {
+  tipo: string
+  position: number
   label: string
   checked: boolean
   onCheckedChange: (checked: boolean) => void
   disabled?: boolean
   onUpdateLabel?: (value: string) => void
+  onDeleteLabel?: (tipo: string, position: number) => void
 }) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(label)
-
   function handleEditGoal() {
     if (!value.trim()) {
       toast.error('O título não pode estar vazio.')
@@ -232,7 +273,7 @@ function GoalItem({
     }
     setIsEditing(false)
     if (onUpdateLabel && value.trim() !== label) {
-      onUpdateLabel(value) // Agora passando apenas a string corrigida
+      onUpdateLabel(value)
     }
   }
 
@@ -245,31 +286,68 @@ function GoalItem({
       handleEditGoal()
     }
   }
-
   return (
-    <div className="flex w-full items-center justify-between p-3 bg-card border rounded-lg">
-      {isEditing ? (
-        <input
-          autoFocus
-          className="bg-transparent text-sm border-b border-gray-500 focus:outline-none"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <label
-          className="text-xs cursor-pointer truncate max-w-[80%]"
-          onClick={() => !disabled && setIsEditing(true)}
-        >
-          {label}
-        </label>
-      )}
-      <Checkbox
-        checked={checked}
-        onCheckedChange={onCheckedChange}
-        disabled={disabled}
-      />
+    <div className="flex w-full justify-around p-2.5 bg-card border  rounded-lg">
+      <div className=" truncate w-[80%]">
+        {isEditing ? (
+          <input
+            autoFocus
+            className="bg-transparent text-sm border-b border-gray-500 focus:outline-none"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+          />
+        ) : (
+          <label
+            className="text-xs cursor-pointer truncate max-w-[80%]"
+            onClick={() => !disabled && setIsEditing(true)}
+          >
+            {label}
+          </label>
+        )}
+      </div>
+      <div className="flex flex-row justify-between  gap-6 w-[15%]">
+        <div className="relative top-[2px] left-3 ">
+          <Checkbox
+            checked={checked}
+            onCheckedChange={onCheckedChange}
+            disabled={disabled}
+          />
+        </div>
+
+        <div className="relative left-1">
+          {!disabled && onDeleteLabel && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  aria-label="Excluir meta"
+                >
+                  <XIcon size={18} />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Excluir meta?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja excluir essa meta? Essa ação não
+                    poderá ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => onDeleteLabel(tipo, position)}
+                  >
+                    Confirmar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

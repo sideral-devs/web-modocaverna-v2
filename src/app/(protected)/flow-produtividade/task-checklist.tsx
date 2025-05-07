@@ -304,8 +304,6 @@ export function TaskChecklist({ task }: { task: Task }) {
     }
   }
 
-  console.log(subtasksOrder)
-
   return (
     <div className="flex flex-col w-full gap-2">
       <div className="flex w-full items-center gap-3">
