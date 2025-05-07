@@ -22,7 +22,7 @@ import { toast } from 'sonner'
 import { EditObjetiveDialog } from './edit-objective'
 import EditableObjectiveItem from '@/components/dreamboard/EditableObjectiveItem'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import { PencilIcon } from 'lucide-react'
+import { Pencil, PencilIcon } from 'lucide-react'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -110,7 +110,7 @@ export default function Page() {
       setCurrentGoal(goals.find((goal) => goal.ano === selectedYear) || null)
     }
   }, [goals, selectedYear])
-
+  const [isEditing, setIsEditing] = useState(false)
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
@@ -199,10 +199,19 @@ export default function Page() {
             {currentGoal ? (
               <div className="flex flex-col col-span-2  md:h-[340px] w-[50%] p-4 gap-2 bg-zinc-800 border-t border-zinc-600 rounded-2xl shadow-lg">
                 <div className="flex flex-col gap-8 lg:gap-8">
-                  <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
-                    <span className="text-[14px] font-semibold">
-                      O que preciso fazer?
-                    </span>
+                  <div className="flex flex-row w-full justify-between">
+                    <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
+                      <span className="text-[14px] font-semibold">
+                        O que preciso fazer?
+                      </span>
+                    </div>
+                    <div className="cursor-pointer">
+                      <Pencil
+                        className={`relative bottom-1 right-1 mt-2 mr-2`}
+                        size={24}
+                        onClick={() => setIsEditing(!isEditing)}
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto relative bottom-3">
                     {currentGoal.objetivos.lista.length > 0 ? (
@@ -214,7 +223,7 @@ export default function Page() {
                           handleCheckGoal={handleCheckGoal}
                           selectedYear={selectedYear}
                           onSave={(index: number, newValue: string) => {
-                            updateGoalList(index, newValue)
+                            updateGoalList(index, newValue) // TODO IMPLEMENTAR A PASSAGEM DE UM ARRAY COMPLETO CONTENDO  TODOS OS ELEMENTOS AO INVÉS DE UM ÚNICO
                           }}
                         />
                       ))
