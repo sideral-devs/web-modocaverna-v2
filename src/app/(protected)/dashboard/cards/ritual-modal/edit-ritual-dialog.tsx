@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { useCalendarDialogStore } from '@/store/calendar-dialog'
 import {
   closestCenter,
   DndContext,
@@ -29,7 +30,7 @@ import {
 } from '@dnd-kit/sortable'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PlusIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SortableItem } from './sortable-item'
 
 export function EditRitualDialog({
@@ -39,6 +40,7 @@ export function EditRitualDialog({
   openRecalculate?: () => void
   defaultTab?: 'matinal' | 'noturno'
 }) {
+  const { ritualDefaultTab } = useCalendarDialogStore()
   const [currentTab, setCurrentTab] = useState<'matinal' | 'noturno'>(
     defaultTab,
   )
@@ -134,6 +136,10 @@ export function EditRitualDialog({
       })
     }
   }
+
+  useEffect(() => {
+    setCurrentTab(ritualDefaultTab)
+  }, [ritualDefaultTab])
 
   return (
     <DialogContent className="flex flex-col max-w-md h-[700px] max-h-[90%] p-0 bg-zinc-900 transition-all duration-200 overflow-hidden">
