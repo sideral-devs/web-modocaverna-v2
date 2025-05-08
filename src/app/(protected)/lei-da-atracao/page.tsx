@@ -2,7 +2,7 @@
 import { BoxCountdown } from '@/components/box-countdown'
 import { DreamboardMaker } from '@/components/dreamboard/dreamboard-maker'
 import { Header, HeaderClose } from '@/components/header'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
@@ -11,11 +11,11 @@ import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { MailIcon, PlusIcon } from 'lucide-react'
 
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NewLockedMessageDialog } from './new-locked-message'
 import { OpenedMessageDialog } from './opened-message-dialog'
-import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import { useQuery } from '@tanstack/react-query'
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
 
@@ -90,7 +90,7 @@ export default function Page() {
             </h2>
             <div className="flex flex-col w-full gap-4 overflow-x-auto item-center justify-center scrollbar-minimal">
               {lockedMessages ? (
-                <div className="flex  flex-col items-center gap-12 w-full py-6">
+                <div className="flex  flex-col items-center gap-12 w-full py-12">
                   {lockedMessages.map((message, index) =>
                     dayjs(message.data_abertura).toDate() < new Date() ? (
                       <div
@@ -180,19 +180,18 @@ export default function Page() {
                       </div>
                     ),
                   )}
-                  <Dialog
-                    open={newMessageDialogOpen}
-                    onOpenChange={setNewMessageDialogOpen}
+
+                  <button
+                    onClick={() => setNewMessageDialogOpen(true)}
+                    className="flex flex-col text-center w-14 h-14 items-center justify-center border-2 border-white rounded-full relative bottom-7 right-[14px]"
                   >
-                    <DialogTrigger asChild>
-                      <button className="flex flex-col text-center w-[56px] h-[56px] items-center justify-center border-2 border-white rounded-full relative bottom-7 right-[14px]">
-                        <PlusIcon size={20} color="#FFF" />
-                      </button>
-                    </DialogTrigger>
-                    <NewLockedMessageDialog
-                      onClose={() => setNewMessageDialogOpen(false)}
-                    />
-                  </Dialog>
+                    <PlusIcon size={20} color="#FFF" />
+                  </button>
+                  <NewLockedMessageDialog
+                    newMessageDialogOpen={newMessageDialogOpen}
+                    setNewMessageDialogOpen={setNewMessageDialogOpen}
+                  />
+
                   {currentMessage && (
                     <Dialog
                       open={openedMessageDialogOpen}

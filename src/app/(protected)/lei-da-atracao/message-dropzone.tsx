@@ -24,7 +24,7 @@ export function MessageDropzone({
 }: {
   saveFile: (arg: File) => void
 }) {
-  const [file, setFile] = React.useState<FileWithPreview | null>(null)
+  const [files, setFiles] = React.useState<FileWithPreview[]>([])
   const [error, setError] = React.useState<string | null>(null)
   const [isDragging, setIsDragging] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -33,29 +33,24 @@ export function MessageDropzone({
     if (!selectedFiles || selectedFiles.length === 0) return
 
     setError(null)
-    const selectedFile = selectedFiles[0]
 
-    const fileType = selectedFile.type
-    if (!Object.keys(acceptedFileTypes).includes(fileType)) {
-      setError(
-        `Arquivo do tipo ${selectedFile.name.split('.').pop()} não é aceito. Formatos aceitos: jpg, jpeg, png, pdf or mp4.`,
-      )
-      return
-    }
+    const newFiles: FileWithPreview[] = []
 
-    let preview = null
-    if (fileType.startsWith('image/')) {
-      preview = URL.createObjectURL(selectedFile)
-    } else if (fileType === 'video/mp4') {
-      preview = URL.createObjectURL(selectedFile)
-    }
+    Array.from(selectedFiles).forEach((selectedFile) => {
+      const fileType = selectedFile.type
+      if (!Object.keys(acceptedFileTypes).includes(fileType)) {
+        setError(
+          `Arquivo do tipo ${selectedFile.name.split('.').pop()} não é aceito. Formatos aceitos: jpg, jpeg, png, pdf ou mp4.`,
+        )
+        return
+      }
 
-    if (file?.preview) {
-      URL.revokeObjectURL(file.preview)
-    }
+      const preview = URL.createObjectURL(selectedFile)
+      newFiles.push({ file: selectedFile, preview })
+      saveFile(selectedFile)
+    })
 
-    setFile({ file: selectedFile, preview })
-    saveFile(selectedFile)
+    setFiles((prev) => [...prev, ...newFiles])
   }
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -83,50 +78,45 @@ export function MessageDropzone({
     fileInputRef.current?.click()
   }
 
-  const removeFile = () => {
-    if (file?.preview) {
-      URL.revokeObjectURL(file.preview)
+  const removeFile = (index: number) => {
+    const fileToRemove = files[index]
+    if (fileToRemove?.preview) {
+      URL.revokeObjectURL(fileToRemove.preview)
     }
 
-    setFile(null)
+    setFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
   const renderFilePreview = () => {
-    if (!file) return null
+    if (files.length === 0) return null
 
-    const fileType = file.file.type
+    const fileItem = files[0]
+    const fileType = fileItem.file.type
 
-    if (fileType.startsWith('image/') && file.preview) {
+    if (fileType.startsWith('image/') || fileType === 'video/mp4') {
       return (
         <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden">
-          <Image
-            src={file.preview || '/placeholder.svg'}
-            alt={file.file.name}
-            className="object-contain"
-            fill
-          />
+          {fileType.startsWith('image/') ? (
+            <Image
+              src={fileItem.preview || '/placeholder.svg'}
+              alt={fileItem.file.name}
+              className="object-contain"
+              fill
+            />
+          ) : (
+            <video
+              src={fileItem.preview || undefined}
+              controls
+              className="w-full h-full"
+            >
+              Seu navegador não suporta a tag vídeo.
+            </video>
+          )}
           <Button
             variant="secondary"
             size="sm"
             className="absolute top-2 right-2"
-            onClick={removeFile}
-          >
-            <X className="h-4 w-4 mr-1" />
-            Remover
-          </Button>
-        </div>
-      )
-    } else if (fileType === 'video/mp4' && file.preview) {
-      return (
-        <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden">
-          <video src={file.preview} controls className="w-full h-full">
-            Seu navegador não suporta a tag vídeo.
-          </video>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="absolute top-2 right-2"
-            onClick={removeFile}
+            onClick={() => removeFile(0)}
           >
             <X className="h-4 w-4 mr-1" />
             Remover
@@ -134,13 +124,11 @@ export function MessageDropzone({
         </div>
       )
     }
-
-    return null
   }
 
   const shouldShowDropzone = () => {
-    if (!file) return true
-    const fileType = file.file.type
+    if (files.length === 0) return true
+    const fileType = files[0].file.type
     return !(
       fileType.startsWith('image/') ||
       fileType === 'video/mp4' ||
@@ -161,9 +149,11 @@ export function MessageDropzone({
 
   React.useEffect(() => {
     return () => {
-      if (file && file.preview) {
-        URL.revokeObjectURL(file.preview)
-      }
+      files.forEach((file) => {
+        if (file.preview) {
+          URL.revokeObjectURL(file.preview)
+        }
+      })
     }
   }, [])
 
@@ -196,7 +186,7 @@ export function MessageDropzone({
               type="file"
               accept=".jpg,.jpeg,.png,.pdf,.mp4"
               className="hidden"
-              multiple={false}
+              multiple
               onChange={(e) => handleFileChange(e.target.files)}
             />
             <Button onClick={handleButtonClick} className="mt-2">
@@ -214,45 +204,51 @@ export function MessageDropzone({
 
       {renderFilePreview()}
 
-      {file && (
+      {files.length > 0 && (
         <div className="mt-6">
-          <h3 className="font-medium mb-3">Arquivo selecionado</h3>
+          <h3 className="font-medium mb-3">Arquivos selecionados</h3>
           <div className="flex flex-col gap-4">
-            <div className="relative group border rounded-lg p-3 hover:bg-muted/50 transition-colors">
-              <div className="flex items-center gap-3">
-                {file.preview ? (
-                  <div className="relative h-12 w-12 rounded overflow-hidden bg-muted">
-                    <Image
-                      src={file.preview || '/placeholder.svg'}
-                      alt={file.file.name}
-                      className="h-full w-full object-cover"
-                      fill
-                    />
+            {files.map((fileItem, index) => (
+              <div
+                key={index}
+                className="relative group border rounded-lg p-3 hover:bg-muted/50 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  {fileItem.preview &&
+                  fileItem.file.type.startsWith('image/') ? (
+                    <div className="relative h-12 w-12 rounded overflow-hidden bg-muted">
+                      <Image
+                        src={fileItem.preview || '/placeholder.svg'}
+                        alt={fileItem.file.name}
+                        className="h-full w-full object-contain"
+                        fill
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-12 w-12 rounded flex items-center justify-center bg-muted">
+                      {getFileIcon(fileItem.file.type)}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">
+                      {fileItem.file.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {(fileItem.file.size / 1024).toFixed(1)} KB
+                    </p>
                   </div>
-                ) : (
-                  <div className="h-12 w-12 rounded flex items-center justify-center bg-muted">
-                    {getFileIcon(file.file.type)}
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
-                    {file.file.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {(file.file.size / 1024).toFixed(1)} KB
-                  </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => removeFile(index)}
+                  >
+                    <X className="h-4 w-4" />
+                    <span className="sr-only">Remover arquivo</span>
+                  </Button>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => removeFile()}
-                >
-                  <X className="h-4 w-4" />
-                  <span className="sr-only">Remover arquivo</span>
-                </Button>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       )}
