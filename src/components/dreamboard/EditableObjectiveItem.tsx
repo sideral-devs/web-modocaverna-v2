@@ -79,24 +79,31 @@ import dayjs from 'dayjs'
 export default function EditableObjectiveItem({
   item,
   index,
-  handleCheckGoal,
+  isEditing,
   selectedYear,
-  onSave,
+  handleCheckGoal,
+  onChange,
+  onStopEditing,
 }: {
   item: { valor: string; checked: boolean }
   index: number
-  handleCheckGoal: (index: number, checked: boolean) => void
+  isEditing: boolean
   selectedYear: string
-  onSave: (index: number, newValue: string) => void
+  handleCheckGoal: () => void
+  onChange: (index: number, newValue: string) => void
+  onStopEditing: () => void
 }) {
-  const [isEditing, setIsEditing] = useState(false)
   const [editedValue, setEditedValue] = useState(item.valor)
+  const [editedChecked, setEditedChecked] = useState(item.checked)
 
   const handleSave = () => {
-    if (editedValue.trim()) {
-      onSave(index, editedValue)
+    if (
+      editedValue.trim() !== item.valor.trim() ||
+      editedChecked !== item.checked
+    ) {
+      onChange(index, editedValue.trim())
     }
-    setIsEditing(false)
+    onStopEditing()
   }
 
   return (
@@ -104,8 +111,8 @@ export default function EditableObjectiveItem({
       <Checkbox
         defaultChecked={item.checked}
         onCheckedChange={(val) => {
-          const checked = val.valueOf() === true || false
-          handleCheckGoal(index, checked)
+          setEditedChecked(val.valueOf() === true || false)
+          handleCheckGoal()
         }}
         disabled={Number(selectedYear) < dayjs().year()}
       />
@@ -114,19 +121,19 @@ export default function EditableObjectiveItem({
           <div className="flex bg-zinc-700 p-[2px] rounded-lg">
             <input
               type="text"
-              className="bg-transparent text-sm  "
+              className="bg-transparent text-sm"
               value={editedValue}
               onChange={(e) => setEditedValue(e.target.value)}
-              onBlur={handleSave}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSave()
                 }
               }}
+              onBlur={handleSave}
               autoFocus
             />
           </div>
-          <p> &quot;Enter&quot;</p>
+          <p className="text-xs text-zinc-400 ml-2">&quot;Enter&quot;</p>
         </>
       ) : (
         <div className="w-[70%] bg-zinc-700 p-[2px] rounded-lg truncate">

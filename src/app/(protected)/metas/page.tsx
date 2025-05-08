@@ -45,6 +45,8 @@ export default function Page() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'))
   const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
+  const [list, setList] = useState<ObjectivesList[]>([])
+  const [isEditing, setIsEditing] = useState(false)
 
   const { data: goals } = useQuery({
     queryKey: ['goals'],
@@ -60,20 +62,33 @@ export default function Page() {
     }
   }, [goals])
 
-  async function handleCheckGoal(index: number, checked: boolean) {
+  // async function handleCheckGoal(index: number, checked: boolean) {
+  //   if (!currentGoal) return
+  //   if (Number(selectedYear) < dayjs().year()) return
+
+  //   // const rollback = goal
+  //   try {
+  //     const found = currentGoal.objetivos.lista[index]
+  //     if (!found) return
+
+  //     await api.put(`/metas/update/${selectedYear}`, {
+  //       ano: selectedYear,
+  //       objetivos: {
+  //         lista: { ...found, checked },
+  //       },
+  //     })
+  //     queryClient.refetchQueries({ queryKey: ['goals'] })
+  //   } catch {
+  //     toast.error('Algo deu errado. Tente novamente.')
+  //     queryClient.invalidateQueries({ queryKey: ['goals'] })
+  //   }
+  // }
+  async function handleItemChange() {
     if (!currentGoal) return
     if (Number(selectedYear) < dayjs().year()) return
-
-    // const rollback = goal
     try {
-      const found = currentGoal.objetivos.lista[index]
-      if (!found) return
-
-      await api.put(`/metas/update/${selectedYear}`, {
-        ano: selectedYear,
-        objetivos: {
-          lista: { ...found, checked },
-        },
+      await api.put(`/metas/update-list/${selectedYear}`, {
+        lista: list,
       })
       queryClient.refetchQueries({ queryKey: ['goals'] })
     } catch {
@@ -81,28 +96,15 @@ export default function Page() {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
     }
   }
-  async function updateGoalList(index: number, newValue: string) {
-    if (!currentGoal) return
-    if (Number(selectedYear) < dayjs().year()) return
-    try {
-      const found = currentGoal.objetivos.lista[index]
-      if (!found) return
-      await api.put(`/metas/update/${selectedYear}`, {
-        ano: selectedYear,
-        objetivos: {
-          lista: {
-            valor: newValue,
-            item: found.item,
-            ano: found.ano,
-            checked: found.checked,
-          },
-        },
-      })
-      queryClient.refetchQueries({ queryKey: ['goals'] })
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
-    }
+  const handleStopEditing = () => {
+    handleItemChange()
+  }
+  const handleChange = (index: number, newValue: string) => {
+    setList((prev) => {
+      const novaLista = [...prev]
+      novaLista[index].valor = newValue
+      return novaLista
+    })
   }
 
   useEffect(() => {
@@ -110,7 +112,13 @@ export default function Page() {
       setCurrentGoal(goals.find((goal) => goal.ano === selectedYear) || null)
     }
   }, [goals, selectedYear])
-  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    if (currentGoal?.objetivos.lista) {
+      setList(currentGoal.objetivos.lista)
+    }
+  }, [currentGoal])
+
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
@@ -214,17 +222,17 @@ export default function Page() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto relative bottom-3">
-                    {currentGoal.objetivos.lista.length > 0 ? (
-                      currentGoal.objetivos.lista.map((item, index) => (
+                    {list.length > 0 ? (
+                      list.map((item, index) => (
                         <EditableObjectiveItem
                           key={item.valor + index}
                           item={item}
                           index={index}
-                          handleCheckGoal={handleCheckGoal}
+                          handleCheckGoal={handleItemChange}
                           selectedYear={selectedYear}
-                          onSave={(index: number, newValue: string) => {
-                            updateGoalList(index, newValue) // TODO IMPLEMENTAR A PASSAGEM DE UM ARRAY COMPLETO CONTENDO  TODOS OS ELEMENTOS AO INVÉS DE UM ÚNICO
-                          }}
+                          isEditing={isEditing}
+                          onChange={handleChange}
+                          onStopEditing={handleStopEditing}
                         />
                       ))
                     ) : (
