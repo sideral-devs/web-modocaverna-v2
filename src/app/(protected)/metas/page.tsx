@@ -69,8 +69,7 @@ export default function Page() {
       await api.put(`/metas/update-list/${selectedYear}`, {
         lista: list,
       })
-      toast.success('Atualizado com sucesso')
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
+      queryClient.refetchQueries({ queryKey: ['goals'] })
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
       queryClient.invalidateQueries({ queryKey: ['goals'] })
