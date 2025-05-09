@@ -204,7 +204,7 @@ export default function Page() {
                       O que preciso fazer?
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto">
+                  <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto relative bottom-3">
                     {currentGoal.objetivos.lista.length > 0 ? (
                       currentGoal.objetivos.lista.map((item, index) => (
                         <EditableObjectiveItem

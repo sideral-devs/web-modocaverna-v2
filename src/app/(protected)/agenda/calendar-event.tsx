@@ -1,13 +1,10 @@
 'use client'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
+import { useCalendarDialogStore } from '@/store/calendar-dialog'
 import { parse } from 'date-fns'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { EditRitualDialog } from '../dashboard/cards/ritual-modal/edit-ritual-dialog'
-import { EditEventDialogTrigger } from './edit-event'
-import { GoogleEditEventDialogTrigger } from './google-edit-event'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -44,6 +41,7 @@ function BaseEvent({
   category,
   checked,
   mode = 'weekly',
+  openDialog,
 }: {
   start: string
   end: string
@@ -52,6 +50,7 @@ function BaseEvent({
   allDay?: boolean
   checked: boolean
   mode?: 'weekly' | 'daily'
+  openDialog: () => void
 }) {
   const PIXELS_PER_MINUTE = 112 / 60
   const DAY_WIDTH = 160
@@ -132,6 +131,7 @@ function BaseEvent({
         right: 4,
         maxWidth: '100%',
       }}
+      onClick={openDialog}
     >
       <span
         className={`${height < 80 ? 'text-[10px]' : 'text-xs'} font-medium`}
@@ -164,20 +164,22 @@ export function CalendarEvent({
   mode: 'weekly' | 'daily'
   allDay?: boolean
 }) {
+  const { setCalendarEventOpen, setEvent } = useCalendarDialogStore()
+
   return (
-    <EditEventDialogTrigger event={event}>
-      <button className="block">
-        <BaseEvent
-          start={event.comeca}
-          end={event.termina}
-          title={event.titulo}
-          category={event.categoria}
-          checked={event.checked}
-          allDay={allDay}
-          mode={mode}
-        />
-      </button>
-    </EditEventDialogTrigger>
+    <BaseEvent
+      start={event.comeca}
+      end={event.termina}
+      title={event.titulo}
+      category={event.categoria}
+      checked={event.checked}
+      allDay={allDay}
+      mode={mode}
+      openDialog={() => {
+        setEvent(event)
+        setCalendarEventOpen(true)
+      }}
+    />
   )
 }
 
@@ -191,20 +193,22 @@ export function GoogleEvent({
   mode: 'weekly' | 'daily'
   allDay?: boolean
 }) {
+  const { setGoogleEventOpen, setGoogleEvent } = useCalendarDialogStore()
+
   return (
-    <GoogleEditEventDialogTrigger event={event}>
-      <button className="block">
-        <BaseEvent
-          start={event.comeca}
-          end={event.termina}
-          title={event.titulo}
-          category={event.categoria}
-          checked={event.checked}
-          allDay={allDay}
-          mode={mode}
-        />
-      </button>
-    </GoogleEditEventDialogTrigger>
+    <BaseEvent
+      start={event.comeca}
+      end={event.termina}
+      title={event.titulo}
+      category={event.categoria}
+      checked={event.checked}
+      allDay={allDay}
+      mode={mode}
+      openDialog={() => {
+        setGoogleEvent(event)
+        setGoogleEventOpen(true)
+      }}
+    />
   )
 }
 
@@ -222,6 +226,8 @@ export function RitualEvent({
   mode: 'weekly' | 'daily'
   type?: 'matinal' | 'noturno'
 }) {
+  const { setRitualOpen, setRitualDefaultTab } = useCalendarDialogStore()
+
   const start = dayjs(parse(timeStart, 'HH:mm', new Date())).format(
     'YYYY-MM-DD HH:mm',
   )
@@ -230,19 +236,18 @@ export function RitualEvent({
   )
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <BaseEvent
-          start={start}
-          end={end}
-          title={title}
-          category="Ritual"
-          checked={false}
-          allDay={false}
-          mode={mode}
-        />
-      </DialogTrigger>
-      <EditRitualDialog defaultTab={type} />
-    </Dialog>
+    <BaseEvent
+      start={start}
+      end={end}
+      title={title}
+      category="Ritual"
+      checked={false}
+      allDay={false}
+      mode={mode}
+      openDialog={() => {
+        setRitualDefaultTab(type)
+        setRitualOpen(true)
+      }}
+    />
   )
 }

@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import {
@@ -24,7 +25,7 @@ import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { ArrowRight, ClockIcon, RepeatIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -55,11 +56,13 @@ const schema = z.object({
 
 type RegisterData = z.infer<typeof schema>
 
-export function EditEventDialogTrigger({
-  children,
+export function EditEventDialog({
+  open,
+  setOpen,
   event,
 }: {
-  children: ReactNode
+  open: boolean
+  setOpen: (arg: boolean) => void
   event: Compromisso
 }) {
   const session = useSession()
@@ -68,8 +71,6 @@ export function EditEventDialogTrigger({
   const [repetitionData, setRepetitionData] = useState<RepetitionData>({
     repete: 0,
   })
-
-  const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const [initialDate, setInitialDate] = useState<Date | undefined>(
     dayjs(event.comeca).toDate(),
@@ -191,16 +192,13 @@ export function EditEventDialogTrigger({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <FormProvider {...form}>
-        <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent
           className="gap-0"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader className="flex flex-col items-start p-3 border-b">
             <div className="flex items-center gap-2">
-              {/* <DialogTitle>
-                <div className="w-4 h-4 rounded border-2 border-white" />
-              </DialogTitle> */}
+              <DialogTitle className="hidden">Editar Evento</DialogTitle>
               <Input
                 placeholder="Título compromisso"
                 className="h-8 pl-6 border-0 focus-visible:ring-0 placeholder:text-zinc-500"

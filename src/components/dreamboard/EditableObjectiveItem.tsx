@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import dayjs from 'dayjs'
+import { Pencil } from 'lucide-react'
 
 export default function EditableObjectiveItem({
   item,
@@ -20,7 +21,7 @@ export default function EditableObjectiveItem({
 
   const handleSave = () => {
     if (editedValue.trim()) {
-      onSave(index, editedValue) // Chama a função de salvar
+      onSave(index, editedValue)
     }
     setIsEditing(false)
   }
@@ -36,26 +37,37 @@ export default function EditableObjectiveItem({
         disabled={Number(selectedYear) < dayjs().year()}
       />
       {isEditing ? (
-        <input
-          type="text"
-          className="bg-transparent text-sm border-b border-zinc-300 "
-          value={editedValue}
-          onChange={(e) => setEditedValue(e.target.value)}
-          onBlur={handleSave}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSave()
-            }
-          }}
-          autoFocus
-        />
+        <>
+          <div className="flex bg-zinc-700 p-[2px] rounded-lg">
+            <input
+              type="text"
+              className="bg-transparent text-sm  "
+              value={editedValue}
+              onChange={(e) => setEditedValue(e.target.value)}
+              onBlur={handleSave}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSave()
+                }
+              }}
+              autoFocus
+            />
+          </div>
+          <p> &quot;Enter&quot;</p>
+        </>
       ) : (
-        <span
-          className="cursor-pointer truncate max-w-[80%]"
-          onClick={() => setIsEditing(true)}
-        >
-          {item.valor}
-        </span>
+        <>
+          <div className="w-[70%] bg-zinc-700 p-[2px] rounded-lg truncate">
+            <span className="p-2">{item.valor}</span>
+          </div>
+          <div className="cursor-pointer">
+            <Pencil
+              className={`relative bottom-1 right-1`}
+              size={12}
+              onClick={() => setIsEditing(true)}
+            />
+          </div>
+        </>
       )}
     </div>
   )
