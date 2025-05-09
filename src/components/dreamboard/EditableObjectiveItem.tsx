@@ -81,39 +81,32 @@ export default function EditableObjectiveItem({
   index,
   isEditing,
   selectedYear,
-  handleCheckGoal,
-  onChange,
-  onStopEditing,
+  onSave,
 }: {
   item: { valor: string; checked: boolean }
   index: number
   isEditing: boolean
   selectedYear: string
-  handleCheckGoal: () => void
-  onChange: (index: number, newValue: string) => void
-  onStopEditing: () => void
+  onSave: (index: number, newValue: string, checked: boolean) => void
 }) {
   const [editedValue, setEditedValue] = useState(item.valor)
   const [editedChecked, setEditedChecked] = useState(item.checked)
-
   const handleSave = () => {
     if (
       editedValue.trim() !== item.valor.trim() ||
       editedChecked !== item.checked
     ) {
-      onChange(index, editedValue.trim())
+      onSave(index, editedValue, editedChecked)
     }
-    onStopEditing()
   }
-
   return (
     <div className="flex items-center gap-2">
       <Checkbox
-        defaultChecked={item.checked}
-        onCheckedChange={(val) => {
-          setEditedChecked(val.valueOf() === true || false)
-          handleCheckGoal()
+        defaultChecked={editedChecked}
+        onCheckedChange={() => {
+          setEditedChecked(!editedChecked)
         }}
+        onBlur={handleSave}
         disabled={Number(selectedYear) < dayjs().year()}
       />
       {isEditing ? (
@@ -124,16 +117,11 @@ export default function EditableObjectiveItem({
               className="bg-transparent text-sm"
               value={editedValue}
               onChange={(e) => setEditedValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSave()
-                }
-              }}
-              onBlur={handleSave}
               autoFocus
+              onBlur={handleSave}
             />
           </div>
-          <p className="text-xs text-zinc-400 ml-2">&quot;Enter&quot;</p>
+          {/* <p className="text-xs text-zinc-400 ml-2">&quot;Enter&quot;</p> */}
         </>
       ) : (
         <div className="w-[70%] bg-zinc-700 p-[2px] rounded-lg truncate">

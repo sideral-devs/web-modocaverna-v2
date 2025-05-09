@@ -22,7 +22,7 @@ import { toast } from 'sonner'
 import { EditObjetiveDialog } from './edit-objective'
 import EditableObjectiveItem from '@/components/dreamboard/EditableObjectiveItem'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import { Pencil, PencilIcon } from 'lucide-react'
+import { Pencil, PencilIcon, Save } from 'lucide-react'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -62,27 +62,6 @@ export default function Page() {
     }
   }, [goals])
 
-  // async function handleCheckGoal(index: number, checked: boolean) {
-  //   if (!currentGoal) return
-  //   if (Number(selectedYear) < dayjs().year()) return
-
-  //   // const rollback = goal
-  //   try {
-  //     const found = currentGoal.objetivos.lista[index]
-  //     if (!found) return
-
-  //     await api.put(`/metas/update/${selectedYear}`, {
-  //       ano: selectedYear,
-  //       objetivos: {
-  //         lista: { ...found, checked },
-  //       },
-  //     })
-  //     queryClient.refetchQueries({ queryKey: ['goals'] })
-  //   } catch {
-  //     toast.error('Algo deu errado. Tente novamente.')
-  //     queryClient.invalidateQueries({ queryKey: ['goals'] })
-  //   }
-  // }
   async function handleItemChange() {
     if (!currentGoal) return
     if (Number(selectedYear) < dayjs().year()) return
@@ -90,7 +69,8 @@ export default function Page() {
       await api.put(`/metas/update-list/${selectedYear}`, {
         lista: list,
       })
-      queryClient.refetchQueries({ queryKey: ['goals'] })
+      toast.success('Atualizado com sucesso')
+      queryClient.invalidateQueries({ queryKey: ['goals'] })
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
       queryClient.invalidateQueries({ queryKey: ['goals'] })
@@ -99,14 +79,20 @@ export default function Page() {
   const handleStopEditing = () => {
     handleItemChange()
   }
-  const handleChange = (index: number, newValue: string) => {
+  const updateGoalList = (
+    index: number,
+    newValue: string,
+    checked?: boolean | undefined,
+  ) => {
     setList((prev) => {
       const novaLista = [...prev]
       novaLista[index].valor = newValue
+      if (checked !== undefined) {
+        novaLista[index].checked = checked
+      }
       return novaLista
     })
   }
-
   useEffect(() => {
     if (goals) {
       setCurrentGoal(goals.find((goal) => goal.ano === selectedYear) || null)
@@ -187,21 +173,8 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col col-span-2 md:h-[730px] p-4 gap-8 bg-zinc-800 border rounded-2xl">
-                <Skeleton className="w-[80%] h-4 bg-zinc-700" />
-                <div className="flex flex-col gap-4">
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                </div>
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
+              <div className="flex flex-col col-span-2 h-full w-1/2 p-4 gap-8 items-center justify-center bg-zinc-800 border rounded-xl">
+                <Skeleton className="w-[80%] h-[40%] bg-zinc-700" />
               </div>
             )}
             {currentGoal ? (
@@ -214,11 +187,24 @@ export default function Page() {
                       </span>
                     </div>
                     <div className="cursor-pointer">
-                      <Pencil
-                        className={`relative bottom-1 right-1 mt-2 mr-2`}
-                        size={24}
-                        onClick={() => setIsEditing(!isEditing)}
-                      />
+                      {!isEditing ? (
+                        <Pencil
+                          className={`relative bottom-1 right-1 mt-2 mr-2`}
+                          size={24}
+                          onClick={() => {
+                            setIsEditing(!isEditing)
+                          }}
+                        />
+                      ) : (
+                        <Save
+                          className={`relative bottom-1 right-1 mt-2 mr-2`}
+                          size={24}
+                          onClick={() => {
+                            setIsEditing(!isEditing)
+                            handleStopEditing()
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto relative bottom-3">
@@ -228,11 +214,19 @@ export default function Page() {
                           key={item.valor + index}
                           item={item}
                           index={index}
-                          handleCheckGoal={handleItemChange}
                           selectedYear={selectedYear}
                           isEditing={isEditing}
-                          onChange={handleChange}
-                          onStopEditing={handleStopEditing}
+                          onSave={(
+                            index: number,
+                            newValue: string,
+                            checked: boolean,
+                          ) => {
+                            const wasChecked = list[index].checked
+                            updateGoalList(index, newValue, checked)
+                            if (checked !== wasChecked) {
+                              handleStopEditing()
+                            }
+                          }}
                         />
                       ))
                     ) : (
@@ -244,21 +238,23 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col col-span-2 md:h-[730px] p-4 gap-8 bg-zinc-800 border rounded-2xl">
-                <Skeleton className="w-[80%] h-4 bg-zinc-700" />
-                <div className="flex flex-col gap-4">
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
+              <div className="flex flex-col h-full w-1/2  items-center justify-center bg-zinc-800 border rounded-xl">
+                <div className="flex flex-row items py-10 pl-6 justify-between h-full w-full">
+                  <div className="flex flex-col w-full h-full gap-4 px-4">
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                  </div>
+                  <div className="flex flex-col w-full h-full gap-4 px-4">
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                  </div>
                 </div>
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
               </div>
             )}
           </div>
