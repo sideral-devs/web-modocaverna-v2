@@ -1,4 +1,7 @@
-import { CourseSwiper, CourseSwiperData } from '@/components/course-swiper'
+import {
+  CourseSwiperIndique,
+  CourseSwiperData,
+} from '@/components/course-swiper-indique'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
@@ -8,8 +11,8 @@ import { useEffect, useState } from 'react'
 export default function SellStrategy() {
   const [courses, setCourses] = useState<CourseSwiperData[] | null>(null)
 
-  const { data } = useQuery({
-    queryKey: ['courses', 'marketingDigital'],
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['courses', 'estrategiasDeVendas'],
     queryFn: async () => {
       const response = await api.get(
         '/conteudos/findCategory/estrategiasDeVendas',
@@ -19,7 +22,7 @@ export default function SellStrategy() {
   })
 
   useEffect(() => {
-    if (data) {
+    if (!isFetching && data) {
       const mapped = data.map((item) => ({
         title: item.titulo,
         description: item.descricao || '',
@@ -43,9 +46,8 @@ export default function SellStrategy() {
 
       setCourses(mapped)
     }
-  }, [data])
-
-  if (!courses) {
+  }, [data, isFetching])
+  if (isLoading || isFetching || !courses) {
     return (
       <div className="flex gap-4">
         {Array.from({ length: 4 }).map((i, index) => (
@@ -58,5 +60,5 @@ export default function SellStrategy() {
     )
   }
 
-  return <CourseSwiper data={courses} />
+  return <CourseSwiperIndique data={courses} />
 }
