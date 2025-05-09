@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react'
 export default function SellStrategy() {
   const [courses, setCourses] = useState<CourseSwiperData[] | null>(null)
 
-  const { data } = useQuery({
-    queryKey: ['courses', 'marketingDigital'],
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['courses', 'estrategiasDeVendas'],
     queryFn: async () => {
       const response = await api.get(
         '/conteudos/findCategory/estrategiasDeVendas',
@@ -19,7 +19,7 @@ export default function SellStrategy() {
   })
 
   useEffect(() => {
-    if (data) {
+    if (!isFetching && data) {
       const mapped = data.map((item) => ({
         title: item.titulo,
         description: item.descricao || '',
@@ -43,9 +43,8 @@ export default function SellStrategy() {
 
       setCourses(mapped)
     }
-  }, [data])
-
-  if (!courses) {
+  }, [data, isFetching])
+  if (isLoading || isFetching || !courses) {
     return (
       <div className="flex gap-4">
         {Array.from({ length: 4 }).map((i, index) => (
