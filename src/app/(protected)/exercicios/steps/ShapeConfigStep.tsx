@@ -87,7 +87,7 @@ export function ShapeConfigStep({ onNext, onBack }: ShapeConfigStepProps) {
           Agora vamos registrar suas medidas corporais
         </h2>
         <p className="text-zinc-400 font-normal">
-          Digite abaixo suas medidas para gerarmos seu treino
+          Esse passo é opcional, mas sugiro que você registre suas medidas
         </p>
       </div>
       <FormProvider {...form}>

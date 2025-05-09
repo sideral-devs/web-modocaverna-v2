@@ -47,9 +47,9 @@ export function TempleForge({ value }: { value: string }) {
 
   return (
     <TabsContent value={value} className="flex-1">
-      <div className="grid relative grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
+      <div className="grid relative grid-cols-1 md:grid-cols-2 rounded-2xl w-full min-h-[676px] gap-2">
         {/* Treinos */}
-        <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
+        <div className="relative w-full gap-4 flex-1 overflow-hidden rounded-2xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
               <span className="uppercase text-[10px] text-yellow-500 font-semibold">
@@ -208,7 +208,7 @@ export function TempleForge({ value }: { value: string }) {
         </div>
 
         {/* Refeições */}
-        <div className="relative w-full gap-4 flex-1 rounded-xl border-t-2 border-t-zinc-700 bg-zinc-800">
+        <div className="relative w-full gap-4 flex-1 overflow-hidden rounded-2xl border-t-2 border-t-zinc-700 bg-zinc-800">
           <div className="w-full p-6 pb-4">
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-yellow-500 rounded-full">
               <span className="uppercase text-[10px] text-yellow-500 font-semibold">

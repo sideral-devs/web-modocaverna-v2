@@ -36,7 +36,7 @@ export function WeightProgressIndicator({
           </div>
         </div>
 
-        <div className="flex flex-col justify-between h-16">
+        <div className="flex flex-col justify-between h-16 pr-4 border-r-4 border-emerald-500">
           <p className="text-zinc-400 text-sm">Objetivo</p>
           <p className="text-2xl font-medium">{targetWeight}kg</p>
         </div>

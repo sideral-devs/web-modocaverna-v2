@@ -127,7 +127,8 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
           <div className="flex mb-4 flex-col gap-2">
             <h2 className="text-2xl font-medium">Registre seu progresso</h2>
             <p className="text-zinc-400 font-normal">
-              Faça upload do seu shape atual abaixo para comparação futura
+              Você não é obrigado, mas acompanhe sua evolução enviando fotos do
+              seu shape atual
             </p>
           </div>
 
