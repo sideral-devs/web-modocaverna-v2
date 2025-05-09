@@ -1,4 +1,7 @@
-import { CourseSwiper, CourseSwiperData } from '@/components/course-swiper'
+import {
+  CourseSwiperIndique,
+  CourseSwiperData,
+} from '@/components/course-swiper-indique'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
@@ -57,5 +60,5 @@ export default function SellStrategy() {
     )
   }
 
-  return <CourseSwiper data={courses} />
+  return <CourseSwiperIndique data={courses} />
 }
