@@ -149,9 +149,7 @@ export function PlanCavernosoMonthlyExpired({
                 </span>
               </h2>
               <span className="text-zinc-400 font-medium text-sm">
-                {selectedPlan === 'yearly'
-                  ? 'ou R$299 à vista'
-                  : 'ou R$49 à vista'}
+                {selectedPlan === 'yearly' && 'ou R$299 à vista'}
               </span>
             </div>
             <div className="flex items-center gap-2 flex-col">

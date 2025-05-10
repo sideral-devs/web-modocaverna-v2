@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 export default function DigitalMarketing() {
   const [courses, setCourses] = useState<CourseSwiperData[] | null>(null)
 
-  const { data } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ['courses', 'marketingDigital'],
     queryFn: async () => {
       const response = await api.get('/conteudos/findCategory/marketingDigital')
@@ -17,7 +17,7 @@ export default function DigitalMarketing() {
   })
 
   useEffect(() => {
-    if (data) {
+    if (!isFetching && data) {
       const mapped = data.map((item) => ({
         title: item.titulo,
         description: item.descricao || '',
@@ -41,8 +41,8 @@ export default function DigitalMarketing() {
 
       setCourses(mapped)
     }
-  }, [data])
-  if (!courses) {
+  }, [data, isFetching])
+  if (isLoading || isFetching || !courses) {
     return (
       <div className="flex gap-4">
         {Array.from({ length: 4 }).map((i, index) => (
