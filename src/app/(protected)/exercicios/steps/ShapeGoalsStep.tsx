@@ -17,6 +17,8 @@ import {
   SmileyAngry,
   SmileyMeh,
   SmileyWink,
+  SmileySad,
+  SmileyXEyes,
 } from '@phosphor-icons/react'
 import { Camera } from 'lucide-react'
 import Image from 'next/image'
@@ -105,8 +107,10 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
   function onSubmit(data: FormData) {
     // Map satisfaction levels to match API expectations
     const satisfactionMap: Record<string, string> = {
-      not_satisfied: 'Não satisfeito',
       satisfied: 'Satisfeito',
+      little_satisfied: 'Pouco satisfeito',
+      not_satisfied: 'Não satisfeito',
+      very_not_satisfied: 'Nada satisfeito',
     }
 
     // Save the data to the store before moving to the next step
@@ -230,16 +234,28 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
                 <SelectValue placeholder="Selecione uma opção" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-800 border border-zinc-700">
-                <SelectItem value="not_satisfied" className="!hover:bg-red-500">
-                  <div className="flex h-10 items-center gap-2">
-                    <SmileyAngry className="w-6 h-6 text-zinc-500" />
+                <SelectItem value="satisfied">
+                  <div className="flex items-center gap-2">
+                    <Smiley className="w-6 h-6 text-green-500" />
+                    <span>Satisfeito</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="little_satisfied">
+                  <div className="flex items-center gap-2">
+                    <SmileyMeh className="w-6 h-6 text-yellow-500" />
+                    <span>Pouco satisfeito</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="not_satisfied">
+                  <div className="flex items-center gap-2">
+                    <SmileySad className="w-6 h-6 text-orange-500" />
                     <span>Não satisfeito</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="satisfied">
+                <SelectItem value="very_not_satisfied">
                   <div className="flex items-center gap-2">
-                    <Smiley className="w-6 h-6 text-zinc-500" />
-                    <span>Satisfeito</span>
+                    <SmileyXEyes className="w-6 h-6 text-red-500" />
+                    <span>Nada satisfeito</span>
                   </div>
                 </SelectItem>
               </SelectContent>

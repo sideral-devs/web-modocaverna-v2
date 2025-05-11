@@ -24,7 +24,10 @@ interface FormData {
 export function UpdatePhotosStep() {
   const router = useRouter()
   const { shapeRegistrations, updateShapeRegistration } = useShape()
-  const lastRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
+  const lastRegistration =
+    shapeRegistrations && shapeRegistrations.length > 1
+      ? shapeRegistrations[shapeRegistrations.length - 1]
+      : shapeRegistrations?.[0]
 
   const form = useForm<FormData>({
     defaultValues: {
@@ -63,7 +66,7 @@ export function UpdatePhotosStep() {
   }
 
   const onSubmit = async (data: FormData) => {
-    if (!lastRegistration || !lastRegistration.fotos) {
+    if (!lastRegistration) {
       toast.error('Não foi possível atualizar as fotos')
       return
     }

@@ -18,6 +18,32 @@ function calculateIMC(altura: number, peso: number): number {
   return Number((peso / (alturaEmMetros * alturaEmMetros)).toFixed(1))
 }
 
+function isValidHeight(altura: string): boolean {
+  const height = Number(altura)
+  return height >= 100 && height <= 250 // reasonable height range in cm
+}
+
+function isValidWeight(peso: string): boolean {
+  const weight = Number(peso)
+  return weight >= 30 && weight <= 300 // reasonable weight range in kg
+}
+
+function getHeightError(altura: string): string {
+  if (!altura) return ''
+  const height = Number(altura)
+  if (height < 100) return 'Altura deve ser maior que 100cm'
+  if (height > 250) return 'Altura deve ser menor que 250cm'
+  return ''
+}
+
+function getWeightError(peso: string): string {
+  if (!peso) return ''
+  const weight = Number(peso)
+  if (weight < 30) return 'Peso deve ser maior que 30kg'
+  if (weight > 300) return 'Peso deve ser menor que 300kg'
+  return ''
+}
+
 type IMCRange = {
   min: number
   max: number
@@ -66,6 +92,11 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
   )
   const imcClassification = getIMCClassification(imc)
 
+  const heightError = getHeightError(measurements.altura)
+  const weightError = getWeightError(measurements.peso)
+  const isFormValid =
+    isValidHeight(measurements.altura) && isValidWeight(measurements.peso)
+
   function handleInputChange(field: keyof HeightWeight, value: string) {
     // Only allow empty string or numbers
     if (value === '' || /^\d{0,3}$/.test(value)) {
@@ -74,6 +105,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
   }
 
   const onSubmit = (data: HeightWeight) => {
+    if (!isFormValid) return
     // Save the data to the store before moving to the next step
     setData({
       altura: Number(data.altura),
@@ -121,7 +153,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
                               .slice(0, 3),
                       )
                     }
-                    className="bg-zinc-800"
+                    className={`bg-zinc-800 ${heightError ? 'border-red-500' : ''}`}
                     suffix="cm"
                   />
                 </div>
@@ -140,11 +172,21 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
                               .slice(0, 3),
                       )
                     }
-                    className="bg-zinc-800"
+                    className={`bg-zinc-800 ${weightError ? 'border-red-500' : ''}`}
                     suffix="kg"
                   />
                 </div>
               </div>
+              {(heightError || weightError) && (
+                <div className="flex flex-col gap-1 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                  {heightError && (
+                    <span className="text-sm text-red-500">{heightError}</span>
+                  )}
+                  {weightError && (
+                    <span className="text-sm text-red-500">{weightError}</span>
+                  )}
+                </div>
+              )}
               {imc > 0 && (
                 <div className="flex flex-col gap-2 mt-4 p-4 bg-zinc-800 rounded-lg">
                   <div className="flex items-center justify-between">
@@ -168,7 +210,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
             </div>
           </div>
 
-          <div className="flex justify-be tween fixed bottom-0 w-full border-t left-0 pb-4 pt-4">
+          <div className="flex justify-between fixed bottom-0 w-full border-t left-0 pb-4 pt-4">
             <div className="w-1/3">
               <Button
                 variant="outline"
@@ -181,7 +223,10 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
               </Button>
             </div>
             <div className="w-1/3 flex justify-center">
-              <AutoSubmitButton onClick={handleSubmit(onSubmit)}>
+              <AutoSubmitButton
+                onClick={handleSubmit(onSubmit)}
+                disabled={!isFormValid}
+              >
                 Continuar
               </AutoSubmitButton>
             </div>

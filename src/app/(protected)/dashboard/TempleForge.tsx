@@ -10,7 +10,13 @@ import { useMeals } from '@/hooks/queries/use-meals'
 import { useShape } from '@/hooks/queries/use-shape'
 import { WEEK_DAYS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { BowlFood, Smiley, SmileyAngry, SmileySad } from '@phosphor-icons/react'
+import {
+  BowlFood,
+  Smiley,
+  SmileySad,
+  SmileyXEyes,
+  SmileyMeh,
+} from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { BicepsFlexed, ScanFace } from 'lucide-react'
@@ -105,7 +111,13 @@ export function TempleForge({ value }: { value: string }) {
                 'flex flex-col w-full pl-4 border-l-4 border-l-red-500 border-y-0 border-r-0',
                 lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
                   ? 'border-l-green-500'
-                  : 'border-l-red-500',
+                  : lastShapeRegistration?.nivel_satisfacao ===
+                      'Pouco satisfeito'
+                    ? 'border-l-yellow-500'
+                    : lastShapeRegistration?.nivel_satisfacao ===
+                        'Não satisfeito'
+                      ? 'border-l-orange-500'
+                      : 'border-l-red-500',
               )}
             >
               <div className="flex flex-col h-full">
@@ -116,17 +128,39 @@ export function TempleForge({ value }: { value: string }) {
                       'flex items-center gap-2',
                       lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
                         ? 'text-green-500'
-                        : 'text-red-500',
+                        : lastShapeRegistration?.nivel_satisfacao ===
+                            'Pouco satisfeito'
+                          ? 'text-yellow-500'
+                          : lastShapeRegistration?.nivel_satisfacao ===
+                              'Não satisfeito'
+                            ? 'text-orange-500'
+                            : 'text-red-500',
                     )}
                   >
                     <span
-                      className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? 'text-green-500' : 'text-red-500'}`}
+                      className={`flex items-center gap-2 text-base ${
+                        lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
+                          ? 'text-green-500'
+                          : lastShapeRegistration?.nivel_satisfacao ===
+                              'Pouco satisfeito'
+                            ? 'text-yellow-500'
+                            : lastShapeRegistration?.nivel_satisfacao ===
+                                'Não satisfeito'
+                              ? 'text-orange-500'
+                              : 'text-red-500'
+                      }`}
                     >
                       {lastShapeRegistration?.nivel_satisfacao ===
                       'Satisfeito' ? (
                         <Smiley weight="bold" size={24} />
-                      ) : (
+                      ) : lastShapeRegistration?.nivel_satisfacao ===
+                        'Pouco satisfeito' ? (
+                        <SmileyMeh weight="bold" size={24} />
+                      ) : lastShapeRegistration?.nivel_satisfacao ===
+                        'Não satisfeito' ? (
                         <SmileySad weight="bold" size={24} />
+                      ) : (
+                        <SmileyXEyes weight="bold" size={24} />
                       )}
                       {lastShapeRegistration?.nivel_satisfacao
                         ? lastShapeRegistration.nivel_satisfacao

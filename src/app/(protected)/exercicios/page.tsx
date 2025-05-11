@@ -17,7 +17,16 @@ import { useWorkouts } from '@/hooks/queries/use-exercises'
 import { useShape } from '@/hooks/queries/use-shape'
 import type { Exercise, Workout } from '@/lib/api/exercises'
 import { WEEK_DAYS } from '@/lib/constants'
-import { Pencil, Plus, Smiley, SmileySad, Trash } from '@phosphor-icons/react'
+import {
+  Pencil,
+  Plus,
+  Smiley,
+  SmileySad,
+  SmileyXEyes,
+  SmileyMeh,
+  Trash,
+  ChartLineUp,
+} from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
@@ -307,18 +316,24 @@ export default function Page() {
               <h1 className="text-2xl font-semibold mt-2">Registro de Shape</h1>
             </div>
 
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() =>
-                firstShapeRegistration?.imc !== 0
-                  ? router.push('/exercicios/atualizar-medidas')
-                  : router.push('/exercicios/steps?step=1')
-              }
-            >
-              <Pencil weight="fill" size={20} />
-              Atualizar medidas
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push('/exercicios/evolucao')}
+              >
+                <ChartLineUp weight="bold" size={20} />
+                Ver evolução do shape
+              </Button>
+              <Button
+                size="sm"
+                variant="default"
+                onClick={() => router.push('/exercicios/steps?step=1')}
+              >
+                <Pencil weight="fill" size={20} />
+                Novo registro
+              </Button>
+            </div>
           </div>
 
           <div className="flex justify-between mb-16 gap-4">
@@ -381,12 +396,28 @@ export default function Page() {
 
               <div className="absolute bottom-4 right-4">
                 <span
-                  className={`flex items-center gap-2 text-base ${lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? 'text-green-500' : 'text-red-500'}`}
+                  className={`flex items-center gap-2 text-base ${
+                    lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
+                      ? 'text-green-500'
+                      : lastShapeRegistration?.nivel_satisfacao ===
+                          'Pouco satisfeito'
+                        ? 'text-yellow-500'
+                        : lastShapeRegistration?.nivel_satisfacao ===
+                            'Não satisfeito'
+                          ? 'text-orange-500'
+                          : 'text-red-500'
+                  }`}
                 >
                   {lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? (
                     <Smiley weight="bold" size={24} />
-                  ) : (
+                  ) : lastShapeRegistration?.nivel_satisfacao ===
+                    'Pouco satisfeito' ? (
+                    <SmileyMeh weight="bold" size={24} />
+                  ) : lastShapeRegistration?.nivel_satisfacao ===
+                    'Não satisfeito' ? (
                     <SmileySad weight="bold" size={24} />
+                  ) : (
+                    <SmileyXEyes weight="bold" size={24} />
                   )}
                   {lastShapeRegistration?.nivel_satisfacao}
                 </span>
@@ -394,21 +425,24 @@ export default function Page() {
 
               <Button
                 size="sm"
-                className="absolute bottom-2 left-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors"
+                className="absolute bottom-2 left-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-800 transition-colors"
                 onClick={() =>
-                  firstShapeRegistration?.imc !== 0 &&
-                  firstShapeRegistration?.fotos &&
-                  firstShapeRegistration?.fotos.length > 0
-                    ? router.push('/exercicios/atualizar-medidas?photos=true')
-                    : router.push('/exercicios/steps?step=1')
+                  router.push('/exercicios/atualizar-medidas?photos=true')
                 }
               >
-                Atualizar fotos
+                <Pencil weight="fill" size={20} /> Atualizar
               </Button>
             </div>
 
-            <div className="bg-zinc-800 w-1/2 rounded-lg p-6">
-              <div className="space-y-8 flex flex-col justify-between h-full">
+            <div className="bg-zinc-800 relative  w-1/2 rounded-lg p-6">
+              <Button
+                size="sm"
+                className="absolute z-10 px-3 py-3 top-2 right-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-900 transition-colors"
+                onClick={() => router.push('/exercicios/atualizar-medidas')}
+              >
+                <Pencil weight="fill" size={20} /> Atualizar
+              </Button>
+              <div className="space-y-8 relative flex flex-col justify-between h-full">
                 <div>
                   <h2 className="text-yellow-500 font-medium mb-4">
                     Circunferência superior

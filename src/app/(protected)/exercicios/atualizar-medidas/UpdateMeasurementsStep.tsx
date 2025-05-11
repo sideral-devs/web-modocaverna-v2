@@ -10,7 +10,12 @@ import { useRouter } from 'next/navigation'
 import { useShape } from '@/hooks/queries/use-shape'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { Smiley, SmileySad } from '@phosphor-icons/react'
+import {
+  Smiley,
+  SmileySad,
+  SmileyXEyes,
+  SmileyMeh,
+} from '@phosphor-icons/react'
 import Image from 'next/image'
 
 type Measurements = {
@@ -42,10 +47,13 @@ export function UpdateMeasurementsStep() {
   const lastRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
   const [currentStep, setCurrentStep] = useState<Step>('measurements')
   const [satisfactionLevel, setSatisfactionLevel] = useState<
-    'Satisfeito' | 'Não satisfeito'
+    'Satisfeito' | 'Não satisfeito' | 'Nada satisfeito' | 'Pouco satisfeito'
   >(
-    (lastRegistration?.nivel_satisfacao as 'Satisfeito' | 'Não satisfeito') ||
-      'Não satisfeito',
+    (lastRegistration?.nivel_satisfacao as
+      | 'Satisfeito'
+      | 'Não satisfeito'
+      | 'Nada satisfeito'
+      | 'Pouco satisfeito') || 'Não satisfeito',
   )
 
   const form = useForm<Measurements>({
@@ -385,15 +393,37 @@ export function UpdateMeasurementsStep() {
                 Satisfeito
               </Button>
               <Button
+                onClick={() => setSatisfactionLevel('Pouco satisfeito')}
+                className={`flex-1 gap-2 ${
+                  satisfactionLevel === 'Pouco satisfeito'
+                    ? 'bg-yellow-500 hover:bg-yellow-600'
+                    : 'bg-zinc-800 hover:bg-zinc-700'
+                }`}
+              >
+                <SmileyMeh weight="bold" size={24} />
+                Pouco satisfeito
+              </Button>
+              <Button
                 onClick={() => setSatisfactionLevel('Não satisfeito')}
                 className={`flex-1 gap-2 ${
                   satisfactionLevel === 'Não satisfeito'
-                    ? 'bg-red-500 hover:bg-red-600'
+                    ? 'bg-orange-500 hover:bg-orange-600'
                     : 'bg-zinc-800 hover:bg-zinc-700'
                 }`}
               >
                 <SmileySad weight="bold" size={24} />
                 Não satisfeito
+              </Button>
+              <Button
+                onClick={() => setSatisfactionLevel('Nada satisfeito')}
+                className={`flex-1 gap-2 ${
+                  satisfactionLevel === 'Nada satisfeito'
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-zinc-800 hover:bg-zinc-700'
+                }`}
+              >
+                <SmileyXEyes weight="bold" size={24} />
+                Nada satisfeito
               </Button>
             </div>
           </div>
