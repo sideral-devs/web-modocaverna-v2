@@ -33,7 +33,6 @@ import {
   AnimatePresence,
   Reorder,
   motion,
-  useDragControls,
   useMotionValueEvent,
   useScroll,
 } from 'framer-motion'
@@ -72,7 +71,6 @@ export interface ShapeRegistration {
 
 export default function Page() {
   const router = useRouter()
-  const dragControls = useDragControls()
   const [selectedDay, setSelectedDay] = useState(
     WEEK_DAYS[new Date().getDay()].workoutIndex,
   )
@@ -88,7 +86,6 @@ export default function Page() {
   const {
     workouts: initialWorkouts,
     isLoading: isLoadingWorkouts,
-    reorderExercises,
     deleteWorkout,
     updateWorkout,
   } = useWorkouts()
@@ -97,7 +94,7 @@ export default function Page() {
   const updateTimeoutRef = useRef<NodeJS.Timeout>()
 
   // Add debounce ref for workouts
-  const updateWorkoutsTimeoutRef = useRef<NodeJS.Timeout>()
+  // const updateWorkoutsTimeoutRef = useRef<NodeJS.Timeout>()
 
   // Initialize local workouts state from initial workouts
   useEffect(() => {
@@ -116,41 +113,41 @@ export default function Page() {
   }, [initialWorkouts])
 
   // Create a debounced update function for workouts
-  const debouncedWorkoutUpdate = useCallback(
-    async (workouts: Workout[]) => {
-      if (updateWorkoutsTimeoutRef.current) {
-        clearTimeout(updateWorkoutsTimeoutRef.current)
-      }
+  // const debouncedWorkoutUpdate = useCallback(
+  //   async (workouts: Workout[]) => {
+  //     if (updateWorkoutsTimeoutRef.current) {
+  //       clearTimeout(updateWorkoutsTimeoutRef.current)
+  //     }
 
-      updateWorkoutsTimeoutRef.current = setTimeout(async () => {
-        try {
-          // Update each workout with its new order index while maintaining its day
-          await Promise.all(
-            workouts.map((workout, index) =>
-              updateWorkout({
-                ficha_id: workout.ficha_id,
-                titulo: workout.titulo,
-                indice: selectedDay,
-                horario: workout.horario,
-                exercicios: workout.exercicios.map((exercise) => ({
-                  nome: exercise.nome,
-                  series: exercise.series.toString(),
-                  repeticoes: exercise.repeticoes.toString(),
-                  carga: exercise.carga.toString(),
-                  indice: exercise.indice,
-                })),
-              }),
-            ),
-          )
-          toast.success('Ordem dos treinos atualizada com sucesso')
-        } catch (error) {
-          console.error('Error updating workout order:', error)
-          // Optionally handle error state here
-        }
-      }, 500)
-    },
-    [updateWorkout, selectedDay],
-  )
+  //     updateWorkoutsTimeoutRef.current = setTimeout(async () => {
+  //       try {
+  //         // Update each workout with its new order index while maintaining its day
+  //         await Promise.all(
+  //           workouts.map((workout, index) =>
+  //             updateWorkout({
+  //               ficha_id: workout.ficha_id,
+  //               titulo: workout.titulo,
+  //               indice: selectedDay,
+  //               horario: workout.horario,
+  //               exercicios: workout.exercicios.map((exercise) => ({
+  //                 nome: exercise.nome,
+  //                 series: exercise.series.toString(),
+  //                 repeticoes: exercise.repeticoes.toString(),
+  //                 carga: exercise.carga.toString(),
+  //                 indice: exercise.indice,
+  //               })),
+  //             }),
+  //           ),
+  //         )
+  //         toast.success('Ordem dos treinos atualizada com sucesso')
+  //       } catch (error) {
+  //         console.error('Error updating workout order:', error)
+  //         // Optionally handle error state here
+  //       }
+  //     }, 500)
+  //   },
+  //   [updateWorkout, selectedDay],
+  // )
 
   // Create a debounced update function for exercises
   const debouncedUpdate = useCallback(
@@ -239,10 +236,10 @@ export default function Page() {
     }
   }, [lastShapeRegistration?.fotos])
 
-  const currentDate = new Date()
-  const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
-    locale: ptBR,
-  })
+  // const currentDate = new Date()
+  // const formattedDate = format(currentDate, "dd 'de' MMMM, yyyy", {
+  //   locale: ptBR,
+  // })
 
   const handleDeleteWorkout = async (workout: Workout) => {
     setWorkoutToDelete(workout)

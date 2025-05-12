@@ -143,7 +143,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
                   <InputWithSuffix
                     type="text"
                     value={measurements.altura}
-                    onChange={(e) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleInputChange(
                         'altura',
                         e.target.value === '-'
@@ -162,7 +162,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
                   <InputWithSuffix
                     type="text"
                     value={measurements.peso}
-                    onChange={(e) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleInputChange(
                         'peso',
                         e.target.value === '-'

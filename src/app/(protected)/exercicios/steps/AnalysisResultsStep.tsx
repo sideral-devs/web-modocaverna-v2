@@ -1,17 +1,16 @@
 'use client'
 
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
-import { Info, Warning } from '@phosphor-icons/react'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useShapeFormStore } from '@/store/shape-form'
+import { Info, Warning } from '@phosphor-icons/react'
+import Image from 'next/image'
 
-import { toast } from 'sonner'
-import { api } from '@/lib/api'
 import { useShape } from '@/hooks/queries/use-shape'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { api } from '@/lib/api'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 type IMCStatus = {
   label: string
@@ -22,7 +21,6 @@ type IMCStatus = {
 
 export function AnalysisResultsStep({
   onBack,
-  onFinish,
 }: {
   onBack: () => void
   onFinish: () => void
@@ -36,8 +34,6 @@ export function AnalysisResultsStep({
   const {
     shapeRegistrations,
     // hasRegistration,
-
-    isLoading: isLoadingShape,
   } = useShape()
 
   const firstShapeRegistration = shapeRegistrations?.[0]
@@ -144,6 +140,7 @@ export function AnalysisResultsStep({
       // Navigate using replace to avoid back button issues
       router.replace('/exercicios')
     } catch (error) {
+      console.error(error)
       toast.error('Algo deu errado. Tente novamente.')
     }
   }
