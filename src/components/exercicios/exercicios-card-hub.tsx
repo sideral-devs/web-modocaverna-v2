@@ -1,7 +1,6 @@
 'use client'
 
 import { Exercise } from '@/lib/api/exercises'
-import { useMotionValue } from 'framer-motion'
 import { BicepsFlexed } from 'lucide-react'
 
 interface ExerciseCardProps {
@@ -10,13 +9,7 @@ interface ExerciseCardProps {
   onEdit: () => void
 }
 
-export function ExerciseCardHub({
-  exercise,
-  workoutIndex,
-  onEdit,
-}: ExerciseCardProps) {
-  const y = useMotionValue(0)
-
+export function ExerciseCardHub({ exercise }: ExerciseCardProps) {
   return (
     <>
       <div className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800">

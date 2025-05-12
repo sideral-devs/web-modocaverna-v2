@@ -1,16 +1,7 @@
 'use client'
 
-import { DotsThree } from '@phosphor-icons/react'
-import { Reorder, motion, useDragControls } from 'framer-motion'
 import { Exercise } from '@/lib/api/exercises'
-import { useWorkouts } from '@/hooks/queries/use-exercises'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+import { Reorder, motion, useDragControls } from 'framer-motion'
 import { GripVertical } from 'lucide-react'
 
 interface ExerciseCardProps {
@@ -19,24 +10,19 @@ interface ExerciseCardProps {
   onEdit: () => void
 }
 
-export function ExerciseCard({
-  exercise,
-  workoutIndex,
-  onEdit,
-}: ExerciseCardProps) {
-  const { deleteExercise } = useWorkouts()
+export function ExerciseCard({ exercise }: ExerciseCardProps) {
   const dragControls = useDragControls()
 
-  const handleDelete = async () => {
-    try {
-      await deleteExercise({
-        workoutIndex,
-        exerciseIndex: exercise.indice,
-      })
-    } catch (error) {
-      console.error('Error deleting exercise:', error)
-    }
-  }
+  // const handleDelete = async () => {
+  //   try {
+  //     await deleteExercise({
+  //       workoutIndex,
+  //       exerciseIndex: exercise.indice,
+  //     })
+  //   } catch (error) {
+  //     console.error('Error deleting exercise:', error)
+  //   }
+  // }
 
   return (
     <Reorder.Item

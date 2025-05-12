@@ -6,8 +6,8 @@ import {
   Pill,
   Trash,
 } from '@phosphor-icons/react'
-import { Button } from '../ui/button'
 import * as Popover from '@radix-ui/react-popover'
+import { Button } from '../ui/button'
 
 interface MealCardProps {
   meal: Meal
@@ -17,13 +17,7 @@ interface MealCardProps {
   isLast?: boolean
 }
 
-export function MealCard({
-  meal,
-  onEdit,
-  onDelete,
-  isFirst,
-  isLast,
-}: MealCardProps) {
+export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
   return (
     <div className="relative flex gap-8">
       {/* Timeline */}

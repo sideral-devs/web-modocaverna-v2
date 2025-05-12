@@ -1,10 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { InputWithSuffix } from '@/components/ui/input-with-suffix'
 import { Button } from '@/components/ui/button'
+import { InputWithSuffix } from '@/components/ui/input-with-suffix'
 import {
   Select,
   SelectContent,
@@ -12,11 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { createShapeRegistration } from '@/lib/api/shape'
+import { useMutation } from '@tanstack/react-query'
 import { Camera } from 'lucide-react'
 import Image from 'next/image'
-import { useMutation } from '@tanstack/react-query'
-import { createShapeRegistration } from '@/lib/api/shape'
-import { useShape } from '@/hooks/queries/use-shape'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 type PhotoType = 'frontal' | 'lateral' | 'costas' | 'lateral2'
 
@@ -59,9 +59,7 @@ export function ShapeRegistrationSteps() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [photos, setPhotos] = useState<ShapePhoto[]>([])
-  const { skipShapeRegistration, shapeRegistrations } = useShape()
-  const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1]
+
   const [formData, setFormData] = useState<FormData>({
     membros_superiores: {
       ombro: 0,
@@ -123,11 +121,11 @@ export function ShapeRegistrationSteps() {
     }
   }
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
-    }
-  }
+  // const handleBack = () => {
+  //   if (currentStep > 1) {
+  //     setCurrentStep(currentStep - 1)
+  //   }
+  // }
 
   async function handlePhotoUpload(type: PhotoType, file: File) {
     const url = URL.createObjectURL(file)

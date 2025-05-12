@@ -1,20 +1,15 @@
 'use client'
 
 import { ProtectedRoute } from '@/components/protected-route'
-import { useUser } from '@/hooks/queries/use-user'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
 import { CloseButton } from '../../settings/CloseButton'
 import { UpdateMeasurementsStep } from './UpdateMeasurementsStep'
 import { UpdatePhotosStep } from './UpdatePhotosStep'
-import { PhaseCounter } from '@/app/(public)/trial/sign-up/PhaseCounter'
 
 export default function Page() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { data: user } = useUser()
-  const [isLoading, setIsLoading] = useState(false)
   const showPhotos = searchParams.get('photos') === 'true'
 
   return (

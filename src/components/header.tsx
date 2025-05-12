@@ -59,7 +59,13 @@ export function HeaderTitle({
   )
 }
 
-export function HeaderClose({ to = '' }: { to?: string }) {
+export function HeaderClose({
+  to = '',
+  pushTo = '',
+}: {
+  to?: string
+  pushTo?: string
+}) {
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -76,7 +82,7 @@ export function HeaderClose({ to = '' }: { to?: string }) {
   }, [])
 
   return (
-    <Link href={`/dashboard?to=${to}`}>
+    <Link href={pushTo ? `${pushTo}` : `/dashboard?to=${to}`}>
       <Button
         ref={buttonRef}
         variant="outline"

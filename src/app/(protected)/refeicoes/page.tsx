@@ -51,7 +51,10 @@ export default function Page() {
   async function handleSubmit(data: Partial<Meal>) {
     if (selectedMeal) {
       console.log(selectedMeal.horario_id, data)
-      await updateMeal({ id: selectedMeal.horario_id, data })
+      await updateMeal({
+        id: selectedMeal.horario_id,
+        data: data as Omit<Meal, 'created_at' | 'updated_at' | 'horario_id'>,
+      })
     } else {
       await createMeal(data as Meal)
     }

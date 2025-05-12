@@ -22,8 +22,13 @@ export function useMeals() {
   })
 
   const { mutateAsync: updateMealMutation } = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<Meal> }) =>
-      updateMeal(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number
+      data: Omit<Meal, 'created_at' | 'updated_at' | 'horario_id'>
+    }) => updateMeal(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['meals'] })
     },

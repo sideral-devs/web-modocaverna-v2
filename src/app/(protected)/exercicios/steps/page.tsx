@@ -1,17 +1,15 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
-import { useUser } from '@/hooks/queries/use-user'
-import { useOnboardingStore } from '@/store/onboarding'
+import { useShape } from '@/hooks/queries/use-shape'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { CloseButton } from '../../settings/CloseButton'
 import { AnalysisResultsStep } from './AnalysisResultsStep'
+import { HeightWeightStep } from './HeightWeightStep'
 import { ShapeConfigStep } from './ShapeConfigStep'
 import { ShapeGoalsStep } from './ShapeGoalsStep'
-import { HeightWeightStep } from './HeightWeightStep'
-import { useShape } from '@/hooks/queries/use-shape'
 
 export default function Page() {
   const router = useRouter()
@@ -19,17 +17,12 @@ export default function Page() {
   const {
     shapeRegistrations,
     // hasRegistration,
-
-    isLoading: isLoadingShape,
   } = useShape()
 
   const firstShapeRegistration = shapeRegistrations?.[0]
-  const { data: user } = useUser()
-  const [isLoading, setIsLoading] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(
     Number(searchParams.get('step')) || 1,
   )
-  const { cellphone } = useOnboardingStore()
 
   const passosTotal = 4
 

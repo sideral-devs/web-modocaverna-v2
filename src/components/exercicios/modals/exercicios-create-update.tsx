@@ -9,11 +9,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Exercise, Workout } from '@/lib/api/exercises'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { Exercise, Workout } from '@/lib/api/exercises'
 import { WEEK_DAYS } from '@/lib/constants'
-import { useState, useEffect } from 'react'
-import { Clock, Plus, Trash, X } from '@phosphor-icons/react'
+import { Plus, Trash, X } from '@phosphor-icons/react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 interface ExerciciosCreateUpdateProps {
@@ -29,7 +29,6 @@ export function ExerciciosCreateUpdate({
   onClose,
   isEdit,
 }: ExerciciosCreateUpdateProps) {
-  const { workouts, isLoading: isLoadingWorkouts } = useWorkouts()
   const { createWorkout, updateWorkout } = useWorkouts()
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())

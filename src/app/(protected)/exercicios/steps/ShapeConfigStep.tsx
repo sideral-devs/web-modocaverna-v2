@@ -3,9 +3,8 @@
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Button } from '@/components/ui/button'
 import { InputWithSuffix } from '@/components/ui/input-with-suffix'
-import { useUser } from '@/hooks/queries/use-user'
-import { FormProvider, useForm } from 'react-hook-form'
 import { useShapeFormStore } from '@/store/shape-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 type Measurements = {
   bicepsD: string
@@ -26,7 +25,6 @@ interface ShapeConfigStepProps {
 }
 
 export function ShapeConfigStep({ onNext, onBack }: ShapeConfigStepProps) {
-  const { data: user } = useUser()
   const { setData, data: storeData } = useShapeFormStore()
   const form = useForm<Measurements>({
     defaultValues: {

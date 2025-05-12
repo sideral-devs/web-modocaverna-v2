@@ -17,7 +17,9 @@ import { WEEK_DAYS } from '@/lib/constants'
 interface MealFormModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (data: Partial<Meal>) => Promise<void>
+  onSubmit: (
+    data: Omit<Meal, 'created_at' | 'updated_at' | 'horario_id'>,
+  ) => Promise<void>
   initialData?: Meal
 }
 

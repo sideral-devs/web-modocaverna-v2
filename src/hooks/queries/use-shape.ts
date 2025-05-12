@@ -2,7 +2,6 @@ import {
   ShapeRegistration,
   createShapeRegistration,
   deleteShapeRegistration,
-  getShapeRegistrationById,
   getShapeRegistrations,
   updateShapeRegistration,
   skipShapeRegistration,

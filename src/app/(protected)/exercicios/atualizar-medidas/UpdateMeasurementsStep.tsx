@@ -3,20 +3,18 @@
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Button } from '@/components/ui/button'
 import { InputWithSuffix } from '@/components/ui/input-with-suffix'
-import { useUser } from '@/hooks/queries/use-user'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useShapeFormStore } from '@/store/shape-form'
-import { useRouter } from 'next/navigation'
 import { useShape } from '@/hooks/queries/use-shape'
-import { toast } from 'sonner'
-import { useState } from 'react'
+import { useUser } from '@/hooks/queries/use-user'
 import {
   Smiley,
+  SmileyMeh,
   SmileySad,
   SmileyXEyes,
-  SmileyMeh,
 } from '@phosphor-icons/react'
-import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 type Measurements = {
   altura: string
@@ -42,7 +40,6 @@ type Step = 'measurements' | 'analysis'
 export function UpdateMeasurementsStep() {
   const router = useRouter()
   const { data: user } = useUser()
-  const { setData } = useShapeFormStore()
   const { shapeRegistrations, updateShapeRegistration } = useShape()
   const lastRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
   const [currentStep, setCurrentStep] = useState<Step>('measurements')
@@ -127,11 +124,6 @@ export function UpdateMeasurementsStep() {
         setValue('imc', imc)
       }
     }
-  }
-
-  const handleAgeChange = (value: string) => {
-    // Handle age separately since it's not part of the Measurements type
-    // Implement the logic to update age in the form
   }
 
   const calculateDifference = (
@@ -591,6 +583,7 @@ export function UpdateMeasurementsStep() {
       toast.success('Medidas atualizadas com sucesso!')
       router.push('/exercicios')
     } catch (error) {
+      console.error(error)
       toast.error('Erro ao atualizar medidas')
     }
   }

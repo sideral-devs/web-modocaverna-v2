@@ -11,19 +11,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import { useShapeFormStore } from '@/store/shape-form'
 import {
   CameraPlus,
   Smiley,
-  SmileyAngry,
   SmileyMeh,
-  SmileyWink,
   SmileySad,
   SmileyXEyes,
 } from '@phosphor-icons/react'
-import { Camera } from 'lucide-react'
 import Image from 'next/image'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useShapeFormStore } from '@/store/shape-form'
 
 type PhotoType = 'frontal' | 'perfil esquerdo' | 'costas' | 'perfil direito'
 
@@ -78,11 +75,6 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
 
   const { setValue, watch } = form
   const { fotos, satisfacao, objetivo, pesoMeta, textoMeta } = watch()
-
-  // Check if all required photos are uploaded
-  const hasAllPhotos = photoTypes.every(({ type }) =>
-    fotos.some((photo) => photo.type === type),
-  )
 
   const hasFilledAllFields =
     (satisfacao && objetivo === 'Manter peso') || (pesoMeta && objetivo)

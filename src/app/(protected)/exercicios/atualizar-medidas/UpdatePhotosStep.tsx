@@ -1,13 +1,13 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Camera, Trash2, Upload } from 'lucide-react'
-import Image from 'next/image'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
-import { useShape } from '@/hooks/queries/use-shape'
-import { toast } from 'sonner'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { Button } from '@/components/ui/button'
+import { useShape } from '@/hooks/queries/use-shape'
+import { Trash2, Upload } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 type PhotoType = 'frontal' | 'perfil esquerdo' | 'costas' | 'perfil direito'
 
@@ -101,6 +101,7 @@ export function UpdatePhotosStep() {
       toast.success('Fotos atualizadas com sucesso!')
       router.push('/exercicios')
     } catch (error) {
+      console.error(error)
       toast.error('Erro ao atualizar fotos')
     }
   }
