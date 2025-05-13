@@ -22,7 +22,7 @@ import { toast } from 'sonner'
 import { EditObjetiveDialog } from './edit-objective'
 import EditableObjectiveItem from '@/components/dreamboard/EditableObjectiveItem'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import { PencilIcon } from 'lucide-react'
+import { Pencil, PencilIcon, Save } from 'lucide-react'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -45,6 +45,8 @@ export default function Page() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [selectedYear, setSelectedYear] = useState(dayjs().format('YYYY'))
   const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
+  const [list, setList] = useState<ObjectivesList[]>([])
+  const [isEditing, setIsEditing] = useState(false)
 
   const { data: goals } = useQuery({
     queryKey: ['goals'],
@@ -60,20 +62,12 @@ export default function Page() {
     }
   }, [goals])
 
-  async function handleCheckGoal(index: number, checked: boolean) {
+  async function handleItemChange() {
     if (!currentGoal) return
     if (Number(selectedYear) < dayjs().year()) return
-
-    // const rollback = goal
     try {
-      const found = currentGoal.objetivos.lista[index]
-      if (!found) return
-
-      await api.put(`/metas/update/${selectedYear}`, {
-        ano: selectedYear,
-        objetivos: {
-          lista: { ...found, checked },
-        },
+      await api.put(`/metas/update-list/${selectedYear}`, {
+        lista: list,
       })
       queryClient.refetchQueries({ queryKey: ['goals'] })
     } catch {
@@ -81,35 +75,34 @@ export default function Page() {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
     }
   }
-  async function updateGoalList(index: number, newValue: string) {
-    if (!currentGoal) return
-    if (Number(selectedYear) < dayjs().year()) return
-    try {
-      const found = currentGoal.objetivos.lista[index]
-      if (!found) return
-      await api.put(`/metas/update/${selectedYear}`, {
-        ano: selectedYear,
-        objetivos: {
-          lista: {
-            valor: newValue,
-            item: found.item,
-            ano: found.ano,
-            checked: found.checked,
-          },
-        },
-      })
-      queryClient.refetchQueries({ queryKey: ['goals'] })
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
-    }
+  const handleStopEditing = () => {
+    handleItemChange()
   }
-
+  const updateGoalList = (
+    index: number,
+    newValue: string,
+    checked?: boolean | undefined,
+  ) => {
+    setList((prev) => {
+      const novaLista = [...prev]
+      novaLista[index].valor = newValue
+      if (checked !== undefined) {
+        novaLista[index].checked = checked
+      }
+      return novaLista
+    })
+  }
   useEffect(() => {
     if (goals) {
       setCurrentGoal(goals.find((goal) => goal.ano === selectedYear) || null)
     }
   }, [goals, selectedYear])
+
+  useEffect(() => {
+    if (currentGoal?.objetivos.lista) {
+      setList(currentGoal.objetivos.lista)
+    }
+  }, [currentGoal])
 
   return (
     <UpgradeModalTrigger>
@@ -179,42 +172,59 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col col-span-2 md:h-[730px] p-4 gap-8 bg-zinc-800 border rounded-2xl">
-                <Skeleton className="w-[80%] h-4 bg-zinc-700" />
-                <div className="flex flex-col gap-4">
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                </div>
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
+              <div className="flex flex-col col-span-2 h-full w-1/2 p-4 gap-8 items-center justify-center bg-zinc-800 border rounded-xl">
+                <Skeleton className="w-[80%] h-[40%] bg-zinc-700" />
               </div>
             )}
             {currentGoal ? (
               <div className="flex flex-col col-span-2  md:h-[340px] w-[50%] p-4 gap-2 bg-zinc-800 border-t border-zinc-600 rounded-2xl shadow-lg">
                 <div className="flex flex-col gap-8 lg:gap-8">
-                  <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
-                    <span className="text-[14px] font-semibold">
-                      O que preciso fazer?
-                    </span>
+                  <div className="flex flex-row w-full justify-between">
+                    <div className="flex w-fit items-center px-3 py-2 gap-1 border border-zinc-500 rounded-full">
+                      <span className="text-[14px] font-semibold">
+                        O que preciso fazer?
+                      </span>
+                    </div>
+                    <div className="cursor-pointer">
+                      {!isEditing ? (
+                        <Pencil
+                          className={`relative bottom-1 right-1 mt-2 mr-2`}
+                          size={24}
+                          onClick={() => {
+                            setIsEditing(!isEditing)
+                          }}
+                        />
+                      ) : (
+                        <Save
+                          className={`relative bottom-1 right-1 mt-2 mr-2`}
+                          size={24}
+                          onClick={() => {
+                            setIsEditing(!isEditing)
+                            handleStopEditing()
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-8 max-h-[80vh] overflow-y-auto relative bottom-3">
-                    {currentGoal.objetivos.lista.length > 0 ? (
-                      currentGoal.objetivos.lista.map((item, index) => (
+                    {list.length > 0 ? (
+                      list.map((item, index) => (
                         <EditableObjectiveItem
                           key={item.valor + index}
                           item={item}
                           index={index}
-                          handleCheckGoal={handleCheckGoal}
                           selectedYear={selectedYear}
-                          onSave={(index: number, newValue: string) => {
-                            updateGoalList(index, newValue)
+                          isEditing={isEditing}
+                          onSave={(
+                            index: number,
+                            newValue: string,
+                            checked: boolean,
+                          ) => {
+                            const wasChecked = list[index].checked
+                            updateGoalList(index, newValue, checked)
+                            if (checked !== wasChecked) {
+                              handleStopEditing()
+                            }
                           }}
                         />
                       ))
@@ -227,114 +237,26 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col col-span-2 md:h-[730px] p-4 gap-8 bg-zinc-800 border rounded-2xl">
-                <Skeleton className="w-[80%] h-4 bg-zinc-700" />
-                <div className="flex flex-col gap-4">
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
-                  <Skeleton className="w-full h-4 bg-zinc-700" />
+              <div className="flex flex-col h-full w-1/2  items-center justify-center bg-zinc-800 border rounded-xl">
+                <div className="flex flex-row items py-10 pl-6 justify-between h-full w-full">
+                  <div className="flex flex-col w-full h-full gap-4 px-4">
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                  </div>
+                  <div className="flex flex-col w-full h-full gap-4 px-4">
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                    <Skeleton className=" w-[90%] h-10 bg-zinc-700" />
+                  </div>
                 </div>
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
-                <Skeleton className="w-full h-4 bg-zinc-700" />
               </div>
             )}
-            {/* <div className="flex flex-col col-span-3 gap-6">
-              {currentGoal ? (
-                <DreamboardMaker
-                  year={Number(selectedYear)}
-                  startingContent={currentGoal.fotos.map((foto) => ({
-                    id: foto.id,
-                    height: Number(foto.height),
-                    width: Number(foto.width),
-                    x: Number(foto.x),
-                    y: Number(foto.y),
-                    rotation: foto.rotation,
-                    src: `${env.NEXT_PUBLIC_PROD_URL}${foto.foto}`,
-                  }))}
-                />
-              ) : (
-                <Skeleton className="flex flex-col flex-1 items-center gap-8 w-full" />
-              )}
-            </div> */}
           </div>
-          {/* <div className="w-full h-[1px] bg-border" />
-          <div className="flex flex-col w-full max-w-8xl p-4 gap-6">
-            <h2 className="flex items-center gap-2 text-xl font-semibold">
-              <MailIcon size={20} />
-              Cartas para o Futuro
-            </h2>
-            <div className="flex w-full gap-2 overflow-x-auto scrollbar-minimal">
-              {lockedMessages ? (
-                <>
-                  {lockedMessages.map((message, index) => (
-                    <div
-                      className="flex flex-col w-64 min-w-64 h-72 p-2 bg-zinc-900 border rounded-xl
-                      bg-cover bg-center bg-no-repeat
-                      "
-                      style={{
-                        backgroundImage: `url(${
-                          dayjs(message.data_abertura).toDate() < new Date()
-                            ? '/images/locked-messages/bau-aberto.png'
-                            : '/images/locked-messages/bau-fechado.png'
-                        })`,
-                      }}
-                      key={index}
-                    >
-                      <span className="flex w-fit h-fit p-[3px] rounded bg-cyan-700 text-cyan-400 text-xs">
-                        Criada em{' '}
-                        {dayjs(message.data_fechamento).format('DD MMM YYYY')}
-                      </span>
-                      <div className="flex flex-1 items-center justify-center"></div>
-
-                      <BoxCountdown
-                        targetDate={dayjs(message.data_abertura).toDate()}
-                        onClick={() => {
-                          setOpenedMessageDialogOpen(true)
-                          setCurrentMessage(message)
-                        }}
-                      />
-                    </div>
-                  ))}
-                  <Dialog
-                    open={newMessageDialogOpen}
-                    onOpenChange={setNewMessageDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <button className="flex w-64 min-w-64 h-72 items-center justify-center bg-zinc-900 border rounded-xl">
-                        <span className="text-red-500 text-sm">
-                          + Nova carta
-                        </span>
-                      </button>
-                    </DialogTrigger>
-                    <NewLockedMessageDialog
-                      onClose={() => setNewMessageDialogOpen(false)}
-                    />
-                  </Dialog>
-                  {currentMessage && (
-                    <Dialog
-                      open={openedMessageDialogOpen}
-                      onOpenChange={setOpenedMessageDialogOpen}
-                    >
-                      <OpenedMessageDialog message={currentMessage} />
-                    </Dialog>
-                  )}
-                </>
-              ) : (
-                Array.from({ length: 3 }, (_, index) => (
-                  <Skeleton
-                    className="w-64 min-w-64 h-72 bg-zinc-900"
-                    key={index}
-                  />
-                ))
-              )}
-            </div>
-          </div> */}
         </section>
         <section className="flex flex-col items-center  w-full bg-black">
           <div className="flex flex-col w-full max-w-8xl items-center p-4 gap-12">

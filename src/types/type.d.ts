@@ -486,20 +486,22 @@ interface Commandment {
     url: string
   }[]
 }
+interface ObjectivesList {
+  valor: string
+  item: string
+  ano?: number
+  checked: boolean
+}
+interface Objectives {
+  principal: string
+  lista: ObjectivesList[]
+}
 
 interface Goal {
   metas_id: number
   user_id: string
   ano: string
-  objetivos: {
-    principal: string
-    lista: {
-      valor: string
-      item: string
-      ano: number
-      checked: boolean
-    }[]
-  }
+  objetivos: Objectives
   fotos: {
     foto: string
     posicao: number
