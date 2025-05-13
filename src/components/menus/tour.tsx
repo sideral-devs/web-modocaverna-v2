@@ -14,7 +14,6 @@ import {
 } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 import { VideoPlayer } from '../video-player'
-import { useOnboardingStore } from '@/store/onboarding'
 
 export function TourMenu() {
   const { open, setOpen } = useTourMenu()
@@ -52,14 +51,14 @@ function TourMenuContent({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <AlertDialogContent className="bg-zinc-800 border-zinc-700 gap-4">
-      <div className="relative w-full h-full overflow-hidden">
+    <AlertDialogContent className="bg-zinc-800 border-zinc-700 gap-4 overflow-hidden">
+      <div className="relative w-full h-full overflow-visible">
         <AnimatePresence mode="wait">
           <motion.div
-            key={step} // O "key" permite animar ao mudar de fase
-            initial={{ x: 300, opacity: 0 }} // Início da animação (da direita)
-            animate={{ x: 0, opacity: 1 }} // Final da animação (no centro)
-            exit={{ x: -300, opacity: 0 }} // Saída (indo para a esquerda)
+            key={step}
+            initial={{ x: 300, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -300, opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="w-full h-full"
           >
@@ -71,13 +70,7 @@ function TourMenuContent({ onClose }: { onClose: () => void }) {
   )
 }
 
-function FirstStep({
-  onClose,
-  onNext,
-}: {
-  onClose: () => void
-  onNext: () => void
-}) {
+function FirstStep({ onNext }: { onClose: () => void; onNext: () => void }) {
   const [timed, setTimed] = useState(false)
 
   useEffect(() => {
@@ -93,15 +86,17 @@ function FirstStep({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex w-full-items-center gap-16">
+      <div className="flex w-full-items-center gap-8 lg:gap-16">
         <Image
           src={'/images/lobo-face.svg'}
           width={125}
           height={109}
           alt="Capitão Caverna"
+          className="scale-75 lg:scale-100"
         />
-        <div className="flex flex-col relative w-full p-6 gap-6 border border-zinc-700 rounded-lg">
-          <p className="font-semibold">
+
+        <div className="flex flex-col relative w-full p-4 lg:p-6 gap-6 border border-zinc-700 rounded-lg">
+          <p className="text-sm lg:text-base font-semibold">
             Este vídeo tour vai te transformar em um(a) verdadeiro(a)
             explorador(a) da Caverna! Assista.
           </p>
@@ -135,32 +130,36 @@ function FirstStep({
 }
 
 function SecondStep({ onNext }: { onNext: () => void }) {
-  const [isLoading, setIsLoading] = useState(false)
-  const { cellphone } = useOnboardingStore()
-  async function handleFinish() {
-    try {
-      setIsLoading(true)
-      await api.put('/users/update?save=true', {
-        tutorial_complete: true,
-        telefone: cellphone,
-      })
-      window.location.href = '/dashboard'
-    } catch {
-      toast.error('Algo deu errado. Tente novamente.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
-    <div className="flex flex-col relative justify-between items-center gap-16">
+    <div className="flex flex-col relative justify-between items-center gap-48 lg:gap-16 overflow-visible">
+      <div
+        style={{
+          width: 212,
+          height: 358,
+        }}
+        className="absolute right-0 bottom-0 translate-y-1/4 scale-90 lg:hidden"
+      >
+        <Image
+          src={'/images/lobo/legal-mobile.png'}
+          alt="Capitão Caverna"
+          fill
+          className="object-cover"
+          style={{
+            maskImage: 'linear-gradient(to bottom, black 40%, transparent)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 40%, transparent)',
+          }}
+        />
+      </div>
       <div className="flex items-start gap-6">
         <Image
           src={'/images/lobo/legal.png'}
           alt="Capitão Caverna"
           width={222}
           height={373}
+          className="hidden lg:block"
         />
+
         <div className="flex flex-col relative w-full p-6 gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">Chegou o grande momento</h1>
           <p className="text-sm text-zinc-400">
@@ -186,14 +185,13 @@ function SecondStep({ onNext }: { onNext: () => void }) {
             width={54}
             height={14}
             alt="balloon"
-            className="absolute -left-[54px] top-14"
+            className="hidden lg:block absolute -left-[54px] top-14"
           />
         </div>
       </div>
+
       <AlertDialogFooter>
-        <Button loading={isLoading} onClick={handleFinish}>
-          Ativar Modo Caverna
-        </Button>
+        <Button onClick={onNext}>Ativar Modo Caverna</Button>
       </AlertDialogFooter>
     </div>
   )

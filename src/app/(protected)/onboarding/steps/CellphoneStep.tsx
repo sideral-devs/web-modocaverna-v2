@@ -1,15 +1,15 @@
+import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { Input } from '@/components/ui/input'
+import { useUser } from '@/hooks/queries/use-user'
+import { api } from '@/lib/api'
 import { cellphoneMask, ddiMask, removeMask } from '@/lib/utils'
 import { useOnboardingStore } from '@/store/onboarding'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '@/lib/api'
+import { AxiosError } from 'axios'
 import Image from 'next/image'
 import { FormProvider, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { useUser } from '@/hooks/queries/use-user'
-import AutoSubmitButton from '@/components/ui/autoSubmitButton'
-import { AxiosError } from 'axios'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
 const schema = z.object({
   DDI: z
@@ -59,19 +59,19 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
       if (err instanceof AxiosError) {
         if (err.response?.status !== 500) {
           setError('cellphone', {
-            message: 'Esse número de whatsapp não existe',
+            message: 'Esse número de WhatsApp não existe',
           })
           return
         }
       } else {
-        toast.error('Erro inexperado ao atualizar dados do usuário!')
+        toast.error('Erro inesperado ao atualizar dados do usuário!')
       }
     }
     if (validateNumber && validateNumber.status !== 500) {
       const respEvolution = validateNumber as { numberExists: boolean }
 
       if (!respEvolution.numberExists) {
-        setError('cellphone', { message: 'Esse número de whatsapp não existe' })
+        setError('cellphone', { message: 'Esse número de WhatsApp não existe' })
         return
       }
     }
@@ -89,19 +89,19 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
           width={222}
           height={402}
         />
-        <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
-          <h1 className="text-2xl">
+        <div className="flex flex-col relative w-full max-w-[611px] p-6 lg:px-12 lg:py-8 gap-5 lg:gap-6 border border-zinc-700 rounded-lg">
+          <h1 className="text-xl lg:text-2xl">
             Quer saber? Eu posso ser mais do que um simples guia.
           </h1>
-          <p className="text-zinc-400 ">
+          <p className="text-zinc-400 text-sm lg:text-base ">
             Sou uma inteligência artificial e fui treinado para ser o seu
             assistente pessoal no WhatsApp.
           </p>
-          <p className="text-zinc-400">
+          <p className="text-zinc-400 text-sm lg:text-base">
             Vou te ajudar no gerenciamento da sua rotina. Te mostrando
             exatamente o que deve ser feito durante o seu dia.
           </p>
-          <p className="text-zinc-400">
+          <p className="text-zinc-400 text-sm lg:text-base">
             <strong className="text-white">
               Para ativar essa função, preencha ou confirme o seu número no
               campo abaixo.
@@ -114,7 +114,7 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
             width={54}
             height={14}
             alt="balloon"
-            className="absolute -left-[54px] top-[25%]"
+            className="hidden md:block absolute -left-[54px] top-[25%]"
           />
         </div>
       </div>

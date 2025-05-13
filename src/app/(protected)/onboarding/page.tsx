@@ -33,7 +33,9 @@ export default function Page() {
         <div className="flex relative flex-1 justify-center items-center p-4">
           <div className="flex flex-col items-center gap-16">
             <div className="flex flex-col items-center gap-4">
-              <h1 className="text-3xl">Seja bem-vindo(a) à Caverna</h1>
+              <h1 className="text-3xl text-center">
+                Seja bem-vindo(a) à Caverna
+              </h1>
               <p className="text-zinc-400 max-w-sm text-center">
                 Você está preparado(a) para a jornada mais desafiadora e
                 transformadora da sua vida?

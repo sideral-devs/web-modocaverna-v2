@@ -33,7 +33,7 @@ export function CloseButton({ className }: HTMLAttributes<HTMLDivElement>) {
           <XIcon />
         </Button>
       </Link>
-      <span className="text-xs">ESC</span>
+      <span className="hidden md:block text-xs">ESC</span>
     </div>
   )
 }

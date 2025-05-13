@@ -62,7 +62,7 @@ export default function Page() {
               </div>
               <PomodoroTimer />
             </Card>
-            <Card className="flex flex-col w-full h-96 p-5 gap-10">
+            <Card className="flex flex-col w-full h-80 xl:h-96 p-5 gap-10">
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary rounded-[0.1rem]" />

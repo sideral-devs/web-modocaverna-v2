@@ -14,10 +14,10 @@ export function ConfidentialityStep({ onNext }: { onNext: () => void }) {
             width={213}
             height={395}
           />
-          <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
-            <h1 className="text-2xl">Confidencialidade garantida</h1>
+          <div className="flex flex-col relative w-full max-w-[611px] p-6 lg:px-12 lg:py-8 gap-5 lg:gap-6 border border-zinc-700 rounded-lg">
+            <h1 className="text-xl lg:text-2xl">Confidencialidade garantida</h1>
             <div className="w-full flex items-center px-5 py-6 gap-6 bg-[#3F0808]/50 rounded-lg">
-              <Lock className="text-red-500" size={32} />
+              <Lock className="text-red-500 min-w-4 lg:min-w-6" size={32} />
               <p className="text-red-500">
                 Seus dados pessoais e informações sensíveis estão protegidos com
                 tecnologia de criptografia avançada.
@@ -38,7 +38,7 @@ export function ConfidentialityStep({ onNext }: { onNext: () => void }) {
               width={54}
               height={14}
               alt="balloon"
-              className="absolute -left-[54px] top-[18%]"
+              className="hidden md:block absolute -left-[54px] top-[18%]"
             />
           </div>
         </div>
