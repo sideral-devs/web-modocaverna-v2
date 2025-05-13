@@ -14,6 +14,7 @@ jobs:
   CI_tests:
     name: Deploy to Staging
     runs-on: ubuntu-22.04
+    
 
     steps:
       - name: Checkout Code
@@ -26,6 +27,18 @@ jobs:
 
       - name: Install Dependencies
         run: npm install --force
+        env:
+            NEXT_PUBLIC_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_ENVIRONMENT }}
+            NEXT_PUBLIC_PROD_URL: ${{ vars.NEXT_PUBLIC_PROD_URL }}
+            NEXT_PUBLIC_DEV_URL: ${{ vars.NEXT_PUBLIC_DEV_URL }}
+            NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_REGISTER: ${{ vars.NEXT_PUBLIC_REGISTER }}
+            NEXT_PUBLIC_YEARLY_PLAN: ${{ vars.NEXT_PUBLIC_YEARLY_PLAN }}
+            NEXT_PUBLIC_MONTHLY_PLAN: ${{ vars.NEXT_PUBLIC_MONTHLY_PLAN }}
+            AUTH_SECRET: ${{ vars.AUTH_SECRET }}
+            AUTH_URL: https://beta.modocaverna.com
+            AUTH_GOOGLE_ID: ${{ vars.AUTH_GOOGLE_ID }}
+            AUTH_GOOGLE_SECRET: ${{ vars.AUTH_GOOGLE_SECRET }}
 
       - name: Lint Project
         run: npx eslint . --fix
