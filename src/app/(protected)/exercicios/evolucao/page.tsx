@@ -86,9 +86,9 @@ export default function ShapeEvolutionPage() {
             <div>
               <p className="text-zinc-500 text-sm">
                 {currentRegistration?.updated_at
-                  ? `Última atualização · ${format(
+                  ? `Registrado em · ${format(
                       new Date(currentRegistration.updated_at),
-                      "dd 'de' MMMM',' yyyy",
+                      "dd 'de' MMMM',' yyyy 'às' HH:mm",
                       { locale: ptBR },
                     )}.`
                   : 'Não atualizadas'}

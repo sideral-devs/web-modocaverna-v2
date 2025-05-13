@@ -27,7 +27,9 @@ export function TempleForge({ value }: { value: string }) {
 
   const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1]
+    shapeRegistrations && shapeRegistrations.length > 1
+      ? shapeRegistrations[shapeRegistrations.length - 1]
+      : shapeRegistrations?.[0]
 
   const today = new Date()
   const dayName = format(today, 'EEEE', { locale: ptBR })

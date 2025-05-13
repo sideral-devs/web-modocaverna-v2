@@ -6,6 +6,8 @@ import { InputWithSuffix } from '@/components/ui/input-with-suffix'
 import { useUser } from '@/hooks/queries/use-user'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useShapeFormStore } from '@/store/shape-form'
+import { useShape } from '@/hooks/queries/use-shape'
+import { useEffect } from 'react'
 
 type HeightWeight = {
   altura: string
@@ -75,6 +77,16 @@ function getIMCClassification(imc: number): IMCRange {
 
 export function HeightWeightStep({ onNext }: { onNext: () => void }) {
   const { data: user } = useUser()
+  const {
+    shapeRegistrations,
+    // hasRegistration,
+  } = useShape()
+
+  const lastShapeRegistration =
+    shapeRegistrations && shapeRegistrations.length > 1
+      ? shapeRegistrations[shapeRegistrations.length - 1]
+      : shapeRegistrations?.[0]
+
   const { setData, data: storeData } = useShapeFormStore()
   const form = useForm<HeightWeight>({
     defaultValues: {
@@ -115,6 +127,12 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
     onNext()
   }
 
+  useEffect(() => {
+    if (lastShapeRegistration) {
+      setValue('altura', lastShapeRegistration.altura.toString())
+    }
+  }, [lastShapeRegistration, setValue])
+
   return (
     <div className="flex flex-col flex-1 items-center gap-4">
       <div className="flex mb-2 flex-col gap-2">
@@ -143,6 +161,7 @@ export function HeightWeightStep({ onNext }: { onNext: () => void }) {
                   <InputWithSuffix
                     type="text"
                     value={measurements.altura}
+                    disabled={!!lastShapeRegistration}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleInputChange(
                         'altura',

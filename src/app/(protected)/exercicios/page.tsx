@@ -199,7 +199,9 @@ export default function Page() {
 
   const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
-    shapeRegistrations?.[shapeRegistrations.length - 1]
+    shapeRegistrations && shapeRegistrations.length > 1
+      ? shapeRegistrations[shapeRegistrations.length - 1]
+      : shapeRegistrations?.[0]
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0)
@@ -420,25 +422,35 @@ export default function Page() {
                 </span>
               </div>
 
-              <Button
-                size="sm"
-                className="absolute bottom-2 left-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-800 transition-colors"
-                onClick={() =>
-                  router.push('/exercicios/atualizar-medidas?photos=true')
-                }
-              >
-                <Pencil weight="fill" size={20} /> Atualizar
-              </Button>
+              {lastShapeRegistration &&
+                new Date().getTime() -
+                  new Date(lastShapeRegistration.updated_at).getTime() <
+                  7 * 24 * 60 * 60 * 1000 && (
+                  <Button
+                    size="sm"
+                    className="absolute bottom-2 left-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-800 transition-colors"
+                    onClick={() =>
+                      router.push('/exercicios/atualizar-medidas?photos=true')
+                    }
+                  >
+                    <Pencil weight="fill" size={20} /> Atualizar
+                  </Button>
+                )}
             </div>
 
             <div className="bg-zinc-800 relative  w-1/2 rounded-lg p-6">
-              <Button
-                size="sm"
-                className="absolute z-10 px-3 py-3 top-2 right-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-900 transition-colors"
-                onClick={() => router.push('/exercicios/atualizar-medidas')}
-              >
-                <Pencil weight="fill" size={20} /> Atualizar
-              </Button>
+              {lastShapeRegistration &&
+                new Date().getTime() -
+                  new Date(lastShapeRegistration.updated_at).getTime() <
+                  7 * 24 * 60 * 60 * 1000 && (
+                  <Button
+                    size="sm"
+                    className="absolute z-10 px-3 py-3 top-2 right-2 bg-zinc-700 text-white rounded-lg hover:bg-zinc-900 transition-colors"
+                    onClick={() => router.push('/exercicios/atualizar-medidas')}
+                  >
+                    <Pencil weight="fill" size={20} /> Atualizar
+                  </Button>
+                )}
               <div className="space-y-8 relative flex flex-col justify-between h-full">
                 <div>
                   <h2 className="text-yellow-500 font-medium mb-4">

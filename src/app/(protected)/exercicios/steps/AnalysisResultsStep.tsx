@@ -151,7 +151,7 @@ export function AnalysisResultsStep({
         <Image
           src={'/images/lobo/apresentando.png'}
           alt="Capitão Caverna"
-          className="absolute -top-2 -left-72"
+          className="absolute top-36 -left-72"
           width={222}
           height={402}
         />

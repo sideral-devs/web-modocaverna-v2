@@ -1,19 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { Plus } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
-import { HeaderClose, Header } from '@/components/header'
+import { Header, HeaderClose } from '@/components/header'
+import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
 import { MealCard } from '@/components/refeicoes/refeicoes-card'
 import { MealFormModal } from '@/components/refeicoes/refeicoes-form-modal'
+import { Button } from '@/components/ui/button'
 import { useMeals } from '@/hooks/queries/use-meals'
+import { Meal } from '@/lib/api/meals'
 import { WEEK_DAYS } from '@/lib/constants'
+import { BowlFood, Plus } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Meal } from '@/lib/api/meals'
-import Image from 'next/image'
-import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 export default function Page() {
@@ -161,12 +160,7 @@ export default function Page() {
             ) : (
               <div className="flex min-h-[300px] border border-zinc-700 rounded-xl flex-col items-center justify-center py-16 text-zinc-500">
                 <div className="w-24 h-24 mb-8 relative">
-                  <Image
-                    src="/images/meals/bowl.svg"
-                    alt="Empty state"
-                    fill
-                    className="object-contain"
-                  />
+                  <BowlFood size={96} weight="fill" />
                 </div>
                 <h2 className="text-xl mb-2 text-white font-semibold">
                   Nenhuma refeição cadastrada
