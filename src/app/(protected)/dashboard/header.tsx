@@ -95,12 +95,14 @@ export function CentralHubHeader() {
 
                     <div className="flex flex-col pl-4">
                       <div className="flex flex-row text-normal">
-                        <span className="text-normal">Avaliação gratuita</span>
-                        <span className="text-primary pl-1 font-semibold text-normal">
+                        <span className="text-xs lg:text-base text-normal">
+                          Avaliação gratuita
+                        </span>
+                        <span className="text-xs lg:text-base text-primary pl-1 font-semibold text-normal">
                           {`encerra em ${diasRestantesTrial} dia${diasRestantesTrial > 1 ? 's' : ''}`}
                         </span>
                       </div>
-                      <p className="text-xs ">
+                      <p className="hidden lg:block text-xs">
                         Faça o upgrade para continuar explorando todas as
                         ferramentas.
                       </p>

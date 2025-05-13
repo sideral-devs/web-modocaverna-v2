@@ -79,13 +79,15 @@ export default function Page() {
     <div className="flex flex-col w-full max-w-8xl pb-16 gap-14">
       {courses && courses.length > 0 ? (
         <div className="w-full max-w-full p-4">
-          <div className="grid grid-cols-2 w-full max-w-full aspect-[14/5] rounded-2xl overflow-hidden">
-            <div className="flex flex-col items-center justify-center gap-12 bg-zinc-800">
+          <div className="grid grid-cols-1 xl:grid-cols-2 w-full max-w-full h-80 xl:aspect-[14/5] rounded-2xl overflow-hidden">
+            <div className="flex flex-col items-center justify-center p-4 gap-12 bg-zinc-800">
               <div className="flex flex-col items-center gap-8">
                 <span className="text-sm text-center text-zinc-300">
                   {courses[0].lessons} aulas • {courses[0].hours} horas
                 </span>
-                <h1 className="font-semibold text-[3.5rem]">Modo Caverna</h1>
+                <h1 className="font-semibold text-[3.5rem] text-center">
+                  Modo Caverna
+                </h1>
                 <div className="w-9 h-[2px] bg-white" />
                 <p className="max-w-60 text-sm text-center text-zinc-300">
                   Tome o controle e mude o rumo de sua vida agora mesmo!

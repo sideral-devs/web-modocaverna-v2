@@ -13,8 +13,8 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
             width={350}
             height={395}
           />
-          <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
-            <h1 className="text-2xl">
+          <div className="flex flex-col relative w-full max-w-[611px] p-6 lg:px-12 lg:py-8 gap-5 lg:gap-6 border border-zinc-700 rounded-lg">
+            <h1 className="text-xl lg:text-2xl">
               Ative o Modo Caverna em 2 simples passos
             </h1>
             <div className="w-full flex items-center px-5 py-6 gap-6 bg-[#32323280]/50 rounded-lg">
@@ -45,7 +45,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
               width={54}
               height={14}
               alt="balloon"
-              className="absolute -left-[54px]"
+              className="hidden md:block absolute -left-[54px]"
             />
           </div>
         </div>

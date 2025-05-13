@@ -1,0 +1,34 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop 
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  CI_tests:
+    name: Deploy to Staging
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14'
+
+      - name: Install Dependencies
+        run: npm install --force
+
+      - name: Lint Project
+        run: npx eslint . --fix
+
+      - name: Build Project
+        run: npm run build

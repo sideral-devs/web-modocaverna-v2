@@ -45,7 +45,7 @@ export default function MusicPlayer() {
   // }, [currentSong])
 
   return (
-    <div className="fixed bottom-24 right-4 z-50 flex flex-col w-72 bg-card border rounded-xl">
+    <div className="hidden fixed bottom-24 right-4 z-50 lg:flex flex-col w-72 bg-card border rounded-xl">
       <Moodboard />
       <div className="bg-card shadow-lg rounded-lg border">
         <div className="flex flex-col">

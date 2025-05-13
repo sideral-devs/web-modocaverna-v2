@@ -15,7 +15,7 @@ export function DownloadAppStep({ onNext }: { onNext: () => void }) {
           width={271}
           height={403}
         />
-        <div className="flex flex-col relative w-[611px] px-12 py-8 gap-6 border border-zinc-700 rounded-lg">
+        <div className="flex flex-col relative w-full max-w-[611px] p-6 lg:px-12 lg:py-8 gap-5 lg:gap-6 border border-zinc-700 rounded-lg">
           <h1 className="text-2xl">O app já está disponível</h1>
           <p className="text-zinc-400">
             Você pode baixar o aplicativo na App Store ou no Google Play e
@@ -36,7 +36,7 @@ export function DownloadAppStep({ onNext }: { onNext: () => void }) {
             width={54}
             height={14}
             alt="balloon"
-            className="absolute -left-[54px]"
+            className="hidden md:block absolute -left-[54px]"
           />
         </div>
       </div>

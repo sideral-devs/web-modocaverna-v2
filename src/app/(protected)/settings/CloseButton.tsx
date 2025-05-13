@@ -36,7 +36,7 @@ export function CloseButton({
           <XIcon />
         </Button>
       </Link>
-      <span className="text-xs">ESC</span>
+      <span className="hidden md:block text-xs">ESC</span>
     </div>
   )
 }

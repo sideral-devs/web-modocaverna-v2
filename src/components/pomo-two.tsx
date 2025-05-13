@@ -207,9 +207,11 @@ export default function PomodoroTimer() {
       <audio ref={stopSoundRef} src="/audio/pomodoro-pause.mp3" />
       <audio ref={finishSoundRef} src="/audio/pomodoro-end.mp3" />
 
-      <div className="flex flex-col items-center justify">
+      <div className="flex flex-col gap-6 items-center justify">
         <span
-          className={cn('flex text-[9rem] items-center font-bold relative')}
+          className={cn(
+            'flex text-[6rem] lg:text-[7rem] xl:text-[9rem] items-center font-bold relative',
+          )}
           style={{
             fontFamily: onest.style.fontFamily,
           }}
