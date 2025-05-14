@@ -15,7 +15,6 @@ jobs:
   CI_tests:
     name: Deploy to Staging
     runs-on: ubuntu-22.04
-    environment: staging
     
 
     steps:
