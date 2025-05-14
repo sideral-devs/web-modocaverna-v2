@@ -41,10 +41,6 @@ jobs:
            AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
            AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
     
-      - name: variavel test
-        run: echo "my secret ${{ secrets.TESTING }}"
-      - name: variavel test2
-        run: echo "auth ${{ vars.NOME }}"
       - name: Lint Project
         run: npx eslint . --fix
 
