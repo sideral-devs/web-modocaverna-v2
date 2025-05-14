@@ -26,8 +26,7 @@ jobs:
         with:
           node-version: '22.14'
 
-      - name: Install Dependencies
-        run: npm install --force
+    
         env:
            NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
            NEXT_PUBLIC_PROD_URL: ${{ secrets.NEXT_PUBLIC_PROD_URL }}
@@ -40,7 +39,14 @@ jobs:
            AUTH_URL: https://beta.modocaverna.com
            AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
            AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
-    
+
+      - name: var values
+        run: echo "value ${{ vars.NEXT_PUBLIC_REGISTER }}"
+
+      - name: secret values
+        run: echo "monthly plan ${{ secrets.NEXT_PUBLIC_MONTHLY_PLAN }}"
+      - name: Install Dependencies
+        run: npm install --force
       - name: Lint Project
         run: npx eslint . --fix
 
