@@ -122,7 +122,7 @@ export default function GoalsGrid({
   }
   async function deleteGoal(tipo: string, position: number) {
     if (!goal) return
-    console.log('tipo', tipo, position)
+
     try {
       await api.delete(`/metas/delete-one-goal/${goal.metas_id}`, {
         data: {

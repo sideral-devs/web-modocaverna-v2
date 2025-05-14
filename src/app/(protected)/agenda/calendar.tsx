@@ -71,16 +71,16 @@ export function EventCalendar() {
 
   function scrollToNow() {
     if (scrollableRef.current) {
-      console.log('scrollToNow() chamado')
+      // console.log('scrollToNow() chamado')
       const now = new Date()
-      console.log('Agora:', now)
+      // console.log('Agora:', now)
       const PIXELS_PER_MINUTE = 112 / 60
       const startMinutes = now.getHours() * 60 + now.getMinutes()
-      console.log('Minutos desde meia-noite:', startMinutes)
+      // console.log('Minutos desde meia-noite:', startMinutes)
       const top = startMinutes * PIXELS_PER_MINUTE
-      console.log('Top calculado:', top)
+      // console.log('Top calculado:', top)
       const viewportHeight = scrollableRef.current.clientHeight
-      console.log('Altura da viewport:', viewportHeight)
+      // console.log('Altura da viewport:', viewportHeight)
       scrollableRef.current.scrollTo({
         top: top - viewportHeight / 2,
         behavior: 'smooth',

@@ -76,10 +76,10 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col w-full max-w-8xl pb-16 gap-14">
+    <div className="flex flex-col w-full max-w-8xl pb-16 gap-14 ">
       {courses && courses.length > 0 ? (
-        <div className="w-full max-w-full p-4">
-          <div className="grid grid-cols-1 xl:grid-cols-2 w-full max-w-full h-80 xl:aspect-[14/5] rounded-2xl overflow-hidden">
+        <div className="w-full max-w-full p-4 ">
+          <div className="grid grid-cols-1 xl:grid-cols-2 w-full max-w-full h-85 xl:aspect-[14/5] rounded-2xl overflow-hidden">
             <div className="flex flex-col items-center justify-center p-4 gap-12 bg-zinc-800">
               <div className="flex flex-col items-center gap-8">
                 <span className="text-sm text-center text-zinc-300">

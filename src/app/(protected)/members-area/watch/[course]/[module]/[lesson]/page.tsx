@@ -309,18 +309,19 @@ export default function Page({
                   {data.modulos.reduce(
                     (acc, modulo) => acc + modulo.aulas.length,
                     0,
-                  )}{' '}
+                  )}
                   aulas ·{' '}
                   {(() => {
-                    const totalMinutes = data.modulos.reduce((acc, modulo) => {
-                      return modulo.aulas.reduce(
-                        (acc2, lesson) => acc2 + Number(lesson.duracao),
+                    const totalMinutos = data.modulos.reduce((acc, modulo) => {
+                      const minutosModulo = modulo.aulas.reduce(
+                        (accAula, aula) => accAula + Number(aula.duracao),
                         0,
                       )
+                      return acc + minutosModulo
                     }, 0)
 
-                    const hours = Math.floor(totalMinutes / 60)
-                    const minutes = totalMinutes % 60
+                    const hours = Math.floor(totalMinutos / 60)
+                    const minutes = Math.round(totalMinutos % 60)
 
                     return `${hours}h ${minutes}min`
                   })()}

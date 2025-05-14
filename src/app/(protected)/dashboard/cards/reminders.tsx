@@ -155,7 +155,6 @@ const reminderPositions = [
 ]
 
 function randomNumber(min: number, max: number) {
-  console.log('random')
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
