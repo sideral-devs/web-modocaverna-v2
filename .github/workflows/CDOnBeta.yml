@@ -21,15 +21,11 @@ jobs:
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS
-          run: |
+        run: |
           ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd ${{ secrets.BETA_DIR }}
             git pull origin beta
-            sudo -u vinicius -i bash -c '
-              whoami
-              which npm
-              npm install --force
-              npx eslint . --fix
-              npm run build
-              pm2 restart 0 || echo "pm2 not used"
-            '
+            npm install --force
+            npx eslint . --fix
+            npm run build
+            pm2 restart 0 || echo "pm2 not used"
