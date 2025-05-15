@@ -13,11 +13,12 @@ import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { cn } from '@/lib/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CheckIcon, ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { CheckIcon, ChevronLeft, ChevronRight, XIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { use } from 'react'
+import { use, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
@@ -28,11 +29,13 @@ export default function Page({
 }: {
   params: Promise<{ course: string; module: string; lesson: string }>
 }) {
-  console.log(params)
   const { course, module: moduloId, lesson: lessonId } = use(params)
   const queryClient = useQueryClient()
   const router = useRouter()
   const { data: user } = useUser()
+
+  const [showNextButton, setShowNextButton] = useState(false)
+  const [animationFinished, setAnimationFinished] = useState(false)
   const { data } = useQuery({
     queryKey: ['course', course],
     queryFn: async () => {
@@ -93,6 +96,8 @@ export default function Page({
       modulo.aulas.findIndex((l) => l.aula_id === Number(lessonId)) + 1
     if (nextLessonIndex >= modulo.aulas.length) return
 
+    handleFinishLesson()
+
     const nextLesson = modulo.aulas[nextLessonIndex]
     router.push(
       `/members-area/watch/${course}/${moduloId}/${nextLesson.aula_id}`,
@@ -136,13 +141,28 @@ export default function Page({
       modulo.aulas.findIndex((l) => l.aula_id === Number(lessonId)) + 1
     return nextLessonIndex < modulo.aulas.length
   }
+
+  function handleVideoEnd() {
+    setShowNextButton(true)
+    setTimeout(() => {
+      setAnimationFinished(true)
+    }, 5000)
+  }
+
+  useEffect(() => {
+    console.log({ animationFinished, showNextButton })
+    if (animationFinished && showNextButton) {
+      nextLesson()
+    }
+  }, [animationFinished])
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 w-full max-w-8xl px-6 md:px-10 py-16 gap-12">
+    <div className="grid grid-cols-1 md:grid-cols-5 w-full max-w-8xl px-6 md:px-10 py-16 gap-12 relative">
       <div className="flex flex-col md:col-span-3 gap-20">
         {data && lesson ? (
           <section id="video" className="flex flex-col gap-10">
             <div className="flex flex-col gap-4">
-              <VideoPlayer id={lesson.video} />
+              <VideoPlayer id={lesson.video} onVideoEnd={handleVideoEnd} />
               <div className="flex flex-col py-2">
                 <h1 className="text-2xl font-semibold">{lesson.titulo}</h1>
               </div>
@@ -397,6 +417,30 @@ export default function Page({
               </AccordionItem>
             ))}
           </Accordion>
+        )}
+      </div>
+      <div className="flex items-center gap-2 sticky w-fit bottom-16 left-0 z-40">
+        {showNextButton && (
+          <Button
+            variant="secondary"
+            size="sm"
+            className="relative bg-zinc-400 overflow-hidden"
+            onClick={() => {
+              setShowNextButton(false)
+            }}
+          >
+            <span className="flex items-center gap-2 z-50">
+              <XIcon className="fill-black" />
+              Próxima aula em 5...
+            </span>
+            <motion.div
+              className="absolute bg-white left-0 inset-y-0"
+              style={{ zIndex: 41 }}
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 5 }}
+            />
+          </Button>
         )}
       </div>
     </div>
