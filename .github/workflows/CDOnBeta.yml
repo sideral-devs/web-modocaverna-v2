@@ -25,6 +25,9 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd ${{ secrets.BETA_DIR }}
             git pull origin beta
+            sudo -u vinicius bash
+            root
             npm install --force
+            npx eslint . --fix
             npm run build
             pm2 restart 0 || echo "pm2 not used"
