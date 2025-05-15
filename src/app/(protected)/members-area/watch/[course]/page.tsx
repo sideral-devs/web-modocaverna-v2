@@ -48,8 +48,8 @@ export default function Page({
 
   if (!data && isLoading) {
     return (
-      <div className="grid grid-cols-5 w-full max-w-8xl px-10 py-16 gap-12">
-        <div className="flex flex-col col-span-3 gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-5 w-full max-w-8xl px-10 py-16 gap-12">
+        <div className="flex flex-col lg:col-span-3 gap-20">
           <section id="video" className="flex flex-col gap-10">
             <Skeleton className="w-full aspect-video" />
             <div className="flex flex-col gap-2">
@@ -59,7 +59,7 @@ export default function Page({
             <Skeleton className="w-full h-[267px] rounded-lg" />
           </section>
         </div>
-        <div className="flex flex-col col-span-2 gap-4">
+        <div className="flex flex-col lg:col-span-2 gap-4">
           <div className="flex w-full gap-4">
             <Skeleton className="w-32 h-56" />
             <div className="flex flex-col flex-1 justify-between">

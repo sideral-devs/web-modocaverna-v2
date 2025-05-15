@@ -85,7 +85,7 @@ export default function Page() {
                 <span className="text-sm text-center text-zinc-300">
                   {courses[0].lessons} aulas • {courses[0].hours} horas
                 </span>
-                <h1 className="font-semibold text-[3.5rem] text-center">
+                <h1 className="font-semibold text-[3rem] lg:text-[3.5rem] text-center">
                   Modo Caverna
                 </h1>
                 <div className="w-9 h-[2px] bg-white" />
@@ -115,7 +115,7 @@ export default function Page() {
         <Skeleton className="w-full h-[573px] 2xl:h-[calc(100vw/32*9)" />
       )}
       <section className="flex flex-col w-full px-4 gap-6 2xl:gap-8">
-        <h2 className="text-[1.4vw] 2xl:text-[1.75rem] font-semibold">
+        <h2 className="text-xl 2xl:text-[1.75rem] font-semibold">
           Desenvolvimento pessoal
         </h2>
         <PersonalDevelopment
@@ -125,7 +125,7 @@ export default function Page() {
         />
       </section>
       <section className="flex flex-col w-full px-4 gap-6 2xl:gap-8">
-        <h2 className="text-[1.4vw] font-semibold">Marketing Digital</h2>
+        <h2 className="text-xl font-semibold">Marketing Digital</h2>
         <DigitalMarketing />
       </section>
     </div>

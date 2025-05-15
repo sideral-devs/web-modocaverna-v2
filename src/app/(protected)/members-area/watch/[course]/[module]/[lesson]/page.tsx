@@ -137,7 +137,7 @@ export default function Page({
     return nextLessonIndex < modulo.aulas.length
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 w-full max-w-8xl px-10 py-16 gap-12">
+    <div className="grid grid-cols-1 md:grid-cols-5 w-full max-w-8xl px-6 md:px-10 py-16 gap-12">
       <div className="flex flex-col md:col-span-3 gap-20">
         {data && lesson ? (
           <section id="video" className="flex flex-col gap-10">
@@ -184,12 +184,13 @@ export default function Page({
               </div>
             </div>
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-              <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4">
-                <div className="flex flex-col max-w-80 xl:max-w-52 z-10 gap-3 xl:gap-0">
-                  <h1 className="text-lg xl:text-base font-extrabold text-primary">
+              <div className="grid grid-cols-2 w-full aspect-[395/166] relative">
+                <div></div>
+                <div className="flex flex-col justify-center z-10 p-1.5 md:p-3 gap-1.5 md:gap-3 xl:gap-0">
+                  <h1 className="text-sm sm:text-base lg:text-xl font-extrabold text-primary leading-tight">
                     Vista-se como um Lobo Cavernoso!
                   </h1>
-                  <p className="text-xs text-black font-semibold py-1">
+                  <p className="text-[10px] sm:text-xs text-black font-semibold py-1">
                     Acesse a loja e garanta um super desconto com o cupom
                     “APLICATIVO”
                   </p>
@@ -200,7 +201,7 @@ export default function Page({
                     className="z-10"
                   >
                     <Button
-                      className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center text-xs"
+                      className="w-full max-w-40 h-6 sm:h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center text-xs"
                       color="primary"
                     >
                       ACESSAR LOJA
@@ -217,18 +218,19 @@ export default function Page({
               {![5, 6, 7, 8, 9, 21, 22, 24, 25, 26].includes(
                 Number(moduloId),
               ) && (
-                <div className="flex flex-col w-full aspect-[395/166] relative justify-center items-end p-2 pr-4 gap-2">
-                  <div className="flex flex-col w-80 xl:w-48 relative z-10  gap-3 xl:gap-0">
-                    <h1 className="text-lg xl:text-base font-extrabold text-yellow-400">
+                <div className="grid grid-cols-2 w-full aspect-[395/166] relative">
+                  <div></div>
+                  <div className="flex flex-col justify-center z-10 p-1.5 md:p-3 gap-1.5 md:gap-3 xl:gap-0">
+                    <h1 className="text-sm sm:text-base lg:text-xl font-extrabold text-yellow-400">
                       Faça parte do nosso programa de afiliados.
                     </h1>
                     {user?.plan === `"TRIAL"` ? (
-                      <p className="text-xs text-white font-semibold py-2">
+                      <p className="text-[10px] sm:text-xs text-white font-semibold py-2">
                         Adquira agora o Modo Caverna e comece a ganhar
                         comissões.
                       </p>
                     ) : (
-                      <p className="text-xs text-white font-semibold py-2">
+                      <p className="text-[10px] sm:text-xs text-white font-semibold py-2">
                         Ganhe comissões generosas indicando o Modo Caverna.
                       </p>
                     )}
@@ -236,7 +238,7 @@ export default function Page({
                     {user?.plan === `"TRIAL"` ? (
                       <Link href="/settings/plans">
                         <Button
-                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
+                          className="w-full max-w-40 h-6 sm:h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           ADQUIRIR
@@ -245,7 +247,7 @@ export default function Page({
                     ) : (
                       <Link href="/indique-e-ganhe">
                         <Button
-                          className="w-40 h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
+                          className="w-full max-w-40 h-6 sm:h-8 hover:cursor-pointer hover:bg-red-700 items-center justify-center z-10 text-xs"
                           color={'primary'}
                         >
                           COMECE AGORA
