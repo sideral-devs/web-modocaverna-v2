@@ -22,12 +22,15 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            cd ${{ secrets.BETA_DIR }}
-            pwd
-            git fetch
-            git reset --hard origin/beta
-            npm install --force
-            npx eslint . --fix
-            npm run build
-            pm2 restart 0 || echo "pm2 not used"
+            ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              nvm use 20
+
+              cd ${{ secrets.BETA_DIR }}
+              git pull origin beta
+              npm install --force
+              npx eslint . --fix
+              npm run build
+              pm2 restart 0 || echo "pm2 not used"
+EOF
