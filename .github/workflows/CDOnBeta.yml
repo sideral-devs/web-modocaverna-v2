@@ -26,7 +26,6 @@ jobs:
             cd ${{ secrets.BETA_DIR }}
             git pull origin beta
             sudo -u vinicius bash
-            root
             npm install --force
             npx eslint . --fix
             npm run build
