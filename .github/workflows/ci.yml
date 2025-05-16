@@ -39,6 +39,7 @@ jobs:
            AUTH_URL: https://beta.modocaverna.com
            AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
            AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+           GOOGLE_METRIC_ID: ${{ secrets.GOOGLE_METRIC_ID }}
 
       # - name: var values
       #   run: echo "value ${{ vars.NEXT_PUBLIC_REGISTER }}"
