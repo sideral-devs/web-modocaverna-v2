@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Clock, CrosshairIcon } from 'lucide-react'
+import { BookmarkIcon, Clock, CrosshairIcon } from 'lucide-react'
 import { ReactNode, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -20,6 +20,7 @@ import { z } from 'zod'
 
 const schema = z.object({
   productivityTime: z.string({ required_error: 'Obrigatório ' }),
+  studyTime: z.string({ required_error: 'Obrigatório ' }),
   shortBreakTime: z.string({ required_error: 'Obrigatório ' }),
   longBreakTime: z.string({ required_error: 'Obrigatório ' }),
 })
@@ -59,6 +60,7 @@ export function ConfigPomodoroDialogTrigger({
     try {
       await api.put(`/pomodoro/update/${pomodoro.pomodoro_id}`, {
         minutagem_produtividade: toSeconds(data.productivityTime),
+        minutagem_estudos: toSeconds(data.studyTime),
         intervalo_curto: toSeconds(data.shortBreakTime),
         intervalo_longo: toSeconds(data.longBreakTime),
       })
@@ -79,6 +81,7 @@ export function ConfigPomodoroDialogTrigger({
         productivityTime: toMinutesSeconds(
           Number(pomodoro.minutagem_produtividade),
         ),
+        studyTime: toMinutesSeconds(Number(pomodoro.minutagem_estudos)),
         longBreakTime: toMinutesSeconds(Number(pomodoro.intervalo_longo)),
         shortBreakTime: toMinutesSeconds(Number(pomodoro.intervalo_curto)),
       })
@@ -119,8 +122,8 @@ export function ConfigPomodoroDialogTrigger({
           <DialogTitle>Configurar Pomodoro</DialogTitle>
         </DialogHeader>
         <FormProvider {...form}>
-          <div className="flex flex-col overflow-y-auto">
-            <div className="grid grid-cols-3 px-4 py-8 gap-4">
+          <div className="flex flex-col py-8 gap-8 overflow-y-auto">
+            <div className="grid grid-cols-3 px-4 gap-4">
               <span className="flex col-span-2 items-center gap-3">
                 <CrosshairIcon size={20} />
                 Produtividade
@@ -142,6 +145,31 @@ export function ConfigPomodoroDialogTrigger({
               {errors.productivityTime && (
                 <span className="text-red-400 text-xs">
                   {errors.productivityTime.message}
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-3 px-4 gap-4">
+              <span className="flex col-span-2 items-center gap-3">
+                <BookmarkIcon size={20} />
+                Estudos
+              </span>
+              <div className="flex flex-col gap-2 justify-self-end">
+                <label className="text-xs text-zinc-400">minutos</label>
+                <Input
+                  className="w-20 p-1 pl-2 border-0"
+                  {...register('studyTime')}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    const formatted = timeMask(value)
+
+                    setValue('studyTime', formatted)
+                  }}
+                  required
+                />
+              </div>
+              {errors.studyTime && (
+                <span className="text-red-400 text-xs">
+                  {errors.studyTime.message}
                 </span>
               )}
             </div>

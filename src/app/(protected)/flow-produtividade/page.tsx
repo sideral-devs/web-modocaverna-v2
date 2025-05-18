@@ -4,13 +4,11 @@ import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import PomodoroTimer from '@/components/pomo-two'
 import { ProtectedRoute } from '@/components/protected-route'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
 import { AlarmClock } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { ChecklistDialog } from './checklist-dialog'
-import { ConfigPomodoroDialogTrigger } from './config-pomodoro'
 import { Board } from './tasks'
 
 export default function Page() {
@@ -47,21 +45,7 @@ export default function Page() {
             <HeaderClose />
           </Header>
           <section className="grid grid-cols-1 md:grid-cols-2 w-full max-w-8xl gap-6 p-4 py-0">
-            <Card className="flex flex-col w-full h-96 p-5 gap-10">
-              <div className="flex w-full items-center justify-between">
-                <div className="flex w-fit items-center px-3 py-2 gap-1 border border-white text-white rounded-full">
-                  <span className="uppercase text-[10px] font-semibold">
-                    Pomodoro
-                  </span>
-                </div>
-                <ConfigPomodoroDialogTrigger>
-                  <Button variant="outline" className="border">
-                    Configurar
-                  </Button>
-                </ConfigPomodoroDialogTrigger>
-              </div>
-              <PomodoroTimer />
-            </Card>
+            <PomodoroTimer />
             <Card className="flex flex-col w-full h-80 xl:h-96 p-5 gap-10">
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">

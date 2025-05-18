@@ -1,5 +1,6 @@
 'use client'
 
+import { ConfigPomodoroDialogTrigger } from '@/app/(protected)/flow-produtividade/config-pomodoro'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,6 +16,7 @@ import { ClockIcon, Pause, Play } from 'lucide-react'
 import { Onest } from 'next/font/google'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { Card } from './ui/card'
 
 const onest = Onest({
   subsets: ['latin'],
@@ -31,6 +33,7 @@ export default function PomodoroTimer() {
   const [currentPhase, setCurrentPhase] = useState<Phase>('focus')
   const [phaseCount, setPhaseCount] = useState(0)
   const [showBreakDialog, setShowBreakDialog] = useState(false)
+  const [mode, setMode] = useState<'productivity' | 'study'>('productivity')
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const startSoundRef = useRef<HTMLAudioElement | null>(null)
@@ -103,7 +106,13 @@ export default function PomodoroTimer() {
             ? Number(pomodoro?.intervalo_longo || 0) * 1000
             : Number(pomodoro?.intervalo_curto || 0) * 1000
         } else {
-          return Number(pomodoro?.minutagem_produtividade || 0) * 1000
+          return (
+            Number(
+              (mode === 'productivity'
+                ? pomodoro?.minutagem_produtividade
+                : pomodoro?.minutagem_estudos) || 0,
+            ) * 1000
+          )
         }
       })
       setIsRunning(true)
@@ -120,7 +129,15 @@ export default function PomodoroTimer() {
     setStartTime(null)
     setDuration(0)
     setCurrentPhase('focus')
-    setTimeLeft(pomodoro ? Number(pomodoro.minutagem_produtividade) : 0)
+    setTimeLeft(
+      pomodoro
+        ? Number(
+            mode === 'productivity'
+              ? pomodoro.minutagem_produtividade
+              : pomodoro.minutagem_estudos,
+          )
+        : 0,
+    )
     setPhaseCount(0)
     setShowBreakDialog(false)
   }
@@ -161,7 +178,13 @@ export default function PomodoroTimer() {
     if (!isRunning) {
       switch (currentPhase) {
         case 'focus':
-          setTimeLeft(Number(pomodoro.minutagem_produtividade))
+          setTimeLeft(
+            Number(
+              mode === 'productivity'
+                ? pomodoro.minutagem_produtividade
+                : pomodoro.minutagem_estudos,
+            ),
+          )
           setShowBreakDialog(false)
           break
         case 'shortBreak':
@@ -176,7 +199,7 @@ export default function PomodoroTimer() {
       setDuration(0)
       setStartTime(null)
     }
-  }, [currentPhase, pomodoro])
+  }, [currentPhase, pomodoro, mode])
 
   useEffect(() => {
     if (!isRunning || startTime === null) return
@@ -202,46 +225,85 @@ export default function PomodoroTimer() {
   }, [timeLeft, isRunning])
 
   return (
-    <>
-      <audio ref={startSoundRef} src="/audio/pomodoro-play.mp3" />
-      <audio ref={stopSoundRef} src="/audio/pomodoro-pause.mp3" />
-      <audio ref={finishSoundRef} src="/audio/pomodoro-end.mp3" />
-
-      <div className="flex flex-col gap-6 items-center justify">
-        <span
-          className={cn(
-            'flex text-[6rem] lg:text-[7rem] xl:text-[9rem] items-center font-bold relative',
-          )}
-          style={{
-            fontFamily: onest.style.fontFamily,
-          }}
-        >
-          {formatTime(timeLeft)}
-        </span>
-        <div className="flex gap-2">
-          {isRunning ? (
-            <Button onClick={handlePause} className="h-10 ">
-              <Pause size={20} />
-              Pausar
-            </Button>
-          ) : (
-            <Button onClick={handleStartFocus} className="h-10">
-              <Play size={20} />
-              Iniciar
-            </Button>
-          )}
-
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="h-10 border"
+    <Card className="flex flex-col w-full h-96 p-5 gap-2">
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex w-fit items-center px-3 py-2 gap-1 border border-white text-white rounded-full">
+            <span className="uppercase text-[10px] font-semibold">
+              Pomodoro
+            </span>
+          </div>
+          <button
+            className={cn(
+              'flex w-fit items-center px-3 py-2 gap-1 border rounded-lg',
+              mode === 'productivity' && 'bg-primary border-primary',
+            )}
+            onClick={() => setMode('productivity')}
           >
-            Resetar
-          </Button>
+            <span className="uppercase text-[10px] font-semibold">
+              Produtividade
+            </span>
+          </button>
+          <button
+            className={cn(
+              'flex w-fit items-center px-3 py-2 gap-1 border rounded-lg',
+              mode === 'study' && 'bg-primary border-primary',
+            )}
+            onClick={() => setMode('study')}
+          >
+            <span className="uppercase text-[10px] font-semibold">Estudos</span>
+          </button>
         </div>
+        <ConfigPomodoroDialogTrigger>
+          <Button variant="outline" className="border">
+            Configurar
+          </Button>
+        </ConfigPomodoroDialogTrigger>
       </div>
+      <div className="flex flex-col flex-1">
+        <audio ref={startSoundRef} src="/audio/pomodoro-play.mp3" />
+        <audio ref={stopSoundRef} src="/audio/pomodoro-pause.mp3" />
+        <audio ref={finishSoundRef} src="/audio/pomodoro-end.mp3" />
 
-      {/* <Card className="w-full max-w-md mx-auto">
+        <div className="flex flex-1 flex-col gap-6 items-center justify-center">
+          <span
+            className={cn(
+              'flex text-[6rem] lg:text-[7rem] xl:text-[9rem] items-center font-bold relative',
+            )}
+            style={{
+              fontFamily: onest.style.fontFamily,
+            }}
+          >
+            {formatTime(timeLeft)}
+          </span>
+          <div className="flex gap-2">
+            {isRunning ? (
+              <Button onClick={handlePause} className="h-10 ">
+                <Pause size={20} />
+                Pausar
+              </Button>
+            ) : (
+              <Button onClick={handleStartFocus} className="h-10">
+                <Play size={20} />
+                Iniciar
+              </Button>
+            )}
+
+            {isRunning || duration ? (
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                className="h-10 border"
+              >
+                Reiniciar
+              </Button>
+            ) : (
+              ''
+            )}
+          </div>
+        </div>
+
+        {/* <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle className="text-center">{getPhaseLabel()}</CardTitle>
         </CardHeader>
@@ -278,35 +340,36 @@ export default function PomodoroTimer() {
         </CardFooter>
       </Card> */}
 
-      <Dialog open={showBreakDialog} onOpenChange={setShowBreakDialog}>
-        <DialogContent className="max-w-none left-0 top-0 right-0 bottom-0 translate-x-0 translate-y-0 w-full h-full max-h-screen flex flex-col items-center justify-center bg-zinc-800">
-          <ClockIcon className="text-zinc-800 fill-primary" />
-          <DialogTitle className="text-4xl text-center">
-            Hora da pausa!
-          </DialogTitle>
-          <DialogDescription className="text-center text-zinc-400">
-            Aproveite para relaxar. O sistema enviará um aviso sono quando o
-            cronometro zerar.
-          </DialogDescription>
-          <div className="text-[150px] font-bold tabular-nums my-10">
-            {formatTime(timeLeft)}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              onClick={handleSkipBreak}
-              variant="outline"
-              className="bg-zinc-900"
-            >
-              VOLTAR AO FLOW
-            </Button>
-            {isRunning ? (
-              <Button onClick={handleSkipBreak}>Pular</Button>
-            ) : (
-              <Button onClick={handleStartPause}>Iniciar pausa</Button>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+        <Dialog open={showBreakDialog} onOpenChange={setShowBreakDialog}>
+          <DialogContent className="max-w-none left-0 top-0 right-0 bottom-0 translate-x-0 translate-y-0 w-full h-full max-h-screen flex flex-col items-center justify-center bg-zinc-800">
+            <ClockIcon className="text-zinc-800 fill-primary" />
+            <DialogTitle className="text-4xl text-center">
+              Hora da pausa!
+            </DialogTitle>
+            <DialogDescription className="text-center text-zinc-400">
+              Aproveite para relaxar. O sistema enviará um aviso sono quando o
+              cronometro zerar.
+            </DialogDescription>
+            <div className="text-[150px] font-bold tabular-nums my-10">
+              {formatTime(timeLeft)}
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={handleSkipBreak}
+                variant="outline"
+                className="bg-zinc-900"
+              >
+                VOLTAR AO FLOW
+              </Button>
+              {isRunning ? (
+                <Button onClick={handleSkipBreak}>Pular</Button>
+              ) : (
+                <Button onClick={handleStartPause}>Iniciar pausa</Button>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </Card>
   )
 }
