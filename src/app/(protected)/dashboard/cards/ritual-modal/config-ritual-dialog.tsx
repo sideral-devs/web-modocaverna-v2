@@ -127,12 +127,15 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
     }
   }
 
-  async function stepThreeSubmit() {
+  async function stepThreeSubmit(ritualForm: RitualFormValues) {
     setLoading(true)
     try {
       await api.post('/blocos/store', {
-        horario_inicial: '07:00',
-        horario_final: '07:30',
+        horario_inicial: calcularHorarioFinal(
+          ritualForm.workTime,
+          `-${ritualForm.morningRoutine}`,
+        ),
+        horario_final: ritualForm.workTime,
         itens: morningItems.map((i) => i.text),
         tipo_ritual: 1,
       })
@@ -143,12 +146,12 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
     }
   }
 
-  async function stepFourSubmit() {
+  async function stepFourSubmit(ritualForm: RitualFormValues) {
     setLoading(true)
     try {
       await api.post('/blocos/store', {
-        horario_inicial: '22:00',
-        horario_final: '22:30',
+        horario_inicial: ritualForm.sleepTime,
+        horario_final: calcularHorarioFinal(ritualForm.sleepTime, '30'), // exemplo: duração do ritual noturno
         itens: nightItems.map((i) => i.text),
         tipo_ritual: 2,
       })
@@ -226,11 +229,11 @@ export function ConfigRitualDialog({ onClose }: { onClose: () => void }) {
                   nextStep()
                   break
                 case 3:
-                  await stepThreeSubmit()
+                  await stepThreeSubmit(stepOneForm.getValues())
                   nextStep()
                   break
                 case 4:
-                  await stepFourSubmit()
+                  await stepFourSubmit(stepOneForm.getValues())
                   setCurrentStep(1)
                   setMorningItems([])
                   setNightItems([])
@@ -731,6 +734,19 @@ function AddNightRitual({
       </div>
     </div>
   )
+}
+
+function calcularHorarioFinal(inicio: string, duracao: string): string {
+  const [h1, m1] = inicio.split(':').map(Number)
+  const dm = Number(duracao)
+
+  const totalMin = h1 * 60 + m1 + dm
+  const horas = Math.floor(totalMin / 60)
+    .toString()
+    .padStart(2, '0')
+  const minutos = (totalMin % 60).toString().padStart(2, '0')
+
+  return `${horas}:${minutos}`
 }
 
 function StepCounter({
