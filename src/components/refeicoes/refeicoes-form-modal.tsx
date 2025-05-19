@@ -49,8 +49,8 @@ export function MealFormModal({
     try {
       // Clean the alimentos array to remove created_at and updated_at
       const cleanedAlimentos = alimentos.map(
-        ({ nomeAlimento: nomeAlimento, quantidade }) => ({
-          nomeAlimento: nomeAlimento,
+        ({ nomeAlimento, quantidade }) => ({
+          nomeAlimento,
           quantidade,
         }),
       )
