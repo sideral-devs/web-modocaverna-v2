@@ -15,6 +15,16 @@ import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+const DAYS_MAP = {
+  'Domingo': 0,
+  'Segunda': 1,
+  'Terça': 2,
+  'Quarta': 3,
+  'Quinta': 4,
+  'Sexta': 5,
+  'Sábado': 6,
+}
+
 export default function Page() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
   const [isScrolled, setIsScrolled] = useState(false)
@@ -49,13 +59,48 @@ export default function Page() {
 
   async function handleSubmit(data: Partial<Meal>) {
     if (selectedMeal) {
-      console.log(selectedMeal.horario_id, data)
       await updateMeal({
         id: selectedMeal.horario_id,
         data: data as Omit<Meal, 'created_at' | 'updated_at' | 'horario_id'>,
       })
     } else {
       await createMeal(data as Meal)
+    }
+  }
+
+  async function handleDuplicate(meal: Meal, selectedDays: string[]) {
+    try {
+      // Create a new meal for each selected day
+      const promises = selectedDays.map(async (short) => {
+        const dayObj = WEEK_DAYS.find((d) => d.short === short);
+        const dayNumber = dayObj ? dayObj.workoutIndex : 0;
+        // Clean the alimentos array to remove created_at and updated_at
+        const cleanedAlimentos = meal.alimentos.map(
+          ({ nome_alimento, quantidade }) => ({
+            nome_alimento,
+            quantidade,
+          }),
+        );
+        // Clean the suplementos array to only include necessary fields
+        const cleanedSuplementos = meal.suplementos.map(({ nome, comprado }) => ({
+          nome,
+          comprado,
+        }));
+        const newMeal: Omit<Meal, 'horario_id' | 'created_at' | 'updated_at'> = {
+          nome_refeicao: meal.nome_refeicao,
+          hora_refeicao: meal.hora_refeicao,
+          observacoes: meal.observacoes,
+          dia_semana: dayNumber,
+          alimentos: cleanedAlimentos as any,
+          suplementos: cleanedSuplementos as any,
+        };
+        await createMeal(newMeal);
+      });
+      await Promise.all(promises);
+      toast.success('Refeição duplicada com sucesso');
+    } catch (error) {
+      console.error('Error duplicating meal:', error);
+      toast.error('Erro ao duplicar refeição');
     }
   }
 
@@ -155,6 +200,7 @@ export default function Page() {
                   meal={meal}
                   onEdit={() => handleOpenModal(meal)}
                   onDelete={() => setMealToDelete(meal)}
+                  onDuplicate={(selectedDays) => handleDuplicate(meal, selectedDays)}
                 />
               ))
             ) : (
