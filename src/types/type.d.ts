@@ -264,7 +264,7 @@ interface Compromisso {
 interface Alimento {
   alimento_id: number
   horario_id: string
-  nome_alimento: string
+  nomeAlimento: string
   quantidade: string
   created_at?: string
   updated_at?: string

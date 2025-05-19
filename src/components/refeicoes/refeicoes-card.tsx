@@ -5,19 +5,128 @@ import {
   NotePencil,
   Pill,
   Trash,
+  Copy,
 } from '@phosphor-icons/react'
 import * as Popover from '@radix-ui/react-popover'
 import { Button } from '../ui/button'
+import { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '../ui/dialog'
+import { WEEK_DAYS } from '@/lib/constants'
 
 interface MealCardProps {
   meal: Meal
   onEdit?: () => void
   onDelete?: () => void
+  onDuplicate?: (selectedDays: string[]) => void
   isFirst?: boolean
   isLast?: boolean
 }
 
-export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
+function DuplicateMealDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: (selectedDays: string[]) => void
+}) {
+  const [selectedDays, setSelectedDays] = useState<string[]>([])
+
+  const allShortDays = WEEK_DAYS.map((d) => d.short)
+  const allSelected = selectedDays.length === allShortDays.length
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedDays([])
+    } else {
+      setSelectedDays(allShortDays)
+    }
+  }
+
+  const handleConfirm = () => {
+    onConfirm(selectedDays)
+    onOpenChange(false)
+    setSelectedDays([])
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Duplicar refeição</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 px-4">
+          <p className="text-sm text-zinc-400">
+            Selecione os dias da semana para duplicar esta refeição:
+          </p>
+
+          <div className="space-y-2">
+            <div className="grid grid-cols-7 gap-2">
+              {WEEK_DAYS.map((day) => (
+                <Button
+                  key={day.short}
+                  type="button"
+                  variant={
+                    selectedDays.includes(day.short) ? 'default' : 'outline'
+                  }
+                  onClick={() => {
+                    if (selectedDays.includes(day.short)) {
+                      setSelectedDays(
+                        selectedDays.filter((d) => d !== day.short),
+                      )
+                    } else {
+                      setSelectedDays([...selectedDays, day.short])
+                    }
+                  }}
+                  className={`border ${
+                    selectedDays.includes(day.short)
+                      ? 'bg-red-500 hover:bg-red-600'
+                      : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
+                  }`}
+                >
+                  {day.short}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleSelectAll}
+            className={`mb-2 px-4 py-2 rounded-lg font-semibold transition-colors w-fit self-start
+              ${allSelected ? 'bg-white text-black shadow-md' : 'bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700'}
+            `}
+          >
+            {allSelected ? 'Limpar seleção' : 'Todos'}
+          </button>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={handleConfirm} disabled={selectedDays.length === 0}>
+            Duplicar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export function MealCard({
+  meal,
+  onEdit,
+  onDelete,
+  onDuplicate,
+}: MealCardProps) {
+  const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false)
+
   return (
     <div className="relative flex gap-8">
       {/* Timeline */}
@@ -60,6 +169,13 @@ export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
                       Editar
                     </button>
                     <button
+                      onClick={() => setDuplicateDialogOpen(true)}
+                      className="flex items-center gap-2 w-full px-3 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-700/50 rounded-md transition-colors"
+                    >
+                      <Copy size={16} />
+                      Duplicar
+                    </button>
+                    <button
                       onClick={onDelete}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-md transition-colors"
                     >
@@ -85,7 +201,7 @@ export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
                     key={alimento.alimento_id}
                     className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
                   >
-                    <p>{alimento.nome_alimento}</p>
+                    <p>{alimento.nomeAlimento}</p>
                     <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
                       {alimento.quantidade}
                     </div>
@@ -121,6 +237,12 @@ export function MealCard({ meal, onEdit, onDelete }: MealCardProps) {
           </div>
         </div>
       </div>
+
+      <DuplicateMealDialog
+        open={duplicateDialogOpen}
+        onOpenChange={setDuplicateDialogOpen}
+        onConfirm={onDuplicate || (() => {})}
+      />
     </div>
   )
 }

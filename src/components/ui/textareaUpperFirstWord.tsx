@@ -1,24 +1,24 @@
 /* eslint-disable */
 
-'use client'
+"use client";
 
-import { Textarea } from '@/components/ui/textarea'
-import { useState } from 'react'
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 interface TextareaUpperFirstWordProps
-  extends React.ComponentProps<'textarea'> {}
+  extends React.ComponentProps<"textarea"> {}
 
 export default function TextareaUpperFirstWord({
   ...props
 }: TextareaUpperFirstWordProps) {
-  const [value, setValue] = useState(props.value || '')
+  const [value, setValue] = useState(props.value || "");
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let textareaValue = event.target.value
+    let textareaValue = event.target.value;
     textareaValue =
-      textareaValue.charAt(0).toUpperCase() + textareaValue.slice(1)
-    setValue(textareaValue)
-  }
+      textareaValue.charAt(0).toUpperCase() + textareaValue.slice(1);
+    setValue(textareaValue);
+  };
 
-  return <Textarea {...props} value={value} onChange={handleChange} />
+  return <Textarea {...props} value={value} onChange={handleChange} />;
 }

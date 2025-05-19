@@ -487,8 +487,7 @@ function ClassLink({
   )
 }
 // eslint-disable-next-line
-function LessonMaterial({ aulaId, aula }: { aulaId: string , aula?: Aula }) {
-
+function LessonMaterial({ aulaId, aula }: { aulaId: string; aula?: Aula }) {
   // MODELO DE MATERIAL PARA ADICIONAR NO FINAL DA DESCRIÇÃO DA AULA NO BANCO DE DADOS NÃO EXCLUIR
   // const htmlContent = `
   // <br>

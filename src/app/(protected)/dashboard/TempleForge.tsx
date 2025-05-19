@@ -19,8 +19,9 @@ import {
 } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { BicepsFlexed, ScanFace } from 'lucide-react'
+import { BicepsFlexed, Clock, ScanFace } from 'lucide-react'
 import Link from 'next/link'
+
 export function TempleForge({ value }: { value: string }) {
   const { workouts } = useWorkouts()
   const { shapeRegistrations } = useShape()
@@ -68,7 +69,7 @@ export function TempleForge({ value }: { value: string }) {
                     new Date(lastShapeRegistration.updated_at),
                     'dd MMM yyyy',
                     { locale: ptBR },
-                  )}.`
+                  )}`
                 : ''}
             </span>
           </div>
@@ -175,27 +176,38 @@ export function TempleForge({ value }: { value: string }) {
               <span className="text-sm text-zinc-400">
                 Hoje é <span className="font-medium">{dayName}</span>.
               </span>
-              <div className="flex mb-4 gap-2 items-center justify-between">
+
+              <div className="flex mb-2 gap-2 items-center justify-between">
                 <div className="flex gap-1 items-center">
-                  <h2 className="text-xl font-medium">Treino de hoje</h2>
-                  {todaysWorkouts ? (
-                    todaysWorkouts.length > 0 &&
-                    todaysWorkouts?.slice(0, 2).map((workout, index) => (
-                      <Badge key={index} variant="outline">
-                        {workout.titulo}
-                      </Badge>
-                    ))
-                  ) : (
-                    <>
-                      <Badge variant="outline">Nenhum treino cadastrado</Badge>
-                    </>
-                  )}
+                  <h2 className="text-xl font-medium">Treino de hoje </h2>
                 </div>
                 <span className="text-sm font-medium text-zinc-300">
                   {todaysWorkouts?.length === 0
                     ? 'Nenhum treino cadastrado'
                     : `${todaysWorkouts?.length || 0} ${todaysWorkouts?.length === 1 ? 'treino' : 'treinos separados'}`}
                 </span>
+              </div>
+              <div className="flex mb-4 gap-2 flex-wrap">
+                {todaysWorkouts ? (
+                  todaysWorkouts.length > 0 &&
+                  todaysWorkouts?.slice(0, 2).map((workout, index) => (
+                    <Badge
+                      className="flex items-center px-1 gap-1"
+                      key={index}
+                      variant="outline"
+                    >
+                      <Clock size={14} className="text-zinc-500" />
+                      {workout.titulo}{' '}
+                      <span className="text-xs text-zinc-500">
+                        {todaysWorkouts[0].horario || 'Sem horário'}
+                      </span>
+                    </Badge>
+                  ))
+                ) : (
+                  <>
+                    <Badge variant="outline">Nenhum treino cadastrado</Badge>
+                  </>
+                )}
               </div>
 
               <div className="h-[400px] scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-800 overflow-y-auto pb-24">
