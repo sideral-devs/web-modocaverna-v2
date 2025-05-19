@@ -1,11 +1,10 @@
-
 name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
-      - develop 
+      - develop
   pull_request:
     branches:
       - main
@@ -15,7 +14,6 @@ jobs:
   CI_tests:
     name: Deploy to Staging
     runs-on: ubuntu-22.04
-    
 
     steps:
       - name: Checkout Code
@@ -24,29 +22,28 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.14'
+          node-version: "22.14"
 
-    
         env:
-           NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
-           NEXT_PUBLIC_PROD_URL: ${{ secrets.NEXT_PUBLIC_PROD_URL }}
-           NEXT_PUBLIC_DEV_URL: ${{ secrets.NEXT_PUBLIC_DEV_URL }}
-           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-           NEXT_PUBLIC_REGISTER: ${{ vars.NEXT_PUBLIC_REGISTER }}
-           NEXT_PUBLIC_YEARLY_PLAN: ${{ secrets.NEXT_PUBLIC_YEARLY_PLAN }}
-           NEXT_PUBLIC_MONTHLY_PLAN: ${{ secrets.NEXT_PUBLIC_MONTHLY_PLAN }}
-           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-           AUTH_URL: https://beta.modocaverna.com
-           AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
-           AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
-           GOOGLE_METRIC_ID: ${{ secrets.GOOGLE_METRIC_ID }}
+          NEXT_PUBLIC_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_ENVIRONMENT }}
+          NEXT_PUBLIC_PROD_URL: ${{ secrets.NEXT_PUBLIC_PROD_URL }}
+          NEXT_PUBLIC_DEV_URL: ${{ secrets.NEXT_PUBLIC_DEV_URL }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_REGISTER: ${{ vars.NEXT_PUBLIC_REGISTER }}
+          NEXT_PUBLIC_YEARLY_PLAN: ${{ secrets.NEXT_PUBLIC_YEARLY_PLAN }}
+          NEXT_PUBLIC_MONTHLY_PLAN: ${{ secrets.NEXT_PUBLIC_MONTHLY_PLAN }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_URL: https://beta.modocaverna.com
+          AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
+          AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+          GOOGLE_METRIC_ID: ${{ secrets.GOOGLE_METRIC_ID }}
 
       # - name: var values
       #   run: echo "value ${{ vars.NEXT_PUBLIC_REGISTER }}"
 
       # - name: secret values
       #   run: echo "monthly plan ${{ secrets.NEXT_PUBLIC_MONTHLY_PLAN }}"
-     
+
       - name: Install Dependencies
         run: npm install --force
       - name: Lint Project

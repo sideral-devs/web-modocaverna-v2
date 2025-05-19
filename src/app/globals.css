@@ -6,22 +6,22 @@
   :root {
     --background: #000000;
     --foreground: #ffffff;
-    --card: #27272A;
+    --card: #27272a;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: #ff3333;
     --primary-foreground: #ffffff;
-    --secondary: #27272A;
+    --secondary: #27272a;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
-    --muted-foreground: #A0A0A9;
+    --muted-foreground: #a0a0a9;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: #3f3f46;
-    --input: #3F3F46;
+    --input: #3f3f46;
     --ring: 0 0% 83.1%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -44,8 +44,7 @@
     @apply text-sm;
   }
 
-  .prose  {
-
+  .prose {
     h1 {
       @apply text-2xl font-bold;
     }
@@ -53,7 +52,7 @@
     h2 {
       @apply text-lg font-bold;
     }
-  
+
     h3 {
       @apply text-base font-bold;
     }
@@ -62,11 +61,11 @@
       @apply pl-1;
     }
 
-    ul>li {
+    ul > li {
       list-style: disc;
     }
 
-    ol>li {
+    ol > li {
       list-style-type: decimal;
     }
 
@@ -86,20 +85,20 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
   .scrollbar-minimal::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   .scrollbar-minimal::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .scrollbar-minimal::-webkit-scrollbar-thumb {
-    background: #3F3F46;
+    background: #3f3f46;
     border-radius: 999px;
   }
 
@@ -107,7 +106,11 @@
     @apply bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
   }
   .vertical-timeline::before {
-    background: linear-gradient(to bottom, #dc2626, #000); /* red-600 para black */
+    background: linear-gradient(
+      to bottom,
+      #dc2626,
+      #000
+    ); /* red-600 para black */
   }
 }
 
@@ -127,17 +130,20 @@
   animation: pulsate-shadow 1.5s infinite;
 }
 
-
 .fc-theme-standard {
   @apply !border-0;
 }
 
-.fc-scrollgrid, .fc-scrollgrid-liquid, .fc-theme-standard,
-  .fc-timegrid-col, .fc-timegrid-cols {
+.fc-scrollgrid,
+.fc-scrollgrid-liquid,
+.fc-theme-standard,
+.fc-timegrid-col,
+.fc-timegrid-cols {
   @apply !border-border;
 }
 
-.fc-theme-standard th, .fc-theme-standard td {
+.fc-theme-standard th,
+.fc-theme-standard td {
   @apply !border-border;
 }
 
@@ -161,13 +167,13 @@ table.fc-scrollgrid {
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    background: #3F3F46;
+    background: #3f3f46;
     border-radius: 999px;
   }
 }

@@ -1,4 +1,4 @@
-import type { Meal } from "@/lib/api/meals";
+import type { Meal } from '@/lib/api/meals'
 import {
   BowlFood,
   DotsThree,
@@ -6,67 +6,55 @@ import {
   Pill,
   Trash,
   Copy,
-} from "@phosphor-icons/react";
-import * as Popover from "@radix-ui/react-popover";
-import { Button } from "../ui/button";
-import { useState } from "react";
+} from '@phosphor-icons/react'
+import * as Popover from '@radix-ui/react-popover'
+import { Button } from '../ui/button'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "../ui/dialog";
-import { Checkbox } from "../ui/checkbox";
-import { Label } from "../ui/label";
-import { WEEK_DAYS } from "@/lib/constants";
+} from '../ui/dialog'
+import { WEEK_DAYS } from '@/lib/constants'
 
 interface MealCardProps {
-  meal: Meal;
-  onEdit?: () => void;
-  onDelete?: () => void;
-  onDuplicate?: (selectedDays: string[]) => void;
-  isFirst?: boolean;
-  isLast?: boolean;
+  meal: Meal
+  onEdit?: () => void
+  onDelete?: () => void
+  onDuplicate?: (selectedDays: string[]) => void
+  isFirst?: boolean
+  isLast?: boolean
 }
-
-const DAYS_OF_WEEK = [
-  "Domingo",
-  "Segunda",
-  "Terça",
-  "Quarta",
-  "Quinta",
-  "Sexta",
-  "Sábado",
-];
 
 function DuplicateMealDialog({
   open,
   onOpenChange,
   onConfirm,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: (selectedDays: string[]) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: (selectedDays: string[]) => void
 }) {
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedDays, setSelectedDays] = useState<string[]>([])
 
-  const allShortDays = WEEK_DAYS.map((d) => d.short);
-  const allSelected = selectedDays.length === allShortDays.length;
+  const allShortDays = WEEK_DAYS.map((d) => d.short)
+  const allSelected = selectedDays.length === allShortDays.length
 
   const handleSelectAll = () => {
     if (allSelected) {
-      setSelectedDays([]);
+      setSelectedDays([])
     } else {
-      setSelectedDays(allShortDays);
+      setSelectedDays(allShortDays)
     }
-  };
+  }
 
   const handleConfirm = () => {
-    onConfirm(selectedDays);
-    onOpenChange(false);
-    setSelectedDays([]);
-  };
+    onConfirm(selectedDays)
+    onOpenChange(false)
+    setSelectedDays([])
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -78,25 +66,29 @@ function DuplicateMealDialog({
           <p className="text-sm text-zinc-400">
             Selecione os dias da semana para duplicar esta refeição:
           </p>
-          
+
           <div className="space-y-2">
             <div className="grid grid-cols-7 gap-2">
               {WEEK_DAYS.map((day) => (
                 <Button
                   key={day.short}
                   type="button"
-                  variant={selectedDays.includes(day.short) ? "default" : "outline"}
+                  variant={
+                    selectedDays.includes(day.short) ? 'default' : 'outline'
+                  }
                   onClick={() => {
                     if (selectedDays.includes(day.short)) {
-                      setSelectedDays(selectedDays.filter((d) => d !== day.short));
+                      setSelectedDays(
+                        selectedDays.filter((d) => d !== day.short),
+                      )
                     } else {
-                      setSelectedDays([...selectedDays, day.short]);
+                      setSelectedDays([...selectedDays, day.short])
                     }
                   }}
                   className={`border ${
                     selectedDays.includes(day.short)
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "border-zinc-700 text-zinc-400 hover:text-zinc-300"
+                      ? 'bg-red-500 hover:bg-red-600'
+                      : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
                   }`}
                 >
                   {day.short}
@@ -108,10 +100,10 @@ function DuplicateMealDialog({
             type="button"
             onClick={handleSelectAll}
             className={`mb-2 px-4 py-2 rounded-lg font-semibold transition-colors w-fit self-start
-              ${allSelected ? "bg-white text-black shadow-md" : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700"}
+              ${allSelected ? 'bg-white text-black shadow-md' : 'bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700'}
             `}
           >
-            {allSelected ? "Limpar seleção" : "Todos"}
+            {allSelected ? 'Limpar seleção' : 'Todos'}
           </button>
         </div>
         <DialogFooter>
@@ -124,7 +116,7 @@ function DuplicateMealDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
 export function MealCard({
@@ -133,7 +125,7 @@ export function MealCard({
   onDelete,
   onDuplicate,
 }: MealCardProps) {
-  const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false);
+  const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false)
 
   return (
     <div className="relative flex gap-8">
@@ -152,7 +144,7 @@ export function MealCard({
           <div className="flex flex-col gap-2 px-8 pt-6 pb-4">
             <h4 className="text-lg font-medium">{meal.nome_refeicao}</h4>
             <p className="text-zinc-400 font-normal">
-              {meal.observacoes || "Sem observação."}
+              {meal.observacoes || 'Sem observação.'}
             </p>
           </div>
           <div className="absolute top-2 right-2">
@@ -252,5 +244,5 @@ export function MealCard({
         onConfirm={onDuplicate || (() => {})}
       />
     </div>
-  );
+  )
 }

@@ -71,7 +71,9 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
       const respEvolution = validateNumber as { numberExists: boolean }
 
       if (!respEvolution.numberExists) {
-        setError('cellphone', { message: 'Esse número de WhatsApp não existe' })
+        setError('cellphone', {
+          message: 'Esse número de WhatsApp não existe',
+        })
         return
       }
     }
