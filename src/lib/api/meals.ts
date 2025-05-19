@@ -3,7 +3,7 @@ import { api } from '../api'
 export interface Food {
   alimento_id: number
   horario_id: number
-  nome_alimento: string
+  nomeAlimento: string
   quantidade: string
   created_at: string
   updated_at: string

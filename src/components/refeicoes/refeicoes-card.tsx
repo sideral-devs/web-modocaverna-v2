@@ -201,7 +201,7 @@ export function MealCard({
                     key={alimento.alimento_id}
                     className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
                   >
-                    <p>{alimento.nome_alimento}</p>
+                    <p>{alimento.nomeAlimento}</p>
                     <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
                       {alimento.quantidade}
                     </div>

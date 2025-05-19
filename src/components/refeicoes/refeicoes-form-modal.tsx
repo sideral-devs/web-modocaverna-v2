@@ -36,7 +36,7 @@ export function MealFormModal({
   const [horario, setHorario] = useState(initialData?.hora_refeicao ?? '')
   const [observacoes, setObservacoes] = useState(initialData?.observacoes ?? '')
   const [alimentos, setAlimentos] = useState<Partial<Food>[]>(
-    initialData?.alimentos ?? [{ nome_alimento: '', quantidade: '' }],
+    initialData?.alimentos ?? [{ nomeAlimento: '', quantidade: '' }],
   )
   const [suplementos, setSuplementos] = useState<Partial<Supplement>[]>(
     initialData?.suplementos ?? [],
@@ -49,8 +49,8 @@ export function MealFormModal({
     try {
       // Clean the alimentos array to remove created_at and updated_at
       const cleanedAlimentos = alimentos.map(
-        ({ nome_alimento: nomeAlimento, quantidade }) => ({
-          nome_alimento: nomeAlimento,
+        ({ nomeAlimento: nomeAlimento, quantidade }) => ({
+          nomeAlimento: nomeAlimento,
           quantidade,
         }),
       )
@@ -73,7 +73,7 @@ export function MealFormModal({
       setNome('')
       setHorario('')
       setObservacoes('')
-      setAlimentos([{ nome_alimento: '', quantidade: '' }])
+      setAlimentos([{ nomeAlimento: '', quantidade: '' }])
       setSuplementos([])
 
       onOpenChange(false)
@@ -89,7 +89,7 @@ export function MealFormModal({
       setNome('')
       setHorario('')
       setObservacoes('')
-      setAlimentos([{ nome_alimento: '', quantidade: '' }])
+      setAlimentos([{ nomeAlimento: '', quantidade: '' }])
       setSuplementos([])
       setSelectedDay(new Date().getDay())
     } else if (initialData) {
@@ -213,12 +213,12 @@ export function MealFormModal({
                     <div key={index} className="flex w-full items-center gap-4">
                       <Input
                         type="text"
-                        value={alimento.nome_alimento}
+                        value={alimento.nomeAlimento}
                         onChange={(e) =>
                           setAlimentos(
                             alimentos.map((a, i) =>
                               i === index
-                                ? { ...a, nome_alimento: e.target.value }
+                                ? { ...a, nomeAlimento: e.target.value }
                                 : a,
                             ),
                           )
@@ -264,7 +264,7 @@ export function MealFormModal({
                     onClick={() =>
                       setAlimentos([
                         ...alimentos,
-                        { nome_alimento: '', quantidade: '' },
+                        { nomeAlimento: '', quantidade: '' },
                       ])
                     }
                     className="flex items-center gap-2 text-red-500 hover:bg-red-500/10"

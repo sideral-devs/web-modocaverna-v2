@@ -67,8 +67,8 @@ export default function Page() {
         const dayNumber = dayObj ? dayObj.workoutIndex : 0
         // Clean the alimentos array to remove created_at and updated_at
         const cleanedAlimentos = meal.alimentos.map(
-          ({ nome_alimento, quantidade }) => ({
-            nome_alimento,
+          ({ nomeAlimento, quantidade }) => ({
+            nomeAlimento,
             quantidade,
           }),
         )
