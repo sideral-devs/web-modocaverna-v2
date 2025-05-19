@@ -135,7 +135,7 @@ export default function Page() {
               Refeições
             </span>
           </div>
-          <HeaderClose />
+          <HeaderClose to="forja-do-templo" />
         </Header>
       </motion.div>
 
