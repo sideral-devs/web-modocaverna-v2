@@ -71,10 +71,14 @@ export default function Page() {
             <CloseButton
               onClick={() =>
                 !firstShapeRegistration
-                  ? router.push('/')
+                  ? router.push('/dashboard?to=forja-do-templo')
                   : router.push('/exercicios')
               }
-              escapeTo={!firstShapeRegistration ? '/' : '/exercicios'}
+              escapeTo={
+                !firstShapeRegistration
+                  ? '/dashboard?to=forja-do-templo'
+                  : '/exercicios'
+              }
             />
           </div>
         </header>

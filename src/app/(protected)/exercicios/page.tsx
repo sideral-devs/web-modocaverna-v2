@@ -295,7 +295,7 @@ export default function Page() {
               Exercícios
             </span>
           </div>
-          <HeaderClose />
+          <HeaderClose to="forja-do-templo" />
         </Header>
       </motion.div>
 
