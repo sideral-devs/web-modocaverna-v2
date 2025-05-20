@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import dayjs from 'dayjs'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@radix-ui/react-tooltip'
 
 export default function EditableObjectiveItem({
   item,
@@ -37,10 +43,10 @@ export default function EditableObjectiveItem({
       />
       {isEditing ? (
         <>
-          <div className="flex bg-zinc-700 p-[2px] rounded-lg">
+          <div className="flex bg-zinc-700 p-[2px] w-[85%] font-normal rounded-lg">
             <input
               type="text"
-              className="bg-transparent text-sm"
+              className="bg-transparent w-[95%]"
               value={editedValue}
               onChange={(e) => setEditedValue(e.target.value)}
               autoFocus
@@ -50,9 +56,21 @@ export default function EditableObjectiveItem({
           {/* <p className="text-xs text-zinc-400 ml-2">&quot;Enter&quot;</p> */}
         </>
       ) : (
-        <div className="w-[70%] bg-zinc-700 p-[2px] rounded-lg truncate">
-          <span className="p-2">{item.valor}</span>
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="w-[85%] font-normal bg-zinc-700 p-[2px] rounded-lg truncate cursor-default">
+                <span className="p-2">{item.valor}</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent
+              side="bottom"
+              className=" flex break-words  relative left-4 rounded-xl bg-black w-[70%] h-auto max-w-[50%] p-4"
+            >
+              <span className="text-sm text-zinc-100">{item.valor}</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </div>
   )
