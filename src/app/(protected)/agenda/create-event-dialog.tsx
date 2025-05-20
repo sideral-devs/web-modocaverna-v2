@@ -29,6 +29,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { EditRepetitionDialog } from './edit-repetition-dialog'
+import { Textarea } from '@/components/ui/textarea'
 
 const schema = z.object({
   title: z.string().min(1, { message: 'Obrigatório' }),
@@ -269,28 +270,44 @@ export function CreateEventDialogTrigger({
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader className="flex flex-col items-start p-3 border-b">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-[90%]">
               {/* <DialogTitle>
                 <div className="w-4 h-4 rounded border-2 border-white" />
               </DialogTitle> */}
-              <Input
+              {/* <Input
                 placeholder="Título compromisso"
-                className="h-8 p-6 border-0 focus-visible:ring-0 placeholder:text-zinc-500"
+                className="h-8 p-6 bg-black border-0 focus-visible:ring-0 placeholder:text-zinc-500"
                 {...register('title')}
               />
               {errors?.title && (
                 <span className="text-[10px] text-red-500">
                   {errors.title.message}
                 </span>
+              )} */}
+              <Textarea
+                placeholder="Título compromisso"
+                className="h-8 p-4 py-4 min-w-full border-0 focus-visible:ring-0 placeholder:text-zinc-500 resize-none text-sm leading-snug break-words scrollbar-minimal"
+                {...register('title')}
+              />
+
+              {errors?.title && (
+                <span className="text-[10px] text-red-500">
+                  {errors.title.message}
+                </span>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded" />
-              <Input
+            <div className="flex py-2 items-center gap-2 w-[90%]">
+              <Textarea
                 placeholder="Adicionar descrição"
-                className="h-8 p-0 border-0 focus-visible:ring-0 text-xs placeholder:text-xs text-zinc-400 placeholder:text-zinc-400 placeholder:font-semibold"
+                className="h-8 p-4 border-0 focus-visible:ring-0 text-xs placeholder:text-xs text-zinc-400 placeholder:text-zinc-400 placeholder:font-semibold resize-none break-words leading-snug scrollbar-minimal"
                 {...register('description')}
               />
+
+              {errors?.description && (
+                <span className="text-[10px] text-red-500">
+                  {errors.description.message}
+                </span>
+              )}
             </div>
           </DialogHeader>
           <div className="flex items-center p-3 gap-2 border-b">
