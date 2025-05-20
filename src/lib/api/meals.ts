@@ -39,7 +39,20 @@ export async function getMealById(id: number) {
 export async function createMeal(
   data: Omit<Meal, 'horario_id' | 'created_at' | 'updated_at'>,
 ) {
-  const response = await api.post('/refeicoes/store', data)
+  const alimentosConvertidos = data.alimentos?.map((alimento) => {
+    const { nomeAlimento, ...resto } = alimento
+    return {
+      ...resto,
+      nome_alimento: nomeAlimento,
+    }
+  })
+
+  const payload = {
+    ...data,
+    alimentos: alimentosConvertidos,
+  }
+
+  const response = await api.post('/refeicoes/store', payload)
   return response.data as Meal
 }
 
