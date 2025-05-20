@@ -210,7 +210,7 @@ export function TempleForge({ value }: { value: string }) {
                 )}
               </div>
 
-              <div className="h-[300px] scrollbar-minimal overflow-y-auto pb-24">
+              <div className="h-[300px] scrollbar-minimal overflow-y-auto pb-12">
                 {todaysWorkouts && todaysWorkouts.length > 0 ? (
                   todaysWorkouts.map((workout) => (
                     <div key={workout.ficha_id} className="space-y-4">
@@ -278,7 +278,7 @@ export function TempleForge({ value }: { value: string }) {
                 </div>
               </div>
 
-              <div className="h-[400px] p-6 pb-24 overflow-y-auto scrollbar-minimal">
+              <div className="h-[400px] p-6 pb-12 overflow-y-auto scrollbar-minimal">
                 {todaysMeals && todaysMeals.length > 0 ? (
                   todaysMeals.map((meal) => (
                     <MealCardHub
