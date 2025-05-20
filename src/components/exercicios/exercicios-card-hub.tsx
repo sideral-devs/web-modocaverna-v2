@@ -12,7 +12,7 @@ interface ExerciseCardProps {
 export function ExerciseCardHub({ exercise }: ExerciseCardProps) {
   return (
     <>
-      <div className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+      <div className="flex w-full items-center justify-between p-4 bg-zinc-900 rounded-lg border border-zinc-800">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
             <BicepsFlexed size={24} className="text-zinc-400" />

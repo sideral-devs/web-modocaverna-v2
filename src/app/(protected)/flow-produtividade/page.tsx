@@ -2,7 +2,7 @@
 import { ProductivityChart } from '@/components/charts/productivity'
 import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import PomodoroTimer from '@/components/pomo-two'
+import PomodoroTimer from '@/components/pomodoro'
 import { ProtectedRoute } from '@/components/protected-route'
 import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
