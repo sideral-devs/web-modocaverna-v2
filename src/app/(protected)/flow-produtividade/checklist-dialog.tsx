@@ -20,7 +20,7 @@ import { motion } from 'framer-motion'
 import { HourglassIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
-import DreamboardCard from '../dashboard/cards/dreamboard'
+import DreamboardFull from './dreamboard-full'
 
 export function ChecklistDialog({
   open,
@@ -133,7 +133,7 @@ export function ChecklistDialog({
                         Quadro dos sonhos
                       </DialogTitle>
                       <div className=" w-full aspect-video rounded-lg overflow-hidden">
-                        <DreamboardCard hideLabel />
+                        <DreamboardFull hideLabel />
                       </div>
                     </DialogContent>
                   </Dialog>

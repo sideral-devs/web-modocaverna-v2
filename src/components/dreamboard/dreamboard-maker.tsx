@@ -56,11 +56,14 @@ export function DreamboardMaker({
   const closeDialog = () => setIsOpen(false)
 
   function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
+    if (!editable) return
+
     e.preventDefault()
     setIsDraggingOver(true)
   }
 
   function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    if (!editable) return
     e.preventDefault()
 
     if (e.currentTarget.contains(e.relatedTarget as Node)) return
@@ -180,6 +183,8 @@ export function DreamboardMaker({
   }
 
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    if (!editable) return
+
     e.preventDefault()
     setIsDraggingOver(false)
     const files = Array.from(e.dataTransfer.files)

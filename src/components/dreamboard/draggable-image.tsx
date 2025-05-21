@@ -26,7 +26,6 @@ export function DraggableImage({
   const imageRef = useRef<HTMLDivElement>(null)
 
   const handleDragStart = () => {
-    console.log(isResizing)
     if (!editable || isResizing) return
     setIsDragging(true)
     setShowControls(true)
@@ -34,7 +33,6 @@ export function DraggableImage({
 
   const handleDragEnd = (event: MouseEvent, info: PanInfo) => {
     if (!editable || isResizing) return
-    console.log('dragEnd')
     setIsDragging(false)
     onUpdate({
       ...image,
@@ -119,6 +117,8 @@ export function DraggableImage({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (!editable) return
+
       if (event.key === 'Backspace' && showControls) {
         onDelete(image.id)
       }
@@ -152,7 +152,7 @@ export function DraggableImage({
   return (
     <motion.div
       ref={imageRef}
-      className={cn('absolute cursor-move')}
+      className={cn('absolute', editable && 'cursor-move')}
       style={{
         top: 0,
         left: 0,
@@ -160,7 +160,7 @@ export function DraggableImage({
         y: image.y,
         zIndex: isDragging || isResizing ? 10 : 1,
       }}
-      drag
+      drag={editable}
       dragMomentum={false}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
@@ -178,8 +178,9 @@ export function DraggableImage({
           src={image.src || '/placeholder.svg'}
           alt="Dreamboard item"
           className={cn(
-            'w-full h-full object-cover rounded-md hover:ring ring-red-700',
+            'w-full h-full object-cover rounded-md ring-red-700',
             showControls && 'ring',
+            editable && 'hover:ring',
           )}
           fill
           draggable={false}
