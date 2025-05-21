@@ -195,7 +195,7 @@ export function DraggableImage({
               className="p-1 hover:bg-gray-100 rounded"
               title="Rotate counterclockwise"
             >
-              <RotateCcw size={16} className="text-white" />
+              <RotateCcw size={16} className="text-white hover:text-black" />
             </button>
             <button
               onClick={(e) => {
@@ -205,7 +205,7 @@ export function DraggableImage({
               className="p-1 hover:bg-gray-100 rounded"
               title="Rotate clockwise"
             >
-              <RotateCw size={16} className="text-white" />
+              <RotateCw size={16} className="text-white hover:text-black" />
             </button>
             <button
               onClick={(e) => {
