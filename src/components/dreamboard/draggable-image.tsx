@@ -152,10 +152,7 @@ export function DraggableImage({
   return (
     <motion.div
       ref={imageRef}
-      className={cn(
-        'absolute cursor-move hover:ring ring-red-700',
-        showControls && 'ring',
-      )}
+      className={cn('absolute cursor-move')}
       style={{
         top: 0,
         left: 0,
@@ -180,7 +177,10 @@ export function DraggableImage({
         <Image
           src={image.src || '/placeholder.svg'}
           alt="Dreamboard item"
-          className="w-full h-full object-cover rounded-md"
+          className={cn(
+            'w-full h-full object-cover rounded-md hover:ring ring-red-700',
+            showControls && 'ring',
+          )}
           fill
           draggable={false}
         />
