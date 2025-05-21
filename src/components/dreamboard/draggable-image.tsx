@@ -1,9 +1,10 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import { motion, PanInfo } from 'framer-motion'
 import { RotateCcw, RotateCw, Trash2 } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ImageItem } from './dreamboard-maker'
 
 interface DraggableImageProps {
@@ -22,21 +23,30 @@ export function DraggableImage({
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [showControls, setShowControls] = useState(false)
+  const imageRef = useRef<HTMLDivElement>(null)
 
   const handleDragStart = () => {
-    if (!editable) return
+    console.log(isResizing)
+    if (!editable || isResizing) return
     setIsDragging(true)
     setShowControls(true)
   }
 
   const handleDragEnd = (event: MouseEvent, info: PanInfo) => {
-    if (!editable) return
+    if (!editable || isResizing) return
+    console.log('dragEnd')
     setIsDragging(false)
     onUpdate({
       ...image,
       x: image.x + info.offset.x,
       y: image.y + info.offset.y,
     })
+  }
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    if (!editable) return
+    e.stopPropagation()
+    setShowControls(true)
   }
 
   const handleResize = (event: MouseEvent, direction: string) => {
@@ -56,26 +66,30 @@ export function DraggableImage({
       let newWidth = startWidth
       let newHeight = startHeight
 
-      // Maintain aspect ratio
-      // const aspectRatio = startWidth / startHeight
+      const aspectRatio = startWidth / startHeight
 
-      if (direction === 'se') {
+      if (direction === 'se' || direction === 'ne') {
         newWidth = startWidth + dx
-        newHeight = startHeight + dy
-      } else if (direction === 'sw') {
+        newHeight = newWidth / aspectRatio
+      } else if (direction === 'sw' || direction === 'nw') {
         newWidth = startWidth - dx
+        newHeight = newWidth / aspectRatio
+      } else if (direction === 'n') {
+        newWidth = startWidth
+        newHeight = startHeight - dy
+      } else if (direction === 's') {
+        newWidth = startWidth
         newHeight = startHeight + dy
-      } else if (direction === 'ne') {
+      } else if (direction === 'e') {
+        newWidth = startWidth - dx
+        newHeight = startHeight
+      } else if (direction === 'w') {
         newWidth = startWidth + dx
-        newHeight = startHeight - dy
-      } else if (direction === 'nw') {
-        newWidth = startWidth - dx
-        newHeight = startHeight - dy
+        newHeight = startHeight
       }
 
-      // Ensure minimum size
-      newWidth = Math.max(50, newWidth)
-      newHeight = Math.max(50, newHeight)
+      // newWidth = Math.max(50, newWidth)
+      // newHeight = Math.max(50, newHeight)
 
       onUpdate({
         ...image,
@@ -103,9 +117,45 @@ export function DraggableImage({
     })
   }
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Backspace' && showControls) {
+        onDelete(image.id)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [showControls, image.id, onDelete])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        imageRef.current &&
+        !imageRef.current.contains(event.target as Node)
+      ) {
+        setShowControls(false)
+      }
+    }
+
+    if (showControls) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showControls])
+
   return (
     <motion.div
-      className="absolute cursor-move"
+      ref={imageRef}
+      className={cn(
+        'absolute cursor-move hover:ring ring-red-700',
+        showControls && 'ring',
+      )}
       style={{
         top: 0,
         left: 0,
@@ -117,9 +167,7 @@ export function DraggableImage({
       dragMomentum={false}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 1.02, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
-      onHoverStart={() => setShowControls(true)}
-      onHoverEnd={() => !isDragging && !isResizing && setShowControls(false)}
+      onClick={handleImageClick}
     >
       <motion.div
         style={{
@@ -137,24 +185,33 @@ export function DraggableImage({
           draggable={false}
         />
 
-        {showControls && editable && (
-          <div className="absolute top-0 -translate-y-1/2 left-1/2 transform -translate-x-1/2 bg-white rounded-md shadow-md p-1 flex gap-1">
+        {showControls && editable && !isResizing && (
+          <div className="absolute top-0 translate-y-[-150%] left-1/2 transform -translate-x-1/2 bg-zinc-900 rounded-full py-1 px-2 flex gap-1 border">
             <button
-              onClick={() => rotateImage('counterclockwise')}
+              onClick={(e) => {
+                e.stopPropagation()
+                rotateImage('counterclockwise')
+              }}
               className="p-1 hover:bg-gray-100 rounded"
               title="Rotate counterclockwise"
             >
-              <RotateCcw size={16} className="text-black" />
+              <RotateCcw size={16} className="text-white" />
             </button>
             <button
-              onClick={() => rotateImage('clockwise')}
+              onClick={(e) => {
+                e.stopPropagation()
+                rotateImage('clockwise')
+              }}
               className="p-1 hover:bg-gray-100 rounded"
               title="Rotate clockwise"
             >
-              <RotateCw size={16} className="text-black" />
+              <RotateCw size={16} className="text-white" />
             </button>
             <button
-              onClick={() => onDelete(image.id)}
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(image.id)
+              }}
               className="p-1 hover:bg-red-100 text-red-500 rounded"
               title="Delete"
             >
@@ -165,24 +222,44 @@ export function DraggableImage({
         {showControls && editable && (
           <>
             <div
-              className="absolute w-6 h-6 bg-white rounded-full border border-gray-300 cursor-nwse-resize -right-3 -bottom-3 flex items-center justify-center shadow-sm"
+              className="absolute w-4 h-4 bg-zinc-100 rounded-full border border-gray-300 cursor-nwse-resize -right-2 -bottom-2 flex items-center justify-center shadow-sm"
               // @ts-expect-error Event type
               onMouseDown={(e) => handleResize(e, 'se')}
             />
             <div
-              className="absolute w-6 h-6 bg-white rounded-full border border-gray-300 cursor-nesw-resize -left-3 -bottom-3 flex items-center justify-center shadow-sm"
+              className="absolute w-4 h-4 bg-zinc-100 rounded-full border border-gray-300 cursor-nesw-resize -left-2 -bottom-2 flex items-center justify-center shadow-sm"
               // @ts-expect-error Event type
               onMouseDown={(e) => handleResize(e, 'sw')}
             />
             <div
-              className="absolute w-6 h-6 bg-white rounded-full border border-gray-300 cursor-nesw-resize -right-3 -top-3 flex items-center justify-center shadow-sm"
+              className="absolute w-4 h-4 bg-zinc-100 rounded-full border border-gray-300 cursor-nesw-resize -right-2 -top-2 flex items-center justify-center shadow-sm"
               // @ts-expect-error Event type
               onMouseDown={(e) => handleResize(e, 'ne')}
             />
             <div
-              className="absolute w-6 h-6 bg-white rounded-full border border-gray-300 cursor-nwse-resize -left-3 -top-3 flex items-center justify-center shadow-sm"
+              className="absolute w-4 h-4 bg-zinc-100 rounded-full border border-gray-300 cursor-nwse-resize -left-2 -top-2 flex items-center justify-center shadow-sm"
               // @ts-expect-error Event type
               onMouseDown={(e) => handleResize(e, 'nw')}
+            />
+            <div
+              className="absolute w-4 h-2 bg-zinc-100 rounded-full border cursor-ns-resize left-1/2 -translate-x-1/2 -top-1.5 flex items-center justify-center shadow-sm"
+              // @ts-expect-error Event type
+              onMouseDown={(e) => handleResize(e, 'n')}
+            />
+            <div
+              className="absolute w-4 h-2 bg-zinc-100 rounded-full border cursor-ns-resize left-1/2 -translate-x-1/2 -bottom-1.5 flex items-center justify-center shadow-sm"
+              // @ts-expect-error Event type
+              onMouseDown={(e) => handleResize(e, 's')}
+            />
+            <div
+              className="absolute w-2 h-4 bg-zinc-100 rounded-full border cursor-ew-resize top-1/2 translate-y-1/2 -left-1.5 flex items-center justify-center shadow-sm"
+              // @ts-expect-error Event type
+              onMouseDown={(e) => handleResize(e, 'e')}
+            />
+            <div
+              className="absolute w-2 h-4 bg-zinc-100 rounded-full border cursor-ew-resize top-1/2 translate-y-1/2 -right-1.5 flex items-center justify-center shadow-sm"
+              // @ts-expect-error Event type
+              onMouseDown={(e) => handleResize(e, 'w')}
             />
           </>
         )}

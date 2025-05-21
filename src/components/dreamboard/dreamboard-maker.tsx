@@ -49,8 +49,24 @@ export function DreamboardMaker({
   const boardRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [isDraggingOver, setIsDraggingOver] = useState(false)
+
   const openDialog = () => setIsOpen(true)
+
   const closeDialog = () => setIsOpen(false)
+
+  function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    setIsDraggingOver(true)
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return
+    setIsDraggingOver(false)
+  }
+
   const handleReset = async () => {
     const rollback = images
     try {
@@ -93,27 +109,27 @@ export function DreamboardMaker({
     }, 1200000)
   }, [])
 
-  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files
-    if (!files) return
-
-    Array.from(files).forEach((file) => {
-      const rollback = images
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          const centerX = 0
-          const centerY = 0
-          const randomX = centerX
-          const randomY = centerY
+  function processImageFile(file: File) {
+    const rollback = images
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        const img = new window.Image()
+        img.onload = () => {
+          const maxHeight = Math.min(600, img.naturalHeight)
+          const aspectRatio = img.naturalWidth / img.naturalHeight
+          const maxWidth =
+            maxHeight !== img.naturalHeight
+              ? maxHeight * aspectRatio
+              : img.naturalWidth
 
           const newImage: ImageItem = {
             id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            src: event.target.result as string,
-            x: randomX,
-            y: randomY,
-            width: 200,
-            height: 200,
+            src: event.target!.result as string,
+            x: 0,
+            y: 0,
+            width: maxWidth,
+            height: maxHeight,
             rotation: 0,
           }
 
@@ -143,13 +159,33 @@ export function DreamboardMaker({
               setImages(rollback)
             })
         }
-      }
-      reader.readAsDataURL(file)
-    })
 
+        img.onerror = () => {
+          toast.error('Erro ao carregar imagem')
+        }
+
+        img.src = event.target.result as string
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files
+    if (!files) return
+    Array.from(files).forEach(processImageFile)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    setIsDraggingOver(false)
+    const files = Array.from(e.dataTransfer.files)
+    const acceptedTypes = ['image/png', 'image/jpeg']
+    const imageFiles = files.filter((file) => acceptedTypes.includes(file.type))
+    imageFiles.forEach(processImageFile)
   }
 
   async function handleImageUpdate(updatedImage: ImageItem) {
@@ -218,6 +254,10 @@ export function DreamboardMaker({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
       >
         {images.length === 0 && editable && (
           <div className="flex flex-col items-center justify-center h-full w-full gap-4">
@@ -235,6 +275,14 @@ export function DreamboardMaker({
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {isDraggingOver && (
+          <div className="absolute inset-0 z-50 bg-black/60 flex items-center justify-center pointer-events-none">
+            <p className="text-white text-lg font-medium">
+              Solte a imagem para adicionar
+            </p>
           </div>
         )}
 
