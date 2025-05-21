@@ -15,9 +15,7 @@ export function MembersAreaHeader() {
   const { data: BusinessCourses } = useQuery({
     queryKey: ['courses', 'marketingDigital'],
     queryFn: async () => {
-      const response = await api.get(
-        '/conteudos/findCategory/estrategiasDeVendas',
-      )
+      const response = await api.get('/conteudos/findCategory/marketingDigital')
       return response.data as Conteudo[]
     },
   })
