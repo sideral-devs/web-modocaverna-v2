@@ -238,7 +238,7 @@ export function DreamboardMaker({
 
       const dataUrl = canvas.toDataURL('image/png')
       const link = document.createElement('a')
-      link.download = `dreamboard-${new Date().toISOString().slice(0, 10)}.png`
+      link.download = `quadro-dos-sonhos.png`
       link.href = dataUrl
       link.click()
     } catch {
