@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Meal } from '@/lib/api/meals'
 import {
   BowlFood,
@@ -196,17 +197,20 @@ export function MealCard({
             </div>
             <div className="flex flex-col gap-2">
               {meal.alimentos.length > 0 ? (
-                meal.alimentos.map((alimento) => (
-                  <div
-                    key={alimento.alimento_id}
-                    className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
-                  >
-                    <p>{alimento.nomeAlimento}</p>
-                    <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
-                      {alimento.quantidade}
+                meal.alimentos.map((alimento: any) => {
+                  const nomeAlimento = alimento.nome_alimento
+                  return (
+                    <div
+                      key={alimento.alimento_id}
+                      className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
+                    >
+                      <p>{nomeAlimento}</p>
+                      <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
+                        {alimento.quantidade}
+                      </div>
                     </div>
-                  </div>
-                ))
+                  )
+                })
               ) : (
                 <p className="text-zinc-400">*Sem alimentos adicionados.</p>
               )}

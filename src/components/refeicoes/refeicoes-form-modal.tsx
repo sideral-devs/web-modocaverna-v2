@@ -231,13 +231,11 @@ export function MealFormModal({
                         type="text"
                         value={alimento.quantidade}
                         onChange={(e) => {
-                          const value = Math.max(
-                            0,
-                            parseInt(e.target.value) || 0,
-                          ).toString()
                           setAlimentos(
                             alimentos.map((a, i) =>
-                              i === index ? { ...a, quantidade: value } : a,
+                              i === index
+                                ? { ...a, quantidade: e.target.value }
+                                : a,
                             ),
                           )
                         }}
@@ -305,13 +303,11 @@ export function MealFormModal({
                         type="text"
                         value={suplemento.comprado}
                         onChange={(e) => {
-                          const value = Math.max(
-                            0,
-                            parseInt(e.target.value) || 0,
-                          ).toString()
                           setSuplementos(
                             suplementos.map((s, i) =>
-                              i === index ? { ...s, comprado: value } : s,
+                              i === index
+                                ? { ...s, comprado: e.target.value }
+                                : s,
                             ),
                           )
                         }}
