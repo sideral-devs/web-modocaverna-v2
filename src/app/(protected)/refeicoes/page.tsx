@@ -14,7 +14,7 @@ import { ptBR } from 'date-fns/locale'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import type { Food, Supplement } from '@/lib/api/meals'
+import type { Supplement } from '@/lib/api/meals'
 
 export default function Page() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
@@ -66,12 +66,12 @@ export default function Page() {
         const dayObj = WEEK_DAYS.find((d) => d.short === short)
         const dayNumber = dayObj ? dayObj.workoutIndex : 0
         // Clean the alimentos array to remove created_at and updated_at
-        const cleanedAlimentos = meal.alimentos.map(
-          ({ nomeAlimento, quantidade }) => ({
-            nomeAlimento,
-            quantidade,
-          }),
-        )
+        // const cleanedAlimentos = meal.alimentos.map(
+        //   ({ nome_alimento, quantidade }) => ({
+        //     nomeAlimento = nome_alimento,
+        //     quantidade,
+        //   }),
+        // )
         // Clean the suplementos array to only include necessary fields
         const cleanedSuplementos = meal.suplementos.map(
           ({ nome, comprado }) => ({
@@ -85,7 +85,7 @@ export default function Page() {
             hora_refeicao: meal.hora_refeicao,
             observacoes: meal.observacoes,
             dia_semana: dayNumber,
-            alimentos: cleanedAlimentos as Food[],
+            alimentos: meal.alimentos,
             suplementos: cleanedSuplementos as Supplement[],
           }
         await createMeal(newMeal)
