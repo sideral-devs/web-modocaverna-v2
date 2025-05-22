@@ -16,6 +16,7 @@
 # next.js
 /.next/
 /out/
+/.vscode/
 
 # production
 /build
@@ -46,3 +47,4 @@ next-env.d.ts
 next.config.ts
 
 pnpm-lock.yaml
+
