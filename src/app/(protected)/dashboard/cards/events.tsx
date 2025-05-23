@@ -2,6 +2,8 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { api } from '@/lib/api'
+import { getWorkouts } from '@/lib/api/exercises'
+import { getMeals } from '@/lib/api/meals'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { Bookmark, Dot } from 'lucide-react'
@@ -61,10 +63,56 @@ export default function EventsCard() {
     },
   })
 
+  const { data: workouts } = useQuery({
+    queryKey: ['workouts'],
+    queryFn: getWorkouts,
+  })
+
+  const { data: meals } = useQuery({
+    queryKey: ['meals'],
+    queryFn: getMeals,
+  })
+
   const allEvents = useMemo(() => {
     const local = data?.compromissos || []
     const google = googleEvents?.events || []
     const rituals = []
+
+    const eventWorkouts =
+      workouts
+        ?.filter((item) => item.indice === dayjs().day())
+        .map((item) => {
+          const start = dayjs(`${today} ${item.horario}`).format(
+            'YYYY-MM-DD HH:mm',
+          )
+          const end = dayjs(start).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+
+          return {
+            comeca: start,
+            termina: end,
+            titulo: item.titulo,
+            categoria: 'Treino',
+            compromisso_id: `workout-${item.ficha_id}`,
+          }
+        }) || []
+
+    const eventMeals =
+      meals
+        ?.filter((item) => item.dia_semana === dayjs().day())
+        .map((item) => {
+          const start = dayjs(`${today} ${item.hora_refeicao}`).format(
+            'YYYY-MM-DD HH:mm',
+          )
+          const end = dayjs(start).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+
+          return {
+            comeca: start,
+            termina: end,
+            titulo: item.nome_refeicao,
+            categoria: 'Treino',
+            compromisso_id: `meal-${item.horario_id}`,
+          }
+        }) || []
 
     if (morningRitual) {
       rituals.push({
@@ -94,11 +142,15 @@ export default function EventsCard() {
       })
     }
 
-    const combined = [...local, ...google, ...rituals].sort((a, b) =>
-      dayjs(a.comeca).diff(dayjs(b.comeca)),
-    )
+    const combined = [
+      ...local,
+      ...google,
+      ...rituals,
+      ...eventMeals,
+      ...eventWorkouts,
+    ].sort((a, b) => dayjs(a.comeca).diff(dayjs(b.comeca)))
     return combined
-  }, [data, googleEvents, morningRitual, nightRitual])
+  }, [data, googleEvents, morningRitual, nightRitual, workouts])
 
   const nextEvent = useMemo(
     () => (allEvents ? getNextEvent(allEvents) : null),
@@ -183,10 +235,12 @@ export default function EventsCard() {
                                 ? ' bg-red-500'
                                 : event.categoria === 'Pessoal'
                                   ? ' bg-green-500'
-                                  : // @ts-expect-error event_id é válido para Compromisso e GoogleEvent, mas não para o Ritual
-                                    (event.event_id?.length ?? 0) > 0
-                                    ? ' bg-orange-400'
-                                    : ' border-zinc-500'
+                                  : event.categoria === 'Ritual'
+                                    ? 'bg-yellow-400'
+                                    : // @ts-expect-error event_id é válido para Compromisso e GoogleEvent, mas não para o Ritual
+                                      (event.event_id?.length ?? 0) > 0
+                                      ? ' bg-orange-400'
+                                      : ' border-zinc-500'
                         } group-data-[state=closed]:hidden`}
                       />
                       {event.titulo}

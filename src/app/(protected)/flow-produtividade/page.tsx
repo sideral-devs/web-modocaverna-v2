@@ -47,10 +47,14 @@ export default function Page() {
           <section className="grid grid-cols-1 md:grid-cols-2 w-full max-w-8xl gap-6 p-4 py-0">
             <PomodoroTimer />
             <Card className="flex flex-col w-full h-80 xl:h-96 p-5 gap-10">
-              <div className="flex w-full items-center justify-between">
+              <div className="flex w-full items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary rounded-[0.1rem]" />
-                  <span className="text-sm">Minutos em foco</span>
+                  <span className="text-sm">Produtividade</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-700 rounded-[0.1rem]" />
+                  <span className="text-sm">Estudos</span>
                 </div>
               </div>
               <ProductivityChart className="flex-1 max-w-full max-h-full overflow-hidden" />

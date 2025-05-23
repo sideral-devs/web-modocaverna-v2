@@ -14,9 +14,13 @@ import { Skeleton } from '../ui/skeleton'
 const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
 const chartConfig = {
-  on: {
-    label: 'Minutos',
+  productivity: {
+    label: 'Produtividade',
     color: 'var(--primary)',
+  },
+  study: {
+    label: 'Estudos',
+    color: 'var(--primary-muted)',
   },
 } satisfies ChartConfig
 
@@ -25,16 +29,21 @@ export function ProductivityChart({ className }: { className?: string }) {
     queryKey: ['pomodoro-chart'],
     queryFn: async () => {
       const response = await api.get('/pomodoro/chart?period=week')
-      return response.data as { produtividade: number[] }
+      return response.data as { produtividade: number[]; estudos: number[] }
     },
   })
 
-  const formatChart = (chartData: { produtividade: number[] }) => {
+  const formatChart = (chartData: {
+    produtividade: number[]
+    estudos: number[]
+  }) => {
     return chartData.produtividade.map((value, index) => {
-      const minutes = (value / 60).toFixed(2)
+      const minutes = Math.floor(value / 60)
+      const studyMinutes = Math.floor(chartData.estudos[index] / 60)
       return {
         day: days[index],
-        on: parseFloat(minutes),
+        productivity: minutes,
+        study: studyMinutes,
       }
     })
   }
@@ -63,13 +72,13 @@ export function ProductivityChart({ className }: { className?: string }) {
           tickFormatter={(value) => value.slice(0, 3)}
         />
         <Bar
-          dataKey="on"
+          dataKey="productivity"
           stackId="a"
           fill="var(--primary)"
-          radius={[0, 0, 4, 4]}
-          label="Minutos"
+          label="Produtividade"
           background={{ fill: '#000' }}
         />
+        <Bar dataKey="study" stackId="a" fill="#1447E6" label="Estudos" />
       </BarChart>
     </ChartContainer>
   )
