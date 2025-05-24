@@ -91,7 +91,7 @@ function mapWorkoutFromDTO(dto: WorkoutDTO): Workout {
 // Workouts (Treinos) endpoints
 export const getWorkouts = async () => {
   const response = await api.get('/fichas-de-treinos/find')
-  return response.data
+  return response.data as Workout[]
 }
 
 export async function getWorkoutById(id: number) {

@@ -165,7 +165,7 @@ export default function RitualsCard() {
           </Dialog>
           <FinishDialog open={finishDialogOpen} setOpen={setFinishDialogOpen} />
         </CardHeader>
-        <div className="flex flex-col flex-1 overflow-y-scroll scrollbar-minimal">
+        <div className="flex flex-col flex-1 overflow-y-scroll scrollbar-minimal relative">
           <Tabs
             value={currentTab}
             onValueChange={(val) => setCurrentTab(val as 'matinal' | 'noturno')}
@@ -185,120 +185,135 @@ export default function RitualsCard() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="matinal">
-              {morningRitual.itens.length > 0 ? (
-                <div className="flex flex-col px-4 divide-y">
-                  <DndContext
-                    sensors={sensors}
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <SortableContext
-                      items={morningRitual.itens.map(
-                        (item, index) => item + index,
-                      )}
-                      strategy={verticalListSortingStrategy}
+              <>
+                {morningRitual.itens.length > 0 ? (
+                  <div className="flex flex-col px-4 divide-y">
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragEnd}
                     >
-                      <ul className="divide-y">
-                        {morningRitual.itens.map((item, index) => (
-                          <SortableItem
-                            key={index}
-                            id={item + index}
-                            index={index + 1}
-                            text={item}
-                            onRemove={() => handleRemove(item, morningRitual)}
-                          />
-                        ))}
-                      </ul>
-                    </SortableContext>
-                  </DndContext>
-                </div>
-              ) : (
-                <div className="flex flex-col flex-1 items-center justify-center relative">
-                  <Image
-                    src="/images/empty-states/empty_rituals.png"
-                    alt="Nenhum objetivo encontrado"
-                    width={140}
-                    height={110}
-                    className="opacity-50"
-                  />
-                  <div className="w-60">
-                    <Dialog
-                      open={editRitualDialogOpen}
-                      onOpenChange={setEditRitualDialogOpen}
-                    >
-                      <DialogTrigger>
-                        <p className="text-[13px] text-zinc-400 text-center">
-                          Clique aqui para montar o seu Ritual Matinal.
-                        </p>
-                      </DialogTrigger>
-                      <EditRitualDialog
-                        openRecalculate={() => {
-                          setEditRitualDialogOpen(false)
-                          setRecalculateDialogOpen(true)
-                        }}
-                      />
-                    </Dialog>
+                      <SortableContext
+                        items={morningRitual.itens.map(
+                          (item, index) => item + index,
+                        )}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        <ul className="divide-y">
+                          {morningRitual.itens.map((item, index) => (
+                            <SortableItem
+                              key={index}
+                              id={item + index}
+                              index={index + 1}
+                              text={item}
+                              onRemove={() => handleRemove(item, morningRitual)}
+                            />
+                          ))}
+                        </ul>
+                      </SortableContext>
+                    </DndContext>
                   </div>
+                ) : (
+                  <div className="flex flex-col flex-1 items-center justify-center relative">
+                    <Image
+                      src="/images/empty-states/empty_rituals.png"
+                      alt="Nenhum objetivo encontrado"
+                      width={140}
+                      height={110}
+                      className="opacity-50"
+                    />
+                    <div className="w-60">
+                      <Dialog
+                        open={editRitualDialogOpen}
+                        onOpenChange={setEditRitualDialogOpen}
+                      >
+                        <DialogTrigger>
+                          <p className="text-[13px] text-zinc-400 text-center">
+                            Clique aqui para montar o seu Ritual Matinal.
+                          </p>
+                        </DialogTrigger>
+                        <EditRitualDialog
+                          openRecalculate={() => {
+                            setEditRitualDialogOpen(false)
+                            setRecalculateDialogOpen(true)
+                          }}
+                        />
+                      </Dialog>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute top-1 right-2 flex px-3 py-2 pt-[9px] border border-yellow-400 rounded-full">
+                  <span className="text-[10px] text-yellow-400 font-semibold">
+                    {morningRitual.horario_inicial} -{' '}
+                    {morningRitual.horario_final}
+                  </span>
                 </div>
-              )}
+              </>
             </TabsContent>
             <TabsContent value="noturno">
-              {nightRitual.itens.length > 0 ? (
-                <div className="flex flex-col px-4 divide-y">
-                  <DndContext
-                    sensors={sensors}
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <SortableContext
-                      items={nightRitual.itens.map(
-                        (item, index) => item + index,
-                      )}
-                      strategy={verticalListSortingStrategy}
+              <>
+                {nightRitual.itens.length > 0 ? (
+                  <div className="flex flex-col px-4 divide-y">
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragEnd}
                     >
-                      <ul className="divide-y">
-                        {nightRitual.itens.map((item, index) => (
-                          <SortableItem
-                            key={index}
-                            id={item + index}
-                            index={index + 1}
-                            text={item}
-                            onRemove={() => handleRemove(item, nightRitual)}
-                          />
-                        ))}
-                      </ul>
-                    </SortableContext>
-                  </DndContext>
-                </div>
-              ) : (
-                <div className="flex flex-col flex-1 items-center justify-center relative">
-                  <Image
-                    src="/images/empty-states/empty_rituals.png"
-                    alt="Nenhum objetivo encontrado"
-                    width={140}
-                    height={110}
-                    className="opacity-50"
-                  />
-                  <div className="w-60">
-                    <Dialog
-                      open={editRitualDialogOpen}
-                      onOpenChange={setEditRitualDialogOpen}
-                    >
-                      <DialogTrigger>
-                        <p className="text-[13px] text-zinc-400 text-center">
-                          Clique aqui para montar o seu Ritual Noturno.
-                        </p>
-                      </DialogTrigger>
-                      <EditRitualDialog
-                        openRecalculate={() => {
-                          setEditRitualDialogOpen(false)
-                          setRecalculateDialogOpen(true)
-                        }}
-                      />
-                    </Dialog>
+                      <SortableContext
+                        items={nightRitual.itens.map(
+                          (item, index) => item + index,
+                        )}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        <ul className="divide-y">
+                          {nightRitual.itens.map((item, index) => (
+                            <SortableItem
+                              key={index}
+                              id={item + index}
+                              index={index + 1}
+                              text={item}
+                              onRemove={() => handleRemove(item, nightRitual)}
+                            />
+                          ))}
+                        </ul>
+                      </SortableContext>
+                    </DndContext>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="flex flex-col flex-1 items-center justify-center relative">
+                    <Image
+                      src="/images/empty-states/empty_rituals.png"
+                      alt="Nenhum objetivo encontrado"
+                      width={140}
+                      height={110}
+                      className="opacity-50"
+                    />
+                    <div className="w-60">
+                      <Dialog
+                        open={editRitualDialogOpen}
+                        onOpenChange={setEditRitualDialogOpen}
+                      >
+                        <DialogTrigger>
+                          <p className="text-[13px] text-zinc-400 text-center">
+                            Clique aqui para montar o seu Ritual Noturno.
+                          </p>
+                        </DialogTrigger>
+                        <EditRitualDialog
+                          openRecalculate={() => {
+                            setEditRitualDialogOpen(false)
+                            setRecalculateDialogOpen(true)
+                          }}
+                        />
+                      </Dialog>
+                    </div>
+                  </div>
+                )}
+              </>
+              <div className="absolute top-1 right-2 flex px-3 py-2 pt-[9px] border border-yellow-400 rounded-full">
+                <span className="text-[10px] text-yellow-400 font-semibold">
+                  {nightRitual.horario_inicial} - {nightRitual.horario_final}
+                </span>
+              </div>
             </TabsContent>
           </Tabs>
         </div>

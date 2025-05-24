@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog'
-import type { Food, Meal, Supplement } from '@/lib/api/meals'
+import type { FormattedFood, Meal, Supplement } from '@/lib/api/meals'
 import { BowlFood, Pill, Plus, Trash } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
@@ -35,7 +35,7 @@ export function MealFormModal({
   const [nome, setNome] = useState(initialData?.nome_refeicao ?? '')
   const [horario, setHorario] = useState(initialData?.hora_refeicao ?? '')
   const [observacoes, setObservacoes] = useState(initialData?.observacoes ?? '')
-  const [alimentos, setAlimentos] = useState<Partial<Food>[]>(
+  const [alimentos, setAlimentos] = useState<Partial<FormattedFood>[]>(
     initialData?.alimentos ?? [{ nomeAlimento: '', quantidade: '' }],
   )
   const [suplementos, setSuplementos] = useState<Partial<Supplement>[]>(
@@ -65,7 +65,7 @@ export function MealFormModal({
         nome_refeicao: nome,
         hora_refeicao: horario,
         observacoes,
-        alimentos: cleanedAlimentos as Food[],
+        alimentos: cleanedAlimentos as FormattedFood[],
         suplementos: cleanedSuplementos as Supplement[],
         dia_semana: selectedDay,
       })

@@ -28,6 +28,7 @@ export function MessageDropzone({
   const [error, setError] = React.useState<string | null>(null)
   const [isDragging, setIsDragging] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const additionalInputRef = React.useRef<HTMLInputElement>(null)
 
   const handleFileChange = (selectedFiles: FileList | null) => {
     if (!selectedFiles || selectedFiles.length === 0) return
@@ -76,6 +77,10 @@ export function MessageDropzone({
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
+  }
+
+  const handleAddFile = () => {
+    additionalInputRef.current?.click()
   }
 
   const removeFile = (index: number) => {
@@ -249,6 +254,21 @@ export function MessageDropzone({
                 </div>
               </div>
             ))}
+            <input
+              ref={additionalInputRef}
+              type="file"
+              accept=".jpg,.jpeg,.png,.pdf,.mp4"
+              className="hidden"
+              multiple
+              onChange={(e) => handleFileChange(e.target.files)}
+            />
+            <Button
+              variant="secondary"
+              className="ml-auto"
+              onClick={handleAddFile}
+            >
+              + Adicionar
+            </Button>
           </div>
         </div>
       )}

@@ -18,6 +18,7 @@ import { addHours, format, parse } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlarmClock,
+  AlertOctagonIcon,
   Bed,
   BriefcaseBusiness,
   CloudSun,
@@ -340,12 +341,16 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
           </div>
         </div>
       </div>
+
       <div className="flex flex-1 items-center justify-between p-6 py-2">
-        <p className="text-sm text-zinc-200 font-normal">
-          <strong className="text-white">Deseja alterar os horários? </strong>{' '}
-          Clique em &quot;Voltar&quot; e reajuste até que fique adequado à sua
-          necessidade e realidade.
-        </p>
+        <div className="w-full flex items-center 3xl:px-5 3xl:py-6  p-4 gap-6 bg-[#44430D80]/50 rounded-lg">
+          <AlertOctagonIcon className="text-yellow-400 min-w-4 xl:min-w-6" />
+          <p className="text-yellow-400 3xl:text-base text-[0.85rem]">
+            <strong>Deseja alterar os horários? </strong> Clique em
+            &quot;Voltar&quot; e reajuste até que fique adequado à sua
+            necessidade e realidade.
+          </p>
+        </div>
       </div>
     </div>
   )
