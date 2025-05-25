@@ -96,7 +96,7 @@ export function AnalysisResultsStep({
       const finalData = {
         ...data,
         imc,
-        satisfeito_fisico: data.nivel_satisfacao === 'Não satisfeito' ? 0 : 1,
+        satisfeito_fisico: data.nivel_satisfacao === 'Nada satisfeito' ? 0 : 1,
         classificacao:
           imc < 18.5
             ? 'Abaixo do peso'
