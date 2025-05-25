@@ -44,13 +44,18 @@ export function UpdateMeasurementsStep() {
   const lastRegistration = shapeRegistrations?.[shapeRegistrations.length - 1]
   const [currentStep, setCurrentStep] = useState<Step>('measurements')
   const [satisfactionLevel, setSatisfactionLevel] = useState<
-    'Satisfeito' | 'Não satisfeito' | 'Nada satisfeito' | 'Pouco satisfeito'
+    | 'Satisfeito'
+    | 'Pouco satisfeito'
+    | 'Nada satisfeito'
+    | 'Insatisfeito'
+    | 'Indefinido'
   >(
     (lastRegistration?.nivel_satisfacao as
       | 'Satisfeito'
-      | 'Não satisfeito'
+      | 'Pouco satisfeito'
       | 'Nada satisfeito'
-      | 'Pouco satisfeito') || 'Não satisfeito',
+      | 'Insatisfeito'
+      | 'Indefinido') || 'Indefinido',
   )
 
   const form = useForm<Measurements>({
@@ -396,17 +401,6 @@ export function UpdateMeasurementsStep() {
                 Pouco satisfeito
               </Button>
               <Button
-                onClick={() => setSatisfactionLevel('Não satisfeito')}
-                className={`flex-1 gap-2 ${
-                  satisfactionLevel === 'Não satisfeito'
-                    ? 'bg-orange-500 hover:bg-orange-600'
-                    : 'bg-zinc-800 hover:bg-zinc-700'
-                }`}
-              >
-                <SmileySad weight="bold" size={24} />
-                Não satisfeito
-              </Button>
-              <Button
                 onClick={() => setSatisfactionLevel('Nada satisfeito')}
                 className={`flex-1 gap-2 ${
                   satisfactionLevel === 'Nada satisfeito'
@@ -416,6 +410,28 @@ export function UpdateMeasurementsStep() {
               >
                 <SmileyXEyes weight="bold" size={24} />
                 Nada satisfeito
+              </Button>
+              <Button
+                onClick={() => setSatisfactionLevel('Insatisfeito')}
+                className={`flex-1 gap-2 ${
+                  satisfactionLevel === 'Insatisfeito'
+                    ? 'bg-orange-500 hover:bg-orange-600'
+                    : 'bg-zinc-800 hover:bg-zinc-700'
+                }`}
+              >
+                <SmileySad weight="bold" size={24} />
+                Insatisfeito
+              </Button>
+              <Button
+                onClick={() => setSatisfactionLevel('Indefinido')}
+                className={`flex-1 gap-2 ${
+                  satisfactionLevel === 'Indefinido'
+                    ? 'bg-zinc-500 hover:bg-zinc-600'
+                    : 'bg-zinc-800 hover:bg-zinc-700'
+                }`}
+              >
+                <SmileyMeh weight="bold" size={24} />
+                Indefinido
               </Button>
             </div>
           </div>
@@ -769,6 +785,7 @@ export function UpdateMeasurementsStep() {
                       <label className="text-sm">Altura</label>
                       <InputWithSuffix
                         type="text"
+                        disabled
                         value={measurements.altura}
                         onChange={(e) =>
                           handleInputChange('altura', e.target.value)
@@ -826,19 +843,19 @@ export function UpdateMeasurementsStep() {
               {currentStep === 'analysis' ? 'Voltar' : 'Cancelar'}
             </Button>
             <AutoSubmitButton
-              disabled={
-                currentStep === 'measurements'
-                  ? !measurements.biceps_direito ||
-                    !measurements.biceps_esquerdo ||
-                    !measurements.peito ||
-                    !measurements.gluteos ||
-                    !measurements.quadriceps_direito ||
-                    !measurements.quadriceps_esquerdo ||
-                    !measurements.quadril ||
-                    !measurements.panturrilha_direita ||
-                    !measurements.panturrilha_esquerda
-                  : false
-              }
+              // disabled={
+              //   currentStep === 'measurements'
+              //     ? !measurements.biceps_direito ||
+              //       !measurements.biceps_esquerdo ||
+              //       !measurements.peito ||
+              //       !measurements.gluteos ||
+              //       !measurements.quadriceps_direito ||
+              //       !measurements.quadriceps_esquerdo ||
+              //       !measurements.quadril ||
+              //       !measurements.panturrilha_direita ||
+              //       !measurements.panturrilha_esquerda
+              //     : false
+              // }
               onClick={handleSubmit(onSubmit)}
             >
               {currentStep === 'measurements'

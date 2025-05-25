@@ -148,19 +148,36 @@ export function TempleForge({ value }: { value: string }) {
                     >
                       {lastShapeRegistration?.nivel_satisfacao ===
                       'Satisfeito' ? (
-                        <Smiley weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <Smiley className="w-6 h-6 text-green-500" />
+                          <span className="text-green-500">Satisfeito</span>
+                        </div>
                       ) : lastShapeRegistration?.nivel_satisfacao ===
                         'Pouco satisfeito' ? (
-                        <SmileyMeh weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <SmileyMeh className="w-6 h-6 text-yellow-500" />
+                          <span className="text-yellow-500">
+                            Pouco satisfeito
+                          </span>
+                        </div>
                       ) : lastShapeRegistration?.nivel_satisfacao ===
-                        'Não satisfeito' ? (
-                        <SmileySad weight="bold" size={24} />
+                        'Nada satisfeito' ? (
+                        <div className="flex items-center gap-2">
+                          <SmileyXEyes className="w-6 h-6 text-red-500" />
+                          <span className="text-red-500">Nada satisfeito</span>
+                        </div>
+                      ) : lastShapeRegistration?.nivel_satisfacao ===
+                        'Insatisfeito' ? (
+                        <div className="flex items-center gap-2">
+                          <SmileySad className="w-6 h-6 text-orange-500" />
+                          <span className="text-orange-500">Insatisfeito</span>
+                        </div>
                       ) : (
-                        <SmileyXEyes weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <SmileyMeh className="w-6 h-6 text-red-500" />
+                          <span className="text-red-500">Indefinido</span>
+                        </div>
                       )}
-                      {lastShapeRegistration?.nivel_satisfacao
-                        ? lastShapeRegistration.nivel_satisfacao
-                        : 'Não definido'}
                     </span>
                   </div>
                 </div>

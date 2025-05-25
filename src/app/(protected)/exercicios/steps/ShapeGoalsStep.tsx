@@ -101,8 +101,9 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
     const satisfactionMap: Record<string, string> = {
       satisfied: 'Satisfeito',
       little_satisfied: 'Pouco satisfeito',
-      not_satisfied: 'Não satisfeito',
-      very_not_satisfied: 'Nada satisfeito',
+      not_satisfied: 'Nada satisfeito',
+      very_not_satisfied: 'Insatisfeito',
+      undefined: 'Indefinido',
     }
 
     // Save the data to the store before moving to the next step
@@ -240,14 +241,20 @@ export function ShapeGoalsStep({ onNext, onBack }: ShapeGoalsStepProps) {
                 </SelectItem>
                 <SelectItem value="not_satisfied">
                   <div className="flex items-center gap-2">
-                    <SmileySad className="w-6 h-6 text-orange-500" />
-                    <span>Não satisfeito</span>
+                    <SmileyXEyes className="w-6 h-6 text-red-500" />
+                    <span>Nada satisfeito</span>
                   </div>
                 </SelectItem>
                 <SelectItem value="very_not_satisfied">
                   <div className="flex items-center gap-2">
-                    <SmileyXEyes className="w-6 h-6 text-red-500" />
-                    <span>Nada satisfeito</span>
+                    <SmileySad className="w-6 h-6 text-orange-500" />
+                    <span>Insatisfeito</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="undefined">
+                  <div className="flex items-center gap-2">
+                    <SmileyMeh className="w-6 h-6 text-zinc-500" />
+                    <span>Indefinido</span>
                   </div>
                 </SelectItem>
               </SelectContent>
