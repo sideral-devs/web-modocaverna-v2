@@ -36,7 +36,7 @@ export function MealFormModal({
   const [horario, setHorario] = useState(initialData?.hora_refeicao ?? '')
   const [observacoes, setObservacoes] = useState(initialData?.observacoes ?? '')
   const [alimentos, setAlimentos] = useState<Partial<FormattedFood>[]>(
-    initialData?.alimentos ?? [{ nomeAlimento: '', quantidade: '' }],
+    initialData?.alimentos ?? [],
   )
   const [suplementos, setSuplementos] = useState<Partial<Supplement>[]>(
     initialData?.suplementos ?? [],
