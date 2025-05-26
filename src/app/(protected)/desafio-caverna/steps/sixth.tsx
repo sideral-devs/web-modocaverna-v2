@@ -23,7 +23,7 @@ export function SixthStep({
     return values.filter((value) => !staticValues.includes(value))
   }
 
-  function saveData(){
+  function saveData() {
     // if (!selectedOptions.length) {
     if (!values.length) {
       toast.error('Selecione pelo menos um item!')
@@ -38,15 +38,14 @@ export function SixthStep({
   }
 
   function handleSaveInfo() {
-    saveData();
+    saveData()
     onNext()
   }
 
-  function handleBackStep (){
+  function handleBackStep() {
     saveData()
     onBack()
   }
-
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -86,12 +85,14 @@ export function SixthStep({
 
   useEffect(() => {
     if (fail && fail.length > 0) {
-      setValues(fail.map((fail) => {
-        return fail.replace('✅ ', '');
-      }));
+      setValues(
+        fail.map((fail) => {
+          return fail.replace('✅ ', '')
+        }),
+      )
     }
-  },  [fail])
-  
+  }, [fail])
+
   return (
     <div className="flex flex-col w-full relative flex-1 items-center">
       <div className="flex flex-col flex-1 w-full max-w-md gap-10">
@@ -137,7 +138,7 @@ export function SixthStep({
         </form>
       </div>
       <footer className="flex w-full h-32 justify-center items-end pb-11 gap-4">
-      <Button onClick={handleBackStep} className="px-5" variant="outline">
+        <Button onClick={handleBackStep} className="px-5" variant="outline">
           Voltar
         </Button>
         <Button onClick={handleSaveInfo} className="px-5">

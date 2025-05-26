@@ -25,10 +25,23 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export function FinalStepTwo({ onBack, challenge }: { onBack: () => void; challenge: Challenge }) {
+export function FinalStepTwo({
+  onBack,
+  challenge,
+}: {
+  onBack: () => void
+  challenge: Challenge
+}) {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { fotos_situacao_final, situacao_final, relato_conquistas, setRelatoConquistas, fotos_oque_motivou_final, setFotosOqueMotivouFinal } = useFinishChallengeStore()
+  const {
+    fotos_situacao_final,
+    situacao_final,
+    relato_conquistas,
+    setRelatoConquistas,
+    fotos_oque_motivou_final,
+    setFotosOqueMotivouFinal,
+  } = useFinishChallengeStore()
   const [images, setImages] = useState<{ name: string; src: string }[]>([])
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -40,7 +53,7 @@ export function FinalStepTwo({ onBack, challenge }: { onBack: () => void; challe
     formState: { errors, isSubmitting },
   } = form
 
-  function handleBackStep (data: FormData){
+  function handleBackStep(data: FormData) {
     setFotosOqueMotivouFinal(images.map((image) => image.src))
     setRelatoConquistas(data.situation)
     onBack()
@@ -48,16 +61,17 @@ export function FinalStepTwo({ onBack, challenge }: { onBack: () => void; challe
 
   useEffect(() => {
     if (fotos_oque_motivou_final) {
-      setImages(fotos_oque_motivou_final.map((src) => ({
-        name: src.split('/').pop() || '',
-        src,
-      })));
+      setImages(
+        fotos_oque_motivou_final.map((src) => ({
+          name: src.split('/').pop() || '',
+          src,
+        })),
+      )
     }
     if (relato_conquistas) {
       form.setValue('situation', relato_conquistas)
     }
   }, [fotos_oque_motivou_final, relato_conquistas])
-
 
   async function handleSaveData(data: FormData) {
     try {
@@ -213,7 +227,11 @@ export function FinalStepTwo({ onBack, challenge }: { onBack: () => void; challe
           </div>
         </div>
         <footer className="flex w-full h-32 justify-center items-end bg-black pb-11 gap-4 border-t">
-        <Button onClick={handleSubmit(handleBackStep)} className="px-5" variant="outline">
+          <Button
+            onClick={handleSubmit(handleBackStep)}
+            className="px-5"
+            variant="outline"
+          >
             Voltar
           </Button>
           <Button

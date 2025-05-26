@@ -23,7 +23,7 @@ export function FifthStep({
     return values.filter((value) => !staticValues.includes(value))
   }
 
-  function saveData(){
+  function saveData() {
     // if (!selectedOptions.length) {
     //   toast.error('Selecione pelo menos um item!')
     //   return
@@ -37,12 +37,11 @@ export function FifthStep({
   }
 
   function handleSaveInfo() {
-    saveData();
+    saveData()
     onNext()
   }
 
-
-  function handleBackStep (){
+  function handleBackStep() {
     saveData()
     onBack()
   }
@@ -85,11 +84,13 @@ export function FifthStep({
 
   useEffect(() => {
     if (compromisses && compromisses.length > 0) {
-      setValues(compromisses.map((compromisse) => {
-        return compromisse.replace('❌ ', '');
-      }));
+      setValues(
+        compromisses.map((compromisse) => {
+          return compromisse.replace('❌ ', '')
+        }),
+      )
     }
-  },  [compromisses])
+  }, [compromisses])
 
   return (
     <div className="flex flex-col w-full relative flex-1 items-center">
@@ -136,7 +137,7 @@ export function FifthStep({
         </form>
       </div>
       <footer className="flex w-full h-32 justify-center items-end pb-11 gap-4">
-      <Button onClick={handleBackStep} className="px-5" variant="outline">
+        <Button onClick={handleBackStep} className="px-5" variant="outline">
           Voltar
         </Button>
         <Button onClick={handleSaveInfo} className="px-5">

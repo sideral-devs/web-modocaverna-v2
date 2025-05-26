@@ -1,21 +1,21 @@
-import AutoSubmitButton from "@/components/ui/autoSubmitButton";
-import { Button } from "@/components/ui/button";
-import clsx from "clsx";
-import { AlertOctagonIcon, LockIcon } from "lucide-react";
-import Image from "next/image";
+import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { Button } from '@/components/ui/button'
+import clsx from 'clsx'
+import { AlertOctagonIcon, LockIcon } from 'lucide-react'
+import Image from 'next/image'
 
 export function FourthStep({
   onNext,
   onBack,
 }: {
-  onNext: () => void;
-  onBack: () => void;
+  onNext: () => void
+  onBack: () => void
 }) {
   return (
     <div className="flex flex-col relative flex-1 w-[140dvh] justify-between items-start">
       <div className="flex items-start pl-10 3xl:pb-8 pb-4 gap-16">
         <Image
-          src={"/images/lobo/bracos-cruzados.png"}
+          src={'/images/lobo/bracos-cruzados.png'}
           alt="Capitão Caverna"
           width={228}
           height={374}
@@ -30,16 +30,16 @@ export function FourthStep({
           </p>
           <div className="w-full flex items-center 3xl:px-5 3xl:py-6  p-4 gap-6 bg-[#44430D80]/50 rounded-lg">
             <AlertOctagonIcon
-              className={clsx("text-yellow-400", "w-6 h-5", "3xl:w-8 3xl:h-6")}
+              className={clsx('text-yellow-400', 'w-6 h-5', '3xl:w-8 3xl:h-6')}
             />
             <p className="text-yellow-400 3xl:text-base text-[0.85rem]">
               A verdadeira transformação acontece nos bastidores, no dia a dia,
-              longe dos holofotes.{" "}
+              longe dos holofotes.{' '}
             </p>
           </div>
           <div className="w-full flex items-center 3xl:px-5 3xl:py-6  p-4 gap-6 bg-[#3F0808]/50 rounded-lg">
             <LockIcon
-              className={clsx("text-red-500", "w-7 h-6", "3xl:w-10 3xl:h-10")}
+              className={clsx('text-red-500', 'w-7 h-6', '3xl:w-10 3xl:h-10')}
             />
             <p className="text-red-500 3xl:text-base text-[0.85rem]">
               O Modo Caverna segue um protocolo bem definido, mas é flexível o
@@ -51,7 +51,7 @@ export function FourthStep({
           </p>
           <div className="w-full flex items-center  3xl:px-5 3xl:py-6  p-4 gap-6 bg-[#44430D80]/50 rounded-lg">
             <AlertOctagonIcon
-              className={clsx("text-yellow-400", "w-7 h-5", "3xl:w-10 3xl:h-8")}
+              className={clsx('text-yellow-400', 'w-7 h-5', '3xl:w-10 3xl:h-8')}
             />
             <p className="text-yellow-400 3xl:text-base text-[0.85rem]">
               Não pegue leve! Quanto mais disciplinado e comprometido você for,
@@ -62,7 +62,7 @@ export function FourthStep({
             A decisão é sua. Vamos lá! 🚀
           </p>
           <Image
-            src={"/images/triangle-balloon.svg"}
+            src={'/images/triangle-balloon.svg'}
             width={54}
             height={14}
             alt="balloon"
@@ -79,5 +79,5 @@ export function FourthStep({
         </AutoSubmitButton>
       </footer>
     </div>
-  );
+  )
 }

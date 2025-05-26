@@ -34,13 +34,13 @@ export function ThirdStep({
     register,
     formState: { errors },
   } = form
-  
-  function saveData(data: FormData){
+
+  function saveData(data: FormData) {
     setReason(data.wish)
     setInitialReasonPhotos(images.map((image) => image.src))
   }
 
-  function handleBackStep (data: FormData){
+  function handleBackStep(data: FormData) {
     saveData(data)
     onBack()
   }
@@ -58,13 +58,14 @@ export function ThirdStep({
         form.setValue('wish', parsed.textarea_oque_motivou)
       }
       if (parsed.initialReasonPhotos) {
-        const restoredImages = parsed.initialReasonPhotos.map((src: string, index: number) => ({
-          name: `image-${index + 1}`,
-          src,
-        }))
+        const restoredImages = parsed.initialReasonPhotos.map(
+          (src: string, index: number) => ({
+            name: `image-${index + 1}`,
+            src,
+          }),
+        )
         setImages(restoredImages)
       }
-      
     }
   }, [])
 
@@ -169,7 +170,11 @@ export function ThirdStep({
           </div>
         </div>
         <footer className="flex w-full  3xl:h-32 h-24 justify-center 3xl:items-end items-center  3xl:pb-11 gap-4 border-t">
-          <Button onClick={handleSubmit(handleBackStep)} className="px-5" variant="outline">
+          <Button
+            onClick={handleSubmit(handleBackStep)}
+            className="px-5"
+            variant="outline"
+          >
             Voltar
           </Button>
           <Button onClick={handleSubmit(handleSaveData)} className="px-5">

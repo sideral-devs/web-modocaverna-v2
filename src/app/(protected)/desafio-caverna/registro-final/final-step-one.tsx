@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Button } from '@/components/ui/button'
 import { ImageInput } from '@/components/ui/image-input'
 import { Textarea } from '@/components/ui/textarea'
@@ -27,7 +28,12 @@ export function FinalStepOne({
   challenge: Challenge
   onNext: () => void
 }) {
-  const { situacao_final, setSituacaoFinal, fotos_situacao_final, setFotosSituacaoFinal } = useFinishChallengeStore()
+  const {
+    situacao_final,
+    setSituacaoFinal,
+    fotos_situacao_final,
+    setFotosSituacaoFinal,
+  } = useFinishChallengeStore()
   const [images, setImages] = useState<{ name: string; src: string }[]>([])
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -47,10 +53,12 @@ export function FinalStepOne({
 
   useEffect(() => {
     if (fotos_situacao_final) {
-      setImages(fotos_situacao_final.map((src) => ({
-        name: src.split('/').pop() || '',
-        src,
-      })));
+      setImages(
+        fotos_situacao_final.map((src) => ({
+          name: src.split('/').pop() || '',
+          src,
+        })),
+      )
     }
     if (situacao_final) {
       form.setValue('situation', situacao_final)
@@ -198,5 +206,4 @@ export function FinalStepOne({
       </div>
     </FormProvider>
   )
-
 }

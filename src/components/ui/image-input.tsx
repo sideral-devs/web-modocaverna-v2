@@ -21,8 +21,8 @@ export function ImageInput({
   size?: number
   className?: string
   imageClassName?: string
-  customId?: string,
-  initialPreview?: string,
+  customId?: string
+  initialPreview?: string
   position: number
 }) {
   const [preview, setPreview] = useState<string | null>(initialPreview || null)
@@ -58,13 +58,13 @@ export function ImageInput({
   const removeImage = () => {
     onSave((prev) => {
       const newImages = [...prev]
-      newImages[position] = null as any
-      return newImages.filter(Boolean)
+      newImages[position] = { name: '', src: '' }
+      return newImages.filter((img) => img.name !== '' && img.src !== '')
     })
     setPreview(null)
     setImage(null)
   }
-  
+
   return (
     <div className={cn('flex items-center gap-6 group', className)}>
       {preview ? (

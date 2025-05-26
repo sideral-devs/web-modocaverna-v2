@@ -27,7 +27,6 @@ export default function Page() {
     setCurrentPhase((curr) => curr - 1)
   }
 
-
   if (!challenge && isFetched) {
     return redirect('/desafio-caverna')
   }

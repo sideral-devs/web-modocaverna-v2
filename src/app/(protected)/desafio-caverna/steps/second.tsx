@@ -3,7 +3,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useChallengerStore } from '@/store/challenge'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
-import { AlertOctagonIcon, ImageIcon } from 'lucide-react'
+import { AlertOctagonIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -34,12 +34,12 @@ export function SecondStep({
     formState: { errors },
   } = form
 
-  function saveData(data: FormData){
+  function saveData(data: FormData) {
     setWish(data.wish)
     setInitialSituationPhotos(images.map((image) => image.src))
   }
 
-  function handleBackStep (data: FormData){
+  function handleBackStep(data: FormData) {
     saveData(data)
     onBack()
   }
@@ -127,7 +127,11 @@ export function SecondStep({
           </div>
         </div>
         <footer className="flex w-full  3xl:h-32 h-24 justify-center 3xl:items-end items-center  3xl:pb-11 gap-4 border-t">
-          <Button onClick={handleSubmit(handleBackStep)} className="px-5" variant="outline">
+          <Button
+            onClick={handleSubmit(handleBackStep)}
+            className="px-5"
+            variant="outline"
+          >
             Voltar
           </Button>
           <Button onClick={handleSubmit(handleSaveData)} className="px-5">
