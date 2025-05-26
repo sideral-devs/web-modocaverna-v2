@@ -206,12 +206,13 @@ export function MealCard({
             <div className="flex flex-col gap-2">
               {meal.alimentos.length > 0 ? (
                 meal.alimentos.map((alimento: any) => {
+                  const nomeAlimento = alimento.nome_alimento
                   return (
                     <div
                       key={alimento.alimento_id}
                       className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
                     >
-                      <p>{alimento.nomeAlimento}</p>
+                      <p>{nomeAlimento}</p>
                       <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
                         {alimento.quantidade}
                       </div>

@@ -49,8 +49,8 @@ export function MealFormModal({
     try {
       // Clean the alimentos array to remove created_at and updated_at
       const cleanedAlimentos = alimentos.map(
-        ({ nomeAlimento, quantidade }) => ({
-          nomeAlimento,
+        ({ nome_alimento, quantidade }) => ({
+          nome_alimento,
           quantidade,
         }),
       )
@@ -73,7 +73,7 @@ export function MealFormModal({
       setNome('')
       setHorario('')
       setObservacoes('')
-      setAlimentos([{ nomeAlimento: '', quantidade: '' }])
+      setAlimentos([{ nome_alimento: '', quantidade: '' }])
       setSuplementos([])
 
       onOpenChange(false)
@@ -89,7 +89,7 @@ export function MealFormModal({
       setNome('')
       setHorario('')
       setObservacoes('')
-      setAlimentos([{ nomeAlimento: '', quantidade: '' }])
+      setAlimentos([{ nome_alimento: '', quantidade: '' }])
       setSuplementos([])
       setSelectedDay(new Date().getDay())
     } else if (initialData) {
@@ -213,12 +213,12 @@ export function MealFormModal({
                     <div key={index} className="flex w-full items-center gap-4">
                       <Input
                         type="text"
-                        value={alimento.nomeAlimento}
+                        value={alimento.nome_alimento}
                         onChange={(e) =>
                           setAlimentos(
                             alimentos.map((a, i) =>
                               i === index
-                                ? { ...a, nomeAlimento: e.target.value }
+                                ? { ...a, nome_alimento: e.target.value }
                                 : a,
                             ),
                           )
@@ -262,7 +262,7 @@ export function MealFormModal({
                     onClick={() =>
                       setAlimentos([
                         ...alimentos,
-                        { nomeAlimento: '', quantidade: '' },
+                        { nome_alimento: '', quantidade: '' },
                       ])
                     }
                     className="flex items-center gap-2 text-red-500 hover:bg-red-500/10"

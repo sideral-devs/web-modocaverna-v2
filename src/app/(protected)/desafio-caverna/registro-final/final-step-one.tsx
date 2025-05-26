@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Button } from '@/components/ui/button'
 import { ImageInput } from '@/components/ui/image-input'
 import { Textarea } from '@/components/ui/textarea'
@@ -8,7 +9,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import { ImageIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -27,7 +28,12 @@ export function FinalStepOne({
   challenge: Challenge
   onNext: () => void
 }) {
-  const { setSituacaoFinal, setFotosSituacaoFinal } = useFinishChallengeStore()
+  const {
+    situacao_final,
+    setSituacaoFinal,
+    fotos_situacao_final,
+    setFotosSituacaoFinal,
+  } = useFinishChallengeStore()
   const [images, setImages] = useState<{ name: string; src: string }[]>([])
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -44,6 +50,20 @@ export function FinalStepOne({
     setSituacaoFinal(data.situation)
     onNext()
   }
+
+  useEffect(() => {
+    if (fotos_situacao_final) {
+      setImages(
+        fotos_situacao_final.map((src) => ({
+          name: src.split('/').pop() || '',
+          src,
+        })),
+      )
+    }
+    if (situacao_final) {
+      form.setValue('situation', situacao_final)
+    }
+  }, [fotos_situacao_final, situacao_final])
 
   return (
     <FormProvider {...form}>
@@ -129,6 +149,8 @@ export function FinalStepOne({
                     descriptionField={false}
                     size={173}
                     onSave={setImages}
+                    initialPreview={images[0]?.src}
+                    position={0}
                   />
                   <ImageInput
                     customId="image-upload-2"
@@ -143,6 +165,8 @@ export function FinalStepOne({
                     descriptionField={false}
                     size={173}
                     onSave={setImages}
+                    initialPreview={images[1]?.src}
+                    position={1}
                   />
                 </div>
               </div>
