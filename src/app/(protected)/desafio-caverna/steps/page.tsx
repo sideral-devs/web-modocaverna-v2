@@ -33,7 +33,7 @@ export default function Page() {
     4: <FourthStep onNext={nextPhase} onBack={prevPhase} />,
     5: <FifthStep onNext={nextPhase} onBack={prevPhase} />,
     6: <SixthStep onNext={nextPhase} onBack={prevPhase} />,
-    7: <SeventhStep />,
+    7: <SeventhStep onBack={prevPhase} />,
   } as { [key: number]: ReactNode }
 
   function nextPhase() {
