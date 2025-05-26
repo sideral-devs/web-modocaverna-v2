@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import { AlertOctagonIcon, ImageIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -34,12 +34,39 @@ export function ThirdStep({
     register,
     formState: { errors },
   } = form
-
-  function handleSaveData(data: FormData) {
+  
+  function saveData(data: FormData){
     setReason(data.wish)
     setInitialReasonPhotos(images.map((image) => image.src))
+  }
+
+  function handleBackStep (data: FormData){
+    saveData(data)
+    onBack()
+  }
+
+  function handleSaveData(data: FormData) {
+    saveData(data)
     onNext()
   }
+
+  useEffect(() => {
+    const saved = localStorage.getItem('challenge-storage')
+    if (saved) {
+      const parsed = JSON.parse(saved).state
+      if (parsed.textarea_oque_motivou) {
+        form.setValue('wish', parsed.textarea_oque_motivou)
+      }
+      if (parsed.initialReasonPhotos) {
+        const restoredImages = parsed.initialReasonPhotos.map((src: string, index: number) => ({
+          name: `image-${index + 1}`,
+          src,
+        }))
+        setImages(restoredImages)
+      }
+      
+    }
+  }, [])
 
   return (
     <FormProvider {...form}>
@@ -119,6 +146,8 @@ export function ThirdStep({
                   }
                   descriptionField={false}
                   onSave={setImages}
+                  initialPreview={images[0]?.src}
+                  position={0}
                 />
                 <ImageInput
                   customId="image-upload-2"
@@ -132,13 +161,15 @@ export function ThirdStep({
                   }
                   descriptionField={false}
                   onSave={setImages}
+                  initialPreview={images[1]?.src}
+                  position={1}
                 />
               </div>
             </div>
           </div>
         </div>
         <footer className="flex w-full  3xl:h-32 h-24 justify-center 3xl:items-end items-center  3xl:pb-11 gap-4 border-t">
-          <Button onClick={onBack} className="px-5" variant="outline">
+          <Button onClick={handleSubmit(handleBackStep)} className="px-5" variant="outline">
             Voltar
           </Button>
           <Button onClick={handleSubmit(handleSaveData)} className="px-5">

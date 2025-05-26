@@ -3,16 +3,17 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useChallengerStore } from '@/store/challenge'
 import { CheckIcon, PlusIcon, XIcon } from 'lucide-react'
-import { FormEvent, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 export function SixthStep({
   onNext,
+  onBack,
 }: {
   onNext: () => void
   onBack: () => void
 }) {
-  const { setFail } = useChallengerStore()
+  const { fail, setFail } = useChallengerStore()
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const [values, setValues] = useState(staticValues)
@@ -22,7 +23,7 @@ export function SixthStep({
     return values.filter((value) => !staticValues.includes(value))
   }
 
-  function handleSaveInfo() {
+  function saveData(){
     // if (!selectedOptions.length) {
     if (!values.length) {
       toast.error('Selecione pelo menos um item!')
@@ -34,8 +35,18 @@ export function SixthStep({
         // .filter((value) => !staticValues.includes(value))
         .map((val) => `✅ ${val}`),
     )
+  }
+
+  function handleSaveInfo() {
+    saveData();
     onNext()
   }
+
+  function handleBackStep (){
+    saveData()
+    onBack()
+  }
+
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -73,6 +84,14 @@ export function SixthStep({
     setValues((prevOptions) => prevOptions.filter((opt) => opt !== option))
   }
 
+  useEffect(() => {
+    if (fail && fail.length > 0) {
+      setValues(fail.map((fail) => {
+        return fail.replace('✅ ', '');
+      }));
+    }
+  },  [fail])
+  
   return (
     <div className="flex flex-col w-full relative flex-1 items-center">
       <div className="flex flex-col flex-1 w-full max-w-md gap-10">
@@ -118,6 +137,9 @@ export function SixthStep({
         </form>
       </div>
       <footer className="flex w-full h-32 justify-center items-end pb-11 gap-4">
+      <Button onClick={handleBackStep} className="px-5" variant="outline">
+          Voltar
+        </Button>
         <Button onClick={handleSaveInfo} className="px-5">
           Estou pronto, Capitão!
         </Button>

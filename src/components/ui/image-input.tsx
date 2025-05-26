@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { CloudUploadIcon, XIcon } from 'lucide-react'
 import Image from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export function ImageInput({
@@ -12,6 +12,8 @@ export function ImageInput({
   className,
   imageClassName,
   customId,
+  initialPreview,
+  position,
 }: {
   onSave: Dispatch<SetStateAction<{ name: string; src: string }[]>>
   customLabel?: JSX.Element
@@ -19,10 +21,17 @@ export function ImageInput({
   size?: number
   className?: string
   imageClassName?: string
-  customId?: string
+  customId?: string,
+  initialPreview?: string,
+  position: number
 }) {
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(initialPreview || null)
   const [image, setImage] = useState<File | null>(null)
+
+  useEffect(() => {
+    if (initialPreview) setPreview(initialPreview)
+    else setPreview(null)
+  }, [initialPreview])
 
   const uuid = crypto.randomUUID()
 
@@ -47,11 +56,15 @@ export function ImageInput({
   }
 
   const removeImage = () => {
-    onSave((prev) => prev.filter((e) => e.name !== image?.name))
+    onSave((prev) => {
+      const newImages = [...prev]
+      newImages[position] = null as any
+      return newImages.filter(Boolean)
+    })
     setPreview(null)
     setImage(null)
   }
-
+  
   return (
     <div className={cn('flex items-center gap-6 group', className)}>
       {preview ? (

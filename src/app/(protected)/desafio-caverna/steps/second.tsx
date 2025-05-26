@@ -1,12 +1,11 @@
 import { Button } from '@/components/ui/button'
-import { ImageInput } from '@/components/ui/image-input'
 import { Textarea } from '@/components/ui/textarea'
 import { useChallengerStore } from '@/store/challenge'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import { AlertOctagonIcon, ImageIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -35,11 +34,33 @@ export function SecondStep({
     formState: { errors },
   } = form
 
-  function handleSaveData(data: FormData) {
+  function saveData(data: FormData){
     setWish(data.wish)
     setInitialSituationPhotos(images.map((image) => image.src))
+  }
+
+  function handleBackStep (data: FormData){
+    saveData(data)
+    onBack()
+  }
+
+  function handleSaveData(data: FormData) {
+    saveData(data)
     onNext()
   }
+
+  useEffect(() => {
+    const saved = localStorage.getItem('challenge-storage')
+    if (saved) {
+      const parsed = JSON.parse(saved).state
+      if (parsed.textarea_oque_deseja) {
+        form.setValue('wish', parsed.textarea_oque_deseja)
+      }
+      if (parsed.initialSituationPhotos) {
+        setImages(parsed.initialSituationPhotos)
+      }
+    }
+  }, [])
 
   return (
     <FormProvider {...form}>
@@ -102,43 +123,11 @@ export function SecondStep({
                   </span>
                 )}
               </div>
-              <p className="text-xs">
-                Faça um registro, de até 02 fotos, que representem a sua
-                situação atual. (Opcional)
-              </p>
-              <div className="flex gap-2">
-                <ImageInput
-                  customId="image-upload-1"
-                  customLabel={
-                    <label
-                      htmlFor="image-upload-1"
-                      className="flex w-20 h-20 items-center justify-center bg-zinc-800 rounded-lg cursor-pointer"
-                    >
-                      <ImageIcon className="text-primary" />
-                    </label>
-                  }
-                  descriptionField={false}
-                  onSave={setImages}
-                />
-                <ImageInput
-                  customId="image-upload-2"
-                  customLabel={
-                    <label
-                      htmlFor="image-upload-2"
-                      className="flex w-20 h-20 items-center justify-center bg-zinc-800 rounded-lg cursor-pointer"
-                    >
-                      <ImageIcon className="text-primary" />
-                    </label>
-                  }
-                  descriptionField={false}
-                  onSave={setImages}
-                />
-              </div>
             </div>
           </div>
         </div>
         <footer className="flex w-full  3xl:h-32 h-24 justify-center 3xl:items-end items-center  3xl:pb-11 gap-4 border-t">
-          <Button onClick={onBack} className="px-5" variant="outline">
+          <Button onClick={handleSubmit(handleBackStep)} className="px-5" variant="outline">
             Voltar
           </Button>
           <Button onClick={handleSubmit(handleSaveData)} className="px-5">

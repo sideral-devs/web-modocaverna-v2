@@ -23,6 +23,11 @@ export default function Page() {
     setCurrentPhase((curr) => curr + 1)
   }
 
+  function prevPhase() {
+    setCurrentPhase((curr) => curr - 1)
+  }
+
+
   if (!challenge && isFetched) {
     return redirect('/desafio-caverna')
   }
@@ -65,7 +70,7 @@ export default function Page() {
         currentPhase === 1 ? (
           <FinalStepOne onNext={nextPhase} challenge={challenge} />
         ) : (
-          <FinalStepTwo challenge={challenge} />
+          <FinalStepTwo onBack={prevPhase} challenge={challenge} />
         )
       ) : null}
     </div>

@@ -1,8 +1,12 @@
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function SeventhStep() {
+export function SeventhStep({ onBack,
+}: {
+  onBack: () => void
+}) {
   return (
     <div className="flex flex-col relative flex-1 w-[140dvh] justify-between items-start">
       <div className="flex items-start pl-10 3xl:pb-8 pb-4 gap-16">
@@ -45,6 +49,9 @@ export function SeventhStep() {
         </div>
       </div>
       <footer className="flex w-full h-32 justify-center items-end  pb-11 gap-4">
+        <Button onClick={onBack} className="px-5" variant="outline">
+          Voltar
+        </Button>
         <Link href={'/desafio-caverna/dashboard/tour'}>
           <AutoSubmitButton>Entendido, Capitão!</AutoSubmitButton>
         </Link>
