@@ -39,6 +39,9 @@ function DuplicateMealDialog({
   onConfirm: (selectedDays: string[]) => void
 }) {
   const [selectedDays, setSelectedDays] = useState<string[]>([])
+  const currentDay = new Date()
+    .toLocaleDateString('pt-BR', { weekday: 'short' })
+    .toUpperCase()
 
   const allShortDays = WEEK_DAYS.map((d) => d.short)
   const allSelected = selectedDays.length === allShortDays.length
@@ -47,7 +50,9 @@ function DuplicateMealDialog({
     if (allSelected) {
       setSelectedDays([])
     } else {
-      setSelectedDays(allShortDays)
+      setSelectedDays(
+        allShortDays.filter((day) => day.toUpperCase() + '.' !== currentDay),
+      )
     }
   }
 
@@ -70,31 +75,34 @@ function DuplicateMealDialog({
 
           <div className="space-y-2">
             <div className="grid grid-cols-7 gap-2">
-              {WEEK_DAYS.map((day) => (
-                <Button
-                  key={day.short}
-                  type="button"
-                  variant={
-                    selectedDays.includes(day.short) ? 'default' : 'outline'
-                  }
-                  onClick={() => {
-                    if (selectedDays.includes(day.short)) {
-                      setSelectedDays(
-                        selectedDays.filter((d) => d !== day.short),
-                      )
-                    } else {
-                      setSelectedDays([...selectedDays, day.short])
+              {WEEK_DAYS.map((day) => {
+                return (
+                  <Button
+                    key={day.short}
+                    type="button"
+                    variant={
+                      selectedDays.includes(day.short) ? 'default' : 'outline'
                     }
-                  }}
-                  className={`border ${
-                    selectedDays.includes(day.short)
-                      ? 'bg-red-500 hover:bg-red-600'
-                      : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
-                  }`}
-                >
-                  {day.short}
-                </Button>
-              ))}
+                    disabled={day.short.toUpperCase() + '.' === currentDay}
+                    onClick={() => {
+                      if (selectedDays.includes(day.short)) {
+                        setSelectedDays(
+                          selectedDays.filter((d) => d !== day.short),
+                        )
+                      } else {
+                        setSelectedDays([...selectedDays, day.short])
+                      }
+                    }}
+                    className={`border ${
+                      selectedDays.includes(day.short)
+                        ? 'bg-red-500 hover:bg-red-600'
+                        : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
+                    }`}
+                  >
+                    {day.short}
+                  </Button>
+                )
+              })}
             </div>
           </div>
           <button
@@ -198,13 +206,12 @@ export function MealCard({
             <div className="flex flex-col gap-2">
               {meal.alimentos.length > 0 ? (
                 meal.alimentos.map((alimento: any) => {
-                  const nomeAlimento = alimento.nome_alimento
                   return (
                     <div
                       key={alimento.alimento_id}
                       className="flex bg-zinc-700 justify-between pl-4 pr-2 rounded-2xl py-2 items-center gap-2"
                     >
-                      <p>{nomeAlimento}</p>
+                      <p>{alimento.nomeAlimento}</p>
                       <div className="text-zinc-400 bg-zinc-800 px-2 py-1 rounded-md">
                         {alimento.quantidade}
                       </div>
