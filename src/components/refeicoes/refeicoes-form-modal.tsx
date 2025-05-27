@@ -36,7 +36,7 @@ export function MealFormModal({
   const [horario, setHorario] = useState(initialData?.hora_refeicao ?? '')
   const [observacoes, setObservacoes] = useState(initialData?.observacoes ?? '')
   const [alimentos, setAlimentos] = useState<Partial<FormattedFood>[]>(
-    initialData?.alimentos ?? [{ nomeAlimento: '', quantidade: '' }],
+    initialData?.alimentos ?? [],
   )
   const [suplementos, setSuplementos] = useState<Partial<Supplement>[]>(
     initialData?.suplementos ?? [],
@@ -48,7 +48,7 @@ export function MealFormModal({
 
     try {
       // Clean the alimentos array to remove created_at and updated_at
-      const cleanedAlimentos = alimentos.map(
+      const cleanedAlimentos = alimentos?.map(
         ({ nomeAlimento, quantidade }) => ({
           nomeAlimento,
           quantidade,
@@ -89,7 +89,7 @@ export function MealFormModal({
       setNome('')
       setHorario('')
       setObservacoes('')
-      setAlimentos([{ nomeAlimento: '', quantidade: '' }])
+      setAlimentos([])
       setSuplementos([])
       setSelectedDay(new Date().getDay())
     } else if (initialData) {
@@ -209,14 +209,14 @@ export function MealFormModal({
                 </p>
 
                 <div className="space-y-2 flex flex-col items-start w-full">
-                  {alimentos.map((alimento, index) => (
+                  {alimentos?.map((alimento, index) => (
                     <div key={index} className="flex w-full items-center gap-4">
                       <Input
                         type="text"
                         value={alimento.nomeAlimento}
                         onChange={(e) =>
                           setAlimentos(
-                            alimentos.map((a, i) =>
+                            alimentos?.map((a, i) =>
                               i === index
                                 ? { ...a, nomeAlimento: e.target.value }
                                 : a,
@@ -232,7 +232,7 @@ export function MealFormModal({
                         value={alimento.quantidade}
                         onChange={(e) => {
                           setAlimentos(
-                            alimentos.map((a, i) =>
+                            alimentos?.map((a, i) =>
                               i === index
                                 ? { ...a, quantidade: e.target.value }
                                 : a,
@@ -248,7 +248,7 @@ export function MealFormModal({
                         variant="ghost"
                         size="icon"
                         onClick={() =>
-                          setAlimentos(alimentos.filter((_, i) => i !== index))
+                          setAlimentos(alimentos?.filter((_, i) => i !== index))
                         }
                         className="hover:bg-red-500/10"
                       >
@@ -261,7 +261,7 @@ export function MealFormModal({
                     variant="ghost"
                     onClick={() =>
                       setAlimentos([
-                        ...alimentos,
+                        ...(alimentos ?? []),
                         { nomeAlimento: '', quantidade: '' },
                       ])
                     }
