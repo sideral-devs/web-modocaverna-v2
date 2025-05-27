@@ -1,10 +1,12 @@
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { Button } from '@/components/ui/button'
 import clsx from 'clsx'
 import { AlertOctagonIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 
 export function FourthStep({
   onNext,
+  onBack,
 }: {
   onNext: () => void
   onBack: () => void
@@ -69,6 +71,9 @@ export function FourthStep({
         </div>
       </div>
       <footer className="flex w-full h-32 justify-center items-end  pb-11 gap-4 border-t">
+        <Button onClick={onBack} className="px-5" variant="outline">
+          Voltar
+        </Button>
         <AutoSubmitButton onClick={onNext}>
           Ok. Me leve ao próximo passo!
         </AutoSubmitButton>

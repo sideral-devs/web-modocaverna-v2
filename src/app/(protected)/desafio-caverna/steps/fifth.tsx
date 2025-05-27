@@ -3,16 +3,17 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useChallengerStore } from '@/store/challenge'
 import { PlusIcon, XIcon } from 'lucide-react'
-import { FormEvent, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 export function FifthStep({
   onNext,
+  onBack,
 }: {
   onNext: () => void
   onBack: () => void
 }) {
-  const { setCompromisses } = useChallengerStore()
+  const { compromisses, setCompromisses } = useChallengerStore()
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const [values, setValues] = useState(staticValues)
@@ -22,7 +23,7 @@ export function FifthStep({
     return values.filter((value) => !staticValues.includes(value))
   }
 
-  function handleSaveInfo() {
+  function saveData() {
     // if (!selectedOptions.length) {
     //   toast.error('Selecione pelo menos um item!')
     //   return
@@ -33,7 +34,16 @@ export function FifthStep({
         // .filter((value) => !staticValues.includes(value))
         .map((val) => `❌ ${val}`),
     )
+  }
+
+  function handleSaveInfo() {
+    saveData()
     onNext()
+  }
+
+  function handleBackStep() {
+    saveData()
+    onBack()
   }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -71,6 +81,16 @@ export function FifthStep({
     }
     setValues((prevOptions) => prevOptions.filter((opt) => opt !== option))
   }
+
+  useEffect(() => {
+    if (compromisses && compromisses.length > 0) {
+      setValues(
+        compromisses.map((compromisse) => {
+          return compromisse.replace('❌ ', '')
+        }),
+      )
+    }
+  }, [compromisses])
 
   return (
     <div className="flex flex-col w-full relative flex-1 items-center">
@@ -117,6 +137,9 @@ export function FifthStep({
         </form>
       </div>
       <footer className="flex w-full h-32 justify-center items-end pb-11 gap-4">
+        <Button onClick={handleBackStep} className="px-5" variant="outline">
+          Voltar
+        </Button>
         <Button onClick={handleSaveInfo} className="px-5">
           Estou pronto, Capitão!
         </Button>

@@ -1,8 +1,6 @@
 'use client'
 
-import { ExerciseCardHub } from '@/components/exercicios/exercicios-card-hub'
 import { MealCardHub } from '@/components/refeicoes/refeicoes-card-hub'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TabsContent } from '@/components/ui/tabs'
 import { useWorkouts } from '@/hooks/queries/use-exercises'
@@ -19,7 +17,7 @@ import {
 } from '@phosphor-icons/react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { BicepsFlexed, Clock, ScanFace } from 'lucide-react'
+import { BicepsFlexed, ChevronDown, ScanFace } from 'lucide-react'
 import Link from 'next/link'
 
 export function TempleForge({ value }: { value: string }) {
@@ -150,19 +148,36 @@ export function TempleForge({ value }: { value: string }) {
                     >
                       {lastShapeRegistration?.nivel_satisfacao ===
                       'Satisfeito' ? (
-                        <Smiley weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <Smiley className="w-6 h-6 text-green-500" />
+                          <span className="text-green-500">Satisfeito</span>
+                        </div>
                       ) : lastShapeRegistration?.nivel_satisfacao ===
                         'Pouco satisfeito' ? (
-                        <SmileyMeh weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <SmileyMeh className="w-6 h-6 text-yellow-500" />
+                          <span className="text-yellow-500">
+                            Pouco satisfeito
+                          </span>
+                        </div>
                       ) : lastShapeRegistration?.nivel_satisfacao ===
-                        'Não satisfeito' ? (
-                        <SmileySad weight="bold" size={24} />
+                        'Nada satisfeito' ? (
+                        <div className="flex items-center gap-2">
+                          <SmileyXEyes className="w-6 h-6 text-red-500" />
+                          <span className="text-red-500">Nada satisfeito</span>
+                        </div>
+                      ) : lastShapeRegistration?.nivel_satisfacao ===
+                        'Insatisfeito' ? (
+                        <div className="flex items-center gap-2">
+                          <SmileySad className="w-6 h-6 text-orange-500" />
+                          <span className="text-orange-500">Insatisfeito</span>
+                        </div>
                       ) : (
-                        <SmileyXEyes weight="bold" size={24} />
+                        <div className="flex items-center gap-2">
+                          <SmileyMeh className="w-6 h-6 text-red-500" />
+                          <span className="text-red-500">Indefinido</span>
+                        </div>
                       )}
-                      {lastShapeRegistration?.nivel_satisfacao
-                        ? lastShapeRegistration.nivel_satisfacao
-                        : 'Não definido'}
                     </span>
                   </div>
                 </div>
@@ -187,7 +202,7 @@ export function TempleForge({ value }: { value: string }) {
                     : `${todaysWorkouts?.length || 0} ${todaysWorkouts?.length === 1 ? 'treino' : 'treinos separados'}`}
                 </span>
               </div>
-              <div className="flex mb-4 gap-2 flex-wrap">
+              {/* <div className="flex mb-4 gap-2 flex-wrap">
                 {todaysWorkouts ? (
                   todaysWorkouts.length > 0 &&
                   todaysWorkouts?.slice(0, 2).map((workout, index) => (
@@ -208,24 +223,73 @@ export function TempleForge({ value }: { value: string }) {
                     <Badge variant="outline">Nenhum treino cadastrado</Badge>
                   </>
                 )}
-              </div>
+              </div> */}
 
               <div className="h-[300px] scrollbar-minimal overflow-y-auto pb-12">
                 {todaysWorkouts && todaysWorkouts.length > 0 ? (
                   todaysWorkouts.map((workout) => (
-                    <div key={workout.ficha_id} className="space-y-4">
-                      {workout.exercicios.length > 0 && (
-                        <div className="flex flex-col gap-1">
-                          {workout.exercicios.map((exercise) => (
-                            <ExerciseCardHub
-                              key={exercise.indice}
-                              exercise={exercise}
-                              workoutIndex={workout.indice}
-                              onEdit={() => {}}
+                    <div
+                      key={workout.ficha_id}
+                      className="flex w-full flex-col p-4 bg-zinc-900 rounded-lg border border-zinc-800"
+                    >
+                      <details className="w-full">
+                        <summary className="flex items-center justify-between w-full cursor-pointer">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
+                              <BicepsFlexed
+                                size={24}
+                                className="text-zinc-400"
+                              />
+                            </div>
+
+                            <div>
+                              <h4 className="text-zinc-300 font-medium">
+                                {workout.titulo}{' '}
+                                <p className="text-sm text-zinc-500">
+                                  {workout.horario}
+                                </p>
+                              </h4>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <ChevronDown
+                              size={16}
+                              className="text-zinc-400 transition-transform group-open:rotate-180"
                             />
+                          </div>
+                        </summary>
+
+                        <div className="flex flex-col gap-4 mt-4">
+                          {workout.exercicios?.map((exercicio, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between bg-zinc-800 rounded-lg p-3"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-md bg-zinc-700 flex items-center justify-center">
+                                  <BicepsFlexed
+                                    size={16}
+                                    className="text-zinc-400"
+                                  />
+                                </div>
+                                <span className="text-sm text-zinc-300">
+                                  {exercicio.nome}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-zinc-500">
+                                  {exercicio.series}x{exercicio.repeticoes}
+                                </span>
+                              </div>
+                            </div>
                           ))}
+                          {workout.exercicios?.length === 0 && (
+                            <div className="text-zinc-500 text-sm">
+                              Nenhum exercício cadastrado
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </details>
                     </div>
                   ))
                 ) : !firstShapeRegistration ? (

@@ -394,32 +394,35 @@ export default function Page() {
               )}
 
               <div className="absolute bottom-4 right-4">
-                <span
-                  className={`flex items-center gap-2 text-base ${
-                    lastShapeRegistration?.nivel_satisfacao === 'Satisfeito'
-                      ? 'text-green-500'
-                      : lastShapeRegistration?.nivel_satisfacao ===
-                          'Pouco satisfeito'
-                        ? 'text-yellow-500'
-                        : lastShapeRegistration?.nivel_satisfacao ===
-                            'Não satisfeito'
-                          ? 'text-orange-500'
-                          : 'text-red-500'
-                  }`}
-                >
-                  {lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? (
-                    <Smiley weight="bold" size={24} />
-                  ) : lastShapeRegistration?.nivel_satisfacao ===
-                    'Pouco satisfeito' ? (
-                    <SmileyMeh weight="bold" size={24} />
-                  ) : lastShapeRegistration?.nivel_satisfacao ===
-                    'Não satisfeito' ? (
-                    <SmileySad weight="bold" size={24} />
-                  ) : (
-                    <SmileyXEyes weight="bold" size={24} />
-                  )}
-                  {lastShapeRegistration?.nivel_satisfacao}
-                </span>
+                {lastShapeRegistration?.nivel_satisfacao === 'Satisfeito' ? (
+                  <div className="flex items-center gap-2">
+                    <Smiley className="w-6 h-6 text-green-500" />
+                    <span className="text-green-500">Satisfeito</span>
+                  </div>
+                ) : lastShapeRegistration?.nivel_satisfacao ===
+                  'Pouco satisfeito' ? (
+                  <div className="flex items-center gap-2">
+                    <SmileyMeh className="w-6 h-6 text-yellow-500" />
+                    <span className="text-yellow-500">Pouco satisfeito</span>
+                  </div>
+                ) : lastShapeRegistration?.nivel_satisfacao ===
+                  'Nada satisfeito' ? (
+                  <div className="flex items-center gap-2">
+                    <SmileyXEyes className="w-6 h-6 text-red-500" />
+                    <span className="text-red-500">Nada satisfeito</span>
+                  </div>
+                ) : lastShapeRegistration?.nivel_satisfacao ===
+                  'Insatisfeito' ? (
+                  <div className="flex items-center gap-2">
+                    <SmileySad className="w-6 h-6 text-orange-500" />
+                    <span className="text-orange-500">Insatisfeito</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <SmileyMeh className="w-6 h-6 text-zinc-500" />
+                    <span className="text-zinc-500">Indefinido</span>
+                  </div>
+                )}
               </div>
 
               {lastShapeRegistration &&
