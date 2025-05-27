@@ -64,11 +64,11 @@ function DuplicateMealDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md pb-2">
         <DialogHeader>
           <DialogTitle>Duplicar refeição</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4 px-4">
+        <div className="flex flex-col gap-4  px-4">
           <p className="text-sm text-zinc-400">
             Selecione os dias da semana para duplicar esta refeição:
           </p>

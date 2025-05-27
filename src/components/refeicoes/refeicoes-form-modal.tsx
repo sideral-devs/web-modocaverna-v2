@@ -218,7 +218,7 @@ export function MealFormModal({
                           setAlimentos(
                             alimentos?.map((a, i) =>
                               i === index
-                                ? { ...a, nomeAlimento: e.target.value }
+                                ? { ...a, nome_alimento: e.target.value }
                                 : a,
                             ),
                           )
