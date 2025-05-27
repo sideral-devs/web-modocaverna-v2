@@ -63,7 +63,10 @@ export default function PomodoroTimer() {
 
   async function completedSession() {
     try {
-      await api.put('/pomodoro/session-completed')
+      await api.put('/pomodoro/session-completed', {
+        minutagem_feita_produtividade: pomodoro?.minutagem_produtividade,
+        minutagem_feita_estudos: pomodoro?.minutagem_estudos,
+      })
       queryClient.invalidateQueries({ queryKey: ['pomodoro-chart'] })
     } catch (err) {
       if (err instanceof AxiosError) {
