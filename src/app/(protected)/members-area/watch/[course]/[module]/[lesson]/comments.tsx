@@ -28,14 +28,54 @@ import {
 } from '@/components/ui/alert-dialog'
 
 export function Comments({ lessonId }: { lessonId: string }) {
+  const queryClient = useQueryClient()
   const { data: user } = useUser()
-  const { data } = useQuery({
+  const [page, setPage] = useState(1)
+
+  const { data, isLoading } = useQuery({
     queryKey: ['comments', lessonId],
     queryFn: async () => {
       const res = await api.get('/comentarios/find/' + lessonId)
+      setPage(1)
       return res.data as ComentarioDTO
     },
   })
+
+  async function loadMore() {
+    if (!data || isLoading) return
+
+    if (page >= data.total_pages) return
+
+    try {
+      const nextPage = page + 1
+      const res = await api.get('/comentarios/find/' + lessonId, {
+        params: { page: nextPage },
+      })
+
+      queryClient.setQueryData(
+        ['comments', lessonId],
+        (oldData: ComentarioDTO | undefined) => {
+          if (!oldData) {
+            return res.data
+          }
+
+          return {
+            ...oldData,
+            comentarios: [...oldData.comentarios, ...res.data.comentarios],
+            current_page: res.data.current_page,
+            total_pages: res.data.total_pages,
+            total_comments: res.data.total_comments,
+          }
+        },
+      )
+
+      setPage(nextPage)
+    } catch (err) {
+      console.error(err)
+      toast.error('Não foi possível fazer isso')
+    }
+  }
+  console.log(data)
   return (
     <section id="comments" className="flex flex-col gap-6">
       {data && user
@@ -50,9 +90,23 @@ export function Comments({ lessonId }: { lessonId: string }) {
         : Array.from({ length: 4 }).map((_, idx) => (
             <Skeleton key={idx} className="w-full h-20" />
           ))}
+      {data && data.comentarios.length > 0 && page < data.total_pages && (
+        <div className="flex justify-center items-center">
+          <Button
+            variant="outline"
+            onClick={loadMore}
+            className=" w-fit"
+            disabled={isLoading}
+            loading={isLoading}
+          >
+            Carregar mais
+          </Button>
+        </div>
+      )}
     </section>
   )
 }
+
 function Comment({
   comment,
   user,
@@ -138,11 +192,6 @@ function Comment({
         </div>
       </div>
       <div className="w-full pl-6 z-40 relative bottom-8">
-        {/* <div className={cn('flex  p-2 bg-black w-[600px] h-[200px] overflow-y-scroll scrollbar-minimal rounded-lg')}>
-          <p className="font-semibold  pl-8 text-sm text-white break-words break-all overflow-hidden">
-            {comment.texto}
-          </p>
-        </div> */}
         <article
           className={cn(
             'flex p-2 bg-black max-w-2xl max-h-[100px]',
