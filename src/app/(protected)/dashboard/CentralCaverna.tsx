@@ -1,5 +1,5 @@
 'use client'
-import { ProductivityChart } from '@/components/charts/productivity'
+import { ProductivityDashboardChart } from '@/components/charts/dashboardProductivity'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -78,7 +78,7 @@ export function CentralCaverna({ value }: { value: string }) {
               </div>
             </CardHeader>
             <div className="flex flex-1 min-h-0 items-center justify-center">
-              <ProductivityChart className="flex-1 max-w-full max-h-full overflow-hidden" />
+              <ProductivityDashboardChart className="flex-1 max-w-full max-h-full overflow-hidden" />
             </div>
             <Link href="/flow-produtividade" className="ml-auto">
               <Button className="ml-auto min-h-9" size="sm">

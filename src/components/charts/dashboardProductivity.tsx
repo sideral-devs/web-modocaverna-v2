@@ -19,7 +19,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ProductivityChart({ className }: { className?: string }) {
+export function ProductivityDashboardChart({
+  className,
+}: {
+  className?: string
+}) {
   const { data } = useQuery({
     queryKey: ['pomodoro-chart'],
     queryFn: async () => {
@@ -55,10 +59,6 @@ export function ProductivityChart({ className }: { className?: string }) {
   return (
     <ChartContainer config={chartConfig} className={cn('flex-1', className)}>
       <BarChart data={formatChart(data)}>
-        {/* <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        /> */}
         <XAxis
           dataKey="day"
           tickLine={false}
@@ -81,48 +81,12 @@ export function ProductivityChart({ className }: { className?: string }) {
           stackId="a"
           fill="var(--primary)"
           background={{ fill: '#000' }}
-          label={({ x, y, value, width }) => {
-            const minutes = Math.floor(value / 60)
-            const seconds = value % 60
-            const formatted =
-              minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`
-
-            return (
-              <text
-                x={x! + width! / 2}
-                y={y! - 5}
-                textAnchor="middle"
-                fill="#fff"
-                fontSize={12}
-              >
-                {formatted}
-              </text>
-            )
-          }}
         />
         <Bar
           dataKey="study"
           stackId="b"
           fill="#1447E6"
           background={{ fill: '#000' }}
-          label={({ x, y, value, width }) => {
-            const minutes = Math.floor(value / 60)
-            const seconds = value % 60
-            const formatted =
-              minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`
-
-            return (
-              <text
-                x={x! + width! / 2}
-                y={y! - 5}
-                textAnchor="middle"
-                fill="#fff"
-                fontSize={12}
-              >
-                {formatted}
-              </text>
-            )
-          }}
         />
       </BarChart>
     </ChartContainer>
