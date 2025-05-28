@@ -44,32 +44,6 @@ export function CommentField({ lessonId }: { lessonId: string }) {
   }
 
   return (
-    // <FormProvider {...form}>
-    //   <form
-    //     className="flex flex-col gap-4"
-    //     onSubmit={handleSubmit(handleComment)}
-    //   >
-    //     {/* <Skeleton className="w-full h-[267px] rounded-lg" /> */}
-    //     <div className="flex w-full relative items-center">
-    //       <Textarea
-    //         className="w-full bg-zinc-900 scrollbar-minimal pr-24"
-    //         placeholder="Escreva um comentário"
-    //         {...register('comment')}
-    //       />
-    //       <Button
-    //         size="sm"
-    //         className="absolute right-2"
-    //         type="submit"
-    //         loading={isSubmitting}
-    //       >
-    //         Comentar
-    //       </Button>
-    //     </div>
-    //     {errors && errors.comment && (
-    //       <span className="text-xs text-red-500">{errors.comment.message}</span>
-    //     )}
-    //   </form>
-    // </FormProvider>
     <FormProvider {...form}>
       <form
         className="flex flex-col gap-2"
