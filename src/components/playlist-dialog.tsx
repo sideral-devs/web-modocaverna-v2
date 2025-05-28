@@ -2,12 +2,25 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/lib/api'
 import { env } from '@/lib/env'
 import { useQuery } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
+import {
+  Loader2,
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+} from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useMusicPlayer } from './music-player-provider'
@@ -17,11 +30,17 @@ export default function PlaylistDialog() {
     isDialogOpen,
     setIsDialogOpen,
     playSong,
+    togglePlay,
+    nextSong,
+    prevSong,
     currentSong,
+    musicRef,
+    isPlaying,
     playlistsQuery,
   } = useMusicPlayer()
 
   const [activeTab, setActiveTab] = useState<string | null>(null)
+  const [volume, setVolume] = useState(1)
 
   if (playlistsQuery.data && playlistsQuery.data.length > 0 && !activeTab) {
     setActiveTab(playlistsQuery.data[0].title)
@@ -29,26 +48,26 @@ export default function PlaylistDialog() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="max-w-4xl h-[80vh] p-0 overflow-auto">
+      <DialogContent className="flex flex-col max-w-4xl h-[80vh] p-0 overflow-auto">
         {playlistsQuery.isLoading && (
           <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <span className="ml-2">Carregando playlists...</span>
           </div>
         )}
-
         {playlistsQuery.isError && (
           <div className="flex items-center justify-center h-full p-6">
             <Alert variant="destructive" className="max-w-md">
               <AlertTitle>Erro</AlertTitle>
               <AlertDescription>
-                {playlistsQuery.error?.message || 'Failed to load playlists'}
+                {playlistsQuery.error?.message ||
+                  'Não foi possível carregar as playlists'}
                 <Button
                   variant="outline"
                   className="mt-4 w-full"
                   onClick={() => window.location.reload()}
                 >
-                  Retry
+                  Tentar novamente
                 </Button>
               </AlertDescription>
             </Alert>
@@ -91,7 +110,100 @@ export default function PlaylistDialog() {
             ))}
           </Tabs>
         )}
-        <DialogTitle className="h-[0] overflow-hidden">
+        <DialogFooter className="!justify-between bg-zinc-900 border-t">
+          <div className="flex items-center justify-between w-full px-4 py-3">
+            {/* Esquerda: Música atual */}
+            <div className="flex items-center gap-4 min-w-0">
+              {currentSong?.banner ? (
+                <div className="w-12 h-12 relative shrink-0">
+                  <Image
+                    src={env.NEXT_PUBLIC_PROD_URL + currentSong.banner}
+                    alt={currentSong.title}
+                    className="rounded-md object-cover"
+                    fill
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 bg-zinc-700 rounded-md" />
+              )}
+              <div className="truncate">
+                <p className="text-sm font-medium truncate">
+                  {currentSong?.title || 'Nenhuma música'}
+                </p>
+              </div>
+            </div>
+
+            {/* Centro: Controles */}
+            <div className="flex items-center gap-4">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={prevSong}
+                disabled={!currentSong}
+              >
+                <SkipBack className="w-5 h-5" />
+              </Button>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="rounded-full"
+                onClick={togglePlay}
+                disabled={!currentSong}
+              >
+                {isPlaying ? (
+                  <Pause className="w-5 h-5 fill-black" />
+                ) : (
+                  <Play className="w-5 h-5 fill-black" />
+                )}
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={nextSong}
+                disabled={!currentSong}
+              >
+                <SkipForward className="w-5 h-5" />
+              </Button>
+            </div>
+
+            {/* Direita: Volume */}
+            <div className="flex items-center gap-2 w-32">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  const newVolume = volume === 0 ? 1 : 0
+                  setVolume(newVolume)
+                  if (musicRef.current) {
+                    musicRef.current.volume = newVolume
+                  }
+                }}
+              >
+                {volume === 0 ? (
+                  <VolumeX className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <Volume2 className="w-5 h-5 text-muted-foreground" />
+                )}
+              </Button>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value)
+                  setVolume(val)
+                  if (musicRef.current) {
+                    musicRef.current.volume = val
+                  }
+                }}
+                className="h-1.5 w-full accent-white hover:accent-primary bg-zinc-700 cursor-pointer rounded"
+              />
+            </div>
+          </div>
+        </DialogFooter>
+        <DialogTitle className="absolute h-[0] overflow-hidden">
           Ver playlists
         </DialogTitle>
       </DialogContent>

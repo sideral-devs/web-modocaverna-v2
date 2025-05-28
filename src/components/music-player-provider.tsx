@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation'
 import {
   createContext,
+  MutableRefObject,
   useContext,
   useEffect,
   useRef,
@@ -19,6 +20,7 @@ interface MusicContextType {
   currentSong: Song | null
   isPlaying: boolean
   isDialogOpen: boolean
+  musicRef: MutableRefObject<HTMLAudioElement | null>
   setIsDialogOpen: (isOpen: boolean) => void
   togglePlay: () => void
   nextSong: () => void
@@ -128,6 +130,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
         playSong,
         currentPlaylistId,
         setCurrentPlaylistId,
+        musicRef,
         playlistsQuery: {
           data: playlistsQuery.data,
           isLoading: playlistsQuery.isLoading,
