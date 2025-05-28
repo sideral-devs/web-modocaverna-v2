@@ -61,11 +61,15 @@ export default function PomodoroTimer() {
     moveToNextPhase()
   }
 
-  async function completedSession() {
+  async function completedSession(modeStr: typeof mode) {
     try {
       await api.put('/pomodoro/session-completed', {
-        minutagem_feita_produtividade: pomodoro?.minutagem_produtividade,
-        minutagem_feita_estudos: pomodoro?.minutagem_estudos,
+        minutagem_produtividade:
+          modeStr === 'productivity'
+            ? pomodoro?.minutagem_produtividade
+            : undefined,
+        minutagem_estudos:
+          modeStr === 'study' ? pomodoro?.minutagem_estudos : undefined,
       })
       queryClient.invalidateQueries({ queryKey: ['pomodoro-chart'] })
     } catch (err) {
@@ -96,7 +100,7 @@ export default function PomodoroTimer() {
         setCurrentPhase('shortBreak')
       }
 
-      completedSession()
+      completedSession(mode)
     } else {
       setCurrentPhase('focus')
     }
