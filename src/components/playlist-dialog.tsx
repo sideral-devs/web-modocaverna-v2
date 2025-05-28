@@ -112,7 +112,6 @@ export default function PlaylistDialog() {
         )}
         <DialogFooter className="!justify-between bg-zinc-900 border-t">
           <div className="flex items-center justify-between w-full px-4 py-3">
-            {/* Esquerda: Música atual */}
             <div className="flex items-center gap-4 min-w-0">
               {currentSong?.banner ? (
                 <div className="w-12 h-12 relative shrink-0">
@@ -133,7 +132,6 @@ export default function PlaylistDialog() {
               </div>
             </div>
 
-            {/* Centro: Controles */}
             <div className="flex items-center gap-4">
               <Button
                 size="icon"
@@ -166,7 +164,6 @@ export default function PlaylistDialog() {
               </Button>
             </div>
 
-            {/* Direita: Volume */}
             <div className="flex items-center gap-2 w-32">
               <Button
                 variant="ghost"
