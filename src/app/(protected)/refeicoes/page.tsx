@@ -13,7 +13,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useState } from 'react'
-import { toast } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import type { Supplement } from '@/lib/api/meals'
 
 export default function Page() {
@@ -234,6 +234,7 @@ export default function Page() {
         onOpenChange={setIsModalOpen}
         onSubmit={handleSubmit}
         initialData={selectedMeal}
+        mealsForDay={mealsForDay}
       />
 
       <DeleteMealDialog

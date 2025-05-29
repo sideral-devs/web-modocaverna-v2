@@ -13,6 +13,7 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { X } from 'lucide-react'
 import { WEEK_DAYS } from '@/lib/constants'
+import { toast } from 'sonner'
 
 interface MealFormModalProps {
   open: boolean
@@ -21,6 +22,7 @@ interface MealFormModalProps {
     data: Omit<Meal, 'created_at' | 'updated_at' | 'horario_id'>,
   ) => Promise<void>
   initialData?: Meal
+  mealsForDay?: Meal[]
 }
 
 export function MealFormModal({
@@ -28,6 +30,7 @@ export function MealFormModal({
   onOpenChange,
   onSubmit,
   initialData,
+  mealsForDay,
 }: MealFormModalProps) {
   const [loading, setLoading] = useState(false)
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
@@ -47,6 +50,18 @@ export function MealFormModal({
     setLoading(true)
 
     try {
+      // Check if there's already a meal at the same time
+      const existingMeal = mealsForDay?.find(
+        (meal) =>
+          meal.hora_refeicao === horario &&
+          meal.horario_id !== initialData?.horario_id,
+      )
+
+      if (existingMeal) {
+        toast.error('Já existe uma refeição cadastrada neste horário')
+        return
+      }
+
       // Clean the alimentos array to remove created_at and updated_at
       const cleanedAlimentos = alimentos?.map(
         ({ nomeAlimento, quantidade }) => ({
@@ -79,6 +94,8 @@ export function MealFormModal({
       onOpenChange(false)
     } catch (error) {
       console.error(error)
+      // You might want to show this error to the user via a toast or alert
+      console.log('Já existe uma refeição cadastrada neste horário')
     } finally {
       setLoading(false)
     }
@@ -218,7 +235,7 @@ export function MealFormModal({
                           setAlimentos(
                             alimentos?.map((a, i) =>
                               i === index
-                                ? { ...a, nome_alimento: e.target.value }
+                                ? { ...a, nomeAlimento: e.target.value }
                                 : a,
                             ),
                           )
