@@ -344,14 +344,18 @@ export function TempleForge({ value }: { value: string }) {
 
               <div className="h-[400px] p-6 pb-12 overflow-y-auto scrollbar-minimal">
                 {todaysMeals && todaysMeals.length > 0 ? (
-                  todaysMeals.map((meal) => (
-                    <MealCardHub
-                      key={meal.horario_id}
-                      meal={meal}
-                      dayIndex={todayIndex}
-                      onEdit={() => {}}
-                    />
-                  ))
+                  todaysMeals
+                    .sort((a, b) =>
+                      a.hora_refeicao.localeCompare(b.hora_refeicao),
+                    )
+                    .map((meal) => (
+                      <MealCardHub
+                        key={meal.horario_id}
+                        meal={meal}
+                        dayIndex={todayIndex}
+                        onEdit={() => {}}
+                      />
+                    ))
                 ) : (
                   <div className="flex flex-col h-full gap-8 items-center justify-center py-16 text-zinc-500">
                     <BowlFood size={56} />

@@ -6,6 +6,7 @@ import { MealCard } from '@/components/refeicoes/refeicoes-card'
 import { MealFormModal } from '@/components/refeicoes/refeicoes-form-modal'
 import { Button } from '@/components/ui/button'
 import { useMeals } from '@/hooks/queries/use-meals'
+import type { Supplement } from '@/lib/api/meals'
 import { Meal } from '@/lib/api/meals'
 import { WEEK_DAYS } from '@/lib/constants'
 import { BowlFood, Plus } from '@phosphor-icons/react'
@@ -14,7 +15,6 @@ import { ptBR } from 'date-fns/locale'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import type { Supplement } from '@/lib/api/meals'
 
 export default function Page() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDay())
@@ -234,6 +234,7 @@ export default function Page() {
         onOpenChange={setIsModalOpen}
         onSubmit={handleSubmit}
         initialData={selectedMeal}
+        mealsForDay={mealsForDay}
       />
 
       <DeleteMealDialog

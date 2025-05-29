@@ -33,25 +33,26 @@ function DuplicateMealDialog({
   open,
   onOpenChange,
   onConfirm,
+  selectedMeal,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: (selectedDays: string[]) => void
+  selectedMeal: Meal
 }) {
   const [selectedDays, setSelectedDays] = useState<string[]>([])
-  const currentDay = new Date()
-    .toLocaleDateString('pt-BR', { weekday: 'short' })
-    .toUpperCase()
 
   const allShortDays = WEEK_DAYS.map((d) => d.short)
-  const allSelected = selectedDays.length === allShortDays.length
+  const allSelected = selectedDays.length === allShortDays.length - 1
+  const selectedMealDay = WEEK_DAYS[selectedMeal.dia_semana]
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedDays([])
     } else {
+      const currentMealDay = selectedMealDay.short.toUpperCase()
       setSelectedDays(
-        allShortDays.filter((day) => day.toUpperCase() + '.' !== currentDay),
+        allShortDays.filter((day) => day.toUpperCase() !== currentMealDay),
       )
     }
   }
@@ -74,8 +75,10 @@ function DuplicateMealDialog({
           </p>
 
           <div className="space-y-2">
-            <div className="grid grid-cols-7 gap-2">
+            <div className="flex flex-wrap gap-2">
               {WEEK_DAYS.map((day) => {
+                const isCurrentDay =
+                  WEEK_DAYS[selectedMeal.dia_semana].short === day.short
                 return (
                   <Button
                     key={day.short}
@@ -83,7 +86,7 @@ function DuplicateMealDialog({
                     variant={
                       selectedDays.includes(day.short) ? 'default' : 'outline'
                     }
-                    disabled={day.short.toUpperCase() + '.' === currentDay}
+                    disabled={isCurrentDay}
                     onClick={() => {
                       if (selectedDays.includes(day.short)) {
                         setSelectedDays(
@@ -96,7 +99,9 @@ function DuplicateMealDialog({
                     className={`border ${
                       selectedDays.includes(day.short)
                         ? 'bg-red-500 hover:bg-red-600'
-                        : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
+                        : isCurrentDay
+                          ? 'border-zinc-700 text-zinc-600 cursor-not-allowed'
+                          : 'border-zinc-700 text-zinc-400 hover:text-zinc-300'
                     }`}
                   >
                     {day.short}
@@ -139,7 +144,7 @@ export function MealCard({
   return (
     <div className="relative flex gap-8">
       {/* Timeline */}
-      <div className="relative flex flex-col items-center">
+      <div className="relative flex max-w-10 w-full flex-col items-center">
         <div className="text-red-500 font-medium whitespace-nowrap">
           {meal.hora_refeicao}
         </div>
@@ -253,6 +258,7 @@ export function MealCard({
         open={duplicateDialogOpen}
         onOpenChange={setDuplicateDialogOpen}
         onConfirm={onDuplicate || (() => {})}
+        selectedMeal={meal}
       />
     </div>
   )
