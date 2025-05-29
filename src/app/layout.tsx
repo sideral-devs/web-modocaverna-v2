@@ -1,4 +1,3 @@
-import MobileAlert from '@/components/MobileAlert'
 import { GlobalProviders } from '@/components/providers'
 import type { Metadata } from 'next'
 import { Rubik } from 'next/font/google'
