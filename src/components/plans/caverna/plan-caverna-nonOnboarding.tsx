@@ -143,7 +143,7 @@ export function PlanCavernaNonOnboarding({
       >
         {!isAnnualPlan && (
           <div
-            className={`border-b md:sticky top-0 p-6 flex justify-between items-start`}
+            className={`border-b mt-4 md:sticky top-0 p-6 flex justify-between items-start`}
           >
             <div className="flex items-start flex-col gap-2">
               {selectedPlan === 'yearly' && (

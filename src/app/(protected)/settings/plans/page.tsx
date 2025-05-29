@@ -121,16 +121,18 @@ export default function Page() {
   // Caso: Plano Trial
   if (isOnTrial) {
     return (
-      <div className="flex flex-col justify-start items-start col-span-3 gap-10">
+      <div className="flex  mt-4 md:flex-col justify-start items-start col-span-3 gap-10">
         {renderHeader()}
         {isExpired && renderExpiredAlert()}
-        <PlanDesafio />
-        <PlanCavernosoNonOnboarding
-          selectedPlan={selectedPlan}
-          setSelectedPlan={setSelectedPlan}
-          isUpdatePlan={false}
-          getPlanUrl={getPlanUrl}
-        />
+        <div className="flex flex-col-reverse md:flex-row gap-8 w-full">
+          <PlanDesafio />
+          <PlanCavernosoNonOnboarding
+            selectedPlan={selectedPlan}
+            setSelectedPlan={setSelectedPlan}
+            isUpdatePlan={false}
+            getPlanUrl={getPlanUrl}
+          />
+        </div>
       </div>
     )
   }

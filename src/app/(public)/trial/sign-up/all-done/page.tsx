@@ -17,9 +17,9 @@ export default function Page() {
         <PhaseCounter current={4} total={3} />
         <div className="flex flex-col w-full max-w-lg gap-6">
           <div className="flex flex-col gap-2">
-            <span className="flex w-fit px-3 py-1 text-sm font-semibold text-yellow-700 bg-yellow-200 rounded-full">
+            {/* <span className="flex w-fit px-3 py-1 text-sm font-semibold text-yellow-700 bg-yellow-200 rounded-full">
               7 dias de Avaliação Gratuita
-            </span>
+            </span> */}
             <h1 className="text-2xl font-semibold">
               Você acaba de ganhar um presente!
             </h1>
@@ -68,5 +68,7 @@ const resources = [
   'Agenda integrada com Google',
   'Área de conteúdos completa',
   'Comunidade Alcateia',
+  'Gerenciamento de Treinos',
+  'Controler de Refeições',
   'Suporte imediato',
 ]

@@ -150,7 +150,7 @@ const chartConfig = {
   },
   study: {
     label: 'Estudos',
-    color: 'var(--primary-muted)',
+    color: '#EAB308',
   },
 } satisfies ChartConfig
 
@@ -208,7 +208,7 @@ export function ProductivityChart({ className }: { className?: string }) {
           label="Produtividade"
           background={{ fill: '#000' }}
         />
-        <Bar dataKey="study" stackId="a" fill="#1447E6" label="Estudos" />
+        <Bar dataKey="study" stackId="a" fill="#EAB308" label="Estudos" />
       </BarChart>
     </ChartContainer>
   )
