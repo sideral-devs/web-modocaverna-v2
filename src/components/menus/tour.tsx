@@ -14,16 +14,24 @@ import {
 } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 import { VideoPlayer } from '../video-player'
+import { useDialogControl } from '@/store/dialog-control'
 
 export function TourMenu() {
   const { open, setOpen } = useTourMenu()
+  const { isAnyDialogOpen, setDialogOpen } = useDialogControl()
 
   function handleClose() {
     setOpen(false)
+    setDialogOpen(false)
+  }
+
+  function handleOpenChange(value: boolean) {
+    setOpen(value)
+    setDialogOpen(value)
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <TourMenuContent onClose={handleClose} />
     </AlertDialog>
   )

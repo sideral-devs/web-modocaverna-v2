@@ -4,11 +4,13 @@ import { api } from '@/lib/api'
 import { modals } from '@/lib/constants'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { useTourMenu } from '@/store/tour-menu'
 
 export default function PageDialog() {
   const [isOpen, setIsOpen] = useState(true)
   const queryClient = useQueryClient()
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { open: tourOpen } = useTourMenu()
   const {
     data: poups,
     isLoading,
@@ -47,6 +49,7 @@ export default function PageDialog() {
   }, [isOpen])
 
   if (
+    tourOpen ||
     isLoading ||
     isError ||
     !currentPopup ||
