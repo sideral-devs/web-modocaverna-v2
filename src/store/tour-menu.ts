@@ -2,15 +2,10 @@ import { create } from 'zustand'
 
 interface TourMenuData {
   open: boolean
-  setOpen: (arg: boolean) => void
+  setOpen: (open: boolean) => void
 }
 
-export const useTourMenu = create<TourMenuData>((set) => {
-  return {
-    open: false,
-
-    setOpen: (arg) => {
-      set({ open: arg })
-    },
-  }
-})
+export const useTourMenu = create<TourMenuData>((set) => ({
+  open: false,
+  setOpen: (open) => set({ open }),
+}))
