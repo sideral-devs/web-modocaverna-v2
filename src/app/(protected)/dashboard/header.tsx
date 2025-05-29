@@ -86,10 +86,10 @@ export function CentralHubHeader() {
                 </div>
               </div>
             ) : (
-              <div className="flex  md:flex-row bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
+              <div className="flex flex-col md:flex-row bg-[#503e04] rounded-lg  px-1 gap-2 items-center justify-center">
                 <Link href="settings/plans" prefetch={false}>
-                  <div className="flex flex-row md:flex  items-center justify-center px-1 py-2 rounded-xl  text-white">
-                    <div className="pl-2">
+                  <div className="flex flex-row md:flex  items-center justify-center p-2 md:py-2 rounded-xl  text-white">
+                    <div className="md:pl-2">
                       <AlarmClock color="#e9b208" />
                     </div>
 
@@ -109,11 +109,11 @@ export function CentralHubHeader() {
                     </div>
                   </div>
                 </Link>
-                <div className="px-2 py-2">
+                <div className="hidden md:block px-2 py-2">
                   <UpgradeDialogDuringSevenDays>
                     <Button
                       variant="secondary"
-                      className="hidden md:flex rounded-xl text-primary pulsating-shadow"
+                      className="rounded-xl text-primary pulsating-shadow"
                     >
                       <Zap
                         fill="#FF3333"
@@ -124,6 +124,22 @@ export function CentralHubHeader() {
                       UPGRADE
                     </Button>
                   </UpgradeDialogDuringSevenDays>
+                </div>
+                <div className="block md:hidden px-2 pb-4">
+                  <Link href="settings/plans" prefetch={false}>
+                    <Button
+                      variant="secondary"
+                      className=" rounded-xl text-primary pulsating-shadow"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
+                  </Link>
                 </div>
               </div>
             )}

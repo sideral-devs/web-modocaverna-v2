@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="pt_BR">
       <body className={`${rubik.className} antialiased`}>
-        <MobileAlert />
+        {/* <MobileAlert /> */}
         <GlobalProviders>{children}</GlobalProviders>
         <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_METRIC_ID!} />
       </body>
