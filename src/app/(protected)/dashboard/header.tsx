@@ -180,7 +180,10 @@ export function CentralHubHeader() {
                     </div>
                     <div className="flex flex-col pl-4">
                       <div>
-                        <span className="text-sm md:text-normal"> Assine o</span>
+                        <span className="text-sm md:text-normal">
+                          {' '}
+                          Assine o
+                        </span>
                         <span className=" text-sm md:text-normal text-primary">
                           {' '}
                           Plano Cavernoso{' '}
@@ -193,19 +196,19 @@ export function CentralHubHeader() {
                   </div>
                 </Link>
                 <div className="block md:hidden pb-2">
-                 <Link href="settings/plans" prefetch>
-                      <Button
-                        variant="secondary"
-                        className="flex rounded-xl text-xs md:text-normal text-primary pulsating-shadow"
-                      >
-                        <Zap
-                          fill="#FF3333"
-                          color="#FF3333"
-                          width={11}
-                          height={15}
-                        ></Zap>
-                        UPGRADE
-                      </Button>
+                  <Link href="settings/plans" prefetch>
+                    <Button
+                      variant="secondary"
+                      className="flex rounded-xl text-xs md:text-normal text-primary pulsating-shadow"
+                    >
+                      <Zap
+                        fill="#FF3333"
+                        color="#FF3333"
+                        width={11}
+                        height={15}
+                      ></Zap>
+                      UPGRADE
+                    </Button>
                   </Link>
                 </div>
                 <div className="hidden md:block px-2 pb-2 md:py-2">
@@ -256,7 +259,7 @@ export function CentralHubHeader() {
                     </div>
                   </Link>
                   <div className="block md:hidden pb-2">
-                 <Link href="settings/plans" prefetch>
+                    <Link href="settings/plans" prefetch>
                       <Button
                         variant="secondary"
                         className="flex rounded-xl text-xs md:text-normal text-primary pulsating-shadow"
@@ -269,24 +272,24 @@ export function CentralHubHeader() {
                         ></Zap>
                         UPGRADE
                       </Button>
-                  </Link>
-                </div>
-                <div className="hidden md:block px-2 pb-2 md:py-2">
-                  <UpgradeDialogExpiredTrial>
-                    <Button
-                      variant="secondary"
-                      className="flex rounded-xl text-xs md:text-normal text-primary pulsating-shadow"
-                    >
-                      <Zap
-                        fill="#FF3333"
-                        color="#FF3333"
-                        width={11}
-                        height={15}
-                      ></Zap>
-                      UPGRADE
-                    </Button>
-                  </UpgradeDialogExpiredTrial>
-                </div>
+                    </Link>
+                  </div>
+                  <div className="hidden md:block px-2 pb-2 md:py-2">
+                    <UpgradeDialogExpired>
+                      <Button
+                        variant="secondary"
+                        className="flex rounded-xl text-xs md:text-normal text-primary pulsating-shadow"
+                      >
+                        <Zap
+                          fill="#FF3333"
+                          color="#FF3333"
+                          width={11}
+                          height={15}
+                        ></Zap>
+                        UPGRADE
+                      </Button>
+                    </UpgradeDialogExpired>
+                  </div>
                 </div>
               )}
           </>

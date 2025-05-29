@@ -153,7 +153,6 @@ export default function Page() {
   } else if (isChallengePlan && !challengeTrial) {
     return (
       <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-      
         {renderHeader()}
 
         {renovationDate < today
