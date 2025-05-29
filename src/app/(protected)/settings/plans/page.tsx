@@ -55,7 +55,7 @@ export default function Page() {
 
   function renderHeader() {
     return (
-      <div className="flex flex-col w-full items-start gap-4">
+      <div className="hidden md:flex flex-col w-full items-start gap-4">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -154,10 +154,11 @@ export default function Page() {
     return (
       <div className="flex flex-col justify-start items-start col-span-3 gap-10">
         {renderHeader()}
+
         {renovationDate < today
           ? renderExpiredAlert()
           : renderTrialExpiredAlert()}
-        <div className="flex flex-row gap-8 w-full">
+        <div className="flex flex-col-reverse sm:flex-row gap-8 w-full">
           <PlanDesafio />
           <PlanCavernaNonOnboarding
             selectedPlan={selectedPlan}
