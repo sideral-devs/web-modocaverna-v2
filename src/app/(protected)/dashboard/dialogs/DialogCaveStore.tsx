@@ -17,7 +17,7 @@ export default function DialogCaveStore({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogContent className=" gap-0 border-none h-[590px] !w-[797px] pt-10 max-w-none bg-zinc-200 text-black overflow-x-hidden overflow-y-auto scrollbar-minimal">
+      <DialogContent className="gap-0 border-none max-h-[590px] w-[90%] max-w-[797px] bg-zinc-200 text-black overflow-x-hidden overflow-y-auto rounded-sm scrollbar-minimal">
         <div
           className="absolute top-2 right-2 cursor-pointer z-50 bg-black p-3 rounded-sm"
           onClick={() => setOpen(false)}
@@ -25,32 +25,36 @@ export default function DialogCaveStore({
           <X className="h-4 w-4 cursor-pointer text-white opacity-100" />
           <span className="sr-only">Close</span>
         </div>
-        <DialogTitle className="text-2xl h-[30px] px-20 ">
+        <DialogTitle className="md:text-2xl sm:text-xl xs:text-sm text-xs  h-[30px] sm:px-20  px-5 my-5">
           {poup.title}
         </DialogTitle>
 
-        <div className="w-full h-[389px] flex justify-center  rounded-xl overflow-hidden">
+        <div className="flex justify-center  rounded-xl overflow-hidden">
           <Image
             src={'/images/dialogs/banner-loja.png'}
             alt="Banner"
-            className=" w-[693px] h-[389px] max-w-none max-h-none rounded-lg"
+            className=" lg:w-[693px] lg:h-[389px] sm:w-[415.8px] sm:h-[233.4px] w-[250px] h-[140px]  max-w-none max-h-none rounded-lg"
             width={693}
             height={389}
           />
         </div>
 
-        <AlertDialogFooter className="px-20  sm:justify-center flex flex-row sm:flex-row pb-5 justify-center gap-20">
-          <h3 className="w-[260px]">
+        <AlertDialogFooter className="sm:px-20 xs:px-10 px-5 mt-10  sm:justify-center flex xs:flex-row flex-col  pb-5 justify-center sm:gap-20 xs:gap-8 gap-3">
+          <h3 className="md:w-[260px] md:text-base text-xs">
             Utilize o cupom &quot;
-            <span className="text-primary">APLICATIVO</span>&quot; para garantir
-            um super desconto.
+            <span className="text-primary md:text-base text-xs">
+              APLICATIVO
+            </span>
+            &quot; para garantir um super desconto.
           </h3>
           <Link
             className="h-[46px]"
             href={`https://redirect.lifs.app/sejacaverna`}
             target="_blank"
           >
-            <Button className="w-[214px] h-[46px] text-lg">ACESSAR LOJA</Button>
+            <Button className="md:w-[214px] md:h-[46px] md:text-lg w-full text-xs ">
+              ACESSAR LOJA
+            </Button>
           </Link>
         </AlertDialogFooter>
       </DialogContent>

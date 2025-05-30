@@ -13,7 +13,7 @@ export default function Page() {
 
     const timeout = setTimeout(() => {
       router.replace('/dashboard')
-    }, 500) 
+    }, 500)
 
     return () => clearTimeout(timeout)
   }, [])
