@@ -227,71 +227,79 @@ export function TempleForge({ value }: { value: string }) {
 
               <div className="h-[300px] scrollbar-minimal overflow-y-auto pb-12">
                 {todaysWorkouts && todaysWorkouts.length > 0 ? (
-                  todaysWorkouts.map((workout) => (
-                    <div
-                      key={workout.ficha_id}
-                      className="flex w-full flex-col p-4 bg-zinc-900 rounded-lg border border-zinc-800"
-                    >
-                      <details className="w-full">
-                        <summary className="flex items-center justify-between w-full cursor-pointer">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
-                              <BicepsFlexed
-                                size={24}
-                                className="text-zinc-400"
+                  todaysWorkouts
+                    .sort((a, b) => {
+                      const timeA = a.horario?.split(':').map(Number) || [0, 0]
+                      const timeB = b.horario?.split(':').map(Number) || [0, 0]
+                      return (
+                        timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1])
+                      )
+                    })
+                    .map((workout) => (
+                      <div
+                        key={workout.ficha_id}
+                        className="flex w-full flex-col p-4 bg-zinc-900 rounded-lg border border-zinc-800"
+                      >
+                        <details className="w-full">
+                          <summary className="flex items-center justify-between w-full cursor-pointer">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
+                                <BicepsFlexed
+                                  size={24}
+                                  className="text-zinc-400"
+                                />
+                              </div>
+
+                              <div>
+                                <h4 className="text-zinc-300 font-medium">
+                                  {workout.titulo}{' '}
+                                  <p className="text-sm text-zinc-500">
+                                    {workout.horario}
+                                  </p>
+                                </h4>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <ChevronDown
+                                size={16}
+                                className="text-zinc-400 transition-transform group-open:rotate-180"
                               />
                             </div>
+                          </summary>
 
-                            <div>
-                              <h4 className="text-zinc-300 font-medium">
-                                {workout.titulo}{' '}
-                                <p className="text-sm text-zinc-500">
-                                  {workout.horario}
-                                </p>
-                              </h4>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <ChevronDown
-                              size={16}
-                              className="text-zinc-400 transition-transform group-open:rotate-180"
-                            />
-                          </div>
-                        </summary>
-
-                        <div className="flex flex-col gap-4 mt-4">
-                          {workout.exercicios?.map((exercicio, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between bg-zinc-800 rounded-lg p-3"
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-md bg-zinc-700 flex items-center justify-center">
-                                  <BicepsFlexed
-                                    size={16}
-                                    className="text-zinc-400"
-                                  />
+                          <div className="flex flex-col gap-4 mt-4">
+                            {workout.exercicios?.map((exercicio, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between bg-zinc-800 rounded-lg p-3"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-md bg-zinc-700 flex items-center justify-center">
+                                    <BicepsFlexed
+                                      size={16}
+                                      className="text-zinc-400"
+                                    />
+                                  </div>
+                                  <span className="text-sm text-zinc-300">
+                                    {exercicio.nome}
+                                  </span>
                                 </div>
-                                <span className="text-sm text-zinc-300">
-                                  {exercicio.nome}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-zinc-500">
+                                    {exercicio.series}x{exercicio.repeticoes}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-zinc-500">
-                                  {exercicio.series}x{exercicio.repeticoes}
-                                </span>
+                            ))}
+                            {workout.exercicios?.length === 0 && (
+                              <div className="text-zinc-500 text-sm">
+                                Nenhum exercício cadastrado
                               </div>
-                            </div>
-                          ))}
-                          {workout.exercicios?.length === 0 && (
-                            <div className="text-zinc-500 text-sm">
-                              Nenhum exercício cadastrado
-                            </div>
-                          )}
-                        </div>
-                      </details>
-                    </div>
-                  ))
+                            )}
+                          </div>
+                        </details>
+                      </div>
+                    ))
                 ) : !firstShapeRegistration ? (
                   <div className="flex flex-col gap-8 items-center justify-center py-16 text-zinc-500">
                     <ScanFace size={56} />
