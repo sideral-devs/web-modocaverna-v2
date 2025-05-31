@@ -46,7 +46,7 @@ export function CentralCaverna({ value }: { value: string }) {
               </span>{' '}
               {Number(user.login_streak) > 1 ? 'consecutivos' : 'consecutivo'}
             </h2>
-            <p className="text-zinc-500 z-50">
+            <p className="text-zinc-500 z-[49]">
               acessando o <span className="text-zinc-400">Modo Caverna</span>
             </p>
             <Image

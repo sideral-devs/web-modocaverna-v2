@@ -1,5 +1,6 @@
 'use client'
 import { SidebarMenuTrigger } from '@/components/sidebar-menu'
+import { DashboardTour } from '@/components/tours/dashboard'
 import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
@@ -27,7 +28,7 @@ export function CentralHubHeader() {
   const diasRestantesTrial = Math.ceil(horasRestantesTrial / 24)
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
-      <div className="hidden lg:flex items-center gap-3">
+      <div className="hidden lg:flex items-center gap-2">
         <Link href="/dashboard?to=central-caverna">
           <div className="flex h-11 items-center justify-center px-3 rounded-xl">
             <Image
@@ -44,7 +45,7 @@ export function CentralHubHeader() {
           <MenuIcon className="text-primary" />
         </div>
       </SidebarMenuTrigger>
-      <div className="flex items-center  gap-3">
+      <div className="flex items-center gap-2">
         {/** USE CASE DO USUÁRIO TRIAL */}
         {user.plan === 'TRIAL' && (
           <>
@@ -311,26 +312,25 @@ export function CentralHubHeader() {
           </>
         )}
       </div>
-      <div className="flex items-center gap-3">
-        {dayjs().isAfter(dayjs('2025-04-24T19:59:59')) ? (
-          <a href="https://redirect.lifs.app/loja-mc" target="_blank">
-            <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
-              <StoreIcon
-                className="text-red-500 group-hover:text-white"
-                size={20}
-              />
-              <span className="text-sm  ">Loja Caverna</span>
-            </div>
-          </a>
-        ) : (
-          <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-            <StoreIcon className="text-red-500" size={20} />
-            <span className="text-sm">Loja Caverna</span>
-            <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
-              <span className="text-[10px] text-red-500">EM BREVE</span>
-            </div>
+      <div className="flex items-center gap-2">
+        <DashboardTour />
+        <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
+          <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
+            <StoreIcon
+              className="text-red-500 group-hover:text-white"
+              size={20}
+            />
+            <span className="text-sm  ">Loja Caverna</span>
           </div>
-        )}
+        </Link>
+        <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
+          <StoreIcon className="text-red-500" size={20} />
+          <span className="text-sm">Loja Caverna</span>
+          <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
+            <span className="text-[10px] text-red-500">EM BREVE</span>
+          </div>
+        </div>
+
         <UserDropdown />
       </div>
     </header>
