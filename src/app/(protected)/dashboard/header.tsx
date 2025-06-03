@@ -1,6 +1,5 @@
 'use client'
 import { SidebarMenuTrigger } from '@/components/sidebar-menu'
-import { DashboardTour } from '@/components/tours/dashboard'
 import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
@@ -313,7 +312,7 @@ export function CentralHubHeader() {
         )}
       </div>
       <div className="flex items-center gap-2">
-        <DashboardTour />
+        {/* <DashboardTour /> */}
         <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
           <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
             <StoreIcon

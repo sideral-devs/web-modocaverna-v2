@@ -142,7 +142,7 @@ export function EventCalendar() {
                   key={index}
                   className="flex w-16 min-w-16 min-h-28 items-end justify-end p-2 bg-zinc-900 border-r"
                 >
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-zinc-500 translate-y-[75%]">
                     {(index < 23 ? index + 1 : 0).toFixed(0).padStart(2, '0')}
                     :00
                   </span>
