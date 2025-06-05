@@ -322,14 +322,6 @@ export function CentralHubHeader() {
             <span className="text-sm  ">Loja Caverna</span>
           </div>
         </Link>
-        <div className="hidden lg:flex h-11 items-center justify-center bg-card px-5 gap-2 rounded-xl">
-          <StoreIcon className="text-red-500" size={20} />
-          <span className="text-sm">Loja Caverna</span>
-          <div className="flex px-1 py-[2px] border border-red-500 rounded-sm">
-            <span className="text-[10px] text-red-500">EM BREVE</span>
-          </div>
-        </div>
-
         <UserDropdown />
       </div>
     </header>
