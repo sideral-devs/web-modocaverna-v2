@@ -3,7 +3,7 @@ import { api } from '@/lib/api'
 export interface ShapeRegistration {
   id: number
   shape_id: number
-  imc: number
+  imc: number | string | null
   altura: number
   peso: number
   is_skipped: boolean | number

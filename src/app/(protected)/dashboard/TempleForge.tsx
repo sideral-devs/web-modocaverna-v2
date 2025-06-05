@@ -37,14 +37,14 @@ export function TempleForge({ value }: { value: string }) {
   const todayIndex = WEEK_DAYS[new Date().getDay()].workoutIndex
 
   const todaysWorkouts = workouts?.filter((workout) => {
-    return workout.indice === todayIndex
+    return String(workout.indice) === String(todayIndex)
   })
 
   // Meals
   const { meals } = useMeals()
 
   const todaysMeals = meals?.filter((meal) => {
-    return meal.dia_semana === todayIndex
+    return String(meal.dia_semana) === String(todayIndex)
   })
 
   return (
