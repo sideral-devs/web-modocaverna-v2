@@ -29,6 +29,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 import { PlusIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SortableItem } from './sortable-item'
@@ -67,21 +68,27 @@ export function EditRitualDialog({
 
   const updateBlocks = useMutation({
     mutationFn: async (data: RitualResponseItem) => {
-      await api.put('/blocos/update/' + data.id, data)
+      return (await api.put(
+        '/blocos/update/' + data.id,
+        data,
+      )) as AxiosResponse<RitualResponseItem>
     },
     onMutate: async (data) => {
       const queryKey =
-        data.tipo_ritual === 1
+        Number(data.tipo_ritual) === 1
           ? 'rituais-blocos-matinais'
           : 'rituais-blocos-noturnos'
 
-      await queryClient.cancelQueries({ queryKey: [queryKey] })
-
       queryClient.setQueryData([queryKey], data)
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
+      const data = res.data
+      const queryKey =
+        String(data.tipo_ritual) === '1'
+          ? 'rituais-blocos-matinais'
+          : 'rituais-blocos-noturnos'
       queryClient.invalidateQueries({
-        queryKey: ['rituais-blocos-matinais', 'rituais-blocos-noturnos'],
+        queryKey: [queryKey],
       })
     },
   })

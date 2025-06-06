@@ -64,7 +64,7 @@ export function PlanCavernaNonOnboarding({
         'flex flex-col w-full bg-zinc-900 rounded-3xl border-2 border-red-500 transition-all duration-500 ease-in-out',
         showAllBenefits
           ? 'h-auto overflow-visible'
-          : 'h-[550px] 3xl:h-[650px] overflow-hidden',
+          : 'md:h-[550px] 3xl:h-[650px] overflow-hidden',
       )}
     >
       <div className="flex flex-col relative gap-2">
@@ -143,7 +143,7 @@ export function PlanCavernaNonOnboarding({
       >
         {!isAnnualPlan && (
           <div
-            className={`border-b sticky top-0 p-6 flex justify-between items-start`}
+            className={`border-b mt-4 md:sticky top-0 p-6 flex justify-between items-start`}
           >
             <div className="flex items-start flex-col gap-2">
               {selectedPlan === 'yearly' && (

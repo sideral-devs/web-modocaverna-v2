@@ -1,9 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getMeals, createMeal, updateMeal, deleteMeal } from '@/lib/api/meals'
 import type { Meal } from '@/lib/api/meals'
+import { createMeal, deleteMeal, getMeals, updateMeal } from '@/lib/api/meals'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useMeals() {
   const queryClient = useQueryClient()
+
+  console.log('useMeals')
 
   const {
     data: meals,

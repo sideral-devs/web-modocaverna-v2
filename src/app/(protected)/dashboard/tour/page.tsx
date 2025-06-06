@@ -1,4 +1,5 @@
 'use client'
+
 import { useTourMenu } from '@/store/tour-menu'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -9,7 +10,12 @@ export default function Page() {
 
   useEffect(() => {
     setOpen(true)
-    router.replace('/dashboard')
+
+    const timeout = setTimeout(() => {
+      router.replace('/dashboard')
+    }, 500)
+
+    return () => clearTimeout(timeout)
   }, [])
 
   return null

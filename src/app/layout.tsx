@@ -1,4 +1,3 @@
-import MobileAlert from '@/components/MobileAlert'
 import { GlobalProviders } from '@/components/providers'
 import type { Metadata } from 'next'
 import { Rubik } from 'next/font/google'
@@ -32,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="pt_BR">
       <body className={`${rubik.className} antialiased`}>
-        <MobileAlert />
+        {/* <MobileAlert /> */}
         <GlobalProviders>{children}</GlobalProviders>
         <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_METRIC_ID!} />
       </body>

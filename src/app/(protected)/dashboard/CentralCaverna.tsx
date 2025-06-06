@@ -1,5 +1,5 @@
 'use client'
-import { ProductivityDashboardChart } from '@/components/charts/dashboardProductivity'
+import { ProductivityChart } from '@/components/charts/productivity'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -46,7 +46,7 @@ export function CentralCaverna({ value }: { value: string }) {
               </span>{' '}
               {Number(user.login_streak) > 1 ? 'consecutivos' : 'consecutivo'}
             </h2>
-            <p className="text-zinc-500 z-50">
+            <p className="text-zinc-500 z-[49]">
               acessando o <span className="text-zinc-400">Modo Caverna</span>
             </p>
             <Image
@@ -78,7 +78,7 @@ export function CentralCaverna({ value }: { value: string }) {
               </div>
             </CardHeader>
             <div className="flex flex-1 min-h-0 items-center justify-center">
-              <ProductivityDashboardChart className="flex-1 max-w-full max-h-full overflow-hidden" />
+              <ProductivityChart className="flex-1 max-w-full max-h-full overflow-hidden" />
             </div>
             <Link href="/flow-produtividade" className="ml-auto">
               <Button className="ml-auto min-h-9" size="sm">

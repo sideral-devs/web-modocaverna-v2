@@ -566,18 +566,19 @@ export default function Page() {
                       <p className="text-zinc-400 text-sm">IMC</p>
                       <p
                         className={`text-sm ${
-                          Number(lastShapeRegistration?.imc.toFixed(1)) >= 25
-                            ? 'text-red-500'
-                            : Number(lastShapeRegistration?.imc.toFixed(1)) <=
-                                18.5
+                          lastShapeRegistration && lastShapeRegistration.imc
+                            ? Number(lastShapeRegistration.imc) >= 25
                               ? 'text-red-500'
-                              : 'text-green-500'
+                              : Number(lastShapeRegistration?.imc) <= 18.5
+                                ? 'text-red-500'
+                                : 'text-green-500'
+                            : ''
                         }`}
                       >
-                        {lastShapeRegistration?.imc
-                          ? Number(lastShapeRegistration.imc.toFixed(1)) < 18.5
+                        {lastShapeRegistration && lastShapeRegistration.imc
+                          ? Number(lastShapeRegistration.imc) < 18.5
                             ? 'Abaixo do peso'
-                            : Number(lastShapeRegistration.imc.toFixed(1)) < 25
+                            : Number(lastShapeRegistration.imc) < 25
                               ? 'Peso normal'
                               : 'Sobrepeso'
                           : '-'}
