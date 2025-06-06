@@ -80,7 +80,7 @@ export default function EventsCard() {
 
     const eventWorkouts =
       workouts
-        ?.filter((item) => item.indice === dayjs().day())
+        ?.filter((item) => Number(item.indice) === dayjs().day())
         .map((item) => {
           const start = dayjs(`${today} ${item.horario}`).format(
             'YYYY-MM-DD HH:mm',
@@ -98,7 +98,7 @@ export default function EventsCard() {
 
     const eventMeals =
       meals
-        ?.filter((item) => item.dia_semana === dayjs().day())
+        ?.filter((item) => Number(item.dia_semana) === dayjs().day())
         .map((item) => {
           const start = dayjs(`${today} ${item.hora_refeicao}`).format(
             'YYYY-MM-DD HH:mm',

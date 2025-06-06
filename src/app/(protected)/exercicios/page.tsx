@@ -102,8 +102,8 @@ export default function Page() {
       // Sort workouts by horario within each day
       const sortedWorkouts = [...initialWorkouts].sort((a, b) => {
         // First sort by day (indice)
-        if (a.indice !== b.indice) {
-          return a.indice - b.indice
+        if (Number(a.indice) !== Number(b.indice)) {
+          return Number(a.indice) - Number(b.indice)
         }
         // Then sort by horario within the same day
         return a.horario.localeCompare(b.horario)
@@ -160,7 +160,7 @@ export default function Page() {
         updateWorkout({
           ficha_id: workout.ficha_id,
           titulo: workout.titulo,
-          indice: workout.indice,
+          indice: Number(workout.indice),
           horario: workout.horario,
           exercicios: exercises.map((exercise) => ({
             nome: exercise.nome,
@@ -207,17 +207,10 @@ export default function Page() {
     setIsScrolled(latest > 0)
   })
 
-  console.log(
-    shapeRegistrations,
-    'the first shape registration is: ',
-    firstShapeRegistration,
-  )
-
   // Redirect to the first step if no photos are uploaded
   useEffect(() => {
     if (!firstShapeRegistration && !isLoadingShape) {
       // No registration at all
-      console.log('redirecting to the first step')
       router.push('/exercicios/steps?step=1')
     }
   }, [firstShapeRegistration, isLoadingShape, router])
@@ -650,10 +643,10 @@ export default function Page() {
             <div>
               <div className="flex flex-col">
                 {localWorkouts.filter(
-                  (workout) => workout.indice === selectedDay,
+                  (workout) => Number(workout.indice) === selectedDay,
                 ).length > 0 ? (
                   localWorkouts
-                    .filter((workout) => workout.indice === selectedDay)
+                    .filter((workout) => Number(workout.indice) === selectedDay)
                     .map((workout) => (
                       <div
                         key={workout.ficha_id}

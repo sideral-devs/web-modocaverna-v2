@@ -44,11 +44,8 @@ export interface Meal {
 
 export async function getMeals() {
   const response = await api.get('/refeicoes/find').then((res) => {
-    console.log(res)
     return res
   })
-
-  console.log('getMeals')
 
   const formatedData = response.data.map((meal: MealResponse) => {
     const alimentosFormatados =

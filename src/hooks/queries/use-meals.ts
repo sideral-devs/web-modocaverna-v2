@@ -5,8 +5,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 export function useMeals() {
   const queryClient = useQueryClient()
 
-  console.log('useMeals')
-
   const {
     data: meals,
     isLoading,
