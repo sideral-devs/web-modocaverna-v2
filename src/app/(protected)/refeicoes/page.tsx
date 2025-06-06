@@ -36,7 +36,7 @@ export default function Page() {
 
   // Filter meals for the selected day and sort by time
   const mealsForDay = meals
-    ?.filter((meal) => meal.dia_semana === selectedDay)
+    ?.filter((meal) => Number(meal.dia_semana) === selectedDay)
     ?.sort((a, b) => {
       const timeA = a.hora_refeicao.split(':').map(Number)
       const timeB = b.hora_refeicao.split(':').map(Number)
