@@ -6,7 +6,15 @@ import { getWorkouts } from '@/lib/api/exercises'
 import { getMeals } from '@/lib/api/meals'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { Bookmark, Dot } from 'lucide-react'
+import {
+  Bookmark,
+  Calendar,
+  Dot,
+  Dumbbell,
+  Sparkles,
+  User,
+  UtensilsCrossed,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -109,7 +117,7 @@ export default function EventsCard() {
             comeca: start,
             termina: end,
             titulo: item.nome_refeicao,
-            categoria: 'Treino',
+            categoria: 'Refeição',
             compromisso_id: `meal-${item.horario_id}`,
           }
         }) || []
@@ -175,6 +183,9 @@ export default function EventsCard() {
       )
     }
   }, [])
+
+  console.log(allEvents)
+
   return (
     <Card className="flex flex-col md:row-span-2 h-fit md:h-full min-h-[300px] bg-gradient-to-b from-[#09373E] to-[#1A1A1A] to-[65%] p-4 gap-5">
       <CardHeader className="justify-between">
@@ -225,24 +236,27 @@ export default function EventsCard() {
                       {eventTime.format('H[h]mm')}
                     </span>
                     <span className="flex items-center gap-2 text-sm text-zinc-300">
-                      <div
-                        className={`w-4 h-4 rounded${
-                          event.categoria === 'Compromisso'
-                            ? ' bg-blue-500'
-                            : event.categoria === 'Refeição'
-                              ? ' bg-yellow-500'
-                              : event.categoria === 'Treino'
-                                ? ' bg-red-500'
-                                : event.categoria === 'Pessoal'
-                                  ? ' bg-green-500'
-                                  : event.categoria === 'Ritual'
-                                    ? 'bg-yellow-400'
-                                    : // @ts-expect-error event_id é válido para Compromisso e GoogleEvent, mas não para o Ritual
-                                      (event.event_id?.length ?? 0) > 0
-                                      ? ' bg-orange-400'
-                                      : ' border-zinc-500'
-                        } group-data-[state=closed]:hidden`}
-                      />
+                      {event.categoria === 'Compromisso' && (
+                        <Bookmark className="text-blue-500" size={16} />
+                      )}
+                      {event.categoria === 'Refeição' && (
+                        <UtensilsCrossed
+                          className="text-yellow-500"
+                          size={16}
+                        />
+                      )}
+                      {event.categoria === 'Treino' && (
+                        <Dumbbell className="text-red-500" size={16} />
+                      )}
+                      {event.categoria === 'Pessoal' && (
+                        <User className="text-green-500" size={16} />
+                      )}
+                      {event.categoria === 'Ritual' && (
+                        <Sparkles className="text-yellow-400" size={16} />
+                      )}
+                      {(event.titulo?.length ?? 0) > 0 && !event.categoria && (
+                        <Calendar className="text-orange-400" size={16} />
+                      )}
                       {event.titulo}
                     </span>
                   </div>
