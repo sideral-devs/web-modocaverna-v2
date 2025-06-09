@@ -9,17 +9,81 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
 import { ChevronDown, Ellipsis, FolderIcon, PlusIcon } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-function Note({ descricao, id, nome }: Note) {
+function Note({ descricao, id, nome, ...props }: Note) {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const [text, setText] = useState(nome)
+
+  const queryClient = useQueryClient()
+  const router = useRouter()
   const pathName = usePathname()
   const noteHref = `/anotacoes/d/${id}`
   const active = pathName.includes(noteHref)
+
+  async function handleEditNote() {
+    try {
+      setEditMode(false)
+      await api.put(`/notas/update/${id}`, {
+        ...props,
+        cor: '#FF0000', // Obrigatório pela API
+        nome: text,
+      })
+    } catch {
+      toast.error('Algo deu errado. Tente novamente.')
+    } finally {
+      setPopoverOpen(false)
+    }
+  }
+
+  async function handleDeleteNote() {
+    try {
+      await api.delete(`/notas/destroy/${id}`)
+      queryClient.invalidateQueries({ queryKey: ['notes'] })
+      queryClient.invalidateQueries({ queryKey: ['notes'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'] })
+
+      if (active) {
+        router.replace('/anotacoes')
+      }
+    } catch {
+      toast.error('Algo deu errado. Tente novamente.')
+    } finally {
+      setPopoverOpen(false)
+    }
+  }
+
+  if (editMode) {
+    return (
+      <div className="border-0 p-0 rounded-xl">
+        <div className="flex relative items-center p-3 gap-2">
+          <input
+            className="bg-transparent text-sm transition-all duration-200"
+            autoFocus
+            value={text}
+            onBlur={() => {
+              handleEditNote()
+            }}
+            onChange={(e) => {
+              setText(e.target.value)
+            }}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter') return
+              handleEditNote()
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <Link
@@ -40,8 +104,33 @@ function Note({ descricao, id, nome }: Note) {
             : 'group-hover/note:brightness-125 text-zinc-500',
         )}
       >
-        {nome || descricao}
+        {text || descricao}
       </span>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+        <PopoverTrigger asChild>
+          <Ellipsis
+            size={20}
+            className="text-zinc-500 opacity-0 group-hover/note:opacity-100"
+          />
+        </PopoverTrigger>
+        <PopoverContent className="w-52 p-1 bg-zinc-800 rounded-lg text-xs">
+          <button
+            onClick={() => {
+              setPopoverOpen(false)
+              setEditMode(true)
+            }}
+            className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+          >
+            Renomear
+          </button>
+          <button
+            onClick={handleDeleteNote}
+            className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+          >
+            Apagar
+          </button>
+        </PopoverContent>
+      </Popover>
     </Link>
   )
 }
