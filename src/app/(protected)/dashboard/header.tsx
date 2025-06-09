@@ -11,8 +11,13 @@ import { UpgradeDialogDuringSevenDays } from './UpgradeDialogDuringSevenDays'
 import { UpgradeDialogExpired } from './UpgradeDialogExpired'
 import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
 
-export function CentralHubHeader() {
+export function CentralHubHeader({
+  setTab,
+}: {
+  setTab: (arg: string) => void
+}) {
   const { data: user } = useUser()
+
   if (!user) {
     return null
   }
@@ -25,10 +30,14 @@ export function CentralHubHeader() {
     'hour',
   )
   const diasRestantesTrial = Math.ceil(horasRestantesTrial / 24)
+
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-2">
-        <Link href="/dashboard?to=central-caverna">
+        <Link
+          href="/dashboard?to=central-caverna"
+          onClick={() => setTab('central-caverna')}
+        >
           <div className="flex h-11 items-center justify-center px-3 rounded-xl">
             <Image
               src={'/icons/logo-completo.svg'}
@@ -319,7 +328,7 @@ export function CentralHubHeader() {
               className="text-red-500 group-hover:text-white"
               size={20}
             />
-            <span className="text-sm  ">Loja Caverna</span>
+            <span className="text-sm">Loja Caverna</span>
           </div>
         </Link>
         <UserDropdown />
