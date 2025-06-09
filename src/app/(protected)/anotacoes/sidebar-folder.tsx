@@ -48,7 +48,6 @@ function Note({ descricao, id, nome, ...props }: Note) {
     try {
       await api.delete(`/notas/destroy/${id}`)
       queryClient.invalidateQueries({ queryKey: ['notes'] })
-      queryClient.invalidateQueries({ queryKey: ['notes'] })
       queryClient.invalidateQueries({ queryKey: ['folders'] })
 
       if (active) {

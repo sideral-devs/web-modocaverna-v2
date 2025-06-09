@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AvatarFallback } from '@radix-ui/react-avatar'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { addHours, format, parse } from 'date-fns'
+import { addDays, addHours, differenceInMinutes, format, parse } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   AlarmClock,
@@ -250,17 +250,30 @@ function CalculateHabitStep({
 }
 
 function ResultStep({ data }: { data?: RitualResponseDTO }) {
-  function sleepTime() {
-    let horasSomadas: string = ''
-    if (data) {
-      horasSomadas = sumHours(
-        data.horario_trabalho_estudo,
-        (data.duracao_ritual_matinal / 60) * -1,
-      )
-    }
-    const horasSemZero = parseInt(horasSomadas.split(':')[0], 10)
+  function getWakeUpTime(data: RitualResponseDTO) {
+    return sumHours(
+      data.horario_trabalho_estudo,
+      (data.duracao_ritual_matinal / 60) * -1,
+    )
+  }
 
-    return horasSemZero
+  function getSleepTime(data: RitualResponseDTO) {
+    const wakeUpTime = getWakeUpTime(data)
+
+    const now = new Date()
+    const sleep = parse(data.inicio_dormir, 'HH:mm', now)
+    let wake = parse(wakeUpTime, 'HH:mm', now)
+
+    if (wake <= sleep) {
+      wake = addDays(wake, 1)
+    }
+
+    const minutesSlept = differenceInMinutes(wake, sleep)
+    const hours = Math.floor(minutesSlept / 60)
+    const minutes = minutesSlept % 60
+
+    const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    return formatted
   }
 
   if (!data) {
@@ -297,7 +310,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-xs leading-none">
-                {sleepTime()} horas de sono
+                {getSleepTime(data)} horas de sono
               </span>
             </div>
           </div>
@@ -307,13 +320,7 @@ function ResultStep({ data }: { data?: RitualResponseDTO }) {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-xs leading-none">
-                Acorde às{' '}
-                <strong>
-                  {sumHours(
-                    data.horario_trabalho_estudo,
-                    (data.duracao_ritual_matinal / 60) * -1,
-                  )}
-                </strong>
+                Acorde às <strong>{getWakeUpTime(data)}</strong>
               </span>
             </div>
           </div>
