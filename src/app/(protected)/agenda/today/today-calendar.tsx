@@ -1,5 +1,7 @@
 'use client'
 import { Calendar } from '@/components/ui/calendar'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { useMeals } from '@/hooks/queries/use-meals'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -8,7 +10,12 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import isBetween from 'dayjs/plugin/isBetween'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
-import { CalendarEvent, GoogleEvent, RitualEvent } from '../calendar-event'
+import {
+  CalendarEvent,
+  GoogleEvent,
+  RitualEvent,
+  WorkoutMealEvent,
+} from '../calendar-event'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -68,6 +75,9 @@ export function TodayEventCalendar() {
       return data[0]
     },
   })
+
+  const { meals } = useMeals()
+  const { workouts } = useWorkouts()
 
   function scrollToNow() {
     if (scrollableRef.current) {
@@ -162,9 +172,37 @@ export function TodayEventCalendar() {
                       mode="daily"
                     />
                   ))}
+              {workouts &&
+                workouts
+                  .filter((item) => Number(item.indice) === selected?.getDay())
+                  .map((workout) => (
+                    <WorkoutMealEvent
+                      key={workout.ficha_id}
+                      mode="daily"
+                      now={selected}
+                      timeStart={workout.horario}
+                      title={workout.titulo}
+                      type="workout"
+                    />
+                  ))}
+              {meals &&
+                meals
+                  .filter(
+                    (item) => Number(item.dia_semana) === selected?.getDay(),
+                  )
+                  .map((meal) => (
+                    <WorkoutMealEvent
+                      key={meal.horario_id}
+                      mode="daily"
+                      now={selected}
+                      timeStart={meal.hora_refeicao}
+                      title={meal.nome_refeicao}
+                      type="meal"
+                    />
+                  ))}
               {morningRitual && (
                 <RitualEvent
-                  mode="weekly"
+                  mode="daily"
                   now={selected}
                   timeStart={morningRitual.horario_inicial}
                   timeEnd={morningRitual.horario_final}
@@ -174,7 +212,7 @@ export function TodayEventCalendar() {
               )}
               {nightRitual && (
                 <RitualEvent
-                  mode="weekly"
+                  mode="daily"
                   now={selected}
                   timeStart={nightRitual.horario_inicial}
                   timeEnd={nightRitual.horario_final}

@@ -20,10 +20,10 @@ const eventColors = {
   Compromisso: {
     text: '#3b82f6',
   },
-  Refeição: {
+  meal: {
     text: '#facc15',
   },
-  Treino: {
+  workout: {
     text: '#ef4444',
   },
   Pessoal: {
@@ -247,6 +247,42 @@ export function RitualEvent({
       openDialog={() => {
         setRitualDefaultTab(type)
         setRitualOpen(true)
+      }}
+    />
+  )
+}
+
+export function WorkoutMealEvent({
+  title,
+  timeStart,
+  mode,
+  type = 'workout',
+}: {
+  title: string
+  timeStart: string
+  now: Date | undefined
+  mode: 'weekly' | 'daily'
+  type?: 'workout' | 'meal'
+}) {
+  const start = dayjs(parse(timeStart, 'HH:mm', new Date())).format(
+    'YYYY-MM-DD HH:mm',
+  )
+
+  const end = dayjs(parse(timeStart, 'HH:mm', new Date()))
+    .add(1, 'hour')
+    .format('YYYY-MM-DD HH:mm')
+
+  return (
+    <BaseEvent
+      start={start}
+      end={end}
+      title={title}
+      category={type}
+      checked={false}
+      allDay={false}
+      mode={mode}
+      openDialog={() => {
+        // Nada
       }}
     />
   )

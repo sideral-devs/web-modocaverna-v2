@@ -1,6 +1,10 @@
 'use client'
 import { Calendar } from '@/components/ui/calendar'
+import { useWorkouts } from '@/hooks/queries/use-exercises'
+import { useMeals } from '@/hooks/queries/use-meals'
 import { api } from '@/lib/api'
+import { Workout } from '@/lib/api/exercises'
+import { Meal } from '@/lib/api/meals'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ptBR } from 'date-fns/locale'
@@ -9,7 +13,12 @@ import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
-import { CalendarEvent, GoogleEvent, RitualEvent } from './calendar-event'
+import {
+  CalendarEvent,
+  GoogleEvent,
+  RitualEvent,
+  WorkoutMealEvent,
+} from './calendar-event'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -67,26 +76,27 @@ export function EventCalendar() {
     },
   })
 
+  const { meals } = useMeals()
+  const { workouts } = useWorkouts()
+
   const scrollableRef = useRef<HTMLDivElement | null>(null)
 
   function scrollToNow() {
     if (scrollableRef.current) {
-      // console.log('scrollToNow() chamado')
       const now = new Date()
-      // console.log('Agora:', now)
       const PIXELS_PER_MINUTE = 112 / 60
       const startMinutes = now.getHours() * 60 + now.getMinutes()
-      // console.log('Minutos desde meia-noite:', startMinutes)
       const top = startMinutes * PIXELS_PER_MINUTE
-      // console.log('Top calculado:', top)
       const viewportHeight = scrollableRef.current.clientHeight
-      // console.log('Altura da viewport:', viewportHeight)
+
       scrollableRef.current.scrollTo({
         top: top - viewportHeight / 2,
         behavior: 'smooth',
       })
     }
   }
+
+  console.log(meals)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -174,6 +184,14 @@ export function EventCalendar() {
                         }))
                     : []
 
+                const dayWorkouts = workouts?.filter(
+                  (item) => Number(item.indice) === i,
+                )
+
+                const dayMeals = meals?.filter(
+                  (item) => Number(item.dia_semana) === i,
+                )
+
                 return (
                   <Column
                     key={i}
@@ -182,6 +200,8 @@ export function EventCalendar() {
                     googleEvents={googleCalendarEvents}
                     morningRitual={morningRitual}
                     nightRitual={nightRitual}
+                    workouts={dayWorkouts}
+                    meals={dayMeals}
                   />
                 )
               })}
@@ -199,6 +219,8 @@ function Column({
   googleEvents,
   morningRitual,
   nightRitual,
+  workouts = [],
+  meals = [],
 }: {
   date: dayjs.Dayjs
   events: Compromisso[]
@@ -207,6 +229,8 @@ function Column({
   >
   morningRitual?: RitualResponseItem
   nightRitual?: RitualResponseItem
+  workouts?: Workout[]
+  meals?: Meal[]
 }) {
   return (
     <div className="xl:w-full min-w-40 w-40 h-full flex-1 border-r relative">
@@ -227,6 +251,26 @@ function Column({
           key={event.compromisso_id}
           now={date.toDate()}
           mode="weekly"
+        />
+      ))}
+      {workouts.map((workout) => (
+        <WorkoutMealEvent
+          key={workout.ficha_id}
+          mode="weekly"
+          now={date.toDate()}
+          timeStart={workout.horario}
+          title={workout.titulo}
+          type="workout"
+        />
+      ))}
+      {meals.map((meal) => (
+        <WorkoutMealEvent
+          key={meal.horario_id}
+          mode="weekly"
+          now={date.toDate()}
+          timeStart={meal.hora_refeicao}
+          title={meal.nome_refeicao}
+          type="meal"
         />
       ))}
       {morningRitual && (
