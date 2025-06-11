@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select'
 import { api } from '@/lib/api'
 
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -29,7 +30,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { EditRepetitionDialog } from './edit-repetition-dialog'
-import { Textarea } from '@/components/ui/textarea'
 
 const schema = z.object({
   title: z.string().min(1, { message: 'Obrigatório' }),
@@ -328,26 +328,6 @@ export function CreateEventDialogTrigger({
                   <div className="flex flex-row items-center gap-2">
                     <div className="w-1 h-1 rounded bg-cyan-400 group-data-[state=closed]:hidden" />
                     Compromisso
-                  </div>
-                </SelectItem>
-                <SelectItem
-                  value="Refeição"
-                  className={selectItemClassName}
-                  hideIcon
-                >
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="w-1 h-1 rounded bg-yellow-400 group-data-[state=closed]:hidden" />
-                    Refeição
-                  </div>
-                </SelectItem>
-                <SelectItem
-                  value="Treino"
-                  className={selectItemClassName}
-                  hideIcon
-                >
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="w-1 h-1 rounded bg-red-500 group-data-[state=closed]:hidden" />
-                    Treino
                   </div>
                 </SelectItem>
                 <SelectItem
