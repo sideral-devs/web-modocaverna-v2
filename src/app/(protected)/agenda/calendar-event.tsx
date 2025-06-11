@@ -118,9 +118,6 @@ function BaseEvent({
     )
   }
 
-  console.log(eventColors[category])
-  console.log({ title, category })
-
   return (
     <div
       className={cn(

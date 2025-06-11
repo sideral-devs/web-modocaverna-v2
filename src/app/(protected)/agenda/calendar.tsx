@@ -96,8 +96,6 @@ export function EventCalendar() {
     }
   }
 
-  console.log(meals)
-
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToNow()
