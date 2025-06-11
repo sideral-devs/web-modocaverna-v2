@@ -20,6 +20,12 @@ const eventColors = {
   Compromisso: {
     text: '#3b82f6',
   },
+  Refeição: {
+    text: '#facc15',
+  },
+  Treino: {
+    text: '#ef4444',
+  },
   meal: {
     text: '#facc15',
   },
@@ -111,6 +117,9 @@ function BaseEvent({
       </div>
     )
   }
+
+  console.log(eventColors[category])
+  console.log({ title, category })
 
   return (
     <div
