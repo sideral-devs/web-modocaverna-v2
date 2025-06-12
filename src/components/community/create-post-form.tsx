@@ -179,7 +179,7 @@ export function CreatePostForm({
               }
             />
             <AvatarFallback className="uppercase">
-              {user.nickname[0]}
+              {user.nickname ? user.nickname[0] : 'a'}
             </AvatarFallback>
           </Avatar>
         ) : (

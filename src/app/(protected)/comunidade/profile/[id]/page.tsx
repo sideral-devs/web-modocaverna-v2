@@ -98,7 +98,11 @@ export default function ProfilePage({
                       }
                     />
                     <AvatarFallback className="uppercase">
-                      {profile.nickname.charAt(0)}
+                      {profile.nickname
+                        ? profile.nickname.charAt(0)
+                        : user && user.name
+                          ? user.name.charAt(0)
+                          : 'U'}
                     </AvatarFallback>
                   </Avatar>
                 ) : (

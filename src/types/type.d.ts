@@ -549,7 +549,7 @@ interface UserProfile {
   created_at: string
   updated_at: string
   num_notifications: number
-  nickname: string
+  nickname: string | null
   foto_perfil: string | null
   is_completed: boolean
 }
