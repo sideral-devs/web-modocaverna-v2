@@ -166,7 +166,7 @@ export function PostCard({
                 }
               />
               <AvatarFallback className="uppercase">
-                {post.author?.nickname.charAt(0)}
+                {post.author?.nickname?.charAt(0) || 'U'}
               </AvatarFallback>
             </Avatar>
 

@@ -164,7 +164,7 @@ export function EditPostForm({ post, onUpdate, onExit }: EditPostFormProps) {
               }
             />
             <AvatarFallback className="uppercase">
-              {user.nickname[0]}
+              {user.nickname?.charAt(0) || 'U'}
             </AvatarFallback>
           </Avatar>
         ) : (
