@@ -46,7 +46,7 @@ export default function NotificationsPage() {
                           src={`${env.NEXT_PUBLIC_PROD_URL}${notification?.sender?.foto_perfil}`}
                         />
                         <AvatarFallback>
-                          {notification.sender.nickname.charAt(0)}
+                          {notification.sender.nickname?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
 
