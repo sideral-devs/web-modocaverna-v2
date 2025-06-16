@@ -13,9 +13,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-const PersonalDevelopment = dynamic(() => import('./personal-development'), {
-  loading: () => <Skeleton className="w-full h-96" />,
-})
 const DigitalMarketing = dynamic(() => import('./digital-marketing'), {
   loading: () => <Skeleton className="w-full h-96" />,
 })
@@ -114,7 +111,7 @@ export default function Page() {
       ) : (
         <Skeleton className="w-full h-[573px] 2xl:h-[calc(100vw/32*9)" />
       )}
-      <section className="flex flex-col w-full px-4 gap-6 2xl:gap-8">
+      {/* <section className="flex flex-col w-full px-4 gap-6 2xl:gap-8">
         <h2 className="text-xl 2xl:text-[1.75rem] font-semibold">
           Desenvolvimento pessoal
         </h2>
@@ -123,9 +120,11 @@ export default function Page() {
             ?.filter((item) => item.category === 'desenvolvimentoPessoal')
             .slice(1)}
         />
-      </section>
+      </section> */}
       <section className="flex flex-col w-full px-4 gap-6 2xl:gap-8">
-        <h2 className="text-xl font-semibold">Marketing Digital</h2>
+        <h2 className="text-xl 2xl:text-[1.75rem] font-semibold">
+          Marketing Digital
+        </h2>
         <DigitalMarketing />
       </section>
     </div>

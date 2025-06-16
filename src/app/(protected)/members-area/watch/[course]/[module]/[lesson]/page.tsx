@@ -394,28 +394,45 @@ export default function Page({
             className="flex flex-col w-full gap-4"
             defaultValue={moduloId}
           >
-            {data.modulos.map((item) => (
-              <AccordionItem
-                key={item.modulo_id}
-                className="border p-0 rounded-xl"
-                value={String(item.modulo_id)}
-              >
-                <AccordionTrigger className="text-lg font-semibold p-5">
-                  {item.titulo}
-                </AccordionTrigger>
-                <AccordionContent className="flex flex-col p-3 border-t">
-                  {item.aulas.map((aula) => (
-                    <ClassLink
-                      title={aula.titulo}
-                      active={aula.aula_id === lesson.aula_id}
-                      key={aula.aula_id}
-                      watched={aula.aula_feedback?.concluido === 'sim'}
-                      href={`/members-area/watch/${course}/${aula.modulo_id}/${aula.aula_id}`}
-                    />
-                  ))}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+            {data.modulos
+              .sort((a, b) => {
+                const aIsCaveFocus = a.titulo
+                  .toLowerCase()
+                  .includes('cave focus')
+                const bIsCaveFocus = b.titulo
+                  .toLowerCase()
+                  .includes('cave focus')
+                if (aIsCaveFocus === bIsCaveFocus) return 0
+                return aIsCaveFocus ? 1 : -1
+              })
+              .sort((a, b) => {
+                const aIsBonus = a.titulo.toLowerCase().includes('bônus')
+                const bIsBonus = b.titulo.toLowerCase().includes('bônus')
+                if (aIsBonus === bIsBonus) return 0
+                return aIsBonus ? 1 : -1
+              })
+              .map((item) => (
+                <AccordionItem
+                  key={item.modulo_id}
+                  className="border p-0 rounded-xl"
+                  value={String(item.modulo_id)}
+                >
+                  <AccordionTrigger className="text-lg font-semibold p-5">
+                    {item.titulo}
+                  </AccordionTrigger>
+                  <AccordionContent className="flex flex-col p-3 border-t">
+                    {item.aulas.map((aula) => (
+                      <ClassLink
+                        title={aula.titulo}
+                        active={aula.aula_id === lesson.aula_id}
+                        key={aula.aula_id}
+                        watched={aula.aula_feedback?.concluido === 'sim'}
+                        href={`/members-area/watch/${course}/${aula.modulo_id}/${aula.aula_id}`}
+                      />
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
           </Accordion>
         )}
       </div>
