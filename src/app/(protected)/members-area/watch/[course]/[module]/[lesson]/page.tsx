@@ -150,7 +150,6 @@ export default function Page({
   }
 
   useEffect(() => {
-    console.log({ animationFinished, showNextButton })
     if (animationFinished && showNextButton) {
       nextLesson()
     }
