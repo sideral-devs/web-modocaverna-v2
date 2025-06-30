@@ -1,8 +1,9 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
+import { DashboardTour } from '@/components/tours/dashboard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useSearchParams } from 'next/navigation'
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
 import PageDialogs from './dialogs/PageDialog'
@@ -22,14 +23,25 @@ export default function Page() {
 function Content() {
   const params = useSearchParams()
   const to = params.get('to')
+  const startTour = params.get('startTour')
 
   const [tab, setTab] = useState(to || 'central-caverna')
+  const [activeTour, setActiveTour] = useState(false)
+
+  useEffect(() => {
+    const doneDashboardTour = localStorage.getItem('doneDashboardTour')
+    if (startTour === 'true' && !doneDashboardTour) {
+      setActiveTour(true)
+      localStorage.setItem('doneDashboardTour', 'true')
+    }
+  }, [startTour])
 
   return (
     <ProtectedRoute>
       <PageDialogs />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12">
         <CentralHubHeader setTab={setTab} />
+        <DashboardTour active={activeTour} setIsActive={setActiveTour} />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
           <Tabs
             defaultValue={to || tab}

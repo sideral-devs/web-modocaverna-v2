@@ -1,12 +1,13 @@
-import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { VideoPlayer } from '@/components/video-player'
 import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
+import { videos } from '@/lib/constants'
 import { cellphoneMask, ddiMask, removeMask } from '@/lib/utils'
 import { useOnboardingStore } from '@/store/onboarding'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
-import Image from 'next/image'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -82,42 +83,17 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-12">
-      <div className="flex items-start gap-16">
-        <Image
-          src={'/images/lobo/apontando.png'}
-          alt="Capitão Caverna"
-          className="absolute -top-2 -left-72"
-          width={222}
-          height={402}
-        />
-        <div className="flex flex-col relative w-full max-w-[611px] p-6 lg:px-12 lg:py-8 gap-5 lg:gap-6 border border-zinc-700 rounded-lg">
-          <h1 className="text-xl lg:text-2xl">
-            Quer saber? Eu posso ser mais do que um simples guia.
-          </h1>
-          <p className="text-zinc-400 text-sm lg:text-base ">
-            Sou uma inteligência artificial e fui treinado para ser o seu
-            assistente pessoal no WhatsApp.
-          </p>
-          <p className="text-zinc-400 text-sm lg:text-base">
-            Vou te ajudar no gerenciamento da sua rotina. Te mostrando
-            exatamente o que deve ser feito durante o seu dia.
-          </p>
-          <p className="text-zinc-400 text-sm lg:text-base">
-            <strong className="text-white">
-              Para ativar essa função, preencha ou confirme o seu número no
-              campo abaixo.
-            </strong>{' '}
-            Em seguida, clique no botão vermelho.
-          </p>
-
-          <Image
-            src={'/images/triangle-balloon.svg'}
-            width={54}
-            height={14}
-            alt="balloon"
-            className="hidden md:block absolute -left-[54px] top-[25%]"
-          />
+    <div className="flex w-full flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-10">
+      <div className="flex w-full max-w-[611px] flex-col items-center gap-8">
+        <h1 className="text-3xl font-bold">Conecte-se com o Capitão Caverna</h1>
+        <p className="text-center opacity-80">
+          Estabeleça uma conexão direta comigo via WhatsApp para receber
+          orientações personalizadas.
+        </p>
+        <div className="flex flex-col relative w-full border border-zinc-700 rounded-lg">
+          <div className="w-full aspect-video rounded-xl overflow-hidden">
+            <VideoPlayer id={videos.caveRite} />
+          </div>
         </div>
       </div>
       <FormProvider {...form}>
@@ -156,13 +132,13 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
             )}
           </div>
           <div className="flex justify-center">
-            <AutoSubmitButton
+            <Button
               onClick={handleSubmit(handleSaveData)}
               loading={isSubmitting}
-              className="mt-auto"
+              size="lg"
             >
-              Entendido Capitão!
-            </AutoSubmitButton>
+              Conectar com Capitão Caverna
+            </Button>
           </div>
         </div>
       </FormProvider>

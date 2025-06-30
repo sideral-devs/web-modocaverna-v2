@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { ChevronLeft, ChevronRight, HelpCircle, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 interface TutorialStep {
@@ -99,25 +100,30 @@ const tutorialSteps: TutorialStep[] = [
   },
 ]
 
-export function DashboardTour() {
-  const [isActive, setIsActive] = useState(false)
+export function DashboardTour({
+  active,
+  setIsActive,
+}: {
+  active: boolean
+  setIsActive: (arg: boolean) => void
+}) {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
-
-  const startTutorial = () => {
-    setIsActive(true)
-    setCurrentStep(0)
-  }
 
   const closeTutorial = () => {
     setIsActive(false)
     setCurrentStep(0)
   }
 
+  const handleFinish = () => {
+    router.replace('/onboarding/concluido')
+  }
+
   const nextStep = () => {
     if (currentStep < tutorialSteps.length - 1) {
       setCurrentStep(currentStep + 1)
     } else {
-      closeTutorial()
+      handleFinish()
     }
   }
 
@@ -171,113 +177,100 @@ export function DashboardTour() {
     }
   }
 
+  if (!active) return null
+
   return (
-    <>
-      {!isActive && (
+    <div className="absolute inset-0 z-50 max-w-8xl mx-auto">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black/60" />
         <div
-          onClick={startTutorial}
-          className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl cursor-pointer"
-        >
-          <HelpCircle
-            className="text-red-500 group-hover:text-white"
-            size={20}
-          />
-        </div>
-      )}
-      {isActive && (
-        <div className="absolute inset-0 z-50 max-w-8xl mx-auto">
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-black/60" />
-            <div
-              className="absolute bg-white/10 border-2 border-primary rounded-lg shadow-2xl"
-              style={{
-                left: `${currentStepData.highlight.x}%`,
-                top: `${currentStepData.highlight.y}%`,
-                width: `${currentStepData.highlight.width}%`,
-                height: `${currentStepData.highlight.height}%`,
-                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
-                zIndex: 51,
-              }}
-            />
+          className="absolute bg-white/10 border-2 border-primary rounded-lg shadow-2xl"
+          style={{
+            left: `${currentStepData.highlight.x}%`,
+            top: `${currentStepData.highlight.y}%`,
+            width: `${currentStepData.highlight.width}%`,
+            height: `${currentStepData.highlight.height}%`,
+            boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
+            zIndex: 51,
+          }}
+        />
+      </div>
+
+      <Card
+        className="absolute max-w-md z-[52] shadow-2xl border-2"
+        style={getDialogPosition()}
+      >
+        <CardHeader className="flex flex-col items-start px-6 py-4 gap-4">
+          <div className="w-full flex items-center justify-between">
+            <Badge variant="outline" className="text-xs">
+              Passo {currentStep + 1} of {tutorialSteps.length}
+            </Badge>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6"
+              onClick={closeTutorial}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+          <CardTitle className="text-lg">{currentStepData.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <CardDescription className="text-sm leading-relaxed">
+            {currentStepData.description}
+          </CardDescription>
+
+          <div className="flex justify-center space-x-1">
+            {tutorialSteps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToStep(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentStep
+                    ? 'bg-primary'
+                    : index < currentStep
+                      ? 'bg-primary/60'
+                      : 'bg-gray-300'
+                }`}
+              />
+            ))}
           </div>
 
-          <Card
-            className="absolute max-w-md z-[52] shadow-2xl border-2"
-            style={getDialogPosition()}
-          >
-            <CardHeader className="flex flex-col items-start px-6 py-4 gap-4">
-              <div className="w-full flex items-center justify-between">
-                <Badge variant="outline" className="text-xs">
-                  Passo {currentStep + 1} of {tutorialSteps.length}
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={closeTutorial}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              <CardTitle className="text-lg">{currentStepData.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <CardDescription className="text-sm leading-relaxed">
-                {currentStepData.description}
-              </CardDescription>
+          <div className="flex justify-between">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={prevStep}
+              disabled={currentStep === 0}
+              className="gap-1"
+            >
+              <ChevronLeft className="w-3 h-3" />
+              Anterior
+            </Button>
 
-              <div className="flex justify-center space-x-1">
-                {tutorialSteps.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToStep(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentStep
-                        ? 'bg-primary'
-                        : index < currentStep
-                          ? 'bg-primary/60'
-                          : 'bg-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
+            <Button size="sm" onClick={nextStep} className="gap-1">
+              {currentStep === tutorialSteps.length - 1 ? (
+                'Finalizar'
+              ) : (
+                <>
+                  Próximo
+                  <ChevronRight className="w-3 h-3" />
+                </>
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
-              <div className="flex justify-between">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={prevStep}
-                  disabled={currentStep === 0}
-                  className="gap-1"
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                  Anterior
-                </Button>
-
-                <Button size="sm" onClick={nextStep} className="gap-1">
-                  {currentStep === tutorialSteps.length - 1 ? (
-                    'Finalizar'
-                  ) : (
-                    <>
-                      Próximo
-                      <ChevronRight className="w-3 h-3" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={closeTutorial}
-            className="absolute bottom-4 right-4 z-52 text-white hover:bg-white/20"
-          >
-            Pular Tutorial
-          </Button>
-        </div>
-      )}
-    </>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={closeTutorial}
+        className="absolute bottom-4 right-4 z-52 text-white hover:bg-white/20"
+      >
+        Pular Tutorial
+      </Button>
+    </div>
   )
 }

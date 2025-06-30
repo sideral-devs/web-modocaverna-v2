@@ -74,7 +74,7 @@ export default function Page() {
     queryKey: ['challenge'],
     queryFn: async () => {
       const response = await api.get('/desafios/user')
-      return response.data
+      return response.data as Challenge
     },
     enabled: !initialChallenge, // Só faz fetch se não tiver dados locais
     staleTime: 0,
@@ -106,9 +106,8 @@ export default function Page() {
 
       const updated: Challenge = {
         ...challenge,
-        desafio_commandment: challenge.desafio_commandment.map(
-          (item: { id: number }) =>
-            item.id === id ? { ...item, completed } : item,
+        desafio_commandment: challenge.desafio_commandment.map((item) =>
+          item.id === id ? { ...item, completed } : item,
         ),
       }
       queryClient.setQueryData(['challenge'], updated)
@@ -327,76 +326,66 @@ export default function Page() {
                 type="single"
                 className="flex flex-col gap-[10px]"
               >
-                {challenge.desafio_commandment.map(
-                  (item: {
-                    id: number
-                    completed: boolean
-                    commandment: {
-                      number: number
-                      title: string
-                      short_description: string
-                    }
-                  }) => (
-                    <AccordionItem
-                      className={cn(
-                        'border p-0 rounded-lg',
-                        item.completed ? 'border-emerald-700' : 'border-border',
-                      )}
-                      value={String(item.id)}
-                      key={item.id}
+                {challenge.desafio_commandment.map((item) => (
+                  <AccordionItem
+                    className={cn(
+                      'border p-0 rounded-lg',
+                      item.completed ? 'border-emerald-700' : 'border-border',
+                    )}
+                    value={String(item.id)}
+                    key={item.id}
+                  >
+                    <AccordionTrigger
+                      className={cn('w-full max-w-full p-4')}
+                      noIcon
                     >
-                      <AccordionTrigger
-                        className={cn('w-full max-w-full p-4')}
-                        noIcon
-                      >
-                        <div className="flex flex-1 max-w-full gap-2">
-                          <span className="w-full flex-1 truncate">
-                            {item.commandment.number}. {item.commandment.title}
-                          </span>
-                          {item.completed && (
-                            <div className="flex items-center justify-center w-4 h-4 border border-emerald-400 rounded-full">
-                              <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                            </div>
-                          )}
-                          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="p-0">
-                        <div className="flex flex-col max-h-36 px-4 py-2 gap-4 overflow-y-auto scrollbar-minimal">
-                          <p className="text-sm text-zinc-400">
-                            {item.commandment.short_description}
-                          </p>
-                          <Button
-                            size="sm"
-                            className="w-fit min-h-9"
-                            onClick={() => {
-                              setCommandment(
-                                item as unknown as DesafioCommandment,
-                              )
-                              setCommandmentDialogOpen(true)
-                            }}
-                          >
-                            Ver mais
-                          </Button>
-                        </div>
-                        {challenge.status_desafio !== 'pausado' && (
-                          <div className="flex w-full p-3 gap-2 border-t">
-                            <Checkbox
-                              className="rounded-full border-emerald-400 data-[state=checked]:bg-emerald-400"
-                              checked={item.completed}
-                              disabled={challenge.status_desafio === 'pausado'}
-                              onCheckedChange={(val) => {
-                                const checked = val.valueOf() === true || false
-                                handleUpdateCommandmentStatus(item.id, checked)
-                              }}
-                            />
-                            <span>Marcar como concluído</span>
+                      <div className="flex flex-1 max-w-full gap-2">
+                        <span className="w-full flex-1 truncate">
+                          {item.commandment.number}. {item.commandment.title}
+                        </span>
+                        {item.completed && (
+                          <div className="flex items-center justify-center w-4 h-4 border border-emerald-400 rounded-full">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400" />
                           </div>
                         )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ),
-                )}{' '}
+                        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="p-0">
+                      <div className="flex flex-col max-h-36 px-4 py-2 gap-4 overflow-y-auto scrollbar-minimal">
+                        <p className="text-sm text-zinc-400">
+                          {item.commandment.short_description}
+                        </p>
+                        <Button
+                          size="sm"
+                          className="w-fit min-h-9"
+                          onClick={() => {
+                            setCommandment(
+                              item as unknown as DesafioCommandment,
+                            )
+                            setCommandmentDialogOpen(true)
+                          }}
+                        >
+                          Ver mais
+                        </Button>
+                      </div>
+                      {challenge.status_desafio !== 'pausado' && (
+                        <div className="flex w-full p-3 gap-2 border-t">
+                          <Checkbox
+                            className="rounded-full border-emerald-400 data-[state=checked]:bg-emerald-400"
+                            checked={item.completed}
+                            disabled={challenge.status_desafio === 'pausado'}
+                            onCheckedChange={(val) => {
+                              const checked = val.valueOf() === true || false
+                              handleUpdateCommandmentStatus(item.id, checked)
+                            }}
+                          />
+                          <span>Marcar como concluído</span>
+                        </div>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}{' '}
               </Accordion>
             ) : (
               <div className="flex flex-col gap-4">

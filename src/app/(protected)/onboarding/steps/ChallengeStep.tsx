@@ -3,7 +3,7 @@ import { VideoPlayer } from '@/components/video-player'
 import { videos } from '@/lib/constants'
 import { useEffect, useState } from 'react'
 
-export function ConfidentialityStep({ onNext }: { onNext: () => void }) {
+export function ChallengeStep({ onNext }: { onNext: () => void }) {
   const [disabled, setDisabled] = useState(true)
 
   useEffect(() => {
@@ -19,12 +19,12 @@ export function ConfidentialityStep({ onNext }: { onNext: () => void }) {
       <div className="flex w-full flex-col items-center gap-64 lg:gap-24">
         <div className="flex flex-col relative w-full max-w-[611px] border border-zinc-700 rounded-lg">
           <div className="w-full aspect-video rounded-xl overflow-hidden">
-            <VideoPlayer id={videos.affiliateTutorial} />
+            <VideoPlayer id={videos.challengeTutorial} />
           </div>
         </div>
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" disabled={disabled}>
-            🧠 Descobrir minha luz
+            🔥 ACEITAR O DESAFIO
           </Button>
         </div>
       </div>

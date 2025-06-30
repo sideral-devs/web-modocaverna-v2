@@ -5,46 +5,51 @@ import { api } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboarding'
 import Image from 'next/image'
 import { redirect, useRouter } from 'next/navigation'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { CellphoneStep } from './CellphoneStep'
+import { ChallengeStep } from './ChallengeStep'
+import { CheckPointStep } from './CheckpointStep'
 import { ConfidentialityStep } from './ConfidentialityStep'
 import { ConfirmStep } from './ConfirmStep'
 import { DownloadAppStep } from './DownloadAppStep'
+import { FortyDaysStep } from './FortyDaysStep'
 import { InfoStep } from './InfoStep'
 import { PlansSystem } from './PlansSystem'
+import { TourStep } from './TourStep'
 
 export default function Page() {
   const router = useRouter()
   const { data: user } = useUser()
   const [isLoading, setIsLoading] = useState(false)
-  const [currentPhase, setCurrentPhase] = useState(1)
+  const [currentPhase, setCurrentPhase] = useState(0)
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
   const { cellphone } = useOnboardingStore()
 
-  const passosTotal = isDesafioPlan ? 7 : 6
-
   const STEPS = isDesafioPlan
-    ? ({
-        1: <InfoStep onNext={nextPhase} />,
-        2: <CellphoneStep onNext={nextPhase} />,
-        3: <ConfidentialityStep onNext={nextPhase} />,
-        4: <DownloadAppStep onNext={nextPhase} />,
-        5: <ActivateCaveModeStep onNext={nextPhase} />,
-        6: <PlansSystem onNext={nextPhase} />,
-        7: <ConfirmStep onNext={handleFinish} isLoading={isLoading} />,
-      } as { [key: number]: ReactNode })
-    : ({
-        1: <InfoStep onNext={nextPhase} />,
-        2: <CellphoneStep onNext={nextPhase} />,
-        3: <ConfidentialityStep onNext={nextPhase} />,
-        4: <DownloadAppStep onNext={nextPhase} />,
-        5: <ActivateCaveModeStep onNext={nextPhase} />,
-        6: <ConfirmStep onNext={handleFinish} isLoading={isLoading} />,
-      } as { [key: number]: ReactNode })
+    ? [
+        <InfoStep key={1} onNext={nextPhase} />,
+        <CellphoneStep key={2} onNext={nextPhase} />,
+        <ConfidentialityStep key={3} onNext={nextPhase} />,
+        <DownloadAppStep key={4} onNext={nextPhase} />,
+        <ActivateCaveModeStep key={5} onNext={nextPhase} />,
+        <PlansSystem key={6} onNext={nextPhase} />,
+        <ConfirmStep key={7} onNext={handleFinish} isLoading={isLoading} />,
+      ]
+    : [
+        <InfoStep key={1} onNext={nextPhase} />,
+        <CellphoneStep key={2} onNext={nextPhase} />,
+        <ConfidentialityStep key={3} onNext={nextPhase} />,
+        <DownloadAppStep key={4} onNext={nextPhase} />,
+        <ActivateCaveModeStep key={5} onNext={nextPhase} />,
+        <ChallengeStep key={6} onNext={nextPhase} />,
+        <CheckPointStep key={7} onNext={nextPhase} />,
+        <FortyDaysStep key={8} onNext={nextPhase} />,
+        <TourStep key={9} onNext={handleFinish} />,
+      ]
 
   function nextPhase() {
     setCurrentPhase((curr) => curr + 1)
@@ -57,7 +62,7 @@ export default function Page() {
         tutorial_complete: true,
         telefone: cellphone,
       })
-      router.replace('/dashboard/tour')
+      router.replace('/dashboard?startTour=true')
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
     } finally {
@@ -83,10 +88,10 @@ export default function Page() {
               width={32}
               height={27}
             />
-            <PhaseCounter current={currentPhase} total={passosTotal} />
+            <PhaseCounter current={currentPhase + 1} total={STEPS.length} />
           </div>
           <span className="text-xs lg:text-sm text-right text-muted-foreground">
-            Passo {currentPhase} de {passosTotal}
+            Passo {currentPhase + 1} de {STEPS.length}
           </span>
         </header>
         {STEPS[currentPhase]}
