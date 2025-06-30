@@ -48,7 +48,7 @@ export function CommissionPlanDialogTrigger({
           <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
               <p className="text-white  text-2xl w-full flex justify-center text text-bold  pb-2">
-                Aplicativo Modo Caverna
+                Modo Caverna
               </p>{' '}
               <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
@@ -90,23 +90,56 @@ export function CommissionPlanDialogTrigger({
                   )
                 }}
               >
-                Solicitar Afiliaçãol
+                Solicitar Afiliação
               </Button>
             )}
+          </Card>
+          <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
+            <div className="flex w-full flex-col px-3 items-start gra-4  justify-start">
+              <p className="text-white text-bold pb-2 w-full flex justify-center text-2xl ">
+                Desafio Modo Caverna
+              </p>{' '}
+              <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
+                <p className="text-base opacity-100 text-zinc-400">
+                  Comissão inicial:{' '}
+                </p>
+
+                <p className="text-extrabold text-base pl-2 mr-2"> 50%</p>
+              </div>
+              <div className="flex flex-row jusfity-between text-base  text-white w-fit">
+                <p className="text-zinc-400">Página de vendas:</p>
+                <a
+                  className="pl-2 text-primary"
+                  href="https://desafio.modocaverna.com/ative"
+                  target="_blank"
+                >
+                  CLIQUE AQUI
+                </a>
+              </div>
+            </div>
+            <a
+              className="pt-2"
+              href="https://redirect.lifs.app/mc-afiliacao"
+              target="_blank"
+            >
+              <Button size={'sm'} className="w-52 text-sm">
+                Solicitar Afiliação
+              </Button>
+            </a>
           </Card>
           <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
               <p className="text-white  text-2xl w-full flex justify-center text text-bold  pb-2">
                 Loja Seja Caverna
               </p>{' '}
-              <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
+              <div className="flex flex-row justify-between pl-1 text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
                   Comissão de até
                 </p>
 
                 <p className="text-extrabold text-base pl-2 mr-2"> R$ 200,00</p>
               </div>
-              <div className="flex flex-col jusfity-between text-base  text-white w-fit">
+              <div className="flex flex-col justify-between text-base  text-white w-fit">
                 <p className="text-zinc-400">
                   Página de vendas:
                   <a
