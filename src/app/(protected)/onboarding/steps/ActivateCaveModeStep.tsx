@@ -24,14 +24,15 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex w-full flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-10">
-      <div className="flex w-full max-w-[611px] flex-col items-center gap-8">
-        <h1 className="text-3xl font-bold">Defina Sua Meta Principal</h1>
-        <p className="text-center opacity-80">
-          Agora que você conhece seu perfil, defina o principal objetivo que
-          quer conquistar nos próximos 40 dias.
-        </p>
-      </div>
+    <div className="flex flex-col items-center justify-center gap-12">
+      <h1 className="font-bold text-center text-3xl lg:text-4xl">
+        Qual é o seu objetivo principal com o{' '}
+        <span className="text-primary">Modo Caverna?</span>
+      </h1>
+      <p className="text-center opacity-80">
+        Defina o principal objetivo que quer conquistar nos próximos 40 dias.
+      </p>
+
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col items-center gap-8"
@@ -50,6 +51,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
         <Button
           type="submit"
           size="lg"
+          className="uppercase"
           disabled={(form.watch('goal') || '').length < 10}
         >
           🎯 Definir meta

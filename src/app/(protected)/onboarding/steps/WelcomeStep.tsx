@@ -1,13 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { VideoPlayer } from '@/components/video-player'
+import { VideoPlayerMux } from '@/components/video-player-mux'
 import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
-import { videos } from '@/lib/constants'
+import { muxVideos } from '@/lib/constants'
 import { cellphoneMask, ddiMask, removeMask } from '@/lib/utils'
 import { useOnboardingStore } from '@/store/onboarding'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -21,23 +23,25 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-function separarDdiENumero(telefone: string): { ddi: string; numero: string } {
-  const limpo = telefone.replace(/\D/g, '') // remove tudo que não é número
-  const ddi = `+${limpo.slice(0, 2)}`
-  const numero = limpo.slice(2)
-  return { ddi, numero }
+function formatCellphoneDDI(telefone: string) {
+  const clean = telefone.replace(/\D/g, '')
+  const ddi = `+${clean.slice(0, 2)}`
+  const number = clean.slice(2)
+  return { ddi, number }
 }
 
-export function CellphoneStep({ onNext }: { onNext: () => void }) {
+export function WelcomeStep({ onNext }: { onNext: () => void }) {
+  const [ended, setEnded] = useState(false)
   const { data: user } = useUser()
   const { setCellphone } = useOnboardingStore()
-  const telefone = user?.telefone || ''
-  const { ddi, numero } = separarDdiENumero(telefone)
+
+  const cellphone = user?.telefone || ''
+  const { ddi, number } = formatCellphoneDDI(cellphone)
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       DDI: ddi,
-      cellphone: cellphoneMask(numero),
+      cellphone: cellphoneMask(number),
     },
   })
 
@@ -50,11 +54,12 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   } = form
 
   async function handleSaveData(data: FormData) {
-    const telefone = data.DDI + removeMask(data.cellphone)
-    setCellphone(telefone)
+    const number = data.DDI + removeMask(data.cellphone)
+    setCellphone(number)
     let validateNumber = null
+
     try {
-      const response = await api.post(`/evolution/check-whatsapp/${telefone}`)
+      const response = await api.post(`/evolution/check-whatsapp/${number}`)
       validateNumber = response.data
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -62,12 +67,13 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
           setError('cellphone', {
             message: 'Esse número de WhatsApp não existe',
           })
-          return
         }
       } else {
         toast.error('Erro inesperado ao atualizar dados do usuário!')
+        return
       }
     }
+
     if (validateNumber && validateNumber.status !== 500) {
       const respEvolution = validateNumber as { numberExists: boolean }
 
@@ -83,25 +89,34 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex w-full flex-col flex-1 relative items-center p-4 3xl:pb-16 gap-10">
-      <div className="flex w-full max-w-[611px] flex-col items-center gap-8">
-        <h1 className="text-3xl font-bold">Conecte-se com o Capitão Caverna</h1>
-        <p className="text-center opacity-80">
-          Estabeleça uma conexão direta comigo via WhatsApp para receber
-          orientações personalizadas.
+    <div className="flex flex-col items-center p-4 gap-16">
+      <div className="flex flex-col items-center gap-6">
+        <h1 className="font-bold text-3xl lg:text-4xl">
+          Bem vindo ao <span className="text-primary">Modo Caverna</span>
+        </h1>
+        <p className="lg:text-lg opacity-80">
+          Sua jornada de transformação pessoal começa agora
         </p>
-        <div className="flex flex-col relative w-full border border-zinc-700 rounded-lg">
-          <div className="w-full aspect-video rounded-xl overflow-hidden">
-            <VideoPlayer id={videos.caveRite} />
-          </div>
-        </div>
       </div>
+
+      <div className="w-full rounded-xl overflow-hidden relative">
+        <VideoPlayerMux id={muxVideos.welcome} onEnded={() => setEnded(true)} />
+      </div>
+
       <FormProvider {...form}>
-        <div className="flex flex-col w-full max-w-[251px] gap-3">
-          <label htmlFor="cellphone" className="text-xs">
-            Seu WhatsApp
-          </label>
-          <div className="flex flex-col w-full gap-2 mb-[3.2rem]">
+        <motion.div
+          className="flex flex-col p-6 gap-6 bg-background rounded-2xl border border-red-900 shadow-xl shadow-red-900"
+          initial={{
+            y: 50,
+            opacity: 0,
+          }}
+          animate={{
+            y: ended ? 0 : 50,
+            opacity: ended ? 1 : 0,
+          }}
+        >
+          <label htmlFor="cellphone">Informe seu WhatsApp</label>
+          <div className="flex flex-col w-full gap-2">
             <div className="flex w-full gap-2">
               <Input
                 className="w-16"
@@ -136,11 +151,12 @@ export function CellphoneStep({ onNext }: { onNext: () => void }) {
               onClick={handleSubmit(handleSaveData)}
               loading={isSubmitting}
               size="lg"
+              className="uppercase w-full"
             >
-              Conectar com Capitão Caverna
+              Começar Jornada
             </Button>
           </div>
-        </div>
+        </motion.div>
       </FormProvider>
     </div>
   )

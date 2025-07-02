@@ -1,33 +1,37 @@
 import { Button } from '@/components/ui/button'
-import { VideoPlayer } from '@/components/video-player'
-import { videos } from '@/lib/constants'
-import { useEffect, useState } from 'react'
+import { VideoPlayerMux } from '@/components/video-player-mux'
+import { muxVideos } from '@/lib/constants'
+import { useState } from 'react'
 
 export function ChallengeStep({ onNext }: { onNext: () => void }) {
-  const [disabled, setDisabled] = useState(true)
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDisabled(false)
-    }, 20)
-
-    return () => clearTimeout(timeout)
-  }, [])
+  const [videoEnded, setVideoEnded] = useState(false)
 
   return (
-    <div className="flex flex-col relative flex-1 w-full justify-between items-center p-4 pb-16 gap-24">
-      <div className="flex w-full flex-col items-center gap-64 lg:gap-24">
-        <div className="flex flex-col relative w-full max-w-[611px] border border-zinc-700 rounded-lg">
-          <div className="w-full aspect-video rounded-xl overflow-hidden">
-            <VideoPlayer id={videos.challengeTutorial} />
-          </div>
-        </div>
+    <div className="flex flex-col items-center p-4 gap-16">
+      <div className="flex flex-col items-center gap-6">
+        <h1 className="font-bold text-center text-4xl lg:text-5xl">
+          Desafio e Filosofia do{' '}
+          <span className="text-primary">Modo Caverna</span>
+        </h1>
+        <p className="lg:text-lg opacity-80">
+          Está pronto para abraçar a metodologia cavernosa?
+        </p>
+      </div>
+
+      <div className="w-full rounded-xl overflow-hidden relative">
+        <VideoPlayerMux
+          id={muxVideos.philosophy}
+          onEnded={() => setVideoEnded(true)}
+        />
+      </div>
+
+      {videoEnded && (
         <div className="flex justify-center">
-          <Button onClick={onNext} size="lg" disabled={disabled}>
-            🔥 ACEITAR O DESAFIO
+          <Button onClick={onNext} size="lg" className="uppercase">
+            Continuar
           </Button>
         </div>
-      </div>
+      )}
     </div>
   )
 }

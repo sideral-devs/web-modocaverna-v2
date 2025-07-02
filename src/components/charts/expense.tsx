@@ -1,9 +1,9 @@
 'use client'
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
 } from '@/components/ui/chart'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Bar, BarChart, XAxis } from 'recharts'
 import { Skeleton } from '../ui/skeleton'
 
-import { getRevenueExpenses } from '@/app/(protected)/financeiro/utils'
+import { getRevenueExpenses } from '@/app/(protected)/(main)/financeiro/utils'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 

@@ -2,7 +2,8 @@
 import { ProtectedRoute } from '@/components/protected-route'
 import { DashboardTour } from '@/components/tours/dashboard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useSearchParams } from 'next/navigation'
+import { useUser } from '@/hooks/queries/use-user'
+import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
@@ -27,14 +28,19 @@ function Content() {
 
   const [tab, setTab] = useState(to || 'central-caverna')
   const [activeTour, setActiveTour] = useState(false)
+  const { data: user } = useUser()
 
   useEffect(() => {
-    const doneDashboardTour = localStorage.getItem('doneDashboardTour')
-    if (startTour === 'true' && !doneDashboardTour) {
+    // const doneDashboardTour = localStorage.getItem('doneDashboardTour')
+    if (startTour === 'true') {
       setActiveTour(true)
       localStorage.setItem('doneDashboardTour', 'true')
     }
   }, [startTour])
+
+  if (user && !Number(user.tutorial_complete) && !startTour) {
+    return redirect('/onboarding')
+  }
 
   return (
     <ProtectedRoute>

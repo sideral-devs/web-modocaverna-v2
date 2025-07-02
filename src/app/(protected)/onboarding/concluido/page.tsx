@@ -1,61 +1,128 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 
 export default function Page() {
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-screen h-screen lg:h-auto items-center gap-3 lg:gap-6 bg-zinc-900 overflow-x-hidden">
-        <div className="flex flex-col relative flex-1 w-full justify-between items-center p-4 py-16 gap-24">
-          <div className="flex flex-col items-center w-full max-w-[611px] gap-12">
-            <h1 className="text-3xl font-bold">
-              Sua jornada começou. Agora é hora de agir
-            </h1>
-            <div className="flex flex-col w-full gap-4">
-              <Card className="flex flex-col relative w-full p-6 gap-4 border border-zinc-700 rounded-lg">
-                <h2 className="text-lg font-semibold text-yellow-400 uppercase">
-                  Seu perfil
-                </h2>
-                <div>
-                  <p className="opacity-80">
-                    <strong>Perfil Caverna:</strong> O VISIONÁRIO
-                  </p>
-                  <p className="opacity-80">
-                    <strong>Meta principal definida:</strong> O VISIONÁRIO
+      <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
+        <div className="w-full flex flex-1 flex-col items-center z-10">
+          <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-12">
+            <header className="flex w-full items-center justify-between">
+              <div className="flex flex-col gap-2">
+                <h1 className="font-bold text-3xl lg:text-4xl">
+                  Bem-vindo ao Modo Caverna
+                </h1>
+                <p className="lg:text-lg opacity-80">
+                  Descubra os segredos da sua mente e desbloqueie seu potencial
+                </p>
+              </div>
+
+              <div className="flex items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
+                <span className="text-2xl">🎯</span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm opacity-80">Seu perfil:</span>
+                  <p className="text-lg text-primary font-bold">
+                    O Estrategista
                   </p>
                 </div>
-              </Card>
-              <Card className="flex flex-col relative w-full p-6 gap-4 border border-zinc-700 rounded-lg">
-                <h2 className="text-lg font-semibold text-yellow-400 uppercase">
-                  O que você precisa fazer agora
-                </h2>
-                <div className="flex flex-col w-full gap-2">
-                  <div className="w-full flex items-center h-[80px] px-6  gap-6 bg-[#32323280]/50 rounded-lg">
-                    <span className="text-red-500">1</span>
-                    <p className="text-sm lg:text-base text-muted-foreground">
-                      Assistir às aulas dos Módulos 1 e 2 na área &quot;Cursos &
+              </div>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-9 py-8 gap-8 w-full border-b relative">
+              <Card className="flex flex-col md:col-span-4 items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl">
+                    🚀 Próximos 2 passos
+                  </CardTitle>
+                  <span className="flex px-3 py-1.5 bg-primary font-bold rounded-full">
+                    Prioridade
+                  </span>
+                </CardHeader>
+                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border border-red-900  rounded-2xl">
+                  <p className="opacity-80">Progresso dos Próximos Passos</p>
+                  <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
+                  <p className="text-yellow-400">0 de 2 passos concluídos</p>
+                </div>
+                <div className="flex w-full items-center p-6 gap-4 bg-white/10 border border-red-900  rounded-2xl">
+                  <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
+                    <p className="text-xl font-bold">1</p>
+                  </div>
+                  <div className="flex flex-col gap-1 flex-1">
+                    <p className="text-lg font-bold">Módulos 1 e 2</p>
+                    <span className="opacity-80 text-sm">
+                      Assistir às aulas fundamentais na área &quot;Cursos &
                       Conteúdos&quot;
-                    </p>
+                    </span>
                   </div>
-                  <div className="w-full flex items-center h-[80px] p-6 py-4 gap-6 bg-[#32323280]/50 rounded-lg">
-                    <span className="text-red-500">2</span>
-                    <p className="text-sm lg:text-base text-muted-foreground">
-                      Criar seu primeiro desafio caverna
-                    </p>
+                  <Link href={'/members-area'}>
+                    <Button size="sm">INICIAR</Button>
+                  </Link>
+                </div>
+              </Card>
+
+              <Card className="flex flex-col md:col-span-3 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl">
+                    🎯 Seu Objetivo
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
+                  <p className="font-bold italic truncate w-full">
+                    Perder 10kg de gordura e mais e mais
+                  </p>
+                </div>
+                <div className="flex items-center p-6 gap-6 bg-yellow-700/10 rounded-2xl border border-yellow-900">
+                  <span className="text-2xl">💪 </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm opacity-80">
+                      Lembre-se: Cada ação que você toma hoje te aproxima deste
+                      objetivo.
+                    </span>
                   </div>
+                </div>
+              </Card>
+
+              <Card className="flex flex-col md:col-span-2 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl">
+                    📊 Jornada Iniciada
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex flex-col items-center gap-2">
+                  <p className="font-bold text-4xl text-primary">0</p>
+                  <span className="opacity-80">Dias no Modo Caverna</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <p className="font-bold text-4xl text-primary">2</p>
+                  <span className="opacity-80">Módulos Disponíveis</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <p className="font-bold text-4xl text-primary">40</p>
+                  <span className="opacity-80">Dias de Desafio</span>
                 </div>
               </Card>
             </div>
-            <div className="flex justify-center">
-              <Link href={'/members-area'}>
-                <Button size="lg" className="text-uppercase">
-                  🎓 Ir para a área de conteúdos
+
+            <div className="flex w-full items-center justify-between gap-8">
+              <p className="text-lg opacity-80">
+                <strong>Capitão Caverna diz:</strong> &quot;A caverna está
+                preparada. Agora é hora de entrar e começar sua
+                transformação!&quot;
+              </p>
+              <Link href={'/dashboard'}>
+                <Button className="h-16 px-8 text-xl font-bold uppercase rounded-xl button-shadow transition-all duration-300 hover:-translate-y-1">
+                  🚀 Entrar na caverna
                 </Button>
               </Link>
             </div>
           </div>
+        </div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
         </div>
       </div>
     </ProtectedRoute>

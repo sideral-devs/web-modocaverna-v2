@@ -3,24 +3,23 @@ import { VideoPlayerMux } from '@/components/video-player-mux'
 import { muxVideos } from '@/lib/constants'
 import { useState } from 'react'
 
-export function FortyDaysStep({ onNext }: { onNext: () => void }) {
+export function ConnectStep({ onNext }: { onNext: () => void }) {
   const [videoEnded, setVideoEnded] = useState(false)
 
   return (
     <div className="flex flex-col items-center p-4 gap-16">
       <div className="flex flex-col items-center gap-6">
         <h1 className="font-bold text-3xl lg:text-4xl">
-          Os 40 Primeiros Dias no{' '}
-          <span className="text-primary">Modo Caverna</span>
+          A Mente como <span className="text-primary">Caverna</span>
         </h1>
         <p className="lg:text-lg opacity-80">
-          Sua jornada de transformação através dos 7 níveis de consciência
+          Descubra os segredos da sua mente e desbloqueie seu potencial
         </p>
       </div>
 
       <div className="w-full rounded-xl overflow-hidden relative">
         <VideoPlayerMux
-          id={muxVideos.fortyDays}
+          id={muxVideos.connect}
           onEnded={() => setVideoEnded(true)}
         />
       </div>

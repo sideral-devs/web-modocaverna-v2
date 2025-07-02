@@ -9,7 +9,6 @@ import { AlarmClock } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 const EventsCard = dynamic(() => import('./cards/events'), {
   loading: () => (
@@ -25,10 +24,6 @@ const RitualsCard = dynamic(() => import('./cards/ritual'), {
 
 export function CentralCaverna({ value }: { value: string }) {
   const { data: user } = useUser()
-
-  if (user && !Number(user.tutorial_complete)) {
-    return redirect('/onboarding')
-  }
 
   return (
     <TabsContent

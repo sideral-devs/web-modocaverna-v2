@@ -1,11 +1,12 @@
 'use client'
+import { HeaderClose } from '@/components/header'
 import { ProtectedRoute } from '@/components/protected-route'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { ReactNode, useState } from 'react'
-import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
+import { PhaseCounter } from '../../../../(public)/trial/sign-up/PhaseCounter'
 import { FifthStep } from './fifth'
 import { FirstStep } from './first'
 import { FourthStep } from './fourth'
@@ -13,7 +14,6 @@ import { SecondStep } from './second'
 import { SeventhStep } from './seventh'
 import { SixthStep } from './sixth'
 import { ThirdStep } from './third'
-import { HeaderClose } from '@/components/header'
 
 export default function Page() {
   const [currentPhase, setCurrentPhase] = useState(1)

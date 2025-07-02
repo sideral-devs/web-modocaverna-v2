@@ -9,16 +9,15 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
-import { CellphoneStep } from './CellphoneStep'
 import { ChallengeStep } from './ChallengeStep'
 import { CheckPointStep } from './CheckpointStep'
-import { ConfidentialityStep } from './ConfidentialityStep'
 import { ConfirmStep } from './ConfirmStep'
-import { DownloadAppStep } from './DownloadAppStep'
+import { ConnectStep } from './ConnectStep'
 import { FortyDaysStep } from './FortyDaysStep'
-import { InfoStep } from './InfoStep'
 import { PlansSystem } from './PlansSystem'
-import { TourStep } from './TourStep'
+import { QuizStep } from './QuizStep'
+import { StartQuizStep } from './StartQuizStep'
+import { WelcomeStep } from './WelcomeStep'
 
 export default function Page() {
   const router = useRouter()
@@ -31,24 +30,23 @@ export default function Page() {
 
   const STEPS = isDesafioPlan
     ? [
-        <InfoStep key={1} onNext={nextPhase} />,
-        <CellphoneStep key={2} onNext={nextPhase} />,
-        <ConfidentialityStep key={3} onNext={nextPhase} />,
-        <DownloadAppStep key={4} onNext={nextPhase} />,
+        <WelcomeStep key={1} onNext={nextPhase} />,
+        <ConnectStep key={2} onNext={nextPhase} />,
+        <StartQuizStep key={3} onNext={nextPhase} />,
+        <QuizStep key={4} onNext={nextPhase} />,
         <ActivateCaveModeStep key={5} onNext={nextPhase} />,
         <PlansSystem key={6} onNext={nextPhase} />,
         <ConfirmStep key={7} onNext={handleFinish} isLoading={isLoading} />,
       ]
     : [
-        <InfoStep key={1} onNext={nextPhase} />,
-        <CellphoneStep key={2} onNext={nextPhase} />,
-        <ConfidentialityStep key={3} onNext={nextPhase} />,
-        <DownloadAppStep key={4} onNext={nextPhase} />,
+        <WelcomeStep key={1} onNext={nextPhase} />,
+        <ConnectStep key={2} onNext={nextPhase} />,
+        <StartQuizStep key={3} onNext={nextPhase} />,
+        <QuizStep key={4} onNext={nextPhase} />,
         <ActivateCaveModeStep key={5} onNext={nextPhase} />,
         <ChallengeStep key={6} onNext={nextPhase} />,
         <CheckPointStep key={7} onNext={nextPhase} />,
-        <FortyDaysStep key={8} onNext={nextPhase} />,
-        <TourStep key={9} onNext={handleFinish} />,
+        <FortyDaysStep key={8} onNext={handleFinish} />,
       ]
 
   function nextPhase() {
@@ -76,8 +74,8 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-screen h-screen lg:h-auto items-center gap-3 lg:gap-6 bg-zinc-900 overflow-x-hidden">
-        <header className="flex w-full max-w-8xl items-center justify-between p-6">
+      <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
+        <header className="flex w-full max-w-8xl items-center justify-between p-6 z-10">
           <span className="text-xs lg:text-sm text-muted-foreground">
             Onboarding
           </span>
@@ -94,7 +92,15 @@ export default function Page() {
             Passo {currentPhase + 1} de {STEPS.length}
           </span>
         </header>
-        {STEPS[currentPhase]}
+        <div className="w-full flex flex-1 flex-col items-center z-10">
+          <div className="flex flex-col w-full max-w-3xl">
+            {STEPS[currentPhase]}
+          </div>
+        </div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+        </div>
       </div>
     </ProtectedRoute>
   )

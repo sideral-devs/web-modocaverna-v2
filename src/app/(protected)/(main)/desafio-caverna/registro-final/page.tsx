@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { useState } from 'react'
-import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
+import { PhaseCounter } from '../../../../(public)/trial/sign-up/PhaseCounter'
 import { FinalStepOne } from './final-step-one'
 import { FinalStepTwo } from './final-step-two'
 
