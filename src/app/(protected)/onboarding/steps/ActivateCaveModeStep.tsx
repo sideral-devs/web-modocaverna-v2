@@ -26,11 +26,12 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-12">
       <h1 className="font-bold text-center text-2xl lg:text-3xl">
-        Qual é o seu objetivo principal com o{' '}
+        Qual o seu principal objetivo com o{' '}
         <span className="text-primary">Modo Caverna?</span>
       </h1>
       <p className="text-center opacity-80">
-        Defina o principal objetivo que quer conquistar nos próximos 40 dias.
+        Agora que você encarou o espelho, reflita sobre o que quer conquistar
+        nos próximos 40 dias.
       </p>
 
       <form
@@ -54,7 +55,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
           className="uppercase"
           disabled={(form.watch('goal') || '').length < 10}
         >
-          🎯 Definir meta
+          🎯 Definir objetivo
         </Button>
       </form>
     </div>

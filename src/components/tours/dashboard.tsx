@@ -31,7 +31,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 1,
     title: 'Bem vindo ao Tutorial Caverna',
     description:
-      'Este tutorial serve para mostrar as principais funcionalidades do sisteme e te ajudar a usar suas ferramentas ao máximo',
+      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com inteligência e propósito — pra extrair o máximo da sua jornada.',
     highlight: { x: 0, y: 0, width: 0, height: 0 },
     dialogPosition: 'center',
   },
@@ -76,9 +76,9 @@ const tutorialSteps: TutorialStep[] = [
   },
   {
     id: 7,
-    title: 'Agenda do dia',
+    title: 'Sua Rotina Cavernosa',
     description:
-      'Os rituais são seus hábitos de evolução! Configure sua rotina matinal e noturna para máximo desempenho.',
+      'Organize seus dias com estratégia. Agenda de compromissos, treinos, refeições e rituais — tudo em um só lugar, pra manter a  disciplina e o controle da sua evolução.',
     highlight: { x: 64, y: 18, width: 30, height: 76 },
     dialogPosition: 'left',
   },
@@ -94,7 +94,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 9,
     title: 'Flow Produtividade',
     description:
-      'Entre no estado de FLOW! Sessões de foco máximo com bloqueio de distrações para alta performance.',
+      'Entre no estado de FLOW! Sessões de foco máximo com bloqueio de distrações para você produzir em alta performance.',
     highlight: { x: 35, y: 55, width: 30, height: 40 },
     dialogPosition: 'right',
   },

@@ -10,10 +10,10 @@ export function ConnectStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col items-center p-4 gap-16">
       <div className="flex flex-col items-center gap-6">
         <h1 className="font-bold text-2xl lg:text-3xl">
-          A Mente como <span className="text-primary">Caverna</span>
+          A Caverna <span className="text-primary">Interior</span>
         </h1>
         <p className="lg:text-lg opacity-80">
-          Descubra os segredos da sua mente e desbloqueie seu potencial
+          A jornada começa na escuridão da sua mente.
         </p>
       </div>
 
@@ -27,7 +27,7 @@ export function ConnectStep({ onNext }: { onNext: () => void }) {
       {videoEnded && (
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" className="uppercase">
-            Continuar
+            ESTOU PRONTO, CAPITÃO!
           </Button>
         </div>
       )}

@@ -11,7 +11,6 @@ import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -56,32 +55,17 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   async function handleSaveData(data: FormData) {
     const number = data.DDI + removeMask(data.cellphone)
     setCellphone(number)
-    let validateNumber = null
 
     try {
-      const response = await api.post(`/evolution/check-whatsapp/${number}`)
-      validateNumber = response.data
+      await api.post(`/evolution/check-whatsapp/${number}`)
     } catch (err) {
       if (err instanceof AxiosError) {
-        if (err.response?.status !== 500) {
+        if (err?.status !== 500) {
           setError('cellphone', {
             message: 'Esse número de WhatsApp não existe',
           })
+          return
         }
-      } else {
-        toast.error('Erro inesperado ao atualizar dados do usuário!')
-        return
-      }
-    }
-
-    if (validateNumber && validateNumber.status !== 500) {
-      const respEvolution = validateNumber as { numberExists: boolean }
-
-      if (!respEvolution.numberExists) {
-        setError('cellphone', {
-          message: 'Esse número de WhatsApp não existe',
-        })
-        return
       }
     }
 
@@ -89,7 +73,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 gap-16">
+    <div className="flex flex-col items-center p-4 gap-8">
       <div className="flex flex-col items-center gap-6">
         <h1 className="font-bold text-2xl lg:text-3xl">
           Bem vindo ao <span className="text-primary">Modo Caverna</span>
@@ -105,7 +89,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
 
       <FormProvider {...form}>
         <motion.div
-          className="flex flex-col p-6 gap-6 bg-background rounded-2xl border border-red-900 shadow-xl shadow-red-900"
+          className="flex flex-col p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow"
           initial={{
             y: 50,
             opacity: 0,

@@ -9,7 +9,7 @@ export default function Page() {
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
         <div className="w-full flex flex-1 flex-col items-center z-10">
-          <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-12">
+          <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-8">
             <header className="flex w-full items-center justify-between">
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold text-2xl lg:text-3xl">
@@ -32,7 +32,7 @@ export default function Page() {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 py-8 gap-8 w-full border-b relative">
-              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+              <Card className="flex flex-col items-center p-6 gap-4 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
                     🚀 Próximos passos
@@ -41,14 +41,14 @@ export default function Page() {
                     Prioridade
                   </span>
                 </CardHeader>
-                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border border-red-900  rounded-2xl">
+                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border rounded-2xl">
                   <p className="opacity-80">Progresso dos Próximos Passos</p>
                   <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
                   <p className="text-yellow-400">0 de 2 passos concluídos</p>
                 </div>
-                <div className="flex w-full items-center p-6 gap-4 bg-white/10 border border-red-900  rounded-2xl">
+                <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
                   <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
-                    <p className="text-xl font-bold">1</p>
+                    <p className="text-lg font-semibold">1</p>
                   </div>
                   <div className="flex flex-col gap-1 flex-1">
                     <p className="text-lg font-bold">Módulos 1 e 2</p>
@@ -61,6 +61,20 @@ export default function Page() {
                     <Button size="sm">INICIAR</Button>
                   </Link>
                 </div>
+                <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
+                  <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
+                    <p className="text-lg font-semibold">2</p>
+                  </div>
+                  <div className="flex flex-col gap-1 flex-1">
+                    <p className="text-lg font-bold">Desafio Caverna</p>
+                    <span className="opacity-80 text-sm">
+                      Criar seu primeiro desafio pessoal de 40 dias
+                    </span>
+                  </div>
+                  <Link href={'/desafio-caverna'}>
+                    <Button size="sm">CRIAR</Button>
+                  </Link>
+                </div>
               </Card>
 
               <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
@@ -71,7 +85,7 @@ export default function Page() {
                 </CardHeader>
                 <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
                   <p className="font-bold italic truncate w-full">
-                    Perder 10kg de gordura e mais e mais
+                    Perder 10kg de gordura
                   </p>
                 </div>
                 <div className="flex items-center p-6 gap-6 bg-yellow-700/10 rounded-2xl border border-yellow-900">
@@ -106,15 +120,15 @@ export default function Page() {
               </Card> */}
             </div>
 
-            <div className="flex w-full items-center justify-between gap-8">
-              <p className="text-lg opacity-80">
+            <div className="flex w-full items-center justify-center gap-8">
+              {/* <p className="text-lg opacity-80">
                 <strong>Capitão Caverna diz:</strong> &quot;A caverna está
                 preparada. Agora é hora de entrar e começar sua
                 transformação!&quot;
-              </p>
+              </p> */}
               <Link href={'/dashboard'}>
                 <Button className="h-16 px-8 text-xl font-bold uppercase rounded-xl button-shadow transition-all duration-300 hover:-translate-y-1">
-                  🚀 Entrar na caverna
+                  🚀 Ativar Modo Caverna
                 </Button>
               </Link>
             </div>

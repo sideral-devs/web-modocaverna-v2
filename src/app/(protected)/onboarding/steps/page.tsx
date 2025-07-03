@@ -92,7 +92,7 @@ export default function Page() {
           </span>
         </header>
         <div className="w-full flex flex-1 flex-col items-center z-10">
-          <div className="flex flex-col w-full max-w-3xl">
+          <div className="flex flex-col w-full max-w-[700px]">
             {STEPS[currentPhase]}
           </div>
         </div>

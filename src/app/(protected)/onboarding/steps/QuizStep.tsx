@@ -1,6 +1,7 @@
 // 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -74,17 +75,11 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
     }
   }
 
-  const handleBack = () => {
-    setDirection(-1)
-    setCurrentStep((prev) => prev - 1)
-  }
-
   const isLastQuestion = currentStep === questions.length
-  const isFirstQuestion = currentStep === 0
 
   return (
     <div className="flex flex-col w-full max-w-xl mx-auto items-center gap-12">
-      <div className="relative w-full h-[480px] overflow-hidden">
+      <div className="relative w-full h-[480px]">
         <AnimatePresence mode="wait" initial={false}>
           {isLastQuestion ? (
             <motion.div
@@ -93,15 +88,16 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: direction < 0 ? 300 : -300, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute w-full h-[480px]"
+              className="flex flex-col absolute w-full h-[480px] gap-12"
             >
               <h1 className="font-bold text-center text-2xl lg:text-3xl">
                 Seu perfil no <span className="text-primary">Modo Caverna</span>
               </h1>
-              <div className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center">
+              <Card className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center bg-white/5 shadow-sm shadow-red-900">
                 <p className="text-4xl">{result.title}</p>
+                <p></p>
                 <p className="opacity-80">{result.description}</p>
-              </div>
+              </Card>
             </motion.div>
           ) : (
             <motion.div
@@ -113,11 +109,13 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               className="absolute w-full"
             >
               <div className="flex flex-col items-center p-4 gap-6 relative w-full">
-                <div className="w-full flex flex-col items-center p-6 gap-2 bg-red-700/10 rounded-lg border border-red-950 text-xl font-semibold">
-                  <p>
+                <div className="w-full flex flex-col items-center p-6 gap-2 bg-red-700/10 rounded-lg border border-red-950">
+                  <p className="opacity-80">
                     Pergunta {currentStep + 1} de {questions.length}
                   </p>
-                  <p>{currentQuestion.text}</p>
+                  <p className="text-xl font-semibold">
+                    {currentQuestion.text}
+                  </p>
                 </div>
                 <div className="w-full grid grid-cols-2 gap-4">
                   {currentQuestion.options.map((option) => (
@@ -134,25 +132,18 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button
-          size="lg"
-          variant="outline"
-          disabled={isFirstQuestion}
-          onClick={handleBack}
-        >
-          Voltar
-        </Button>
-
-        <Button
-          size="lg"
-          onClick={onNext}
-          disabled={!isLastQuestion}
-          className="uppercase"
-        >
-          Definir meu objetivo
-        </Button>
-      </div>
+      {isLastQuestion && (
+        <div className="flex items-center gap-2">
+          <Button
+            size="lg"
+            onClick={onNext}
+            disabled={!isLastQuestion}
+            className="uppercase"
+          >
+            Avançar
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
