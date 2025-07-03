@@ -31,7 +31,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 1,
     title: 'Bem vindo ao Tutorial Caverna',
     description:
-      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com inteligência e propósito — pra extrair o máximo da sua jornada.',
+      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com inteligência e propósito.',
     highlight: { x: 0, y: 0, width: 0, height: 0 },
     dialogPosition: 'center',
   },
@@ -70,7 +70,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 6,
     title: 'Rituais',
     description:
-      'Os rituais são seus hábitos de evolução! Configure sua rotina matinal e noturna para máximo desempenho.',
+      'Seus rituais moldam sua evolução. A forma como você inicia e encerra o dia define quem você se torna.',
     highlight: { x: 35, y: 18, width: 30, height: 40 },
     dialogPosition: 'right',
   },
@@ -86,7 +86,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 8,
     title: 'Desafio Caverna',
     description:
-      'O Desafio Caverna é sua jornada de 40 dias! Um período intenso de transformação e evolução.',
+      'O Desafio Caverna é uma jornada de 40 dias rumo à sua transformação. Um período intenso de disciplina, renúncia e evolução.',
     highlight: { x: 6, y: 55, width: 30, height: 40 },
     dialogPosition: 'top',
   },
@@ -230,8 +230,8 @@ export function DashboardTour({
                   index === currentStep
                     ? 'bg-primary'
                     : index < currentStep
-                      ? 'bg-primary/60'
-                      : 'bg-gray-300'
+                      ? 'bg-zinc-900'
+                      : 'bg-gray-400'
                 }`}
               />
             ))}

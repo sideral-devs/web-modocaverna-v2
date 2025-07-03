@@ -3,72 +3,76 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const questions = [
   {
     id: 'rotina',
     text: 'Como está sua rotina hoje?',
     options: [
-      '🏆 Organizada e produtiva',
-      '🤷‍♂️ Meio bagunçada',
-      '⏰ Sempre correndo',
-      '🔋 Sem energia',
-    ],
-  },
-  {
-    id: 'inimigo',
-    text: 'Seu maior inimigo diário?',
-    options: [
-      '📱 Celular',
-      '😵‍💫 Procrastinação',
-      '📅 Falta de planejamento',
-      '🙁 Desânimo',
-    ],
-  },
-  {
-    id: 'vencer',
-    text: 'Onde quer vencer primeiro?',
-    options: ['💼 Carreira', '🏠 Casa', '💪 Saúde', '❤️ Relacionamentos'],
-  },
-  {
-    id: 'prioridade',
-    text: 'Sua prioridade urgente?',
-    options: [
-      '🧠 Clareza mental',
-      '⏳ Gerenciar tempo',
-      '🚀 Tirar um projeto do papel',
-      '🛌 Dormir melhor',
+      { label: '🏆 Organizada e produtiva', profile: 'estrategista' },
+      { label: '🙃 Meio bagunçada', profile: 'desperto' },
+      { label: '⏰ Sempre correndo', profile: 'executor' },
+      { label: '🪫 Sem energia', profile: 'guerreiro' },
     ],
   },
   {
     id: 'motivacao',
-    text: 'O que mais te motiva?',
+    text: 'O que mais te motiva a mudar?',
     options: [
-      '🏖️ Liberdade',
-      '🎯 Resultados',
-      '🎨 Criar algo novo',
-      '💞 Impactar pessoas',
+      { label: '🏁 Conquistas pessoais', profile: 'executor' },
+      { label: '🌟 Reconhecimento', profile: 'estrategista' },
+      { label: '💰 Prosperidade', profile: 'executor' },
+      { label: '🔥 Superação', profile: 'guerreiro' },
+    ],
+  },
+  {
+    id: 'prioridade',
+    text: 'Qual sua maior urgência agora?',
+    options: [
+      { label: '🎯 Foco', profile: 'estrategista' },
+      { label: '⚡ Energia', profile: 'guerreiro' },
+      { label: '📈 Resultados', profile: 'executor' },
+      { label: '🧘 Equilíbrio', profile: 'desperto' },
+    ],
+  },
+  {
+    id: 'foco',
+    text: 'Onde você quer vencer primeiro?',
+    options: [
+      { label: '💼 Carreira', profile: 'executor' },
+      { label: '💪 Saúde', profile: 'guerreiro' },
+      { label: '🧠 Mindset', profile: 'desperto' },
+      { label: '❤️ Relacionamentos', profile: 'estrategista' },
+    ],
+  },
+  {
+    id: 'obstaculo',
+    text: 'O que mais te sabota no dia a dia?',
+    options: [
+      { label: '📱 Distrações digitais', profile: 'estrategista' },
+      { label: '😴 Procrastinação', profile: 'executor' },
+      { label: '😰 Ansiedade', profile: 'desperto' },
+      { label: '⏳ Falta de tempo', profile: 'guerreiro' },
     ],
   },
 ]
 
-const result = {
-  title: '🌟\nO VISIONÁRIO',
-  description:
-    'Você é criativo, inspirador e inovador. Sua força está na capacidade de imaginar possibilidades e inspirar mudanças. No Modo Caverna, você será o criador do seu futuro ideal.',
-}
-
 export function QuizStep({ onNext }: { onNext: () => void }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<{ [key: string]: string }>({})
+  const [score, setScore] = useState<{ [profile: string]: number }>({})
   const [direction, setDirection] = useState(1)
 
   const currentQuestion = questions[currentStep]
 
-  const handleSelect = (option: string) => {
-    const updatedAnswers = { ...answers, [currentQuestion.id]: option }
+  const handleSelect = (option: { label: string; profile: string }) => {
+    const updatedAnswers = { ...answers, [currentQuestion.id]: option.label }
     setAnswers(updatedAnswers)
+    setScore((prev) => ({
+      ...prev,
+      [option.profile]: (prev[option.profile] || 0) + 1,
+    }))
     if (currentStep < questions.length) {
       setDirection(1)
       setTimeout(() => setCurrentStep((prev) => prev + 1), 100)
@@ -76,6 +80,37 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
   }
 
   const isLastQuestion = currentStep === questions.length
+
+  const topProfile = Object.entries(score).sort((a, b) => b[1] - a[1])[0]?.[0]
+  const resultMap: Record<string, { title: string; description: string }> = {
+    estrategista: {
+      title: '🎯 O ESTRATEGISTA',
+      description:
+        'Você pensa com clareza e planeja com precisão. Seu poder está em enxergar o caminho com inteligência.',
+    },
+    desperto: {
+      title: '🧘 O DESPERTO',
+      description:
+        'Você busca equilíbrio e consciência. Seu foco é viver com intenção.',
+    },
+    executor: {
+      title: '⚙️ O EXECUTOR',
+      description:
+        'Você age rápido e gosta de resultados. Seu foco está na ação e produtividade.',
+    },
+    guerreiro: {
+      title: '🛡️ O GUERREIRO',
+      description:
+        'Você tem resiliência e força. Mesmo nos desafios, continua firme no que acredita.',
+    },
+  }
+  const result = resultMap[topProfile || '']
+
+  useEffect(() => {
+    if (isLastQuestion && result) {
+      localStorage.setItem('cave_profile', JSON.stringify(result))
+    }
+  }, [isLastQuestion, result])
 
   return (
     <div className="flex flex-col w-full max-w-xl mx-auto items-center gap-12">
@@ -94,9 +129,9 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
                 Seu perfil no <span className="text-primary">Modo Caverna</span>
               </h1>
               <Card className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center bg-white/5 shadow-sm shadow-red-900">
-                <p className="text-4xl">{result.title}</p>
+                <p className="text-4xl">{result?.title}</p>
                 <p></p>
-                <p className="opacity-80">{result.description}</p>
+                <p className="opacity-80">{result?.description}</p>
               </Card>
             </motion.div>
           ) : (
@@ -120,8 +155,8 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
                 <div className="w-full grid grid-cols-2 gap-4">
                   {currentQuestion.options.map((option) => (
                     <AnswerButton
-                      key={option}
-                      option={option}
+                      key={option.label}
+                      option={option.label}
                       onClick={() => handleSelect(option)}
                     />
                   ))}

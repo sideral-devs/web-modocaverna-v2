@@ -3,14 +3,34 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+type Profile = {
+  title: string
+  description: string
+}
 
 export default function Page() {
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const savedProfile = localStorage.getItem('cave_profile')
+
+  useEffect(() => {
+    try {
+      const actualProfile = savedProfile
+        ? (JSON.parse(savedProfile) as Profile)
+        : null
+      setProfile(actualProfile)
+    } catch {
+      setProfile(null)
+    }
+  }, [savedProfile])
+
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
         <div className="w-full flex flex-1 flex-col items-center z-10">
           <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-8">
-            <header className="flex w-full items-center justify-between">
+            <header className="flex w-full items-center">
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold text-2xl lg:text-3xl">
                   Bem-vindo ao Modo Caverna
@@ -19,20 +39,10 @@ export default function Page() {
                   Descubra os segredos da sua mente e desbloqueie seu potencial
                 </p>
               </div>
-
-              <div className="flex items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
-                <span className="text-2xl">🎯</span>
-                <div className="flex flex-col gap-1">
-                  <span className="text-sm opacity-80">Seu perfil:</span>
-                  <p className="text-lg text-primary font-bold">
-                    O Estrategista
-                  </p>
-                </div>
-              </div>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 py-8 gap-8 w-full border-b relative">
-              <Card className="flex flex-col items-center p-6 gap-4 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
                     🚀 Próximos passos
@@ -41,11 +51,11 @@ export default function Page() {
                     Prioridade
                   </span>
                 </CardHeader>
-                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border rounded-2xl">
+                {/* <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border rounded-2xl">
                   <p className="opacity-80">Progresso dos Próximos Passos</p>
                   <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
                   <p className="text-yellow-400">0 de 2 passos concluídos</p>
-                </div>
+                </div> */}
                 <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
                   <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
                     <p className="text-lg font-semibold">1</p>
@@ -83,6 +93,17 @@ export default function Page() {
                     🎯 Seu Objetivo
                   </CardTitle>
                 </CardHeader>
+                <div className="flex w-full items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
+                  <div className="flex flex-col gap-2">
+                    <span className="text-sm opacity-80">Seu perfil:</span>
+                    <p className="text-lg text-primary font-bold">
+                      {profile?.title || 'O Estrategista'}
+                    </p>
+                    {profile && (
+                      <p className="opacity-80">{profile.description}</p>
+                    )}
+                  </div>
+                </div>
                 <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
                   <p className="font-bold italic truncate w-full">
                     Perder 10kg de gordura
