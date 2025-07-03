@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { ChallengeStep } from './ChallengeStep'
-import { CheckPointStep } from './CheckpointStep'
 import { ConfirmStep } from './ConfirmStep'
 import { ConnectStep } from './ConnectStep'
 import { FortyDaysStep } from './FortyDaysStep'
@@ -45,8 +44,8 @@ export default function Page() {
         <QuizStep key={4} onNext={nextPhase} />,
         <ActivateCaveModeStep key={5} onNext={nextPhase} />,
         <ChallengeStep key={6} onNext={nextPhase} />,
-        <CheckPointStep key={7} onNext={nextPhase} />,
-        <FortyDaysStep key={8} onNext={handleFinish} />,
+        // <CheckPointStep key={7} onNext={nextPhase} />,
+        <FortyDaysStep key={7} onNext={handleFinish} />,
       ]
 
   function nextPhase() {

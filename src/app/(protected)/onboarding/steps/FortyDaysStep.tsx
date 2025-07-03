@@ -9,7 +9,7 @@ export function FortyDaysStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col items-center p-4 gap-16">
       <div className="flex flex-col items-center gap-6">
-        <h1 className="font-bold text-3xl lg:text-4xl">
+        <h1 className="font-bold text-2xl lg:text-3xl">
           Os 40 Primeiros Dias no{' '}
           <span className="text-primary">Modo Caverna</span>
         </h1>

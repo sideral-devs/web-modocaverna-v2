@@ -95,7 +95,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               transition={{ duration: 0.3 }}
               className="absolute w-full h-[480px]"
             >
-              <h1 className="font-bold text-center text-3xl lg:text-4xl">
+              <h1 className="font-bold text-center text-2xl lg:text-3xl">
                 Seu perfil no <span className="text-primary">Modo Caverna</span>
               </h1>
               <div className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center">

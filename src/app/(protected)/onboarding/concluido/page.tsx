@@ -12,7 +12,7 @@ export default function Page() {
           <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-12">
             <header className="flex w-full items-center justify-between">
               <div className="flex flex-col gap-2">
-                <h1 className="font-bold text-3xl lg:text-4xl">
+                <h1 className="font-bold text-2xl lg:text-3xl">
                   Bem-vindo ao Modo Caverna
                 </h1>
                 <p className="lg:text-lg opacity-80">
@@ -31,11 +31,11 @@ export default function Page() {
               </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-9 py-8 gap-8 w-full border-b relative">
-              <Card className="flex flex-col md:col-span-4 items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 py-8 gap-8 w-full border-b relative">
+              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
-                    🚀 Próximos 2 passos
+                    🚀 Próximos passos
                   </CardTitle>
                   <span className="flex px-3 py-1.5 bg-primary font-bold rounded-full">
                     Prioridade
@@ -63,7 +63,7 @@ export default function Page() {
                 </div>
               </Card>
 
-              <Card className="flex flex-col md:col-span-3 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
                     🎯 Seu Objetivo
@@ -85,7 +85,7 @@ export default function Page() {
                 </div>
               </Card>
 
-              <Card className="flex flex-col md:col-span-2 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+              {/* <Card className="flex flex-col md:col-span-2 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
                     📊 Jornada Iniciada
@@ -103,7 +103,7 @@ export default function Page() {
                   <p className="font-bold text-4xl text-primary">40</p>
                   <span className="opacity-80">Dias de Desafio</span>
                 </div>
-              </Card>
+              </Card> */}
             </div>
 
             <div className="flex w-full items-center justify-between gap-8">

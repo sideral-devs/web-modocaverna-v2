@@ -4,8 +4,8 @@ export function StartQuizStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col w-full items-center p-4 lg:px-16 gap-12">
       <div className="flex flex-col items-center gap-10">
-        <p className="font-bold text-3xl lg:text-4xl">🔥</p>
-        <h1 className="font-bold text-3xl lg:text-4xl">Momento da Verdade</h1>
+        <p className="font-bold text-2xl lg:text-3xl">🔥</p>
+        <h1 className="font-bold text-2xl lg:text-3xl">Momento da Verdade</h1>
         <p className="lg:text-lg opacity-80 text-center">
           <p>O Modo Caverna não é para todos.</p>
           <p>É para quem está pronto para enfrentar a realidade. </p>

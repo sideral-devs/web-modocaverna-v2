@@ -25,7 +25,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
 
   return (
     <div className="flex flex-col items-center justify-center gap-12">
-      <h1 className="font-bold text-center text-3xl lg:text-4xl">
+      <h1 className="font-bold text-center text-2xl lg:text-3xl">
         Qual é o seu objetivo principal com o{' '}
         <span className="text-primary">Modo Caverna?</span>
       </h1>
