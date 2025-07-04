@@ -80,26 +80,34 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
   const isLastQuestion = currentStep === questions.length
 
   const topProfile = Object.entries(score).sort((a, b) => b[1] - a[1])[0]?.[0]
-  const resultMap: Record<string, { title: string; description: string }> = {
+  const resultMap: Record<
+    string,
+    { title: string; subtitle: string; description: string }
+  > = {
     estrategista: {
       title: '🎯 O ESTRATEGISTA',
+      subtitle: 'Você não é de agir no impulso.',
       description:
-        'Você não é de agir no impulso. Quer entender o jogo, dominar o terreno, e só depois acelerar. O problema é que o caos do dia a dia tira sua visão — e você sabe disso. Chegou a hora de assumir o controle e planejar como um verdadeiro mestre de guerra.',
+        'Quer entender o jogo, dominar o terreno, e só depois acelerar. O problema é que o caos do dia a dia tira sua visão — e você sabe disso. Chegou a hora de assumir o controle e planejar como um verdadeiro mestre de guerra.',
     },
     desperto: {
       title: '🧘 O DESPERTO',
+      subtitle: 'Você não tá mais no modo automático.',
       description:
-        'Você busca equilíbrio e consciência. Seu foco é viver com intenção.',
+        'Sabe que precisa mudar — mas precisa fazer do seu jeito, com profundidade. Antes de acelerar, você precisa entender o que importa de verdade. E aqui dentro, você vai encontrar esse caminho com silêncio, estrutura e intenção.',
     },
     executor: {
       title: '⚙️ O EXECUTOR',
+      subtitle:
+        'Você é daqueles que quer vencer, crescer, conquistar — e tem pressa.',
       description:
-        'Você age rápido e gosta de resultados. Seu foco está na ação e produtividade.',
+        'Mas não adianta correr sem direção. Aqui dentro, você vai aprender a transformar ambição em ação concreta. Nada de metas soltas ou produtividade vazia. Chegou a hora de usar o sistema como uma máquina de execução.',
     },
     guerreiro: {
       title: '🛡️ O GUERREIRO',
+      subtitle: 'Você já sentiu o gosto da queda.',
       description:
-        'Você tem resiliência e força. Mesmo nos desafios, continua firme no que acredita.',
+        'Já andou sem energia, sem rumo… mas algo em você se recusa a desistir. Você é feito de garra. O que te falta não é força — é um ambiente certo para renascer. E aqui dentro, a sua reconstrução começa agora.',
     },
   }
   const result = resultMap[topProfile || '']
@@ -128,7 +136,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               </h1>
               <Card className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center bg-white/5 shadow-sm shadow-red-900">
                 <p className="text-4xl">{result?.title}</p>
-                <p></p>
+                <p>{result?.subtitle}</p>
                 <p className="opacity-80">{result?.description}</p>
               </Card>
             </motion.div>

@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
+import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -18,9 +21,19 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
     },
   })
 
-  function onSubmit(data: FormData) {
-    console.log(data)
-    onNext()
+  async function onSubmit(data: FormData) {
+    try {
+      const year = dayjs().year()
+      await api.put(`/metas/update/${year}`, {
+        ano: year,
+        objetivos: {
+          principal: data.goal,
+        },
+      })
+      onNext()
+    } catch {
+      toast.error('Não foi possível salvar sua meta')
+    }
   }
 
   return (

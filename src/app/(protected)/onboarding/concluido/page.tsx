@@ -2,17 +2,31 @@
 import { ProtectedRoute } from '@/components/protected-route'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { api } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 type Profile = {
   title: string
+  subtitle: string
   description: string
 }
 
 export default function Page() {
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
   const savedProfile = localStorage.getItem('cave_profile')
+  const currentYear = dayjs().format('YYYY')
+
+  const { data: goals } = useQuery({
+    queryKey: ['goals'],
+    queryFn: async () => {
+      const response = await api.get('/metas/find')
+      return response.data as Goal[]
+    },
+  })
 
   useEffect(() => {
     try {
@@ -24,6 +38,12 @@ export default function Page() {
       setProfile(null)
     }
   }, [savedProfile])
+
+  useEffect(() => {
+    if (goals) {
+      setCurrentGoal(goals.find((goal) => goal.ano === currentYear) || null)
+    }
+  }, [goals, currentYear])
 
   return (
     <ProtectedRoute>
@@ -114,7 +134,7 @@ export default function Page() {
                 </CardHeader>
                 <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
                   <p className="font-bold italic truncate w-full">
-                    Perder 10kg de gordura
+                    {currentGoal?.objetivos.principal}
                   </p>
                 </div>
               </Card>
