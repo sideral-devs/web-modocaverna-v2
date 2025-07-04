@@ -12,8 +12,8 @@ export const videos = {
 
 export const muxVideos = {
   welcome: '3D01ZZwHZlrAYjL59v2b502D00odvQYVH35vL5pqc996H00',
-  connect: 'wn3kyHd9H01rcNUSvEL4Jow7iZOx98vS3GzUz5qqOTiY',
-  philosophy: '5goygKxC79pZAlW3Qf6WFQTzK2002Tr7GNmWv01S5zNOU',
+  connect: 'XDKtmNH4GHWTpN3HXI1MCqIF00JceH01hnp4nNn00P5wPU',
+  philosophy: 'v5uuPSFULkK4Js79hzZas8ne5oiOYNAKf1w6e2qxT3g',
   fortyDays: 'yh3vT6hgHbqRi011rEBItyKoM02ux01qdjgbY8o7but8W00',
 }
 

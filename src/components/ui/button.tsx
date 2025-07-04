@@ -6,21 +6,17 @@ import { cn } from '@/lib/utils'
 import { Loader2Icon } from 'lucide-react'
 
 const buttonVariants = cva(
-  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 transition-all duration-300 hover:opacity-90',
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-        outline:
-          'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
+        default: 'bg-primary text-primary-foreground shadow',
+        destructive: 'bg-destructive text-destructive-foreground shadow-sm',
+        outline: 'bg-secondary text-secondary-foreground shadow-sm',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-white text-black shadow hover:bg-white/90',
+        secondary: 'bg-white text-black shadow',
         link: 'text-primary underline-offset-4 hover:underline',
-        success:
-          'bg-emerald-700 text-emerald-400 shadow hover:bg-emerald-700/90',
+        success: 'bg-emerald-700 text-emerald-400 shadow',
       },
       size: {
         default: 'h-11 px-4 py-2',

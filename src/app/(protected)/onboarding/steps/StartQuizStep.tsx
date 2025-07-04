@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
 
 export function StartQuizStep({ onNext }: { onNext: () => void }) {
   return (
@@ -40,11 +41,27 @@ export function StartQuizStep({ onNext }: { onNext: () => void }) {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-4">
-        <Button onClick={onNext} size="lg" className="uppercase">
+      <motion.div
+        className="flex flex-col items-center gap-4"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          duration: 1,
+          delay: 5,
+        }}
+      >
+        <Button
+          onClick={onNext}
+          size="lg"
+          className="uppercase transition-all duration-300 hover:-translate-y-1 hover:opacity-90 hover:button-shadow"
+        >
           OK, Vamos nessa!
         </Button>
-      </div>
+      </motion.div>
     </div>
   )
 }

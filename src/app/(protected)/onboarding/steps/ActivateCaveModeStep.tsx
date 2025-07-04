@@ -69,6 +69,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
           size="lg"
           className="uppercase"
           disabled={(form.watch('goal') || '').length < 10}
+          loading={form.formState.isLoading}
         >
           🎯 Definir objetivo
         </Button>

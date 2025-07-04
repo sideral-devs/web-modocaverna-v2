@@ -24,7 +24,8 @@ type FormData = z.infer<typeof schema>
 
 function formatCellphoneDDI(telefone: string) {
   const clean = telefone.replace(/\D/g, '')
-  const ddi = `+${clean.slice(0, 2)}`
+  const sliced = clean.slice(0, 2)
+  const ddi = sliced.length > 0 ? `+${sliced}` : undefined
   const number = clean.slice(2)
   return { ddi, number }
 }
