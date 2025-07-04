@@ -22,7 +22,7 @@ export default function Page() {
   const router = useRouter()
   const { data: user } = useUser()
   const [isLoading, setIsLoading] = useState(false)
-  const [currentPhase, setCurrentPhase] = useState(4)
+  const [currentPhase, setCurrentPhase] = useState(0)
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
   const { cellphone } = useOnboardingStore()
