@@ -37,7 +37,7 @@ const tutorialSteps: TutorialStep[] = [
   },
   {
     id: 2,
-    title: 'HUBS',
+    title: 'HUBS de ferramentas',
     description:
       'Os HUBS organizam suas ferramentas por objetivo. Navegue entre eles para acessar diferentes áreas de desenvolvimento.',
     highlight: { x: 6, y: 12, width: 60, height: 8 },
@@ -52,9 +52,9 @@ const tutorialSteps: TutorialStep[] = [
   },
   {
     id: 4,
-    title: 'Central caverna',
+    title: 'Central Caverna',
     description:
-      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e para onde você sempre retorna para evoluir!',
+      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e  onde você sempre retorna para evoluir!',
     highlight: { x: 6, y: 12, width: 12, height: 8 },
     dialogPosition: 'right',
   },
@@ -78,7 +78,7 @@ const tutorialSteps: TutorialStep[] = [
     id: 7,
     title: 'Sua Rotina Cavernosa',
     description:
-      'Organize seus dias com estratégia. Agenda de compromissos, treinos, refeições e rituais — tudo em um só lugar, pra manter a  disciplina e o controle da sua evolução.',
+      'Organize seus dias com intenção. Agenda de compromissos, treinos, refeições e rituais — tudo em um só lugar, pra manter a  disciplina e o controle da sua evolução.',
     highlight: { x: 64, y: 18, width: 30, height: 76 },
     dialogPosition: 'left',
   },
@@ -203,7 +203,7 @@ export function DashboardTour({
         <CardHeader className="flex flex-col items-start px-6 py-4 gap-4">
           <div className="w-full flex items-center justify-between">
             <Badge variant="outline" className="text-xs">
-              Passo {currentStep + 1} of {tutorialSteps.length}
+              Passo {currentStep + 1} de {tutorialSteps.length}
             </Badge>
             <Button
               variant="ghost"
@@ -230,7 +230,7 @@ export function DashboardTour({
                   index === currentStep
                     ? 'bg-primary'
                     : index < currentStep
-                      ? 'bg-zinc-900'
+                      ? 'bg-red-700'
                       : 'bg-gray-400'
                 }`}
               />

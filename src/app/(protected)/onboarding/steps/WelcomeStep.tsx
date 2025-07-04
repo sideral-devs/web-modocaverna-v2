@@ -39,7 +39,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      DDI: ddi,
+      DDI: ddi || '+55',
       cellphone: cellphoneMask(number),
     },
   })
@@ -78,8 +78,9 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
         <h1 className="font-bold text-2xl lg:text-3xl">
           Bem vindo ao <span className="text-primary">Modo Caverna</span>
         </h1>
-        <p className="lg:text-lg opacity-80">
-          Sua jornada de transformação pessoal começa agora
+        <p className="lg:text-lg opacity-80 text-center max-w-xl">
+          Você está prestes a começar a jornada mais desafiadora e
+          transformadora da sua vida.
         </p>
       </div>
 
@@ -89,7 +90,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
 
       <FormProvider {...form}>
         <motion.div
-          className="flex flex-col p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow"
+          className="flex flex-col items-center p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow"
           initial={{
             y: 50,
             opacity: 0,
@@ -130,7 +131,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
               </span>
             )}
           </div>
-          <div className="flex justify-center">
+          <div className="flex w-full justify-center">
             <Button
               onClick={handleSubmit(handleSaveData)}
               loading={isSubmitting}

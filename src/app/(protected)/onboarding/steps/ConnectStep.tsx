@@ -27,7 +27,7 @@ export function ConnectStep({ onNext }: { onNext: () => void }) {
       {videoEnded && (
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" className="uppercase">
-            ESTOU PRONTO, CAPITÃO!
+            ENTENDIDO, CAPITÃO!
           </Button>
         </div>
       )}

@@ -26,17 +26,19 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-12">
       <h1 className="font-bold text-center text-2xl lg:text-3xl">
-        Qual o seu principal objetivo com o{' '}
-        <span className="text-primary">Modo Caverna?</span>
+        Qual o seu principal objetivo na{' '}
+        <span className="text-primary">Caverna?</span>
       </h1>
-      <p className="text-center opacity-80">
-        Agora que você encarou o espelho, reflita sobre o que quer conquistar
-        nos próximos 40 dias.
-      </p>
+      <div className="flex flex-col gap-4">
+        <p className="text-center opacity-80 max-w-md">
+          Agora que você encarou o espelho, reflita sobre o que quer conquistar
+          nos próximos 40 dias.
+        </p>
+      </div>
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap-8"
+        className="flex flex-col w-full items-center gap-8"
       >
         <Controller
           control={form.control}
@@ -45,7 +47,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
             <Textarea
               {...field}
               placeholder="Ex: Perder 10kg e ganhar massa muscular"
-              className="w-[400px]"
+              className="w-full max-w-[440px]"
             />
           )}
         />

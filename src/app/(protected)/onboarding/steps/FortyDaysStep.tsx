@@ -27,7 +27,7 @@ export function FortyDaysStep({ onNext }: { onNext: () => void }) {
       {videoEnded && (
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" className="uppercase">
-            Continuar
+            Estou pronto, Capitão!
           </Button>
         </div>
       )}

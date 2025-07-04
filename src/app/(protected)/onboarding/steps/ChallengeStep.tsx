@@ -13,7 +13,7 @@ export function ChallengeStep({ onNext }: { onNext: () => void }) {
           O código da transformação na{' '}
           <span className="text-primary">Caverna</span>
         </h1>
-        <p className="lg:text-lg opacity-80">
+        <p className="lg:text-lg opacity-80 text-center">
           Muito além de um método. É uma filosofia de vida. Propósito, foco e
           progresso — ou nada muda.
         </p>
@@ -29,7 +29,7 @@ export function ChallengeStep({ onNext }: { onNext: () => void }) {
       {videoEnded && (
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" className="uppercase">
-            Eu Aceito o desafio
+            Eu me comprometo, Capitão!
           </Button>
         </div>
       )}

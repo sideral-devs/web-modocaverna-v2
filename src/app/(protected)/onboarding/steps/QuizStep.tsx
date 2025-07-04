@@ -1,5 +1,3 @@
-// 'use client'
-
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -48,7 +46,7 @@ const questions = [
   },
   {
     id: 'obstaculo',
-    text: 'O que mais te sabota no dia a dia?',
+    text: 'Qual é seu pior inimigo diário?',
     options: [
       { label: '📱 Distrações digitais', profile: 'estrategista' },
       { label: '😴 Procrastinação', profile: 'executor' },
@@ -86,7 +84,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
     estrategista: {
       title: '🎯 O ESTRATEGISTA',
       description:
-        'Você pensa com clareza e planeja com precisão. Seu poder está em enxergar o caminho com inteligência.',
+        'Você não é de agir no impulso. Quer entender o jogo, dominar o terreno, e só depois acelerar. O problema é que o caos do dia a dia tira sua visão — e você sabe disso. Chegou a hora de assumir o controle e planejar como um verdadeiro mestre de guerra.',
     },
     desperto: {
       title: '🧘 O DESPERTO',
@@ -113,8 +111,8 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
   }, [isLastQuestion, result])
 
   return (
-    <div className="flex flex-col w-full max-w-xl mx-auto items-center gap-12">
-      <div className="relative w-full h-[480px]">
+    <div className="flex flex-col w-full max-w-xl mx-auto items-center gap-4">
+      <div className="relative w-full h-[450px]">
         <AnimatePresence mode="wait" initial={false}>
           {isLastQuestion ? (
             <motion.div
@@ -123,7 +121,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: direction < 0 ? 300 : -300, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col absolute w-full h-[480px] gap-12"
+              className="flex flex-col absolute w-full gap-12"
             >
               <h1 className="font-bold text-center text-2xl lg:text-3xl">
                 Seu perfil no <span className="text-primary">Modo Caverna</span>
@@ -145,7 +143,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
             >
               <div className="flex flex-col items-center p-4 gap-6 relative w-full">
                 <div className="w-full flex flex-col items-center p-6 gap-2 bg-red-700/10 rounded-lg border border-red-950">
-                  <p className="opacity-80">
+                  <p className="opacity-80 text-primary">
                     Pergunta {currentStep + 1} de {questions.length}
                   </p>
                   <p className="text-xl font-semibold">

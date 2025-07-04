@@ -5,11 +5,10 @@ export function StartQuizStep({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col w-full items-center p-4 lg:px-16 gap-12">
       <div className="flex flex-col items-center gap-10">
         <h1 className="font-bold text-2xl lg:text-3xl">Momento da Verdade</h1>
-        <p className="lg:text-lg opacity-80 text-center">
-          <p>O Modo Caverna não é para todos.</p>
-          <p>
-            É para quem está pronto para enfrentar a realidade - e abandonar o
-            conforto da ilusão.
+        <p className="lg:text-lg text-center">
+          <p className="lg:text-xl">O Modo Caverna não é para todos.</p>
+          <p className="opacity-80">
+            É para quem está disposto a abandonar o conforto da ilusão.
           </p>
         </p>
       </div>
@@ -33,7 +32,7 @@ export function StartQuizStep({ onNext }: { onNext: () => void }) {
         </div>
         <div className="flex flex-col items-center p-6 gap-4 text-sm bg-white/10 border rounded-lg transition-all duration-200 hover:border-red-900 hover:-translate-y-1">
           <p className="text-2xl">🕚</p>
-          <p className="text-center">Menos de um minuto para completar</p>
+          <p className="text-center">Leva menos de 1 minuto</p>
         </div>
         <div className="flex flex-col items-center p-6 gap-4 text-sm bg-white/10 border rounded-lg transition-all duration-200 hover:border-red-900 hover:-translate-y-1">
           <p className="text-2xl">🔍</p>
@@ -43,7 +42,7 @@ export function StartQuizStep({ onNext }: { onNext: () => void }) {
 
       <div className="flex flex-col items-center gap-4">
         <Button onClick={onNext} size="lg" className="uppercase">
-          🚀 Começar Avaliação
+          OK, Vamos nessa!
         </Button>
       </div>
     </div>
