@@ -129,12 +129,12 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: direction < 0 ? 300 : -300, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col absolute w-full gap-12"
+              className="flex flex-col absolute w-full gap-8"
             >
-              <h1 className="font-bold text-center text-2xl lg:text-3xl">
+              <h1 className="font-bold text-center text-xl md:text-2xl lg:text-3xl">
                 Seu perfil no <span className="text-primary">Modo Caverna</span>
               </h1>
-              <Card className="flex flex-col h-full items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center bg-white/5 shadow-sm shadow-red-900">
+              <Card className="flex flex-col items-center justify-center gap-6 relative w-full rounded-xl px-6 py-16 text-center bg-white/5 shadow-sm shadow-red-900">
                 <p className="text-4xl">{result?.title}</p>
                 <p>{result?.subtitle}</p>
                 <p className="opacity-80">{result?.description}</p>
@@ -154,7 +154,7 @@ export function QuizStep({ onNext }: { onNext: () => void }) {
                   <p className="opacity-80 text-primary">
                     Pergunta {currentStep + 1} de {questions.length}
                   </p>
-                  <p className="text-xl font-semibold">
+                  <p className="text-xl font-semibold text-center">
                     {currentQuestion.text}
                   </p>
                 </div>
@@ -200,12 +200,12 @@ function AnswerButton({
   const title = titleParts.join(' ')
   return (
     <div
-      className="relative overflow-hidden flex flex-col items-center px-6 py-6 gap-4 text-sm bg-white/5 border rounded-lg cursor-pointer transition-all duration-500 hover:border-primary hover:scale-105 hover:bg-red-700/20 group hover:card-shadow-sm"
+      className="relative overflow-hidden flex flex-col items-center justify-center h-[130px] px-6 py-6 gap-3 md:gap-4 text-sm bg-white/5 border rounded-lg cursor-pointer transition-all duration-500 hover:border-primary hover:scale-105 hover:bg-red-700/20 group hover:card-shadow-sm"
       onClick={onClick}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shine pointer-events-none " />
-      <span className="text-2xl">{emoji}</span>
-      <span className="text-center text-lg">{title}</span>
+      <span className="text-xl md:text-2xl">{emoji}</span>
+      <span className="text-center md:text-lg">{title}</span>
     </div>
   )
 }

@@ -57,56 +57,62 @@ export default function Page() {
                   <span className="text-primary">Modo Caverna</span> começou
                 </h1>
                 <p className="lg:text-lg opacity-80 text-center">
-                  Descubra os segredos da sua mente e desbloqueie seu potencial
+                  Assuma o controle. Chegou a hora de construir sua nova versão.
                 </p>
               </div>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full relative">
-              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+              <Card className="flex flex-col items-center p-6 gap-8 text-sm bg-zinc-900 border-2 border-red-900 card-shadow rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
-                    🚀 Próximos passos
+                    📋 Próximos passos
                   </CardTitle>
                   {/* <span className="flex px-3 py-1.5 bg-primary font-bold rounded-full">
                     Prioridade
                   </span> */}
                 </CardHeader>
-                <p className="lg:text-lg">O que você precisa fazer agora:</p>
+                <p className="text-lg lg:text-xl md:mt-2">
+                  O que você precisa fazer agora:
+                </p>
                 {/* <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border rounded-2xl">
                   <p className="opacity-80">Progresso dos Próximos Passos</p>
                   <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
                   <p className="text-yellow-400">0 de 2 passos concluídos</p>
                 </div> */}
-                <div className="flex flex-col gap-4 my-auto">
+                <div className="flex flex-col gap-4">
                   <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
                     <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
                       <p className="text-lg font-semibold">1</p>
                     </div>
                     <div className="flex flex-col gap-1 flex-1">
-                      <p className="text-lg font-bold">Módulos 1 e 2</p>
+                      <p className="text-lg font-bold">
+                        Assista as aulas do curso
+                      </p>
                       <span className="opacity-80 text-sm">
-                        Assistir às aulas fundamentais na área &quot;Cursos &
-                        Conteúdos&quot;
+                        Aprenda e aplique a metodologia do Modo Caverna na área
+                        &quot;Cursos & Conteúdos&quot;.
                       </span>
                     </div>
-                    <Link href={'/members-area'}>
+                    {/* <Link href={'/members-area'}>
                       <Button size="sm">INICIAR</Button>
-                    </Link>
+                    </Link> */}
                   </div>
                   <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
                     <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
                       <p className="text-lg font-semibold">2</p>
                     </div>
                     <div className="flex flex-col gap-1 flex-1">
-                      <p className="text-lg font-bold">Desafio Caverna</p>
+                      <p className="text-lg font-bold">
+                        Crie seu primeiro Desafio de 40 dias
+                      </p>
                       <span className="opacity-80 text-sm">
-                        Criar seu primeiro desafio pessoal de 40 dias
+                        E desperte sua melhor versão.
                       </span>
                     </div>
-                    <Link href={'/desafio-caverna'}>
+                    {/* <Link href={'/desafio-caverna'}>
                       <Button size="sm">CRIAR</Button>
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </Card>
@@ -114,7 +120,7 @@ export default function Page() {
               <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
-                    🎯 Seu Perfil Caverna
+                    👤 Seu Perfil Caverna
                   </CardTitle>
                 </CardHeader>
                 <div className="flex w-full items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
@@ -123,7 +129,9 @@ export default function Page() {
                       {profile?.title || 'O Estrategista'}
                     </p>
                     {profile && (
-                      <p className="opacity-80">{profile.description}</p>
+                      <p className="opacity-80">
+                        {profile.subtitle + ' ' + profile.description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -176,7 +184,7 @@ export default function Page() {
                 preparada. Agora é hora de entrar e começar sua
                 transformação!&quot;
               </p> */}
-              <Link href={'/dashboard'}>
+              <Link href={'/members-area'}>
                 <Button className="h-16 px-8 text-xl font-bold uppercase rounded-xl button-shadow transition-all duration-300 hover:-translate-y-1">
                   🚀 Ativar Modo Caverna
                 </Button>

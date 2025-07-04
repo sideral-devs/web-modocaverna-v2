@@ -78,12 +78,12 @@ export default function Page() {
             objectFit: 'cover',
             objectPosition: 'top center',
             zIndex: -1,
-            opacity: 0.4,
+            opacity: 0.3,
           }}
         />
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
-          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-10 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-10 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
         </div>
       </div>
     </ProtectedRoute>

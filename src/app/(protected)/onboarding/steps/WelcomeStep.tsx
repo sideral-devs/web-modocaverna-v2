@@ -91,7 +91,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
 
       <FormProvider {...form}>
         <motion.div
-          className="flex flex-col items-center p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow"
+          className="flex flex-col items-center p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow-md"
           initial={{
             y: 50,
             opacity: 0,

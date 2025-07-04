@@ -7,7 +7,7 @@ export function ChallengeStep({ onNext }: { onNext: () => void }) {
   const [videoEnded, setVideoEnded] = useState(false)
 
   return (
-    <div className="flex flex-col items-center p-4 gap-16">
+    <div className="flex flex-col items-center p-4 gap-8">
       <div className="flex flex-col items-center gap-6">
         <h1 className="font-bold text-center text-2xl lg:text-3xl">
           O código da transformação na{' '}

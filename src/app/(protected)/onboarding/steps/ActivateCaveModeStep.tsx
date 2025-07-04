@@ -37,7 +37,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-12">
+    <div className="flex flex-col items-center justify-center gap-8">
       <h1 className="font-bold text-center text-2xl lg:text-3xl">
         Qual o seu principal objetivo na{' '}
         <span className="text-primary">Caverna?</span>
@@ -59,7 +59,7 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
           render={({ field }) => (
             <Textarea
               {...field}
-              placeholder="Ex: Perder 10kg e ganhar massa muscular"
+              placeholder="Ex: Me tornar mais produtivo e focado"
               className="w-full max-w-[440px]"
             />
           )}

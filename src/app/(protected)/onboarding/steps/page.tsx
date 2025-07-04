@@ -22,7 +22,7 @@ export default function Page() {
   const router = useRouter()
   const { data: user } = useUser()
   const [isLoading, setIsLoading] = useState(false)
-  const [currentPhase, setCurrentPhase] = useState(0)
+  const [currentPhase, setCurrentPhase] = useState(2)
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
   const { cellphone } = useOnboardingStore()
@@ -73,12 +73,12 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
+      <div className="flex flex-col w-full min-h-dvh items-center gap-0 bg-zinc-950 overflow-hidden relative">
         <header className="flex w-full max-w-8xl items-center justify-between p-6 z-10">
-          <span className="text-xs lg:text-sm text-muted-foreground">
+          <span className="text-[10px] md:text-xs lg:text-sm text-muted-foreground">
             Onboarding
           </span>
-          <div className="flex flex-col w-full max-w-xl items-center gap-6">
+          <div className="flex flex-col flex-1 w-full max-w-xl items-center gap-6">
             <Image
               src={'/images/logo-icon.svg'}
               alt="Logo"
@@ -87,18 +87,18 @@ export default function Page() {
             />
             <PhaseCounter current={currentPhase + 1} total={STEPS.length} />
           </div>
-          <span className="text-xs lg:text-sm text-right text-muted-foreground">
+          <span className="text-[10px] md:text-xs lg:text-sm text-right text-muted-foreground">
             Passo {currentPhase + 1} de {STEPS.length}
           </span>
         </header>
         <div className="w-full flex flex-1 flex-col items-center z-10">
-          <div className="flex flex-col w-full max-w-[700px]">
+          <div className="flex flex-col w-full max-w-[700px] px-2">
             {STEPS[currentPhase]}
           </div>
         </div>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
-          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute bottom-[400px] md:-bottom-[800px] -left-[400px] md:-left-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -top-[400px] md:-top-[800px] -right-[400px] md:-right-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
         </div>
       </div>
     </ProtectedRoute>
