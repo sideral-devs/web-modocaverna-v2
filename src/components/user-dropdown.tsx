@@ -35,7 +35,7 @@ export function UserDropdown() {
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild data-tutorial-id="perfil">
         {user.user_foto && !imageError ? (
           <Image
             src={`${env.NEXT_PUBLIC_PROD_URL}${user.user_foto}`}

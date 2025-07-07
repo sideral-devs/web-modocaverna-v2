@@ -82,7 +82,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
     challenge.status_desafio === 'abandonado'
   ) {
     return (
-      <div className="relative flex flex-row items-center flex-1 justify-center md:justify-normal md:pt-6 gap-2">
+      <div
+        className="relative flex flex-row items-center flex-1 justify-center md:justify-normal md:pt-6 gap-2"
+        data-tutorial-id="desafio-caverna"
+      >
         <div className="flex flex-row relative bottom-10">
           <Image
             src={'/images/empty-states/empty-desafio.png'}
@@ -115,7 +118,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   if (challenge.status_desafio === 'pausado') {
     if (dayjs(challenge.data_de_inicio).isAfter(dayjs().endOf('day'))) {
       return (
-        <div className="flex flex-col flex-1 items-center justify-center md:justify-normal md:pt-6">
+        <div
+          className="flex flex-col flex-1 items-center justify-center md:justify-normal md:pt-6"
+          data-tutorial-id="desafio-caverna"
+        >
           <div className="flex flex-col max-w-80 items-center">
             <AlarmClock className="text-zinc-700" fill="#EE4444" />
             <p className="text-xl text-center mt-4">
@@ -140,7 +146,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
       )
     } else {
       return (
-        <div className="flex flex-col items-center flex-1 justify-center md:justify-normal md:pt-6 gap-6">
+        <div
+          className="flex flex-col items-center flex-1 justify-center md:justify-normal md:pt-6 gap-6"
+          data-tutorial-id="desafio-caverna"
+        >
           <div className="flex flex-col items-center gap-4">
             <AlarmClock className="text-zinc-700" fill="#EE4444" />
             <p className="text-center text-zinc-500">
@@ -158,7 +167,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   if (dayjs().hour() < 19) {
     return (
       <>
-        <div className="flex flex-col flex-1 items-center gap-5">
+        <div
+          className="flex flex-col flex-1 items-center gap-5"
+          data-tutorial-id="desafio-caverna"
+        >
           <div className="flex flex-col items-center gap-2">
             <AlarmClock className="text-zinc-700" fill="#EE4444" />
             <p className="text-center">
@@ -184,7 +196,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   if (!challenge.hojeInfo || challenge.hojeInfo === 'null') {
     return (
       <>
-        <div className="flex flex-col flex-1 items-center gap-5">
+        <div
+          className="flex flex-col flex-1 items-center gap-5"
+          data-tutorial-id="desafio-caverna"
+        >
           <div className="flex flex-col items-center gap-2">
             <AlarmClock className="text-zinc-700" fill="#EE4444" />
             <p className="text-center">
@@ -209,7 +224,10 @@ function ChallengeComponent({ challenge }: { challenge?: Challenge | null }) {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-3">
+    <div
+      className="flex flex-1 flex-col items-center justify-center gap-3"
+      data-tutorial-id="desafio-caverna"
+    >
       {challenge.hojeInfo === 'positiveCheck' ? (
         <CheckCheckIcon size={32} className="text-emerald-400" />
       ) : (

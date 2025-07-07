@@ -55,8 +55,16 @@ function Content() {
             onValueChange={setTab}
             className="flex flex-col flex-1 w-full h-full gap-5"
           >
-            <TabsList className="overflow-x-auto min-h-8">
-              <TabsTrigger value="central-caverna">Central Caverna</TabsTrigger>
+            <TabsList
+              className="overflow-x-auto min-h-8 data-[tutorial-id=hubs]"
+              data-tutorial-id="hubs"
+            >
+              <TabsTrigger
+                value="central-caverna"
+                data-tutorial-id="central-caverna"
+              >
+                Central Caverna
+              </TabsTrigger>
               <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
               <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
               <TabsTrigger value="cursos-e-conhecimentos">

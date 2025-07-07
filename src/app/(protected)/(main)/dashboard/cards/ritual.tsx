@@ -140,7 +140,10 @@ export default function RitualsCard() {
 
   if (morningRitual && nightRitual) {
     return (
-      <Card className="flex flex-col w-full min-h-80 md:h-full md:min-h-[300px] relative overflow-hidden">
+      <Card
+        className="flex flex-col w-full min-h-80 md:h-full md:min-h-[300px] relative overflow-hidden"
+        data-tutorial-id="rituais"
+      >
         <CardHeader className="justify-between p-4">
           <div className="flex px-3 py-2 pt-[9px] border border-white rounded-full">
             <span className="text-[10px] text-white font-semibold">
@@ -333,7 +336,10 @@ export default function RitualsCard() {
     setShowUpgradeModal(true)
   }
   return (
-    <Card className="flex flex-col w-full min-h-80 md:h-full md:min-h-[300px] relative p-4 gap-5 overflow-hidden">
+    <Card
+      className="flex flex-col w-full min-h-80 md:h-full md:min-h-[300px] relative p-4 gap-5 overflow-hidden"
+      data-tutorial-id="rituais"
+    >
       <CardHeader className="justify-between">
         <div className="flex px-3 py-2 pt-[9px] border border-white rounded-full">
           <span className="text-[10px] font-semibold">RITUAIS</span>
