@@ -11,10 +11,10 @@ export const videos = {
 }
 
 export const muxVideos = {
-  welcome: '3D01ZZwHZlrAYjL59v2b502D00odvQYVH35vL5pqc996H00',
-  connect: 'XDKtmNH4GHWTpN3HXI1MCqIF00JceH01hnp4nNn00P5wPU',
-  philosophy: 'v5uuPSFULkK4Js79hzZas8ne5oiOYNAKf1w6e2qxT3g',
-  fortyDays: 'yh3vT6hgHbqRi011rEBItyKoM02ux01qdjgbY8o7but8W00',
+  welcome: 'U300ccQcOuFIklpPDylu3zFSx9g3mhUSlJud6SaA6sp4',
+  connect: 'v6n2PXMocvZ5xaoOg3PZy01tJq00qv02Zn3uf00p01BmmmiI',
+  philosophy: '1YjT7gmrkB3FoB8sOxVMW4vbWKuz31mX2eKB2T02lBpY',
+  fortyDays: 'fEKvfD4ulNGLe3UE5sXQpafYO6wcBszDLqa9lccOwuw',
 }
 
 export const WEEK_DAYS = [

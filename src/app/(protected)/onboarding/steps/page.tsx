@@ -59,7 +59,11 @@ export default function Page() {
         tutorial_complete: true,
         telefone: cellphone,
       })
-      router.replace('/dashboard?startTour=true')
+      if (window.innerWidth < 768) {
+        router.replace('/onboarding/concluido')
+      } else {
+        router.replace('/dashboard?startTour=true')
+      }
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
     } finally {
