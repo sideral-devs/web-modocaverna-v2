@@ -61,7 +61,7 @@ export function CommissionPlanDialogTrigger({
                 <p className="text-zinc-400">Página de vendas:</p>
                 <a
                   className="pl-2 text-primary"
-                  href="https://desafio.modocaverna.com/ative"
+                  href="https://desafio.modocaverna.com/ative-af"
                   target="_blank"
                 >
                   CLIQUE AQUI
@@ -70,7 +70,7 @@ export function CommissionPlanDialogTrigger({
             </div>
             <a
               className="pt-2"
-              href="https://desafio.modocaverna.com/ative-af"
+              href="https://redirect.lifs.app/mc-afiliacao"
               target="_blank"
             >
               <Button size={'sm'} className="w-52 text-sm">
