@@ -63,6 +63,36 @@ export default function Page() {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full relative">
+              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
+                    👤 Seu Perfil Caverna
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex w-full items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg text-primary font-bold">
+                      {profile?.title || 'O Estrategista'}
+                    </p>
+                    {profile && (
+                      <p className="opacity-80">
+                        {profile.subtitle + ' ' + profile.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
+                    🎯 Seu Principal Objetivo
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
+                  <p className="font-bold italic truncate w-full">
+                    {currentGoal?.objetivos.principal}
+                  </p>
+                </div>
+              </Card>
+
               <Card className="flex flex-col items-center p-6 gap-8 text-sm bg-zinc-900 border-2 border-red-900 card-shadow rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
@@ -114,36 +144,6 @@ export default function Page() {
                       <Button size="sm">CRIAR</Button>
                     </Link> */}
                   </div>
-                </div>
-              </Card>
-
-              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
-                <CardHeader className="justify-between uppercase">
-                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
-                    👤 Seu Perfil Caverna
-                  </CardTitle>
-                </CardHeader>
-                <div className="flex w-full items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
-                  <div className="flex flex-col gap-2">
-                    <p className="text-lg text-primary font-bold">
-                      {profile?.title || 'O Estrategista'}
-                    </p>
-                    {profile && (
-                      <p className="opacity-80">
-                        {profile.subtitle + ' ' + profile.description}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <CardHeader className="justify-between uppercase">
-                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
-                    🎯 Seu Principal Objetivo
-                  </CardTitle>
-                </CardHeader>
-                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
-                  <p className="font-bold italic truncate w-full">
-                    {currentGoal?.objetivos.principal}
-                  </p>
                 </div>
               </Card>
 

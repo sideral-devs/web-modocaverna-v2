@@ -83,7 +83,7 @@ const tutorialSteps: TutorialStep[] = [
     description:
       'O Desafio Caverna é uma jornada de 40 dias rumo à sua transformação. Um período intenso de disciplina, renúncia e evolução.',
     elementId: 'desafio-caverna',
-    dialogPosition: 'top',
+    dialogPosition: 'right',
   },
   {
     id: 9,
@@ -124,9 +124,10 @@ export function DashboardTour({
 
     if (el) {
       const rect = el.getBoundingClientRect()
+      console.log(rect)
       setHighlightRect({
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX,
+        top: rect.top,
+        left: rect.left,
         width: rect.width,
         height: rect.height,
       })
@@ -138,6 +139,7 @@ export function DashboardTour({
   const closeTutorial = () => {
     setIsActive(false)
     setCurrentStep(0)
+    router.replace('/dashboard')
   }
 
   const handleFinish = () => {
@@ -224,7 +226,7 @@ export function DashboardTour({
   if (!active) return null
 
   return (
-    <div className="absolute inset-0 z-50 max-w-8xl mx-auto">
+    <div className="absolute inset-0 z-50">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black/60" />
         <div
