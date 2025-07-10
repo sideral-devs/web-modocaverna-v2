@@ -119,9 +119,6 @@ export function DashboardTour({
       ? document.querySelector(`[data-tutorial-id="${step.elementId}"]`)
       : null
 
-    console.log(`[data-tutorial-id="${step.elementId}"]`)
-    console.log(el)
-
     if (el) {
       const rect = el.getBoundingClientRect()
       console.log(rect)

@@ -333,6 +333,7 @@ export function CentralHubHeader({
         <button
           className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl transition-all duration-200"
           onClick={() => {
+            setTab('central-caverna')
             router.replace('/dashboard?startTour=true')
           }}
         >
