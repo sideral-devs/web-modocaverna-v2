@@ -178,14 +178,6 @@ export default function Page() {
                 </p>
               </Card>
             </CommissionPlanDialogTrigger>
-            {/* <LeadFluxDialogTrigger>
-              <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
-                <Users className="scale-75 md:scale-100 text-primary" />
-                <p className="text-xs md:text-base font-semibold truncate">
-                  Grupo no Whatsapp
-                </p>
-              </Card>
-            </LeadFluxDialogTrigger> */}
             <AffiliateDashLink
               icon={Users}
               title="Grupo no Whatsapp"
@@ -218,7 +210,7 @@ export default function Page() {
             <AffiliateDashLink
               icon={GlobeIcon}
               title="Suporte para o afiliado"
-              href="https://api.whatsapp.com/send?phone=557382446098"
+              href="https://redirect.lifs.app/af-suporte"
             />
           </div>
         </section>

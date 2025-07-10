@@ -31,7 +31,7 @@ export function ShareMaterialDialogTrigger({
             </p>
             <a
               className=""
-              href="https://redirect.lifs.app/cadastro-ticto"
+              href="https://redirect.lifs.app/material-af"
               target="_blank"
             >
               <Button size={'sm'} className="w-52 text-sm">
