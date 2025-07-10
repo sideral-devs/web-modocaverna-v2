@@ -1,6 +1,8 @@
 'use client'
 
+import EditableObjectiveItem from '@/components/dreamboard/EditableObjectiveItem'
 import { Header, HeaderClose } from '@/components/header'
+import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
   Select,
@@ -15,14 +17,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { Pencil, PencilIcon, Save } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { EditObjetiveDialog } from './edit-objective'
-import EditableObjectiveItem from '@/components/dreamboard/EditableObjectiveItem'
-import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import { Pencil, PencilIcon, Save } from 'lucide-react'
 
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
@@ -75,9 +75,11 @@ export default function Page() {
       queryClient.invalidateQueries({ queryKey: ['goals'] })
     }
   }
+
   const handleStopEditing = () => {
     handleItemChange()
   }
+
   const updateGoalList = (
     index: number,
     newValue: string,
@@ -92,6 +94,7 @@ export default function Page() {
       return novaLista
     })
   }
+
   useEffect(() => {
     if (goals) {
       setCurrentGoal(goals.find((goal) => goal.ano === selectedYear) || null)
