@@ -11,7 +11,6 @@ import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -25,7 +24,8 @@ type FormData = z.infer<typeof schema>
 
 function formatCellphoneDDI(telefone: string) {
   const clean = telefone.replace(/\D/g, '')
-  const ddi = `+${clean.slice(0, 2)}`
+  const sliced = clean.slice(0, 2)
+  const ddi = sliced.length > 0 ? `+${sliced}` : undefined
   const number = clean.slice(2)
   return { ddi, number }
 }
@@ -40,7 +40,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      DDI: ddi,
+      DDI: ddi || '+55',
       cellphone: cellphoneMask(number),
     },
   })
@@ -56,32 +56,17 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   async function handleSaveData(data: FormData) {
     const number = data.DDI + removeMask(data.cellphone)
     setCellphone(number)
-    let validateNumber = null
 
     try {
-      const response = await api.post(`/evolution/check-whatsapp/${number}`)
-      validateNumber = response.data
+      await api.post(`/evolution/check-whatsapp/${number}`)
     } catch (err) {
       if (err instanceof AxiosError) {
-        if (err.response?.status !== 500) {
+        if (err?.status !== 500) {
           setError('cellphone', {
             message: 'Esse número de WhatsApp não existe',
           })
+          return
         }
-      } else {
-        toast.error('Erro inesperado ao atualizar dados do usuário!')
-        return
-      }
-    }
-
-    if (validateNumber && validateNumber.status !== 500) {
-      const respEvolution = validateNumber as { numberExists: boolean }
-
-      if (!respEvolution.numberExists) {
-        setError('cellphone', {
-          message: 'Esse número de WhatsApp não existe',
-        })
-        return
       }
     }
 
@@ -89,13 +74,14 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 gap-16">
+    <div className="flex flex-col items-center p-4 gap-8">
       <div className="flex flex-col items-center gap-6">
-        <h1 className="font-bold text-3xl lg:text-4xl">
+        <h1 className="font-bold text-2xl lg:text-3xl">
           Bem vindo ao <span className="text-primary">Modo Caverna</span>
         </h1>
-        <p className="lg:text-lg opacity-80">
-          Sua jornada de transformação pessoal começa agora
+        <p className="lg:text-lg opacity-80 text-center max-w-xl">
+          Você está prestes a começar a jornada mais desafiadora e
+          transformadora da sua vida.
         </p>
       </div>
 
@@ -105,7 +91,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
 
       <FormProvider {...form}>
         <motion.div
-          className="flex flex-col p-6 gap-6 bg-background rounded-2xl border border-red-900 shadow-xl shadow-red-900"
+          className="flex flex-col items-center p-6 gap-6 bg-background rounded-2xl border border-red-900 card-shadow-md"
           initial={{
             y: 50,
             opacity: 0,
@@ -146,7 +132,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
               </span>
             )}
           </div>
-          <div className="flex justify-center">
+          <div className="flex w-full justify-center">
             <Button
               onClick={handleSubmit(handleSaveData)}
               loading={isSubmitting}

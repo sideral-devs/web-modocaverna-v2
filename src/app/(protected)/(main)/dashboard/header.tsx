@@ -4,9 +4,16 @@ import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
-import { AlarmClock, MenuIcon, StoreIcon, Zap } from 'lucide-react'
+import {
+  AlarmClock,
+  MenuIcon,
+  MessageCircleQuestion,
+  StoreIcon,
+  Zap,
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { UpgradeDialogDuringSevenDays } from './UpgradeDialogDuringSevenDays'
 import { UpgradeDialogExpired } from './UpgradeDialogExpired'
 import { UpgradeDialogExpiredTrial } from './UpgradeDialogExpiredTrial'
@@ -17,10 +24,12 @@ export function CentralHubHeader({
   setTab: (arg: string) => void
 }) {
   const { data: user } = useUser()
+  const router = useRouter()
 
   if (!user) {
     return null
   }
+
   const dataDeCompra = dayjs(user.data_de_compra)
   const dataMaisSeteDias = dataDeCompra.add(7, 'day')
   const horasRestantes = dayjs(dataMaisSeteDias).diff(dayjs(), 'hour')
@@ -321,7 +330,14 @@ export function CentralHubHeader({
         )}
       </div>
       <div className="flex items-center gap-2">
-        {/* <DashboardTour /> */}
+        <button
+          className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl transition-all duration-200"
+          onClick={() => {
+            router.replace('/dashboard?startTour=true')
+          }}
+        >
+          <MessageCircleQuestion className="text-primary group-hover:text-white transition-all duration-200" />{' '}
+        </button>
         <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
           <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
             <StoreIcon

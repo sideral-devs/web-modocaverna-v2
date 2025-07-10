@@ -14,6 +14,7 @@ export default function ProtectedLayout({
     <MusicPlayerProvider>
       <SessionProvider>
         <CrispWithNoSSR />
+
         {/* <FormbricksLoader /> */}
         {children}
       </SessionProvider>

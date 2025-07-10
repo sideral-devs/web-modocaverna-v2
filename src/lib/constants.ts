@@ -8,13 +8,14 @@ export const videos = {
   onboardingTutorial: '67f0299ed75d2074cce0f8af',
   codeTutorial: '673ba95084647c000ad93566',
   affiliateTutorial: '67fea6ca3ea2667a8e542ebd',
+  automationTutorial: '686ea9efdb09c22ddcc96691',
 }
 
 export const muxVideos = {
-  welcome: 'B6vLKRewpv33EtC02Yi1EHpeVYXDEkxcTMjJ6QBSIIZQ',
-  connect: 'wn3kyHd9H01rcNUSvEL4Jow7iZOx98vS3GzUz5qqOTiY',
-  philosophy: '5goygKxC79pZAlW3Qf6WFQTzK2002Tr7GNmWv01S5zNOU',
-  fortyDays: 'yh3vT6hgHbqRi011rEBItyKoM02ux01qdjgbY8o7but8W00',
+  welcome: 'U300ccQcOuFIklpPDylu3zFSx9g3mhUSlJud6SaA6sp4',
+  connect: 'v6n2PXMocvZ5xaoOg3PZy01tJq00qv02Zn3uf00p01BmmmiI',
+  philosophy: '1YjT7gmrkB3FoB8sOxVMW4vbWKuz31mX2eKB2T02lBpY',
+  fortyDays: 'fEKvfD4ulNGLe3UE5sXQpafYO6wcBszDLqa9lccOwuw',
 }
 
 export const WEEK_DAYS = [

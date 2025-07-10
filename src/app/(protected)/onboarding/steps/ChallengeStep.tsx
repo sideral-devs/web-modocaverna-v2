@@ -7,14 +7,15 @@ export function ChallengeStep({ onNext }: { onNext: () => void }) {
   const [videoEnded, setVideoEnded] = useState(false)
 
   return (
-    <div className="flex flex-col items-center p-4 gap-16">
+    <div className="flex flex-col items-center p-4 gap-8">
       <div className="flex flex-col items-center gap-6">
-        <h1 className="font-bold text-center text-4xl lg:text-5xl">
-          Desafio e Filosofia do{' '}
-          <span className="text-primary">Modo Caverna</span>
+        <h1 className="font-bold text-center text-2xl lg:text-3xl">
+          O código da transformação na{' '}
+          <span className="text-primary">Caverna</span>
         </h1>
-        <p className="lg:text-lg opacity-80">
-          Está pronto para abraçar a metodologia cavernosa?
+        <p className="lg:text-lg opacity-80 text-center">
+          Muito além de um método. É uma filosofia de vida. Propósito, foco e
+          progresso — ou nada muda.
         </p>
       </div>
 
@@ -28,7 +29,7 @@ export function ChallengeStep({ onNext }: { onNext: () => void }) {
       {videoEnded && (
         <div className="flex justify-center">
           <Button onClick={onNext} size="lg" className="uppercase">
-            Continuar
+            Eu me comprometo, Capitão!
           </Button>
         </div>
       )}

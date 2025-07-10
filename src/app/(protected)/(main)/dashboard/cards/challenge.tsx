@@ -26,7 +26,10 @@ export default function ChallengeCard() {
   }
 
   return (
-    <Card className="flex flex-col w-full h-full min-h-[300px] p-4 gap-4">
+    <Card
+      className="flex flex-col w-full h-full min-h-[300px] p-4 gap-4"
+      data-tutorial-id="desafio-caverna"
+    >
       <CardHeader>
         <div className="flex w-fit px-3 py-2 pt-[9px] border border-primary rounded-full">
           <span className="text-[10px] text-primary font-semibold">

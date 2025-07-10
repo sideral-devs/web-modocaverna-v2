@@ -11,19 +11,14 @@ import {
 } from '@/components/ui/card'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface TutorialStep {
   id: number
   title: string
   description: string
-  highlight: {
-    x: number
-    y: number
-    width: number
-    height: number
-  }
-  dialogPosition: 'top' | 'bottom' | 'left' | 'right' | 'center'
+  elementId?: string
+  dialogPosition: 'top' | 'bottom' | 'left' | 'right' | 'center' | 'bottomLeft'
 }
 
 const tutorialSteps: TutorialStep[] = [
@@ -31,31 +26,31 @@ const tutorialSteps: TutorialStep[] = [
     id: 1,
     title: 'Bem vindo ao Tutorial Caverna',
     description:
-      'Este tutorial serve para mostrar as principais funcionalidades do sisteme e te ajudar a usar suas ferramentas ao máximo',
-    highlight: { x: 0, y: 0, width: 0, height: 0 },
+      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com inteligência e propósito.',
+    elementId: undefined,
     dialogPosition: 'center',
   },
   {
     id: 2,
-    title: 'HUBS',
+    title: 'HUBS de ferramentas',
     description:
       'Os HUBS organizam suas ferramentas por objetivo. Navegue entre eles para acessar diferentes áreas de desenvolvimento.',
-    highlight: { x: 6, y: 12, width: 60, height: 8 },
+    elementId: 'hubs',
     dialogPosition: 'bottom',
   },
   {
     id: 3,
     title: 'Perfil e configurações',
     description: 'Personalize sua experiência e acompanhe seu progresso.',
-    highlight: { x: 94, y: 1, width: 6, height: 8 },
-    dialogPosition: 'bottom',
+    elementId: 'perfil',
+    dialogPosition: 'bottomLeft',
   },
   {
     id: 4,
-    title: 'Central caverna',
+    title: 'Central Caverna',
     description:
-      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e para onde você sempre retorna para evoluir!',
-    highlight: { x: 6, y: 12, width: 12, height: 8 },
+      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e  onde você sempre retorna para evoluir!',
+    elementId: 'central-caverna',
     dialogPosition: 'right',
   },
   {
@@ -63,39 +58,39 @@ const tutorialSteps: TutorialStep[] = [
     title: 'Streak',
     description:
       'Seu streak mostra sua consistência! Manter a chama acesa diariamente é o segredo da transformação.',
-    highlight: { x: 6, y: 18, width: 30, height: 40 },
+    elementId: 'streak',
     dialogPosition: 'right',
   },
   {
     id: 6,
     title: 'Rituais',
     description:
-      'Os rituais são seus hábitos de evolução! Configure sua rotina matinal e noturna para máximo desempenho.',
-    highlight: { x: 35, y: 18, width: 30, height: 40 },
+      'Seus rituais moldam sua evolução. A forma como você inicia e encerra o dia define quem você se torna.',
+    elementId: 'rituais',
     dialogPosition: 'right',
   },
   {
     id: 7,
-    title: 'Agenda do dia',
+    title: 'Sua Rotina Cavernosa',
     description:
-      'Os rituais são seus hábitos de evolução! Configure sua rotina matinal e noturna para máximo desempenho.',
-    highlight: { x: 64, y: 18, width: 30, height: 76 },
+      'Organize seus dias com intenção. Agenda de compromissos, treinos, refeições e rituais — tudo em um só lugar, pra manter a  disciplina e o controle da sua evolução.',
+    elementId: 'rotina-cavernosa',
     dialogPosition: 'left',
   },
   {
     id: 8,
     title: 'Desafio Caverna',
     description:
-      'O Desafio Caverna é sua jornada de 40 dias! Um período intenso de transformação e evolução.',
-    highlight: { x: 6, y: 55, width: 30, height: 40 },
-    dialogPosition: 'top',
+      'O Desafio Caverna é uma jornada de 40 dias rumo à sua transformação. Um período intenso de disciplina, renúncia e evolução.',
+    elementId: 'desafio-caverna',
+    dialogPosition: 'right',
   },
   {
     id: 9,
     title: 'Flow Produtividade',
     description:
-      'Entre no estado de FLOW! Sessões de foco máximo com bloqueio de distrações para alta performance.',
-    highlight: { x: 35, y: 55, width: 30, height: 40 },
+      'Entre no estado de FLOW! Sessões de foco máximo com bloqueio de distrações para você produzir em alta performance.',
+    elementId: 'flow-produtividade',
     dialogPosition: 'right',
   },
 ]
@@ -109,10 +104,42 @@ export function DashboardTour({
 }) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
+  const [highlightRect, setHighlightRect] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+  })
+
+  useEffect(() => {
+    if (!active) return
+
+    const step = tutorialSteps[currentStep]
+    const el = step.elementId
+      ? document.querySelector(`[data-tutorial-id="${step.elementId}"]`)
+      : null
+
+    console.log(`[data-tutorial-id="${step.elementId}"]`)
+    console.log(el)
+
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      console.log(rect)
+      setHighlightRect({
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      })
+    } else {
+      setHighlightRect({ top: 0, left: 0, width: 0, height: 0 })
+    }
+  }, [active, currentStep])
 
   const closeTutorial = () => {
     setIsActive(false)
     setCurrentStep(0)
+    router.replace('/dashboard')
   }
 
   const handleFinish = () => {
@@ -140,33 +167,52 @@ export function DashboardTour({
   const currentStepData = tutorialSteps[currentStep]
 
   const getDialogPosition = () => {
-    const highlight = currentStepData.highlight
+    const rect = highlightRect
     const dialogPosition = currentStepData.dialogPosition
+
+    if (!rect.top && !rect.left) {
+      return {
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      }
+    }
 
     switch (dialogPosition) {
       case 'top':
         return {
-          top: `${highlight.y - 5}%`,
-          left: `${highlight.x + highlight.width / 2}%`,
+          top: rect.top - 10,
+          left: rect.left + rect.width / 2,
           transform: 'translate(-50%, -100%)',
+          position: 'absolute' as const,
         }
       case 'bottom':
         return {
-          top: `${highlight.y + highlight.height + 5}%`,
-          left: `${highlight.x + highlight.width / 2}%`,
+          top: rect.top + rect.height + 10,
+          left: rect.left + rect.width / 2,
           transform: 'translate(-50%, 0)',
+          position: 'absolute' as const,
         }
       case 'left':
         return {
-          top: `${highlight.y + highlight.height / 2}%`,
-          left: `${highlight.x - 5}%`,
+          top: rect.top + rect.height / 2,
+          left: rect.left - 10,
           transform: 'translate(-100%, -50%)',
+          position: 'absolute' as const,
         }
       case 'right':
         return {
-          top: `${highlight.y + highlight.height / 2}%`,
-          left: `${highlight.x + highlight.width + 5}%`,
+          top: rect.top + rect.height / 2,
+          left: rect.left + rect.width + 10,
           transform: 'translate(0, -50%)',
+          position: 'absolute' as const,
+        }
+      case 'bottomLeft':
+        return {
+          top: rect.top + rect.height + 10,
+          left: rect.left - 10,
+          transform: 'translate(-100%, 0)',
+          position: 'absolute' as const,
         }
       default:
         return {
@@ -180,16 +226,16 @@ export function DashboardTour({
   if (!active) return null
 
   return (
-    <div className="absolute inset-0 z-50 max-w-8xl mx-auto">
+    <div className="absolute inset-0 z-50">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black/60" />
         <div
           className="absolute bg-white/10 border-2 border-primary rounded-lg shadow-2xl"
           style={{
-            left: `${currentStepData.highlight.x}%`,
-            top: `${currentStepData.highlight.y}%`,
-            width: `${currentStepData.highlight.width}%`,
-            height: `${currentStepData.highlight.height}%`,
+            left: `${highlightRect.left}px`,
+            top: `${highlightRect.top}px`,
+            width: `${highlightRect.width}px`,
+            height: `${highlightRect.height}px`,
             boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
             zIndex: 51,
           }}
@@ -203,7 +249,7 @@ export function DashboardTour({
         <CardHeader className="flex flex-col items-start px-6 py-4 gap-4">
           <div className="w-full flex items-center justify-between">
             <Badge variant="outline" className="text-xs">
-              Passo {currentStep + 1} of {tutorialSteps.length}
+              Passo {currentStep + 1} de {tutorialSteps.length}
             </Badge>
             <Button
               variant="ghost"
@@ -230,8 +276,8 @@ export function DashboardTour({
                   index === currentStep
                     ? 'bg-primary'
                     : index < currentStep
-                      ? 'bg-primary/60'
-                      : 'bg-gray-300'
+                      ? 'bg-red-700'
+                      : 'bg-gray-400'
                 }`}
               />
             ))}

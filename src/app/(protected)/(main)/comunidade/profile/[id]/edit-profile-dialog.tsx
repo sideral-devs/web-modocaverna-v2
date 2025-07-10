@@ -29,7 +29,7 @@ import { z } from 'zod'
 dayjs.extend(customParseFormat)
 
 const schema = z.object({
-  biography: z.string().min(1, { message: 'A biografia é obrigatória' }),
+  biography: z.string().optional(),
   nickname: z.string().min(1, { message: 'O nome de usuário é obrigatório' }),
 
   instagram: z
@@ -52,7 +52,7 @@ const schema = z.object({
             value.includes('instagram.com')
           )
         } else {
-          return false
+          return true
         }
       },
       {
@@ -65,10 +65,13 @@ const schema = z.object({
     .string()
     .transform((val) => (val === '' ? undefined : val))
     .optional()
-    .refine((value) => value?.toLowerCase().includes('linkedin.com'), {
-      message:
-        'A URL deve ser válida e do LinkedIn (ex: https://linkedin.com/in/usuario)',
-    }),
+    .refine(
+      (value) => (value ? value.toLowerCase().includes('linkedin.com') : true),
+      {
+        message:
+          'A URL deve ser válida e do LinkedIn (ex: https://linkedin.com/in/usuario)',
+      },
+    ),
 })
 
 type RegisterData = z.infer<typeof schema>

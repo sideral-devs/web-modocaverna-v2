@@ -2,90 +2,152 @@
 import { ProtectedRoute } from '@/components/protected-route'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { api } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+type Profile = {
+  title: string
+  subtitle: string
+  description: string
+}
 
 export default function Page() {
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
+  const savedProfile = localStorage.getItem('cave_profile')
+  const currentYear = dayjs().format('YYYY')
+
+  const { data: goals } = useQuery({
+    queryKey: ['goals'],
+    queryFn: async () => {
+      const response = await api.get('/metas/find')
+      return response.data as Goal[]
+    },
+  })
+
+  useEffect(() => {
+    try {
+      const actualProfile = savedProfile
+        ? (JSON.parse(savedProfile) as Profile)
+        : null
+      setProfile(actualProfile)
+    } catch {
+      setProfile(null)
+    }
+  }, [savedProfile])
+
+  useEffect(() => {
+    if (goals) {
+      setCurrentGoal(goals.find((goal) => goal.ano === currentYear) || null)
+    }
+  }, [goals, currentYear])
+
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
         <div className="w-full flex flex-1 flex-col items-center z-10">
           <div className="flex flex-col w-full max-w-6xl p-8 lg:py-16 gap-12">
-            <header className="flex w-full items-center justify-between">
+            <header className="flex w-full items-center justify-center">
               <div className="flex flex-col gap-2">
-                <h1 className="font-bold text-3xl lg:text-4xl">
-                  Bem-vindo ao Modo Caverna
+                <h1 className="font-bold text-2xl lg:text-3xl text-center">
+                  Sua jornada no{' '}
+                  <span className="text-primary">Modo Caverna</span> começou
                 </h1>
-                <p className="lg:text-lg opacity-80">
-                  Descubra os segredos da sua mente e desbloqueie seu potencial
+                <p className="lg:text-lg opacity-80 text-center">
+                  Assuma o controle. Chegou a hora de construir sua nova versão.
                 </p>
-              </div>
-
-              <div className="flex items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
-                <span className="text-2xl">🎯</span>
-                <div className="flex flex-col gap-1">
-                  <span className="text-sm opacity-80">Seu perfil:</span>
-                  <p className="text-lg text-primary font-bold">
-                    O Estrategista
-                  </p>
-                </div>
               </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-9 py-8 gap-8 w-full border-b relative">
-              <Card className="flex flex-col md:col-span-4 items-center p-6 gap-6 text-sm bg-white/5 border-2 border-red-900 card-shadow rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full relative">
+              <Card className="flex flex-col items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
-                  <CardTitle className="font-bold text-lg lg:text-xl">
-                    🚀 Próximos 2 passos
+                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
+                    👤 Seu Perfil Caverna
                   </CardTitle>
-                  <span className="flex px-3 py-1.5 bg-primary font-bold rounded-full">
-                    Prioridade
-                  </span>
                 </CardHeader>
-                <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border border-red-900  rounded-2xl">
-                  <p className="opacity-80">Progresso dos Próximos Passos</p>
-                  <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
-                  <p className="text-yellow-400">0 de 2 passos concluídos</p>
-                </div>
-                <div className="flex w-full items-center p-6 gap-4 bg-white/10 border border-red-900  rounded-2xl">
-                  <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
-                    <p className="text-xl font-bold">1</p>
+                <div className="flex w-full items-center p-6 gap-6 bg-red-700/10 rounded-2xl border border-red-900">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg text-primary font-bold">
+                      {profile?.title || 'O Estrategista'}
+                    </p>
+                    {profile && (
+                      <p className="opacity-80">
+                        {profile.subtitle + ' ' + profile.description}
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-col gap-1 flex-1">
-                    <p className="text-lg font-bold">Módulos 1 e 2</p>
-                    <span className="opacity-80 text-sm">
-                      Assistir às aulas fundamentais na área &quot;Cursos &
-                      Conteúdos&quot;
-                    </span>
-                  </div>
-                  <Link href={'/members-area'}>
-                    <Button size="sm">INICIAR</Button>
-                  </Link>
                 </div>
-              </Card>
-
-              <Card className="flex flex-col md:col-span-3 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
-                  <CardTitle className="font-bold text-lg lg:text-xl">
-                    🎯 Seu Objetivo
+                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
+                    🎯 Seu Principal Objetivo
                   </CardTitle>
                 </CardHeader>
                 <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border-l-2 border-primary  rounded-2xl">
                   <p className="font-bold italic truncate w-full">
-                    Perder 10kg de gordura e mais e mais
+                    {currentGoal?.objetivos.principal}
                   </p>
                 </div>
-                <div className="flex items-center p-6 gap-6 bg-yellow-700/10 rounded-2xl border border-yellow-900">
-                  <span className="text-2xl">💪 </span>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-sm opacity-80">
-                      Lembre-se: Cada ação que você toma hoje te aproxima deste
-                      objetivo.
-                    </span>
+              </Card>
+
+              <Card className="flex flex-col items-center p-6 gap-8 text-sm bg-zinc-900 border-2 border-red-900 card-shadow rounded-2xl">
+                <CardHeader className="justify-between uppercase">
+                  <CardTitle className="font-bold text-lg lg:text-xl mx-auto">
+                    📋 Próximos passos
+                  </CardTitle>
+                  {/* <span className="flex px-3 py-1.5 bg-primary font-bold rounded-full">
+                    Prioridade
+                  </span> */}
+                </CardHeader>
+                <p className="text-lg lg:text-xl md:mt-2">
+                  O que você precisa fazer agora:
+                </p>
+                {/* <div className="flex flex-col w-full items-center p-6 gap-3 bg-white/10 border rounded-2xl">
+                  <p className="opacity-80">Progresso dos Próximos Passos</p>
+                  <div className="w-full bg-white/15 h-1.5 rounded card-shadow-sm" />
+                  <p className="text-yellow-400">0 de 2 passos concluídos</p>
+                </div> */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
+                    <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
+                      <p className="text-lg font-semibold">1</p>
+                    </div>
+                    <div className="flex flex-col gap-1 flex-1">
+                      <p className="text-lg font-bold">
+                        Assista as aulas do curso
+                      </p>
+                      <span className="opacity-80 text-sm">
+                        Aprenda e aplique a metodologia do Modo Caverna na área
+                        &quot;Cursos & Conteúdos&quot;.
+                      </span>
+                    </div>
+                    {/* <Link href={'/members-area'}>
+                      <Button size="sm">INICIAR</Button>
+                    </Link> */}
+                  </div>
+                  <div className="flex w-full items-center p-6 gap-4 bg-white/10 border rounded-2xl">
+                    <div className="w-8 h-8 flex flex-col items-center justify-center bg-primary rounded-full">
+                      <p className="text-lg font-semibold">2</p>
+                    </div>
+                    <div className="flex flex-col gap-1 flex-1">
+                      <p className="text-lg font-bold">
+                        Crie seu primeiro Desafio de 40 dias
+                      </p>
+                      <span className="opacity-80 text-sm">
+                        E desperte sua melhor versão.
+                      </span>
+                    </div>
+                    {/* <Link href={'/desafio-caverna'}>
+                      <Button size="sm">CRIAR</Button>
+                    </Link> */}
                   </div>
                 </div>
               </Card>
 
-              <Card className="flex flex-col md:col-span-2 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
+              {/* <Card className="flex flex-col md:col-span-2 items-center p-6 gap-6 text-sm bg-white/5 border rounded-2xl">
                 <CardHeader className="justify-between uppercase">
                   <CardTitle className="font-bold text-lg lg:text-xl">
                     📊 Jornada Iniciada
@@ -103,18 +165,28 @@ export default function Page() {
                   <p className="font-bold text-4xl text-primary">40</p>
                   <span className="opacity-80">Dias de Desafio</span>
                 </div>
-              </Card>
+              </Card> */}
             </div>
 
-            <div className="flex w-full items-center justify-between gap-8">
-              <p className="text-lg opacity-80">
+            <div className="flex w-fit mx-auto items-center p-6 gap-6 bg-yellow-700/10 rounded-2xl border border-yellow-900">
+              <span className="text-2xl">💪 </span>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm opacity-80">
+                  Lembre-se: Cada ação que você toma hoje te aproxima deste
+                  objetivo.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex w-full items-center justify-center gap-8">
+              {/* <p className="text-lg opacity-80">
                 <strong>Capitão Caverna diz:</strong> &quot;A caverna está
                 preparada. Agora é hora de entrar e começar sua
                 transformação!&quot;
-              </p>
-              <Link href={'/dashboard'}>
+              </p> */}
+              <Link href={'/members-area'}>
                 <Button className="h-16 px-8 text-xl font-bold uppercase rounded-xl button-shadow transition-all duration-300 hover:-translate-y-1">
-                  🚀 Entrar na caverna
+                  🚀 Ativar Modo Caverna
                 </Button>
               </Link>
             </div>

@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { ChallengeStep } from './ChallengeStep'
-import { CheckPointStep } from './CheckpointStep'
 import { ConfirmStep } from './ConfirmStep'
 import { ConnectStep } from './ConnectStep'
 import { FortyDaysStep } from './FortyDaysStep'
@@ -45,8 +44,8 @@ export default function Page() {
         <QuizStep key={4} onNext={nextPhase} />,
         <ActivateCaveModeStep key={5} onNext={nextPhase} />,
         <ChallengeStep key={6} onNext={nextPhase} />,
-        <CheckPointStep key={7} onNext={nextPhase} />,
-        <FortyDaysStep key={8} onNext={handleFinish} />,
+        // <CheckPointStep key={7} onNext={nextPhase} />,
+        <FortyDaysStep key={7} onNext={handleFinish} />,
       ]
 
   function nextPhase() {
@@ -60,7 +59,11 @@ export default function Page() {
         tutorial_complete: true,
         telefone: cellphone,
       })
-      router.replace('/dashboard?startTour=true')
+      if (window.innerWidth < 768) {
+        router.replace('/onboarding/concluido')
+      } else {
+        router.replace('/dashboard?startTour=true')
+      }
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
     } finally {
@@ -74,12 +77,12 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-dvh items-center gap-8 bg-zinc-950 overflow-hidden relative">
+      <div className="flex flex-col w-full min-h-dvh items-center gap-0 bg-zinc-950 overflow-hidden relative">
         <header className="flex w-full max-w-8xl items-center justify-between p-6 z-10">
-          <span className="text-xs lg:text-sm text-muted-foreground">
+          <span className="text-[10px] md:text-xs lg:text-sm text-muted-foreground">
             Onboarding
           </span>
-          <div className="flex flex-col w-full max-w-xl items-center gap-6">
+          <div className="flex flex-col flex-1 w-full max-w-xl items-center gap-6">
             <Image
               src={'/images/logo-icon.svg'}
               alt="Logo"
@@ -88,18 +91,18 @@ export default function Page() {
             />
             <PhaseCounter current={currentPhase + 1} total={STEPS.length} />
           </div>
-          <span className="text-xs lg:text-sm text-right text-muted-foreground">
+          <span className="text-[10px] md:text-xs lg:text-sm text-right text-muted-foreground">
             Passo {currentPhase + 1} de {STEPS.length}
           </span>
         </header>
         <div className="w-full flex flex-1 flex-col items-center z-10">
-          <div className="flex flex-col w-full max-w-3xl">
+          <div className="flex flex-col w-full max-w-[700px] px-2">
             {STEPS[currentPhase]}
           </div>
         </div>
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -bottom-[800px] -left-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
-          <div className="absolute -top-[800px] -right-[800px] size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute bottom-[400px] md:-bottom-[800px] -left-[400px] md:-left-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
+          <div className="absolute -top-[400px] md:-top-[800px] -right-[400px] md:-right-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
         </div>
       </div>
     </ProtectedRoute>

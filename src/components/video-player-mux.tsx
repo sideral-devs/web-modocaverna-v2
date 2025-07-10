@@ -1,5 +1,6 @@
 'use client'
 import { useUser } from '@/hooks/queries/use-user'
+import { useInteractionStore } from '@/store/interaction-store'
 import MuxPlayerElement from '@mux/mux-player'
 import MuxPlayer from '@mux/mux-player-react'
 import { motion } from 'framer-motion'
@@ -13,8 +14,8 @@ interface VideoPlayerProps extends React.ComponentProps<typeof MuxPlayer> {
 export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
   const playerRef = useRef<MuxPlayerElement>(null)
   const [progress, setProgress] = useState(0)
-  const [showPlayButton, setShowPlayButton] = useState(false)
-  const [isMuted, setIsMuted] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const { hasUserInteracted } = useInteractionStore()
 
   useEffect(() => {
     const player = playerRef.current
@@ -26,10 +27,10 @@ export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
       setProgress((current / duration) * 100)
     }
 
-    const handlePlay = () => setShowPlayButton(false)
+    const handlePlay = () => setIsPlaying(true)
     const handlePause = () => {
       if ((player.currentTime || 0) < (player.duration || 1)) {
-        setShowPlayButton(true)
+        setIsPlaying(false)
       }
     }
 
@@ -46,14 +47,13 @@ export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
 
   const handlePlayClick = () => {
     playerRef.current?.play()
-    setShowPlayButton(false)
-    setIsMuted(false)
+    setIsPlaying(true)
   }
 
   const { data: user } = useUser()
 
   return (
-    <div className="relative" onClick={() => setIsMuted(false)}>
+    <div className="relative">
       <MuxPlayer
         ref={playerRef}
         playbackId={id}
@@ -67,25 +67,20 @@ export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
             '--controls': 'none',
           } as React.CSSProperties
         }
-        autoPlay
         disablePictureInPicture
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        autoPlay={hasUserInteracted}
+        muted={!hasUserInteracted}
         nohotkeys
-        muted={isMuted}
         {...props}
       />
-
-      {isMuted && (
-        <div className="absolute top-2 right-2 z-50 bg-black/60 text-white text-sm px-3 py-1 rounded">
-          Clique para ativar o som
-        </div>
-      )}
-
-      {showPlayButton && (
+      {!isPlaying && (
         <button
           onClick={handlePlayClick}
-          className="absolute inset-0 z-40 flex items-center justify-center bg-black/40 text-white text-4xl"
+          className="absolute inset-0 z-40 flex items-center justify-center bg-black/50 text-white text-4xl"
         >
-          <div className="flex size-12 items-center justify-center bg-red-700 shadow-xl shadow-red-600 rounded-full">
+          <div className="flex size-16 items-center justify-center bg-red-700 button-shadow rounded-full">
             <PlayIcon className="fill-white" />
           </div>
         </button>

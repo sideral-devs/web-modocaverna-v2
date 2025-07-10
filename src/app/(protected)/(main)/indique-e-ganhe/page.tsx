@@ -26,6 +26,7 @@ import { AffiliateCodeDialogTrigger } from './dialogs/affiliate-code'
 import { CommissionPlanDialogTrigger } from './dialogs/commission-plan'
 import { PlateDialogTrigger } from './dialogs/plate'
 import { PublicMapDialogTrigger } from './dialogs/public-map'
+import { ShareMaterialDialogTrigger } from './dialogs/share-material'
 import { AffiliatesHeader } from './header'
 import { TutorialAffiliateDialogTrigger } from './tutorial-affilate'
 
@@ -198,11 +199,14 @@ export default function Page() {
                 </p>
               </Card>
             </PublicMapDialogTrigger>
-            <AffiliateDashLink
-              icon={FileOutputIcon}
-              title="Materiais de Divulgação"
-              href="https://redirect.lifs.app/drive-af-cc"
-            />
+            <ShareMaterialDialogTrigger>
+              <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
+                <FileOutputIcon className="scale-75 md:scale-100 text-primary" />
+                <p className="text-xs md:text-base font-semibold truncate">
+                  Materiais de divulgação
+                </p>
+              </Card>
+            </ShareMaterialDialogTrigger>
             <PlateDialogTrigger>
               <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
                 <TrophyIcon className="scale-75 md:scale-100 text-primary" />

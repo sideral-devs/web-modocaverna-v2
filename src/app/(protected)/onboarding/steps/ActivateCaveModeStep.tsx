@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
+import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -18,24 +21,37 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
     },
   })
 
-  function onSubmit(data: FormData) {
-    console.log(data)
-    onNext()
+  async function onSubmit(data: FormData) {
+    try {
+      const year = dayjs().year()
+      await api.put(`/metas/update/${year}`, {
+        ano: year,
+        objetivos: {
+          principal: data.goal,
+        },
+      })
+      onNext()
+    } catch {
+      toast.error('Não foi possível salvar sua meta')
+    }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-12">
-      <h1 className="font-bold text-center text-3xl lg:text-4xl">
-        Qual é o seu objetivo principal com o{' '}
-        <span className="text-primary">Modo Caverna?</span>
+    <div className="flex flex-col items-center justify-center gap-8">
+      <h1 className="font-bold text-center text-2xl lg:text-3xl">
+        Qual o seu principal objetivo na{' '}
+        <span className="text-primary">Caverna?</span>
       </h1>
-      <p className="text-center opacity-80">
-        Defina o principal objetivo que quer conquistar nos próximos 40 dias.
-      </p>
+      <div className="flex flex-col gap-4">
+        <p className="text-center opacity-80 max-w-md">
+          Agora que você encarou o espelho, reflita sobre o que quer conquistar
+          nos próximos 40 dias.
+        </p>
+      </div>
 
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap-8"
+        className="flex flex-col w-full items-center gap-8"
       >
         <Controller
           control={form.control}
@@ -43,8 +59,8 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
           render={({ field }) => (
             <Textarea
               {...field}
-              placeholder="Ex: Perder 10kg e ganhar massa muscular"
-              className="w-[400px]"
+              placeholder="Ex: Me tornar mais produtivo e focado"
+              className="w-full max-w-[440px]"
             />
           )}
         />
@@ -53,8 +69,9 @@ export function ActivateCaveModeStep({ onNext }: { onNext: () => void }) {
           size="lg"
           className="uppercase"
           disabled={(form.watch('goal') || '').length < 10}
+          loading={form.formState.isLoading}
         >
-          🎯 Definir meta
+          🎯 Definir objetivo
         </Button>
       </form>
     </div>

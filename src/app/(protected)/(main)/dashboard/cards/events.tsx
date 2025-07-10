@@ -184,10 +184,11 @@ export default function EventsCard() {
     }
   }, [])
 
-  console.log(allEvents)
-
   return (
-    <Card className="flex flex-col md:row-span-2 h-fit md:h-full min-h-[300px] bg-gradient-to-b from-[#09373E] to-[#1A1A1A] to-[65%] p-4 gap-5">
+    <Card
+      className="flex flex-col md:row-span-2 h-fit md:h-full min-h-[300px] bg-gradient-to-b from-[#09373E] to-[#1A1A1A] to-[65%] p-4 gap-5"
+      data-tutorial-id="rotina-cavernosa"
+    >
       <CardHeader className="justify-between">
         <div className="flex items-center px-3 py-2 gap-[6px] border border-cyan-400 rounded-full">
           <Bookmark className="text-cyan-400" size={16} fill="#22d3ee" />

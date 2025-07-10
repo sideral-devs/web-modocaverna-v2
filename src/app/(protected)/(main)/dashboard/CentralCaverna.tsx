@@ -32,7 +32,10 @@ export function CentralCaverna({ value }: { value: string }) {
     >
       {user ? (
         <div className="flex flex-col md:grid md:grid-cols-3 md:grid-rows-2 w-full h-full md:min-h-[676px] gap-2 2xl:max-h-[676px]">
-          <Card className="flex flex-col w-full min-h-80 xl:h-full relative p-[6px] pl-9 pt-11 gap-5 overflow-hidden">
+          <Card
+            className="flex flex-col w-full min-h-80 xl:h-full relative p-[6px] pl-9 pt-11 gap-5 overflow-hidden"
+            data-tutorial-id="streak"
+          >
             <h2 className="text-2xl font-semibold">
               Você está há{' '}
               <span className="text-primary">
@@ -59,7 +62,10 @@ export function CentralCaverna({ value }: { value: string }) {
           <RitualsCard />
           <EventsCard />
           <ChallengeCard />
-          <Card className="flex flex-col w-full  min-h-[330px] p-4 gap-5">
+          <Card
+            className="flex flex-col w-full  min-h-[330px] p-4 gap-5"
+            data-tutorial-id="flow-produtividade"
+          >
             <CardHeader>
               <div className="flex w-fit items-center px-3  py-[7px] gap-[6px] border border-cyan-400 rounded-full">
                 <AlarmClock
