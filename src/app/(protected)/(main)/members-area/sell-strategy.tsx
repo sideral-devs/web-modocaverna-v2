@@ -1,6 +1,6 @@
 import {
-  CourseSwiperIndique,
   CourseSwiperData,
+  CourseSwiperIndique,
 } from '@/components/course-swiper-indique'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/lib/api'

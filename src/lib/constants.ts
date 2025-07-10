@@ -8,6 +8,7 @@ export const videos = {
   onboardingTutorial: '67f0299ed75d2074cce0f8af',
   codeTutorial: '673ba95084647c000ad93566',
   affiliateTutorial: '67fea6ca3ea2667a8e542ebd',
+  automationTutorial: '686ea9efdb09c22ddcc96691',
 }
 
 export const muxVideos = {

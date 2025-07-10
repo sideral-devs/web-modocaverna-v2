@@ -127,7 +127,7 @@ export function CommissionPlanDialogTrigger({
               </Button>
             )}
           </Card>
-          <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
+          {/* <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
               <p className="text-white  text-2xl w-full flex justify-center text text-bold  pb-2">
                 Loja Seja Caverna
@@ -161,7 +161,7 @@ export function CommissionPlanDialogTrigger({
                 Solicitar Afiliação
               </Button>
             </a>
-          </Card>
+          </Card> */}
           <div className="bg-yellow-500 flex justify-between  bg-opacity-20 rounded-lg ">
             <div className="flex flex-row items-center justify-center p-4 pe-2 gap-2">
               <p>⚠️</p>
