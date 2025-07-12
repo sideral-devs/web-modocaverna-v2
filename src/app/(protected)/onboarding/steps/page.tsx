@@ -33,9 +33,9 @@ export default function Page() {
         <ConnectStep key={2} onNext={nextPhase} />,
         <StartQuizStep key={3} onNext={nextPhase} />,
         <QuizStep key={4} onNext={nextPhase} />,
-        <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        <PlansSystem key={6} onNext={nextPhase} />,
-        <ConfirmStep key={7} onNext={handleFinish} isLoading={isLoading} />,
+        // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
+        <PlansSystem key={5} onNext={nextPhase} />,
+        <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
       ]
     : [
         <WelcomeStep key={1} onNext={nextPhase} />,
@@ -59,7 +59,7 @@ export default function Page() {
         tutorial_complete: true,
         telefone: cellphone,
       })
-      if (window.innerWidth < 768) {
+      if (window?.innerWidth < 768) {
         router.replace('/onboarding/concluido')
       } else {
         router.replace('/dashboard?startTour=true')
