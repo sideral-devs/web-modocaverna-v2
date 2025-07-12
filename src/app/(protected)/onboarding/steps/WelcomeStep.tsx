@@ -110,7 +110,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
                 maxLength={4}
                 {...register('DDI')}
                 onChange={(e) => {
-                  const value = e.target.value
+                  const value = e.target?.value
                   const formatted = ddiMask(value)
                   setValue('DDI', formatted)
                 }}
@@ -120,7 +120,7 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
                 placeholder="11 9999-9999"
                 {...register('cellphone')}
                 onChange={(e) => {
-                  const value = e.target.value
+                  const value = e.target?.value
                   const formatted = cellphoneMask(value)
                   setValue('cellphone', formatted)
                 }}

@@ -16,10 +16,12 @@ export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
   const [progress, setProgress] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const { hasUserInteracted } = useInteractionStore()
+  const { data: user } = useUser()
 
   useEffect(() => {
+    if (!playerRef || !playerRef.current) return
+
     const player = playerRef.current
-    if (!player) return
 
     const handleTimeUpdate = () => {
       const current = player.currentTime || 0
@@ -49,8 +51,6 @@ export function VideoPlayerMux({ id, title, ...props }: VideoPlayerProps) {
     playerRef.current?.play()
     setIsPlaying(true)
   }
-
-  const { data: user } = useUser()
 
   return (
     <div className="relative">

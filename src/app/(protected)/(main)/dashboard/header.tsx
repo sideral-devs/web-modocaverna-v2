@@ -330,15 +330,16 @@ export function CentralHubHeader({
         )}
       </div>
       <div className="flex items-center gap-2">
-        <button
-          className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl transition-all duration-200"
+        <Button
+          variant="secondary"
+          className="hidden lg:flex h-11 items-center group justify-center px-5 gap-2 rounded-xl transition-all duration-200 hover:bg-white/90"
           onClick={() => {
             setTab('central-caverna')
             router.replace('/dashboard?startTour=true')
           }}
         >
-          <MessageCircleQuestion className="text-primary group-hover:text-white transition-all duration-200" />{' '}
-        </button>
+          <MessageCircleQuestion className="text-primary" />
+        </Button>
         <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
           <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
             <StoreIcon
