@@ -56,7 +56,7 @@ function Content() {
             className="flex flex-col flex-1 w-full h-full gap-5"
           >
             <TabsList
-              className="overflow-x-auto min-h-8 data-[tutorial-id=hubs]"
+              className="overflow-x-auto min-h-8 data-[tutorial-id=hubs] scrollbar-minimal"
               data-tutorial-id="hubs"
             >
               <TabsTrigger

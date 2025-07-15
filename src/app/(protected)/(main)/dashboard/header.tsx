@@ -10,6 +10,7 @@ import {
   MessageCircleQuestion,
   StoreIcon,
   Zap,
+  ZapIcon,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -162,44 +163,46 @@ export function CentralHubHeader({
         {/** USE CASE DO USUÁRIO DESAFIO */}
         {user.plan === 'DESAFIO' &&
           (user.data_de_compra && nextSevenDays.isAfter(dayjs()) ? (
-            <div className="flex flex-col max-w-sm lg:max-w-xl bg-card rounded-lg px-6 py-2 gap-2 items-center justify-center">
+            <div className="flex flex-col max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-2 items-center justify-center">
               <Link href="settings/plans" prefetch={false}>
                 <div className="flex w-full items-center justify-center text-white">
                   {/* <div className="pl-2">
                     <AlarmClock color="#e9b208" />
                   </div> */}
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-1.5">
                     <div className="flex flex-row text-normal">
-                      <span className="text-normal text-green-600">
-                        ✅ Seu acesso ao Modo Caverna está ativo por 1 ano
+                      <span className="text-green-600">
+                        Seu acesso ao Desafio Caverna está ativo por 1 ano
                       </span>
                     </div>
-                    <p className="text-sm">
-                      Durante os primeiros 7 dias, você testa tudo do plano
-                      Cavernoso com acesso total e pode fazer o upgrade com
-                      desconto exclusivo.
+                    <p className="text-[10px]">
+                      Durante os primeiros 7 dias, você testa o Plano Cavernoso
+                      completo.
                     </p>
+                    <span className="text-[10px] text-yellow-500">
+                      Faltam {remainingDays} dia(s) para decidir
+                    </span>
                   </div>
                 </div>
               </Link>
-              <div className="flex w-full items-center justify-between">
-                <span className="text-normal text-yellow-500">
-                  ⏳ Faltam {remainingDays} dia(s) para decidir
-                </span>
+              <div className="flex">
                 <UpgradeDialogDuringSevenDays>
                   <Button
                     variant="secondary"
-                    className="hidden md:flex rounded-xl text-primary pulsating-shadow"
+                    className="flex rounded-xl text-[10px] pulsating-shadow lg:max-w-32 gap-1 px-2"
                     size="sm"
                   >
-                    Fazer upgrade com desconto
+                    <ZapIcon className="fill-white" size={16} />
+                    <span className="w-full break-words whitespace-normal text-[10px] uppercase">
+                      Fazer upgrade com desconto
+                    </span>
                   </Button>
                 </UpgradeDialogDuringSevenDays>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col max-w-sm lg:max-w-lg bg-card rounded-lg px-6 py-2 gap-2 items-center justify-center">
+            <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
               <Link href="settings/plans" prefetch={false}>
                 <div className="flex w-full items-center justify-center text-white">
                   {/* <div className="pl-2">
@@ -207,25 +210,30 @@ export function CentralHubHeader({
                   </div> */}
                   <div className="flex flex-col">
                     <div>
-                      <span className="md:text-normal text-green-600">
-                        ✅ Seu acesso ao Modo Caverna continua ativo
+                      <span className="text-green-600">
+                        Seu acesso ao Desafio Caverna continua ativo.
                       </span>
                     </div>
-                    <p className="text-xs md:text-sm">
-                      O período de teste do plano Cavernoso terminou. Mas o
-                      desconto especial do upgrade ainda está disponível por
-                      tempo limitado.
+                    <p className="text-xs">
+                      O teste do Plano Cavernoso com ferramentas extras
+                      terminou.
                     </p>
+                    <span className="text-xs text-yellow-500">
+                      Quer manter os recursos avançados? Aproveite o desconto!
+                    </span>
                   </div>
                 </div>
               </Link>
-              <div className="flex w-full items-center justify-end">
+              <div className="flex">
                 <UpgradeDialogExpiredTrial>
                   <Button
-                    className="flex rounded-xl text-xs md:text-normal pulsating-shadow"
+                    className="flex rounded-xl text-[10px] pulsating-shadow lg:max-w-32 gap-1 px-2"
                     size="sm"
                   >
-                    Fazer upgrade com desconto
+                    <ZapIcon className="fill-white" size={16} />
+                    <span className="w-full break-words whitespace-normal text-[10px] uppercase">
+                      Fazer upgrade com desconto
+                    </span>
                   </Button>
                 </UpgradeDialogExpiredTrial>
               </div>
