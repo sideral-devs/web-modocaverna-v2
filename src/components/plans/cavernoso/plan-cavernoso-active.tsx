@@ -3,13 +3,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { useUser } from '@/hooks/queries/use-user'
 import { cn } from '@/lib/utils'
 import { Lightning } from '@phosphor-icons/react'
 import { Star } from '@phosphor-icons/react/dist/ssr'
 import { Check } from 'lucide-react'
 import { useState } from 'react'
-import { Label } from '@/components/ui/label'
 interface PlanCavernosoProps {
   selectedPlan: string
   setSelectedPlan: (plan: 'yearly' | 'monthly') => void
@@ -17,6 +17,7 @@ interface PlanCavernosoProps {
   getPlanUrl: () => string
   isOnboarding?: boolean
   isExpired?: boolean
+  className?: string
 }
 
 const PLAN_FEATURES = [
@@ -48,9 +49,10 @@ export function PlanCavernosoActive({
   getPlanUrl,
   isOnboarding,
   isExpired,
+  className,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
-  const [showAllBenefits, setShowAllBenefits] = useState(false)
+  const [showAllBenefits, setShowAllBenefits] = useState(true)
   const isAnnualPlan = user?.plan === 'ANUAL'
   const isInactive = user?.status_plan === 'INATIVO'
   return (
@@ -59,6 +61,7 @@ export function PlanCavernosoActive({
         'flex flex-col transition-all duration-700 overflow-hidden w-full bg-zinc-900 rounded-3xl border-2 border-zinc-700',
         showAllBenefits || isAnnualPlan ? 'h-auto' : 'h-full',
         isOnboarding && '3xl:h-[650px] h-[550px]',
+        className,
       )}
     >
       <div className="flex flex-col relative gap-2">

@@ -48,7 +48,7 @@ export function PlanCavernosoMonthlyExpired({
   isOnboarding,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
-  const [showAllBenefits, setShowAllBenefits] = useState(false)
+  const [showAllBenefits, setShowAllBenefits] = useState(true)
 
   const isOnTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
   const isAnnualPlan = user?.plan === 'ANUAL'

@@ -1,19 +1,21 @@
-import { cn } from '@/lib/utils'
-import { Lightning } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useUser } from '@/hooks/queries/use-user'
+import { cn } from '@/lib/utils'
+import { Lightning } from '@phosphor-icons/react'
 
 interface PlanUpdateToAnnualProps {
   selectedPlan: string
   setSelectedPlan: (plan: string) => void
   getPlanUrl: () => string
+  className?: string
 }
 
 export function PlanCavernosoUpdate({
   selectedPlan,
   setSelectedPlan,
+  className,
 }: PlanUpdateToAnnualProps) {
   const { data: user } = useUser()
 
@@ -21,7 +23,7 @@ export function PlanCavernosoUpdate({
   const isAnnualPlan = user?.plan === 'ANUAL'
 
   return (
-    <div className="w-full">
+    <div className={cn('w-full', className)}>
       <div className="mb-8">
         <h2 className="text-3xl font-medium mb-2">
           {!isMonthlyPlan && 'Economize 50%'}

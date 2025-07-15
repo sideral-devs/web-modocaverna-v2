@@ -1,39 +1,37 @@
 'use client'
-import { useUser } from '@/hooks/queries/use-user'
-import { env } from '@/lib/env'
-import { useState } from 'react'
 import { PlanDesafio } from '@/components/plans/caverna/leftCollumn/plan-desafio'
-import { PlanUpdateToAnnual } from '@/components/plans/cavernoso/plan-update-to-annual'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import dayjs from 'dayjs'
+import { PlanCavernaNonOnboarding } from '@/components/plans/caverna/plan-caverna-nonOnboarding'
 import { PlanCavernosoActive } from '@/components/plans/cavernoso/plan-cavernoso-active'
 import { PlanCavernosoYearlyExpired } from '@/components/plans/cavernoso/plan-cavernoso-expired'
-import { PlanCavernosoUpdate } from '@/components/plans/cavernoso/plan-update-for-annual'
-import { PlanCavernosoNonOnboarding } from '@/components/plans/cavernoso/plan-cavernoso-nonOnboarding'
-import { PlanCavernaNonOnboarding } from '@/components/plans/caverna/plan-caverna-nonOnboarding'
 import { PlanCavernosoMonthlyExpired } from '@/components/plans/cavernoso/plan-cavernoso-monthly-expired '
+import { PlanCavernosoUpdate } from '@/components/plans/cavernoso/plan-update-for-annual'
+import { PlanUpdateToAnnual } from '@/components/plans/cavernoso/plan-update-to-annual'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useUser } from '@/hooks/queries/use-user'
+import { env } from '@/lib/env'
+import dayjs from 'dayjs'
+import { useState } from 'react'
 
 export default function Page() {
   const [selectedPlan, setSelectedPlan] = useState('yearly')
   const { data: user } = useUser()
+  // const { data } = useUser()
+  // const user = data
+  //   ? {
+  //       ...data,
+  //       plan: 'MENSAL',
+  //       status_plan: 'EXPIRADO',
+  //     }
+  //   : undefined
 
   if (!user) return null
 
+  console.log(user.plan)
+  console.log(user.status_plan)
+
   const isOnTrial = user.plan === 'TRIAL'
   const isExpired = user.status_plan === 'EXPIRADO'
-  const isMonthlyPlan = user.plan === 'MENSAL'
-  const isAnnualPlan = user.plan === 'ANUAL'
   const isChallengePlan = user.plan === 'DESAFIO'
-  const renovationDate = dayjs(user.data_de_renovacao)
-  const today = dayjs()
   const challengeTrial =
     user.plan === 'DESAFIO' &&
     dayjs(user.data_de_compra).add(8, 'day').isAfter(dayjs())
@@ -53,94 +51,31 @@ export default function Page() {
     }
   }
 
-  function renderHeader() {
-    return (
-      <div className="hidden md:flex flex-col w-full items-start gap-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/settings/account">
-                Configurações
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Planos e Upgrades</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+  return (
+    <div className="w-full flex flex-col justify-start items-start col-span-3 gap-10">
+      {isExpired && <ExpiredAlert user={user} />}
+      <div className="grid md:grid-cols-2 gap-8 w-full">
+        <CurrentPlan
+          isTrial={isOnTrial}
+          user={user}
+          getPlanUrl={getPlanUrl}
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+        />
+        <UpgradePlan
+          user={user}
+          getPlanUrl={getPlanUrl}
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+        />
       </div>
-    )
-  }
+    </div>
+  )
 
-  function renderExpiredAlert() {
-    return (
-      <div className="flex border border-red-500 bg-red-900/20 rounded-lg p-4 justify-between items-center w-full gap-4">
-        <div className="flex items-center gap-4">
-          <Avatar className="w-8 h-8 rounded-none">
-            <AvatarImage
-              src="/images/logo-icon.svg"
-              className="object-contain"
-            />
-            <AvatarFallback>MC</AvatarFallback>
-          </Avatar>
-          <p className="text-lg text-white">
-            {user && user.plan !== 'TRIAL'
-              ? `Sua Assinatura expirou em ${dayjs(user.data_de_renovacao).format('DD [de] MMMM [de] YYYY')}`
-              : 'Sua avaliação gratuita expirou'}
-          </p>
-        </div>
-        <h3 className="text-red-500 font-bold">
-          {user && user.plan === 'TRIAL' ? 'Upgrade' : ''}
-        </h3>
-      </div>
-    )
-  }
-  function renderTrialExpiredAlert() {
-    return (
-      <div className="flex border border-red-500 bg-red-900/20 rounded-lg p-4 justify-between items-center w-full gap-4">
-        <div className="flex items-center gap-4">
-          <Avatar className="w-8 h-8 rounded-none">
-            <AvatarImage
-              src="/images/logo-icon.svg"
-              className="object-contain"
-            />
-            <AvatarFallback>MC</AvatarFallback>
-          </Avatar>
-          <p className="text-lg text-white"> Sua avaliação gratuita expirou </p>
-        </div>
-        <h3 className="text-red-500 font-bold"> Upgrade </h3>
-      </div>
-    )
-  }
-
-  // Caso: Plano Trial
-  if (isOnTrial) {
-    return (
-      <div className="flex  mt-4 md:flex-col justify-start items-start col-span-3 gap-10">
-        {renderHeader()}
-        {isExpired && renderExpiredAlert()}
-        <div className="flex flex-col-reverse md:flex-row gap-8 w-full">
-          <PlanDesafio />
-          <PlanCavernosoNonOnboarding
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            isUpdatePlan={false}
-            getPlanUrl={getPlanUrl}
-          />
-        </div>
-      </div>
-    )
-  }
   // Caso 1: Plano Desafio Trial ou Desafio Expirado
   if (isChallengePlan && challengeTrial) {
     return (
       <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        {renderHeader()}
         <div className="flex flex-row gap-8 w-full">
           <PlanDesafio isTrial={challengeTrial} />
           <PlanCavernaNonOnboarding
@@ -155,11 +90,7 @@ export default function Page() {
   } else if (isChallengePlan && !challengeTrial) {
     return (
       <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        {renderHeader()}
-
-        {renovationDate < today
-          ? renderExpiredAlert()
-          : renderTrialExpiredAlert()}
+        <ExpiredAlert user={user} />
         <div className="flex flex-col-reverse sm:flex-row gap-8 w-full">
           <PlanDesafio />
           <PlanCavernaNonOnboarding
@@ -172,86 +103,118 @@ export default function Page() {
       </div>
     )
   }
+}
 
-  // Caso: Plano Mensal
-  if (isMonthlyPlan) {
-    return (
-      <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        {renderHeader()}
-        {isExpired && renderExpiredAlert()}
-        {!isExpired && (
-          <h2 className="text-3xl font-medium">Aproveite seu plano</h2>
-        )}
-        <div className="flex items-start w-full gap-4">
-          <div className="w-full">
-            <div className="w-[85%]">
-              <PlanUpdateToAnnual
-                selectedPlan={selectedPlan}
-                setSelectedPlan={setSelectedPlan}
-                getPlanUrl={getPlanUrl}
-              />
-            </div>
-          </div>
-          <PlanCavernosoMonthlyExpired
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            isUpdatePlan={true}
-            getPlanUrl={getPlanUrl}
-          />
-        </div>
-      </div>
-    )
-  }
+function CurrentPlan({
+  user,
+  isTrial,
+  getPlanUrl,
+  selectedPlan,
+  setSelectedPlan,
+}: {
+  user: User
+  isTrial?: boolean
+  getPlanUrl: () => string
+  selectedPlan: string
+  setSelectedPlan: (arg: string) => void
+}) {
+  const isExpired = user.status_plan === 'EXPIRADO'
 
-  // Caso: Plano Anual
-  if (isAnnualPlan) {
-    if (!isExpired) {
+  switch (user.plan) {
+    case 'MENSAL':
       return (
-        <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-          {renderHeader()}
-          <div className="flex items-start w-full gap-4">
-            <PlanCavernosoActive
-              selectedPlan={selectedPlan}
-              setSelectedPlan={setSelectedPlan}
-              isUpdatePlan={false}
-              getPlanUrl={getPlanUrl}
-              isExpired={isExpired}
-            />
-          </div>
-        </div>
+        <PlanUpdateToAnnual
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          getPlanUrl={getPlanUrl}
+        />
       )
-    } else {
-      return (
-        <div className="flex flex-col  justify-start items-start col-span-3 gap-10">
-          {renderHeader()}
-          {renderExpiredAlert()}
-          <div className="w-full flex flex-row">
-            <div className="w-full">
-              <div className="w-[85%]">
-                <PlanCavernosoUpdate
-                  selectedPlan={selectedPlan}
-                  setSelectedPlan={setSelectedPlan}
-                  getPlanUrl={getPlanUrl}
-                />
-              </div>
-            </div>
-            <PlanCavernosoYearlyExpired
-              selectedPlan={selectedPlan}
-              setSelectedPlan={setSelectedPlan}
-              isUpdatePlan={false}
-              getPlanUrl={getPlanUrl}
-            />
-          </div>
-        </div>
+    case 'ANUAL':
+      return isExpired ? (
+        <PlanCavernosoUpdate
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          getPlanUrl={getPlanUrl}
+        />
+      ) : (
+        <PlanCavernosoActive
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          isUpdatePlan={false}
+          getPlanUrl={getPlanUrl}
+          isExpired={isExpired}
+          className="col-span-2"
+        />
       )
-    }
-  }
 
-  // Fallback (caso nenhum plano seja identificado)
+    default:
+      return <PlanDesafio isTrial={isTrial} />
+  }
+}
+
+function UpgradePlan({
+  user,
+  getPlanUrl,
+  selectedPlan,
+  setSelectedPlan,
+}: {
+  user: User
+  getPlanUrl: () => string
+  selectedPlan: string
+  setSelectedPlan: (arg: string) => void
+}) {
+  const isExpired = user.status_plan === 'EXPIRADO'
+
+  switch (user.plan) {
+    case 'MENSAL':
+      return (
+        <PlanCavernosoMonthlyExpired
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          isUpdatePlan={true}
+          getPlanUrl={getPlanUrl}
+        />
+      )
+    case 'ANUAL':
+      return isExpired ? (
+        <PlanCavernosoYearlyExpired
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          isUpdatePlan={false}
+          getPlanUrl={getPlanUrl}
+        />
+      ) : null
+    default:
+      return (
+        <PlanCavernaNonOnboarding
+          selectedPlan={selectedPlan}
+          setSelectedPlan={setSelectedPlan}
+          isUpdatePlan={false}
+          getPlanUrl={getPlanUrl}
+        />
+      )
+  }
+}
+
+function ExpiredAlert({ user }: { user: User | undefined }) {
   return (
-    <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-      {renderHeader()}
-      <p>Seu plano não foi identificado.</p>
+    <div className="flex border border-red-500 bg-red-900/20 rounded-lg p-4 justify-between items-center w-full gap-4">
+      <div className="flex items-center gap-4">
+        <Avatar className="w-8 h-8 rounded-none">
+          <AvatarImage src="/images/logo-icon.svg" className="object-contain" />
+          <AvatarFallback>MC</AvatarFallback>
+        </Avatar>
+        <p className="text-lg text-white">
+          {user && user.plan !== 'TRIAL'
+            ? `Sua Assinatura expirou em ${dayjs(user.data_de_renovacao).format('DD [de] MMMM [de] YYYY')}`
+            : user?.status_plan === 'EXPIRADO'
+              ? 'Sua avaliação gratuita expirou'
+              : `Sua avaliação gratuita encerra em ${dayjs(user?.data_de_renovacao).diff(dayjs(), 'days') + 1}  dia(s)`}
+        </p>
+      </div>
+      {/* <h3 className="text-red-500 font-bold">
+          {user && user.plan === 'TRIAL' ? 'Upgrade' : ''}
+        </h3> */}
     </div>
   )
 }

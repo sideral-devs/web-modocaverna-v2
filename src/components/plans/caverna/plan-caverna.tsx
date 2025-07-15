@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 import { Lightning } from '@phosphor-icons/react'
 import { Star } from '@phosphor-icons/react/dist/ssr'
 import { Check } from 'lucide-react'
-import { useState } from 'react'
 
 interface PlanCavernosoProps {
   selectedPlan: string
@@ -46,7 +45,6 @@ export function PlanCavernoso({
   isOnboarding,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
-  const [showAllBenefits, setShowAllBenefits] = useState(false)
 
   const isOnTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
   const isAnnualPlan = user?.plan === 'ANUAL'
@@ -56,7 +54,6 @@ export function PlanCavernoso({
     <div
       className={cn(
         'flex flex-col transition-all duration-700 h-[800px] overflow-hidden w-full bg-zinc-900  rounded-3xl border',
-        showAllBenefits && 'h-auto',
         isAnnualPlan && 'h-auto',
         isOnboarding && '3xl:h-[650px] h-[550px]',
       )}
@@ -210,16 +207,6 @@ export function PlanCavernoso({
             </div>
           )}
         </ul>
-        {!showAllBenefits && !isAnnualPlan && !isOnboarding && (
-          <div className="absolute flex items-end pb-8 justify-center bottom-0 w-full h-52 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent">
-            <span
-              onClick={() => setShowAllBenefits(true)}
-              className="text-red-500 cursor-pointer font-medium text-sm"
-            >
-              Ver todos os benefícios
-            </span>
-          </div>
-        )}
       </div>
     </div>
   )
