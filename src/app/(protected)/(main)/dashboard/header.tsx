@@ -163,7 +163,7 @@ export function CentralHubHeader({
         {/** USE CASE DO USUÁRIO DESAFIO */}
         {user.plan === 'DESAFIO' &&
           (user.data_de_compra && nextSevenDays.isAfter(dayjs()) ? (
-            <div className="flex flex-col max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-2 items-center justify-center">
+            <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
               <Link href="settings/plans" prefetch={false}>
                 <div className="flex w-full items-center justify-center text-white">
                   {/* <div className="pl-2">
@@ -189,7 +189,6 @@ export function CentralHubHeader({
               <div className="flex">
                 <UpgradeDialogDuringSevenDays>
                   <Button
-                    variant="secondary"
                     className="flex rounded-xl text-[10px] pulsating-shadow lg:max-w-32 gap-1 px-2"
                     size="sm"
                   >
