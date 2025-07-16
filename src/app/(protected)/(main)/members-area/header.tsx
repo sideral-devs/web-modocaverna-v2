@@ -6,6 +6,7 @@ import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 export function MembersAreaHeader() {
@@ -50,9 +51,9 @@ export function MembersAreaHeader() {
       ) : (
         <HeaderTitle title="CONTEÚDOS" />
       )}
-      <button onClick={() => router.back()} className="focus:outline-none">
+      <Link href="/dashboard?tab=central-caverna">
         <Image src="/images/logo.svg" alt="Logo" width={132} height={35} />
-      </button>
+      </Link>
       <HeaderClose to="cursos-e-conhecimentos" />
     </Header>
   )
