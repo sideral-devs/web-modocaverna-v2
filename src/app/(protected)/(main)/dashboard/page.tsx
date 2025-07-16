@@ -25,6 +25,7 @@ function Content() {
   const params = useSearchParams()
   const to = params.get('to')
   const startTour = params.get('startTour')
+  const tourRedirect = params.get('tourRedirect')
 
   const [tab, setTab] = useState(to || 'central-caverna')
   const [activeTour, setActiveTour] = useState(false)
@@ -47,7 +48,11 @@ function Content() {
       <PageDialogs />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12 relative">
         <CentralHubHeader setTab={setTab} />
-        <DashboardTour active={activeTour} setIsActive={setActiveTour} />
+        <DashboardTour
+          active={activeTour}
+          setIsActive={setActiveTour}
+          redirect={tourRedirect === 'true'}
+        />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
           <Tabs
             defaultValue={to || tab}
