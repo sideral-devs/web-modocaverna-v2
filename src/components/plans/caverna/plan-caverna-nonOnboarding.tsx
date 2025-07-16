@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 import { Lightning } from '@phosphor-icons/react'
 import { Star } from '@phosphor-icons/react/dist/ssr'
 import { Check } from 'lucide-react'
-import { useState } from 'react'
 
 interface PlanCavernosoProps {
   selectedPlan: string
@@ -48,23 +47,17 @@ export function PlanCavernaNonOnboarding({
   isOnboarding,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
-  const [showAllBenefits, setShowAllBenefits] = useState(false)
 
   const isOnTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
   const isAnnualPlan = user?.plan === 'ANUAL'
   const isInactive = user?.status_plan === 'INATIVO'
-  const initialFeaturesToShow = selectedPlan === 'monthly' ? 6 : 4
-  const featuresToShow = showAllBenefits
-    ? PLAN_FEATURES
-    : PLAN_FEATURES.slice(0, initialFeaturesToShow)
+  const featuresToShow = PLAN_FEATURES
 
   return (
     <div
       className={cn(
         'flex flex-col w-full bg-zinc-900 rounded-3xl border-2 border-red-500 transition-all duration-500 ease-in-out',
-        showAllBenefits
-          ? 'h-auto overflow-visible'
-          : 'md:h-[550px] 3xl:h-[650px] overflow-hidden',
+        'h-auto overflow-visible',
       )}
     >
       <div className="flex flex-col relative gap-2">
@@ -193,16 +186,6 @@ export function PlanCavernaNonOnboarding({
             ))}
           </ul>
         </div>
-        {!showAllBenefits && (
-          <div className="absolute flex items-end py-[32px] justify-center bottom-0 w-full h-52 bg-gradient-to-t from-zinc-800 via-zinc-800 to-transparent">
-            <span
-              onClick={() => setShowAllBenefits(!showAllBenefits)}
-              className="text-red-500 cursor-pointer font-medium text-sm"
-            >
-              Ver todos os benefícios
-            </span>
-          </div>
-        )}
       </div>
     </div>
   )

@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 import { Lightning } from '@phosphor-icons/react'
 import { Star } from '@phosphor-icons/react/dist/ssr'
 import { Check } from 'lucide-react'
-import { useState } from 'react'
 
 interface PlanCavernosoProps {
   selectedPlan: string
@@ -48,23 +47,17 @@ export function PlanCavernosoExpired({
   isOnboarding,
 }: PlanCavernosoProps) {
   const { data: user } = useUser()
-  const [showAllBenefits, setShowAllBenefits] = useState(false)
 
   const isOnTrial = user?.plan === 'TRIAL' || user?.plan === 'DESAFIO'
   const isAnnualPlan = user?.plan === 'ANUAL'
   const isInactive = user?.status_plan === 'INATIVO'
-  const initialFeaturesToShow = 8
-  const featuresToShow = showAllBenefits
-    ? PLAN_FEATURES
-    : PLAN_FEATURES.slice(0, initialFeaturesToShow)
+  const featuresToShow = PLAN_FEATURES
 
   return (
     <div
       className={cn(
-        `'flex flex-col w-full bg-zinc-900 rounded-3xl border-2 border-red-500 transition-all duration-500 ease-in-out'`,
-        showAllBenefits
-          ? `'h-auto overflow-visible'`
-          : `'h-[550px] 3xl:h-[650px] overflow-hidden'`,
+        'flex flex-col w-full bg-zinc-900 rounded-3xl border-2 border-red-500 transition-all duration-500 ease-in-out',
+        'h-auto overflow-visible',
       )}
     >
       <div className="flex flex-col relative gap-2">
@@ -179,17 +172,6 @@ export function PlanCavernosoExpired({
             ))}
           </ul>
         </div>
-
-        {!showAllBenefits && (
-          <div className="sticky bottom-0 flex items-end justify-center w-full pt-20 pb-8 bg-gradient-to-t from-zinc-800 via-zinc-800/90 to-transparent">
-            <button
-              onClick={() => setShowAllBenefits(!showAllBenefits)}
-              className="text-red-500 cursor-pointer font-medium text-sm"
-            >
-              Ver todos os benefícios
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )

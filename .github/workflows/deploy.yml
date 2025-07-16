@@ -1,0 +1,47 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 209.38.136.59 >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            REMOTE_PATH="/var/www/app.modocaverna.com/"
+            PM2_ID=1
+          else
+            REMOTE_PATH="/var/www/beta.modocaverna.com/"
+            PM2_ID=0
+          fi
+
+          ssh deploy@209.38.136.59 <<EOF
+            export NVM_DIR="\$HOME/.nvm"
+            source "\$NVM_DIR/nvm.sh"
+            cd $REMOTE_PATH
+            git pull origin $(echo ${{ github.ref }} | sed 's|refs/heads/||')
+            whoami
+            which node
+            which npm
+            which nvm
+            which pm2
+            nvm use v20
+            npm install --force
+            npm run build
+            pm2 restart $PM2_ID
+          EOF
