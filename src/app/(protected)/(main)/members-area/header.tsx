@@ -13,10 +13,12 @@ export function MembersAreaHeader() {
   const pathName = usePathname()
   const router = useRouter()
 
-  const { data: businessCourses } = useQuery({
-    queryKey: ['courses', 'marketingDigital'],
+  const { data: affiliateCourses } = useQuery({
+    queryKey: ['courses', 'estrategiasDeVendas'],
     queryFn: async () => {
-      const response = await api.get('/conteudos/findCategory/marketingDigital')
+      const response = await api.get(
+        '/conteudos/findCategory/estrategiasDeVendas',
+      )
       return response.data as Conteudo[]
     },
   })
@@ -24,18 +26,18 @@ export function MembersAreaHeader() {
   const pathId = pathName?.split('/watch/')[1]
   const lessonId = pathId?.split('/')[0]
 
-  const isBusinessCourse = businessCourses?.some(
+  const isAffiliateCourse = affiliateCourses?.some(
     (course) => course.conteudo_id === Number(lessonId),
   )
 
   return (
     <Header>
       {pathName.includes('/watch') ? (
-        isBusinessCourse ? (
+        isAffiliateCourse ? (
           <Button
             variant="outline"
             className="w-12 h-12 rounded-xl border text-primary"
-            onClick={() => router.push('/members-area')}
+            onClick={() => router.push('/indique-e-ganhe')}
           >
             <ChevronLeft />
           </Button>
@@ -43,7 +45,7 @@ export function MembersAreaHeader() {
           <Button
             variant="outline"
             className="w-12 h-12 rounded-xl border text-primary"
-            onClick={() => router.push('/indique-e-ganhe')}
+            onClick={() => router.push('/members-area')}
           >
             <ChevronLeft />
           </Button>
@@ -54,10 +56,10 @@ export function MembersAreaHeader() {
       <Link href="/dashboard?tab=central-caverna">
         <Image src="/images/logo.svg" alt="Logo" width={132} height={35} />
       </Link>
-      {isBusinessCourse ? (
-        <HeaderClose to="cursos-e-conhecimentos" />
-      ) : (
+      {isAffiliateCourse ? (
         <HeaderClose pushTo="/indique-e-ganhe" />
+      ) : (
+        <HeaderClose to="cursos-e-conhecimentos" />
       )}
     </Header>
   )
