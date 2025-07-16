@@ -410,6 +410,12 @@ export default function Page({
                 if (aIsBonus === bIsBonus) return 0
                 return aIsBonus ? 1 : -1
               })
+              .sort((a, b) => {
+                const aIsManychat = a.titulo.toLowerCase().includes('manychat')
+                const bIsManychat = b.titulo.toLowerCase().includes('manychat')
+                if (aIsManychat === bIsManychat) return 0
+                return aIsManychat ? -1 : 1
+              })
               .map((item) => (
                 <AccordionItem
                   key={item.modulo_id}
