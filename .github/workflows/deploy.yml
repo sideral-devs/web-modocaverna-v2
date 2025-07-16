@@ -34,7 +34,7 @@ jobs:
             cd $REMOTE_PATH
             git pull origin $(echo ${{ github.ref }} | sed 's|refs/heads/||')
             whoami
-            which npm
+            nvm use v20
             npm install --force
             npm run build
             pm2 restart $PM2_ID
