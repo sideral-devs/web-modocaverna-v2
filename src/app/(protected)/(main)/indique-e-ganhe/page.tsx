@@ -30,7 +30,7 @@ import { ShareMaterialDialogTrigger } from './dialogs/share-material'
 import { AffiliatesHeader } from './header'
 import { TutorialAffiliateDialogTrigger } from './tutorial-affilate'
 
-const DigitalMarketing = dynamic(
+const SellStrategyCourses = dynamic(
   () => import('../members-area/sell-strategy'),
   {
     loading: () => <Skeleton className="w-full h-96" />,
@@ -284,7 +284,7 @@ export default function Page() {
         <div className="w-full h-1 bg-zinc-800" />
         <section className="flex flex-col w-full max-w-8xl gap-6 p-4 pb-32">
           <h2 className="text-xl font-semibold">Estratégias de vendas</h2>
-          <DigitalMarketing />
+          <SellStrategyCourses />
         </section>
       </div>
     </ProtectedRoute>

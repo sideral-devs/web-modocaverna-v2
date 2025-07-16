@@ -102,9 +102,9 @@ const tutorialSteps: TutorialStep[] = [
   },
   {
     id: 10,
-    title: 'Chat',
+    title: 'Dúvidas?',
     description:
-      'Tire suas dúvidas de forma fácil com o chat do Capitão Caverna',
+      'Fale comigo direto no chat. Sou eu mesmo, o Capitão Caverna, pronto pra te destravar.',
     elementId: 'chat',
     dialogPosition: 'topLeft',
   },
@@ -113,9 +113,11 @@ const tutorialSteps: TutorialStep[] = [
 export function DashboardTour({
   active,
   setIsActive,
+  redirect,
 }: {
   active: boolean
   setIsActive: (arg: boolean) => void
+  redirect?: boolean
 }) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
@@ -155,7 +157,7 @@ export function DashboardTour({
   }
 
   const handleFinish = () => {
-    router.replace('/onboarding/concluido')
+    redirect ? router.replace('/onboarding/concluido') : closeTutorial()
   }
 
   const nextStep = () => {

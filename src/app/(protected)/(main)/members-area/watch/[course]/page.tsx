@@ -23,16 +23,22 @@ export default function Page({
     },
     select: (orig) => ({
       ...orig,
-      modulos: orig.modulos.map((modulo) => {
-        if (modulo.modulo_id === 30) {
-          const primeiro = modulo.aulas.filter((a) => a.aula_id === 105)
-          const restantes = modulo.aulas.filter((a) => a.aula_id !== 105)
-          return { ...modulo, aulas: [...primeiro, ...restantes] }
-        }
-        return modulo
-      }),
+      modulos: [...orig.modulos]
+        .map((modulo) => {
+          if (modulo.modulo_id === 30) {
+            return {
+              ...modulo,
+              aulas: [...modulo.aulas].sort((a, b) =>
+                a.aula_id === 105 ? -1 : b.aula_id === 105 ? 1 : 0,
+              ),
+            }
+          }
+          return modulo
+        })
+        .sort((a, b) => (a.modulo_id === 36 ? -1 : b.modulo_id === 38 ? 1 : 0)),
     }),
   })
+
   if (
     user?.plan === 'DESAFIO' &&
     !user?.isInTrialDesafio &&

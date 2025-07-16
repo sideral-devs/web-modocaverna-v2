@@ -62,7 +62,7 @@ export default function Page() {
       if (window?.innerWidth < 768) {
         router.replace('/onboarding/concluido')
       } else {
-        router.replace('/dashboard?startTour=true')
+        router.replace('/dashboard?startTour=true&tourRedirect=true')
       }
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
