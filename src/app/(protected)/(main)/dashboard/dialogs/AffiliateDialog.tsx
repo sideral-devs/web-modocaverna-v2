@@ -1,10 +1,5 @@
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { ReactNode, useState } from 'react'
@@ -22,20 +17,18 @@ export function AffiliateDialogTrigger({ children }: { children: ReactNode }) {
 
 function AffiliateDialog() {
   return (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle className="text-lg text-center">
-          💰 Sabia que usuários como você já faturam R$10 mil só indicando o
-          app? E sabe o melhor?
+    <DialogContent className="max-w-md">
+      <div className="flex flex-col items-center p-8 gap-8">
+        <DialogTitle className="text-lg font-bold text-center">
+          💰 Sabia que pessoas comuns como você faturam R$10 mil só indicando o
+          app?
         </DialogTitle>
-      </DialogHeader>
-      <div className="flex flex-col items-center p-6 gap-10">
-        <p className="text-center">
-          Nós ensinamos tudo para que você comece a ganhar também.
+        <p className="text-center opacity-80">
+          E o melhor? Nós ensinamos tudo para que você comece a ganhar também
         </p>
         <Link href={'/indique-e-ganhe'}>
-          <Button className="w-fit uppercase" size="lg">
-            Quero ganhar
+          <Button className="w-fit uppercase rounded-full pulsating-shadow">
+            Quero indicar e ganhar
           </Button>
         </Link>
       </div>
