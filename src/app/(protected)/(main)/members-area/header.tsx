@@ -13,7 +13,7 @@ export function MembersAreaHeader() {
   const pathName = usePathname()
   const router = useRouter()
 
-  const { data: BusinessCourses } = useQuery({
+  const { data: businessCourses } = useQuery({
     queryKey: ['courses', 'marketingDigital'],
     queryFn: async () => {
       const response = await api.get('/conteudos/findCategory/marketingDigital')
@@ -24,7 +24,7 @@ export function MembersAreaHeader() {
   const pathId = pathName?.split('/watch/')[1]
   const lessonId = pathId?.split('/')[0]
 
-  const isBusinessCourse = BusinessCourses?.some(
+  const isBusinessCourse = businessCourses?.some(
     (course) => course.conteudo_id === Number(lessonId),
   )
 
@@ -35,7 +35,7 @@ export function MembersAreaHeader() {
           <Button
             variant="outline"
             className="w-12 h-12 rounded-xl border text-primary"
-            onClick={() => router.push('/indique-e-ganhe')}
+            onClick={() => router.push('/members-area')}
           >
             <ChevronLeft />
           </Button>
@@ -43,7 +43,7 @@ export function MembersAreaHeader() {
           <Button
             variant="outline"
             className="w-12 h-12 rounded-xl border text-primary"
-            onClick={() => router.push('/members-area')}
+            onClick={() => router.push('/indique-e-ganhe')}
           >
             <ChevronLeft />
           </Button>
@@ -54,7 +54,11 @@ export function MembersAreaHeader() {
       <Link href="/dashboard?tab=central-caverna">
         <Image src="/images/logo.svg" alt="Logo" width={132} height={35} />
       </Link>
-      <HeaderClose to="cursos-e-conhecimentos" />
+      {isBusinessCourse ? (
+        <HeaderClose to="cursos-e-conhecimentos" />
+      ) : (
+        <HeaderClose pushTo="/indique-e-ganhe" />
+      )}
     </Header>
   )
 }
