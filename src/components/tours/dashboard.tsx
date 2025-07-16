@@ -18,7 +18,14 @@ interface TutorialStep {
   title: string
   description: string
   elementId?: string
-  dialogPosition: 'top' | 'bottom' | 'left' | 'right' | 'center' | 'bottomLeft'
+  dialogPosition:
+    | 'top'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'center'
+    | 'bottomLeft'
+    | 'topLeft'
 }
 
 const tutorialSteps: TutorialStep[] = [
@@ -92,6 +99,14 @@ const tutorialSteps: TutorialStep[] = [
       'Entre no estado de FLOW! Sessões de foco máximo com bloqueio de distrações para você produzir em alta performance.',
     elementId: 'flow-produtividade',
     dialogPosition: 'right',
+  },
+  {
+    id: 10,
+    title: 'Chat',
+    description:
+      'Tire suas dúvidas de forma fácil com o chat do Capitão Caverna',
+    elementId: 'chat',
+    dialogPosition: 'topLeft',
   },
 ]
 
@@ -211,6 +226,13 @@ export function DashboardTour({
           transform: 'translate(-100%, 0)',
           position: 'absolute' as const,
         }
+      case 'topLeft':
+        return {
+          top: rect.top - 10,
+          left: rect.left - 10,
+          transform: 'translate(-100%, -100%)',
+          position: 'absolute' as const,
+        }
       default:
         return {
           top: '50%',
@@ -306,14 +328,14 @@ export function DashboardTour({
         </CardContent>
       </Card>
 
-      <Button
+      {/* <Button
         variant="ghost"
         size="sm"
         onClick={closeTutorial}
         className="absolute bottom-4 right-4 z-52 text-white hover:bg-white/20"
       >
         Pular Tutorial
-      </Button>
+      </Button> */}
     </div>
   )
 }

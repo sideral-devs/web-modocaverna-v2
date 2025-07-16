@@ -45,7 +45,7 @@ function Content() {
   return (
     <ProtectedRoute>
       <PageDialogs />
-      <div className="flex flex-col w-full h-screen items-center py-6 gap-12">
+      <div className="flex flex-col w-full h-screen items-center py-6 gap-12 relative">
         <CentralHubHeader setTab={setTab} />
         <DashboardTour active={activeTour} setIsActive={setActiveTour} />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
@@ -81,6 +81,10 @@ function Content() {
             <AreaBeneficios value="area-de-beneficios" />
           </Tabs>
         </div>
+        <div
+          className="w-16 h-16 absolute right-4 bottom-4"
+          data-tutorial-id="chat"
+        />
       </div>
     </ProtectedRoute>
   )
