@@ -3,7 +3,6 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main
       - develop
 
 jobs:
@@ -34,7 +33,9 @@ jobs:
           ssh deploy@209.38.136.59 <<EOF
             cd $REMOTE_PATH
             git pull origin $(echo ${{ github.ref }} | sed 's|refs/heads/||')
-            npm install
+            whoami
+            which npm
+            npm install --force
             npm run build
             pm2 restart $PM2_ID
           EOF
