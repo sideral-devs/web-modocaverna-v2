@@ -3,10 +3,10 @@
 import { ConfigPomodoroDialogTrigger } from '@/app/(protected)/(main)/flow-produtividade/config-pomodoro'
 import { Button } from '@/components/ui/button'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'

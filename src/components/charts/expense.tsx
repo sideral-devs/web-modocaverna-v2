@@ -1,9 +1,9 @@
 'use client'
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from '@/components/ui/chart'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'

@@ -43,6 +43,10 @@ function Content() {
     return redirect('/onboarding')
   }
 
+  if (user && user.plan === 'DESAFIO') {
+    return redirect('/dashboard/desafio')
+  }
+
   return (
     <ProtectedRoute>
       <PageDialogs />
