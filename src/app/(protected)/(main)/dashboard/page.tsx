@@ -7,6 +7,7 @@ import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
+import { ChatDialog } from './dialogs/ChatDialog'
 import PageDialogs from './dialogs/PageDialog'
 import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
@@ -29,6 +30,7 @@ function Content() {
 
   const [tab, setTab] = useState(to || 'central-caverna')
   const [activeTour, setActiveTour] = useState(false)
+  const [chatModalOpen, setChatModalOpen] = useState(false)
   const { data: user } = useUser()
 
   useEffect(() => {
@@ -38,6 +40,21 @@ function Content() {
       localStorage.setItem('doneDashboardTour', 'true')
     }
   }, [startTour])
+
+  useEffect(() => {
+    const opened = localStorage.getItem('chatModalOpened')
+
+    if (
+      !opened &&
+      user &&
+      Number(user.tutorial_complete) &&
+      Number(user.login_streak) > 1 &&
+      !startTour
+    ) {
+      setChatModalOpen(true)
+      localStorage.setItem('chatModalOpened', 'true')
+    }
+  }, [user, startTour])
 
   if (user && !Number(user.tutorial_complete) && !startTour) {
     return redirect('/onboarding')
@@ -91,9 +108,10 @@ function Content() {
           </Tabs>
         </div>
         <div
-          className="w-16 h-16 absolute right-4 bottom-4"
+          className="w-16 h-16 absolute right-5 bottom-4"
           data-tutorial-id="chat"
         />
+        <ChatDialog open={chatModalOpen} setIsOpen={setChatModalOpen} />
       </div>
     </ProtectedRoute>
   )

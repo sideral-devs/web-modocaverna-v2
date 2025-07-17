@@ -6,6 +6,7 @@ import { useUser } from '@/hooks/queries/use-user'
 import Link from 'next/link'
 import { redirect, usePathname, useSearchParams } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
+import { ChatDialog } from '../dialogs/ChatDialog'
 import { CentralHubHeader } from './header'
 
 export default function Layout({ children }: PropsWithChildren) {
@@ -14,6 +15,7 @@ export default function Layout({ children }: PropsWithChildren) {
   const startTour = params.get('startTour')
   const tourRedirect = params.get('tourRedirect')
   const [tab, setTab] = useState('members-area')
+  const [chatModalOpen, setChatModalOpen] = useState(false)
 
   const [activeTour, setActiveTour] = useState(false)
   const { data: user } = useUser()
@@ -21,6 +23,20 @@ export default function Layout({ children }: PropsWithChildren) {
   useEffect(() => {
     setTab(pathname.split('/')[3])
   }, [pathname])
+
+  useEffect(() => {
+    const opened = localStorage.getItem('chatModalOpened')
+
+    if (
+      !opened &&
+      user &&
+      Number(user.tutorial_complete) &&
+      Number(user.login_streak) > 1
+    ) {
+      setChatModalOpen(true)
+      localStorage.setItem('chatModalOpened', 'true')
+    }
+  }, [user])
 
   if (user && !Number(user.tutorial_complete) && !startTour) {
     return redirect('/onboarding')
@@ -60,6 +76,11 @@ export default function Layout({ children }: PropsWithChildren) {
             {children}
           </Tabs>
         </div>
+        <div
+          className="w-16 h-16 absolute right-5 bottom-4"
+          data-tutorial-id="chat"
+        />
+        <ChatDialog open={chatModalOpen} setIsOpen={setChatModalOpen} />
       </div>
     </ProtectedRoute>
   )
