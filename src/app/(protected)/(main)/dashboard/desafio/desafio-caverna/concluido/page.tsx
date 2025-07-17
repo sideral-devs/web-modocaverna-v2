@@ -1,11 +1,11 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'

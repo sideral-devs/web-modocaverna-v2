@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 'use client'
 import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
 import { VideoPlayer } from '@/components/video-player'
