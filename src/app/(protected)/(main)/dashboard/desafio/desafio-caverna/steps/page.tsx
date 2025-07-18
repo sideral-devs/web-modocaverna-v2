@@ -1,5 +1,4 @@
 'use client'
-import { HeaderClose } from '@/components/header'
 import { ProtectedRoute } from '@/components/protected-route'
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
@@ -55,8 +54,8 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-screen items-center gap-6 bg-zinc-900">
-        <header className="flex w-full max-w-8xl items-center justify-center p-6 relative">
+      <div className="flex flex-col w-full h-full items-center gap-6">
+        <header className="flex w-full items-center justify-center py-4 relative">
           <span className="absolute left-6 top-6 hidden lg:block text-sm text-muted-foreground">
             {titles[currentPhase - 1]}
           </span>
@@ -70,12 +69,9 @@ export default function Page() {
             <PhaseCounter current={currentPhase} total={7} />
           </div>
           <div>
-            <span className="absolute right-36 top-6 hidden lg:block text-sm text-muted-foreground">
+            <span className="absolute right-6 top-6 hidden lg:block text-sm text-muted-foreground">
               Passo {currentPhase} de 7
             </span>
-            <div className="absolute right-4 top-6 hidden lg:block text-sm text-muted-foreground">
-              <HeaderClose />
-            </div>
           </div>
         </header>
         {STEPS[currentPhase]}

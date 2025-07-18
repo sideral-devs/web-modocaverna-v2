@@ -38,7 +38,7 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex w-full min-h-screen">
+      <div className="flex w-full h-full">
         <div className="flex relative flex-1 justify-center items-center p-4">
           <div className="flex flex-col items-center gap-16">
             <div className="flex flex-col items-center gap-4">

@@ -39,10 +39,10 @@ export function ChallengeAbandoned() {
           </div>
         </div>
         <AlertDialogFooter>
-          <Link href={'/dashboard'} replace>
+          <Link href={'/dashboard/desafio'} replace>
             <Button variant="ghost">Voltar à tela inicial</Button>
           </Link>
-          <Link href={'/desafio-caverna'} replace>
+          <Link href={'/dashboard/desafio/desafio-caverna'} replace>
             <Button>Novo desafio</Button>
           </Link>
         </AlertDialogFooter>

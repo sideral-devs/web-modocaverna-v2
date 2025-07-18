@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export function SeventhStep({ onBack }: { onBack: () => void }) {
   return (
-    <div className="flex flex-col relative flex-1 w-[140dvh] justify-between items-start">
+    <div className="flex flex-col relative flex-1 w-full justify-between items-center">
       <div className="flex items-start pl-10 3xl:pb-8 pb-4 gap-16">
         <Image
           src={'/images/lobo/apontando.png'}

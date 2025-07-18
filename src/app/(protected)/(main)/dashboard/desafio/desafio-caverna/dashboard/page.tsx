@@ -159,7 +159,7 @@ export default function Page() {
       ['finalizado', 'abandonado'].includes(challenge.status_desafio)
 
     if (shouldRedirect) {
-      window.location.href = '/desafio-caverna'
+      window.location.href = '/dashboard/desafio/desafio-caverna'
     }
   }, [challenge, isFetched])
 

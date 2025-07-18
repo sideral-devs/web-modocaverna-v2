@@ -9,15 +9,15 @@ import { formatMoney } from '@/lib/utils'
 import { useAffiliateStore } from '@/store/affiliate-store'
 import { useQuery } from '@tanstack/react-query'
 import {
-  ArrowUpRight,
-  CircleDollarSignIcon,
-  FileOutputIcon,
-  GlobeIcon,
-  LucideIcon,
-  MapIcon,
-  Settings,
-  TrophyIcon,
-  Users,
+    ArrowUpRight,
+    CircleDollarSignIcon,
+    FileOutputIcon,
+    GlobeIcon,
+    LucideIcon,
+    MapIcon,
+    Settings,
+    TrophyIcon,
+    Users,
 } from 'lucide-react'
 import Link from 'next/link'
 import SellStrategy from '../../../members-area/sell-strategy'

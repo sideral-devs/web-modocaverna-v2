@@ -47,7 +47,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col w-full min-h-screen items-center gap-6 bg-zinc-900">
+    <div className="flex flex-col w-full h-full items-center gap-6 bg-zinc-900">
       <header className="flex w-full max-w-8xl items-center justify-center pt-7 relative">
         <span className="absolute left-6 top-8 hidden xl:flex text-xs px-3 py-2 bg-primary rounded-full uppercase">
           Registro final

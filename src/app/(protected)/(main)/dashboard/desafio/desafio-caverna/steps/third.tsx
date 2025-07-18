@@ -71,7 +71,7 @@ export function ThirdStep({
 
   return (
     <FormProvider {...form}>
-      <div className="flex flex-col  w-[140dvh] relative flex-1 items-start">
+      <div className="flex flex-col  w-full relative flex-1 items-center">
         <div className="flex flex-1 items-start pl-10 3xl:pb-8 pb-4 gap-16">
           <Image
             src={'/images/lobo/apresentando.png'}

@@ -32,6 +32,10 @@ export default function Layout({ children }: PropsWithChildren) {
     return redirect('/onboarding')
   }
 
+  // if (user && user.plan !== 'DESAFIO') {
+  //   return redirect('/dashboard')
+  // }
+
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full h-screen items-center pt-6 gap-8 relative overflow-y-auto scrollbar-minimal">
