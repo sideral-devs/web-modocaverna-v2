@@ -1,23 +1,18 @@
 'use client'
 import { ProtectedRoute } from '@/components/protected-route'
-import { DashboardTour } from '@/components/tours/dashboard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUser } from '@/hooks/queries/use-user'
 import Link from 'next/link'
-import { redirect, usePathname, useSearchParams } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { ChatDialog } from '../dialogs/ChatDialog'
 import { CentralHubHeader } from './header'
 
 export default function Layout({ children }: PropsWithChildren) {
-  const params = useSearchParams()
   const pathname = usePathname()
-  const startTour = params.get('startTour')
-  const tourRedirect = params.get('tourRedirect')
   const [tab, setTab] = useState('members-area')
   const [chatModalOpen, setChatModalOpen] = useState(false)
 
-  const [activeTour, setActiveTour] = useState(false)
   const { data: user } = useUser()
 
   useEffect(() => {
@@ -38,20 +33,15 @@ export default function Layout({ children }: PropsWithChildren) {
     }
   }, [user])
 
-  if (user && !Number(user.tutorial_complete) && !startTour) {
+  if (user && !Number(user.tutorial_complete)) {
     return redirect('/onboarding')
   }
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full h-screen items-center py-6 gap-12 relative">
+      <div className="flex flex-col w-full items-center py-6 gap-12 relative overflow-y-auto scrollbar-minimal">
         <CentralHubHeader setTab={setTab} hideTour />
-        <DashboardTour
-          active={activeTour}
-          setIsActive={setActiveTour}
-          redirect={tourRedirect === 'true'}
-        />
-        <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
+        <div className="flex w-full flex-1 max-w-8xl min-h-0 p-4 pb-24">
           <Tabs
             defaultValue={tab}
             value={tab}
