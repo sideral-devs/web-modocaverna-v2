@@ -14,9 +14,11 @@ import { useEffect, useState } from 'react'
 export function ChatDialog({
   open,
   setIsOpen,
+  tutorialId,
 }: {
   open: boolean
   setIsOpen: (arg: boolean) => void
+  tutorialId?: string
 }) {
   const [highlightRect, setHighlightRect] = useState({
     top: 0,
@@ -28,7 +30,9 @@ export function ChatDialog({
   useEffect(() => {
     if (!open) return
 
-    const el = document.querySelector(`[data-tutorial-id="chat"]`)
+    const el = document.querySelector(
+      `[data-tutorial-id="${tutorialId || 'chat'}"]`,
+    )
 
     if (el) {
       const rect = el.getBoundingClientRect()

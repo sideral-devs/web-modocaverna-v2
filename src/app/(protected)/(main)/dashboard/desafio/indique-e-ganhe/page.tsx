@@ -42,8 +42,8 @@ export default function Page() {
   return (
     <ProtectedRoute level="non-trial">
       <TutorialAffiliateDialogTrigger />
-      <div className="flex flex-col w-full min-h-screen items-center gap-8 md:gap-16 overflow-y-auto scrollbar-minimal">
-        <section className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-8xl gap-6 p-4">
+      <div className="flex flex-col w-full items-center gap-8 md:gap-16">
+        <section className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-8xl gap-6 py-4">
           <div className="flex flex-col gap-3">
             <Card className="flex flex-col w-full h-96 py-8 px-7">
               {data ? (
@@ -274,7 +274,7 @@ export default function Page() {
         <div className="w-full h-1 bg-zinc-800" />
         <section className="flex flex-col w-full max-w-8xl gap-6 p-4 pb-32">
           <h2 className="text-xl font-semibold">Estratégias de vendas</h2>
-          <SellStrategy />
+          <SellStrategy desafio />
         </section>
       </div>
     </ProtectedRoute>

@@ -9,7 +9,7 @@ export function AffiliateDialogTrigger({ children }: { children: ReactNode }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <AffiliateDialog />
     </Dialog>
   )

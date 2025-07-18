@@ -1,11 +1,6 @@
 'use client'
 import { ChallengePoints } from '@/components/challenge-points'
-import {
-  Header,
-  HeaderBack,
-  HeaderClose,
-  HeaderTitle,
-} from '@/components/header'
+import { Header } from '@/components/header'
 import {
   Accordion,
   AccordionContent,
@@ -29,7 +24,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { BadgeCheckIcon, ChevronDown, Loader2, XIcon } from 'lucide-react'
-import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -182,7 +176,7 @@ export default function Page() {
 
   if (!challenge) {
     return (
-      <div className="flex flex-col w-full h-screen items-center justify-center">
+      <div className="flex flex-col w-full h-full items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
       </div>
     )
@@ -190,19 +184,44 @@ export default function Page() {
 
   return (
     <div
-      className={cn(
-        'flex flex-col w-full h-screen items-center overflow-hidden',
-      )}
+      className={cn('flex flex-col w-full h-full items-center overflow-hidden')}
     >
       <Header containerClassName="justify-center md:justify-between">
-        <div className="absolute left-0 md:hidden">
-          <HeaderBack />
+        {challenge ? (
+          <ChallengePoints challenge={challenge} />
+        ) : (
+          <Skeleton className="w-64 h-4" />
+        )}
+
+        <div className="hidden xl:flex flex-col gap-2">
+          <span className="text-xs text-zinc-500">Legenda</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 border rounded" />
+              <span className="text-sm">Dia futuro</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex w-5 h-5 items-center justify-center border rounded">
+                <XIcon size={16} />
+              </div>
+              <span className="text-sm">Dia nulo</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex w-5 h-5 items-center justify-center border rounded">
+                <span className="text-emerald-500 text-xs">+1</span>
+              </div>
+              <span className="text-sm">Dia positivo</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex w-5 h-5 items-center justify-center border rounded">
+                <span className="text-red-500 text-xs">-1</span>
+              </div>
+              <span className="text-sm">Dia negativo</span>
+            </div>
+          </div>
         </div>
-        <div className="md:hidden">
-          <HeaderTitle title="Desafio Caverna" />
-        </div>
-        <div className="hidden md:flex items-center gap-6">
-          <Image src={'/images/logo.svg'} alt="Logo" width={132} height={35} />
+
+        <div className="hidden md:flex">
           {challenge && (
             <Dialog>
               <DialogTrigger asChild>
@@ -245,39 +264,6 @@ export default function Page() {
             </Dialog>
           )}
         </div>
-        <div className="hidden xl:flex flex-col gap-2">
-          <span className="text-xs text-zinc-500">Legenda</span>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 border rounded" />
-              <span className="text-sm">Dia futuro</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex w-5 h-5 items-center justify-center border rounded">
-                <XIcon size={16} />
-              </div>
-              <span className="text-sm">Dia nulo</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex w-5 h-5 items-center justify-center border rounded">
-                <span className="text-emerald-500 text-xs">+1</span>
-              </div>
-              <span className="text-sm">Dia positivo</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex w-5 h-5 items-center justify-center border rounded">
-                <span className="text-red-500 text-xs">-1</span>
-              </div>
-              <span className="text-sm">Dia negativo</span>
-            </div>
-          </div>
-        </div>
-        {challenge ? (
-          <ChallengePoints challenge={challenge} />
-        ) : (
-          <Skeleton className="w-64 h-4" />
-        )}
-        <HeaderClose />
       </Header>
       <div className="flex flex-1 w-full max-w-[1512px] mx-auto overflow-hidden">
         <div className="flex flex-col w-72 lg:w-96 h-full border-r bg-black overflow-hidden">

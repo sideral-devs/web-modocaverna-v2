@@ -8,7 +8,7 @@ import { env } from '@/lib/env'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
-export default function SellStrategy() {
+export default function SellStrategy({ desafio }: { desafio?: boolean }) {
   const [courses, setCourses] = useState<CourseSwiperData[] | null>(null)
 
   const { data, isLoading, isFetching } = useQuery({
@@ -41,7 +41,7 @@ export default function SellStrategy() {
           (acc, modulo) => acc + modulo.aulas.length,
           0,
         ),
-        href: `/members-area/watch/${item.conteudo_id}`,
+        href: `${desafio ? '/dashboard/desafio' : ''}/members-area/watch/${item.conteudo_id}`,
       }))
 
       setCourses(mapped)
