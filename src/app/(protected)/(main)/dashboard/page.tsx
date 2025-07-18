@@ -73,6 +73,7 @@ function Content() {
           active={activeTour}
           setIsActive={setActiveTour}
           redirect={tourRedirect === 'true'}
+          tab={tab}
         />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
           <Tabs
@@ -91,12 +92,28 @@ function Content() {
               >
                 Central Caverna
               </TabsTrigger>
-              <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
-              <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
-              <TabsTrigger value="cursos-e-conhecimentos">
+              <TabsTrigger
+                value="ordem-no-caos"
+                data-tutorial-id="ordem-no-caos"
+              >
+                Ordem no Caos
+              </TabsTrigger>
+              <TabsTrigger
+                value="forja-do-templo"
+                data-tutorial-id="forja-do-templo"
+              >
+                Forja do Templo
+              </TabsTrigger>
+              <TabsTrigger
+                value="cursos-e-conhecimentos"
+                data-tutorial-id="cursos-networking"
+              >
                 Cursos & Networking
               </TabsTrigger>
-              <TabsTrigger value="area-de-beneficios">
+              <TabsTrigger
+                value="area-de-beneficios"
+                data-tutorial-id="area-de-beneficios"
+              >
                 Área de Benefícios
               </TabsTrigger>
             </TabsList>

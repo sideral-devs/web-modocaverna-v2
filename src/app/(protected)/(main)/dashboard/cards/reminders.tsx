@@ -18,7 +18,7 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
-import { AlertTriangleIcon, Maximize2, Plus } from 'lucide-react'
+import { AlertTriangleIcon, Plus } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -44,58 +44,55 @@ export default function RemindersCard() {
     return <Skeleton className="flex flex-col w-full h-full min-h-[300px]" />
   }
 
-  if (!reminders) {
-    return (
-      <Card className="flex flex-col w-full h-full min-h-[300px] relative p-4 gap-5 overflow-hidden">
-        <CardHeader className="justify-between">
-          <div className="flex px-3 py-2 pt-1 border border-white rounded-full">
-            <span className="text-[10px] font-semibold">LEMBRETES</span>
-          </div>
-          <Maximize2 className="text-zinc-500" />
-        </CardHeader>
-        <div className="flex flex-col w-full flex-1 items-center justify-center gap-3">
-          <AlertTriangleIcon className="text-red-400" strokeWidth={2} />
-          <p className=" text-center ext-zinc-700">
-            Não foi possível carregar os lembretes!
-          </p>
-        </div>
-      </Card>
-    )
-  }
-
   return (
-    <Card className="flex flex-col w-full h-full min-h-[300px] relative p-4 gap-5 overflow-hidden">
+    <Card
+      data-tutorial-id="lembretes"
+      className="flex flex-col w-full h-full min-h-[300px] relative p-4 gap-5 overflow-hidden"
+    >
       <CardHeader className="justify-between">
         <div className="flex px-3 py-2 pt-[9px] border border-white rounded-full">
           <span className="text-[10px] font-semibold">LEMBRETES</span>
         </div>
         {/* <Maximize2 className="text-zinc-500" /> */}
       </CardHeader>
-      {reminders.length > 0 ? (
-        <ReminderCard
-          reminders={reminders.filter((item) => !item.checked)}
-          setSelected={setSelectedReminder}
-          setDialogOpen={setDialogOpen}
-          setDialogMode={setDialogMode}
-        />
+      {reminders ? (
+        reminders.length > 0 ? (
+          <ReminderCard
+            reminders={reminders.filter((item) => !item.checked)}
+            setSelected={setSelectedReminder}
+            setDialogOpen={setDialogOpen}
+            setDialogMode={setDialogMode}
+          />
+        ) : (
+          <div className="flex flex-col flex-1 items-center justify-center">
+            <p className="text-xl text-center">
+              Você não criou nenhum lembrete
+            </p>
+          </div>
+        )
       ) : (
-        <div className="flex flex-col flex-1 items-center justify-center">
-          <p className="text-xl text-center">Você não criou nenhum lembrete</p>
+        <div className="flex flex-col w-full flex-1 items-center justify-center gap-3">
+          <AlertTriangleIcon className="text-red-400" strokeWidth={2} />
+          <p className=" text-center ext-zinc-700">
+            Não foi possível carregar os lembretes!
+          </p>
         </div>
       )}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger asChild>
-          <Plus
-            className="absolute text-primary right-4 bottom-4 z-10 cursor-pointer"
-            onClick={() => setDialogMode('create')}
+      {reminders && (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Plus
+              className="absolute text-primary right-4 bottom-4 z-10 cursor-pointer"
+              onClick={() => setDialogMode('create')}
+            />
+          </DialogTrigger>
+          <ReminderDialog
+            onClose={() => setDialogOpen(false)}
+            mode={dialogMode}
+            reminder={selectedReminder}
           />
-        </DialogTrigger>
-        <ReminderDialog
-          onClose={() => setDialogOpen(false)}
-          mode={dialogMode}
-          reminder={selectedReminder}
-        />
-      </Dialog>
+        </Dialog>
+      )}
     </Card>
   )
 }

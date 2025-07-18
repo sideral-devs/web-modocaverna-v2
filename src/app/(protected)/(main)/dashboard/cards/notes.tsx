@@ -52,7 +52,10 @@ export default function NotesCard() {
   })
 
   return (
-    <Card className="flex flex-col w-full h-full min-h-[300px] p-4 gap-6">
+    <Card
+      data-tutorial-id="anotacoes"
+      className="flex flex-col w-full h-full min-h-[300px] p-4 gap-6"
+    >
       <CardHeader>
         <Link href="/anotacoes">
           <div className="flex w-fit px-3 py-2 border border-white rounded-full">
