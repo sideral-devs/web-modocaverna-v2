@@ -34,8 +34,11 @@ function Content() {
   const { data: user } = useUser()
 
   useEffect(() => {
-    // const doneDashboardTour = localStorage.getItem('doneDashboardTour')
-    if (startTour === 'true') {
+    const doneDashboardTour = localStorage.getItem('doneDashboardTour')
+    if (
+      (startTour === 'true' || doneDashboardTour !== 'true') &&
+      tab === 'central-caverna'
+    ) {
       setActiveTour(true)
       localStorage.setItem('doneDashboardTour', 'true')
     }

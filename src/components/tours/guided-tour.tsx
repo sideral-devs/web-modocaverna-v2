@@ -33,11 +33,13 @@ export function GuidedTour({
   active,
   setIsActive,
   redirect,
+  origin,
 }: {
   data: TutorialStep[]
   active: boolean
   setIsActive: (arg: boolean) => void
   redirect?: boolean
+  origin?: string
 }) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
@@ -58,7 +60,6 @@ export function GuidedTour({
 
     if (el) {
       const rect = el.getBoundingClientRect()
-      console.log(rect)
       setHighlightRect({
         top: rect.top,
         left: rect.left,
@@ -73,7 +74,8 @@ export function GuidedTour({
   const closeTutorial = () => {
     setIsActive(false)
     setCurrentStep(0)
-    router.replace('/dashboard')
+
+    router.replace(origin || '/dashboard')
   }
 
   const handleFinish = () => {
