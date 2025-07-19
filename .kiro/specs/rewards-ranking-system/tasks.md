@@ -13,27 +13,27 @@ This implementation plan breaks down the development of the rewards and ranking 
   - Update transformation levels to match the seven-level system from images
   - _Requirements: 1.1, 3.1, 7.1_
 
-- [ ] 2. Implement Points Engine
-  - [ ] 2.1 Create points calculation system
-    - Build PointsEngine class with calculation methods
-    - Implement points mapping for all user actions
-    - Add multiplier system for streaks and bonuses
-    - Create unit tests for points calculations
+- [ ] 2. Enhance Existing Points System
+  - [ ] 2.1 Create points aggregation and level calculation API
+    - Build API endpoint to calculate user's current level from existing score
+    - Create real-time points-to-level conversion using TRANSFORMATION_LEVELS
+    - Add caching for frequently accessed user levels
+    - Implement level change detection and notifications
     - _Requirements: 3.1, 3.2, 3.3_
 
-  - [ ] 2.2 Integrate points tracking with existing features
-    - Connect challenge completion to points system
-    - Add points for community interactions (posts, comments, likes)
-    - Integrate Pomodoro sessions and productivity tracking
-    - Link meal planning and exercise logging to points
+  - [ ] 2.2 Enable disabled point activities
+    - Reactivate Pomodoro session points (currently disabled)
+    - Enable Goals system points (metas completion)
+    - Activate referral milestone rewards
+    - Test and validate point attribution for these features
     - _Requirements: 3.4, 3.5_
 
-  - [ ] 2.3 Implement points validation and security
-    - Add anti-gaming measures and rate limiting
-    - Create anomaly detection for suspicious activity
-    - Implement secure points update mechanisms
-    - Add comprehensive error handling
-    - _Requirements: 3.6_
+  - [ ] 2.3 Add missing point activities from existing features
+    - Connect meal planning to points system (currently missing)
+    - Add exercise logging points (currently missing)
+    - Integrate calendar/agenda usage points
+    - Link note-taking activities to points
+    - _Requirements: 3.4, 3.5_
 
 - [ ] 3. Build Transformation Levels System
   - [ ] 3.1 Create level progression logic
@@ -65,7 +65,7 @@ This implementation plan breaks down the development of the rewards and ranking 
     - Create ranking history tracking
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 4.2 Build ranking widget UI component
+  - [x] 4.2 Build ranking widget UI component
     - Create responsive ranking widget layout
     - Implement user list with avatars and levels
     - Add current user position highlighting

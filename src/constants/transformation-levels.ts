@@ -5,7 +5,7 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     theme: "Reconhecimento e Consciência",
     description: "O primeiro passo da jornada. Hora de despertar para seu potencial.",
     min_points: 0,
-    max_points: 1000,
+    max_points: 500,
     color: "#6B7280", // Gray
     icon: "👁️",
     milestones: [
@@ -60,8 +60,8 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "A Ruptura",
     theme: "Rompendo Padrões Limitantes",
     description: "Hora de romper com velhos padrões e criar hábitos transformadores.",
-    min_points: 1001,
-    max_points: 2500,
+    min_points: 501,
+    max_points: 1200,
     color: "#DC2626", // Red
     icon: "🔥",
     milestones: [
@@ -116,9 +116,9 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "O Chamado",
     theme: "Respondendo ao Chamado Interior",
     description: "Hora de responder ao chamado da sua verdadeira missão.",
-    min_points: 2501,
-    max_points: 5000,
-    color: "#2563EB", // Blue
+    min_points: 1201,
+    max_points: 2000,
+    color: "#F59E0B", // Amber
     icon: "📯",
     milestones: [
       {
@@ -172,8 +172,8 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "A Descoberta",
     theme: "Descobrindo Seu Verdadeiro Potencial",
     description: "O momento da verdadeira descoberta. Hora de encontrar sua essência.",
-    min_points: 5001,
-    max_points: 8500,
+    min_points: 2001,
+    max_points: 3500,
     color: "#7C3AED", // Purple
     icon: "🔍",
     milestones: [
@@ -228,8 +228,8 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "O Discernimento",
     theme: "Sabedoria e Discernimento",
     description: "Desenvolva sabedoria profunda e discernimento aguçado.",
-    min_points: 8501,
-    max_points: 15000,
+    min_points: 3501,
+    max_points: 5000,
     color: "#059669", // Green
     icon: "🧠",
     milestones: [
@@ -284,8 +284,8 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "A Ascensão",
     theme: "Ascendendo a Novos Patamares",
     description: "Use sua transformação para ascender e impactar outros positivamente.",
-    min_points: 15001,
-    max_points: 25000,
+    min_points: 5001,
+    max_points: 8000,
     color: "#EA580C", // Orange
     icon: "🚀",
     milestones: [
@@ -340,7 +340,7 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
     name: "A Lenda",
     theme: "Legado Eterno",
     description: "O nível mais alto. Você se tornou uma lenda e agora cria um legado duradouro.",
-    min_points: 25001,
+    min_points: 8001,
     max_points: 999999,
     color: "#FBBF24", // Gold
     icon: "🏆",
