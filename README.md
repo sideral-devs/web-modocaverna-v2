@@ -2,12 +2,22 @@
 
 > **Desperte a sua melhor versão** - Ative o MODO CAVERNA e acelere a conquista dos seus sonhos.
 
-Uma plataforma completa de produtividade e desenvolvimento pessoal que combina desafios estruturados, ferramentas de produtividade e engajamento comunitário em um ambiente gamificado.
+Uma plataforma completa de produtividade e desenvolvimento pessoal que combina desafios estruturados, ferramentas de produtividade e engajamento comunitário em um ambiente gamificado com sistema de transformação em 7 níveis.
 
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.4.2-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.1-38B2AC?logo=tailwind-css)
 ![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-11.18.0-ff69b4?logo=framer)
+
+## ✨ Novidades Recentes
+
+### 🏆 Sistema de Ranking e Transformação
+- **7 Níveis de Transformação**: O Despertar → A Ruptura → O Chamado → A Descoberta → O Discernimento → A Ascensão → A Lenda
+- **CavePoints (CP)**: Sistema de pontuação gamificado com 55+ atividades que geram pontos
+- **Rankings em Tempo Real**: Competição saudável entre usuários com leaderboards dinâmicos
+- **Animações Fluidas**: Contadores animados e transições suaves para engajamento máximo
+- **Área de Benefícios**: Hub dedicado com widget de ranking integrado
 
 ## 🚀 Visão Geral
 
@@ -15,16 +25,41 @@ Uma plataforma completa de produtividade e desenvolvimento pessoal que combina d
 
 ### 🎯 Principais Funcionalidades
 
-- **🏆 Desafio Caverna**: Programa estruturado de transformação pessoal
-- **⏰ Produtividade**: Timer Pomodoro, gestão de tarefas e flow states
-- **🎯 Gestão de Metas**: Sistema de definição e acompanhamento de metas
-- **💰 Controle Financeiro**: Gerenciador de finanças pessoais
-- **📚 Base de Conhecimento**: Biblioteca de cursos, livros e vídeos
-- **📝 Anotações**: Editor de texto rico com recursos avançados
-- **👥 Comunidade**: Rede social com feed, perfis e interações
-- **📅 Agenda**: Integração completa com Google Calendar
-- **🏅 Gamificação**: Sistema de pontos, rankings e conquistas
-- **💸 Programa de Afiliados**: "Indique e Ganhe" com comissões
+#### 🏆 Sistema de Transformação Gamificado
+- **7 Níveis Evolutivos**: Jornada estruturada de crescimento pessoal
+- **CavePoints (CP)**: Sistema de pontuação com 55+ atividades recompensadas
+- **Rankings Dinâmicos**: Competição saudável com leaderboards em tempo real
+- **Área de Benefícios**: Hub exclusivo com descontos e recompensas por nível
+
+#### ⚡ Produtividade & Foco
+- **Timer Pomodoro**: Técnica de foco com sessões cronometradas
+- **Flow States**: Monitoramento de estados de alta performance
+- **Gestão de Tarefas**: Sistema Kanban integrado com drag & drop
+- **Analytics**: Métricas detalhadas de produtividade
+
+#### 🎯 Desenvolvimento Pessoal
+- **Desafio Caverna**: Programa de 40 dias de transformação
+- **Gestão de Metas**: Sistema completo de objetivos e sonhos
+- **Dream Board**: Quadro visual de metas com upload de imagens
+- **Acompanhamento**: Progress tracking com gráficos e insights
+
+#### 💡 Conhecimento & Aprendizado
+- **Base de Conhecimento**: Biblioteca de cursos, livros e vídeos
+- **Editor Rico**: Anotações com Tiptap e recursos avançados
+- **Members Area**: Conteúdo exclusivo para assinantes
+- **Streaming**: Integração com Mux para vídeos de alta qualidade
+
+#### 👥 Comunidade & Social
+- **Feed Social**: Posts, comentários e interações
+- **Perfis Personalizados**: Sistema completo de perfis de usuário
+- **Notificações**: Sistema de notificações em tempo real
+- **Programa de Afiliados**: "Indique e Ganhe" com comissões
+
+#### 🔧 Ferramentas Integradas
+- **Agenda**: Integração completa com Google Calendar
+- **Controle Financeiro**: Gerenciador de finanças pessoais
+- **Exercícios**: Tracking de atividades físicas e medidas corporais
+- **Refeições**: Planejamento nutricional e controle alimentar
 
 ## 🛠️ Stack Tecnológica
 
@@ -169,11 +204,69 @@ npm run start        # Servidor de produção
 npm run lint         # Verificação de código
 ```
 
+## 🎮 Sistema de CavePoints (CP)
+
+### Como Ganhar Pontos
+O sistema de CavePoints recompensa 55+ atividades diferentes:
+
+#### 📈 Atividades Diárias (1-5 CP)
+- **Login diário**: 1 CP
+- **Sessão Pomodoro**: 5 CP  
+- **Exercício registrado**: 2 CP
+- **Refeição planejada**: 1 CP
+
+#### 🏆 Desafios & Metas (25-200 CP)
+- **Desafio completado**: 100 CP
+- **Meta alcançada**: 50 CP
+- **Streak de 7 dias**: 3 CP
+- **Mandamento cumprido**: 5 CP
+
+#### 👥 Engajamento Comunitário (2-25 CP)
+- **Post criado**: 15 CP
+- **Comentário útil**: 10 CP
+- **Curtida recebida**: 2 CP
+- **Top 5 comunidade**: 10 CP
+
+#### 📚 Aprendizado (10-200 CP)
+- **Curso finalizado**: 50-100 CP
+- **Aula assistida**: 5-10 CP
+- **Livro concluído**: 5 CP
+- **Vídeo assistido**: 10 CP
+
+### 🏅 Níveis de Transformação
+
+| Nível | Nome | CP Necessários | Benefícios |
+|-------|------|----------------|------------|
+| 1 | **O Despertar** | 0-500 CP | Acesso básico, 5% desconto |
+| 2 | **A Ruptura** | 501-1.200 CP | 10% desconto, conteúdo extra |
+| 3 | **O Chamado** | 1.201-2.000 CP | 15% desconto, eventos mensais |
+| 4 | **A Descoberta** | 2.001-3.500 CP | 20% desconto, suporte prioritário |
+| 5 | **O Discernimento** | 3.501-5.000 CP | 25% desconto, acesso beta |
+| 6 | **A Ascensão** | 5.001-8.000 CP | 30% desconto, coaching mensal |
+| 7 | **A Lenda** | 8.000+ CP | 40% desconto, programas exclusivos |
+
+## 🎨 Interface & Experiência
+
+### 🌟 Animações & Interações
+- **Contadores Animados**: CavePoints contam de 0 até o valor real
+- **Transições Suaves**: Hover effects e micro-interações
+- **Feedback Visual**: Celebrações de conquistas e level-ups
+- **Responsivo**: Design adaptativo para todos os dispositivos
+
+### 🎯 Gamificação Inteligente
+- **Progresso Visual**: Barras de progresso para próximo nível
+- **Conquistas**: Sistema de badges e reconhecimentos
+- **Competição Saudável**: Rankings que motivam sem pressionar
+- **Recompensas Tangíveis**: Benefícios reais por engajamento
+
 ## 📚 Documentação
 
 Para documentação técnica detalhada, consulte a pasta [`documentation/`](./documentation/):
 
 - [Sistema de Ranking e Transformação](./documentation/RANKING_SYSTEM_DOCUMENTATION.md)
+- [Análise do Sistema de Pontos Existente](./documentation/EXISTING_POINTS_ANALYSIS.md)
+- [Plano de Integração de Recompensas](./documentation/REWARDS_SYSTEM_INTEGRATION_PLAN.md)
+- [Documentação de APIs](./documentation/API_ENDPOINTS_DOCUMENTATION.md)
 
 ## 🐺 Sobre o Modo Caverna
 
