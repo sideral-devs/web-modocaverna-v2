@@ -169,6 +169,11 @@ npm run start        # Servidor de produção
 npm run lint         # Verificação de código
 ```
 
+## 📚 Documentação
+
+Para documentação técnica detalhada, consulte a pasta [`documentation/`](./documentation/):
+
+- [Sistema de Ranking e Transformação](./documentation/RANKING_SYSTEM_DOCUMENTATION.md)
 
 ## 🐺 Sobre o Modo Caverna
 

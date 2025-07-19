@@ -1,11 +1,11 @@
 export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   {
     id: 1,
-    name: "Despertar",
+    name: "O Despertar",
     theme: "Reconhecimento e Consciência",
     description: "O primeiro passo da jornada. Hora de despertar para seu potencial.",
     min_points: 0,
-    max_points: 100,
+    max_points: 1000,
     color: "#6B7280", // Gray
     icon: "👁️",
     milestones: [
@@ -57,11 +57,11 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 2,
-    name: "Compromisso",
-    theme: "Estabelecimento de Disciplina",
-    description: "Hora de criar hábitos sólidos e estabelecer disciplina real.",
-    min_points: 101,
-    max_points: 300,
+    name: "A Ruptura",
+    theme: "Rompendo Padrões Limitantes",
+    description: "Hora de romper com velhos padrões e criar hábitos transformadores.",
+    min_points: 1001,
+    max_points: 2500,
     color: "#DC2626", // Red
     icon: "🔥",
     milestones: [
@@ -113,13 +113,13 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 3,
-    name: "Foco",
-    theme: "Concentração e Produtividade",
-    description: "Domine as ferramentas de produtividade e desenvolva foco laser.",
-    min_points: 301,
-    max_points: 600,
+    name: "O Chamado",
+    theme: "Respondendo ao Chamado Interior",
+    description: "Hora de responder ao chamado da sua verdadeira missão.",
+    min_points: 2501,
+    max_points: 5000,
     color: "#2563EB", // Blue
-    icon: "🎯",
+    icon: "📯",
     milestones: [
       {
         id: "pomodoro_master",
@@ -169,13 +169,13 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 4,
-    name: "Transformação",
-    theme: "Mudanças Profundas",
-    description: "O momento da verdadeira transformação. Hora do Desafio Caverna.",
-    min_points: 601,
-    max_points: 1000,
+    name: "A Descoberta",
+    theme: "Descobrindo Seu Verdadeiro Potencial",
+    description: "O momento da verdadeira descoberta. Hora de encontrar sua essência.",
+    min_points: 5001,
+    max_points: 8500,
     color: "#7C3AED", // Purple
-    icon: "⚡",
+    icon: "🔍",
     milestones: [
       {
         id: "challenge_complete",
@@ -225,13 +225,13 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 5,
-    name: "Maestria",
-    theme: "Excelência e Liderança",
-    description: "Domine todas as ferramentas e comece a liderar outros.",
-    min_points: 1001,
-    max_points: 1500,
+    name: "O Discernimento",
+    theme: "Sabedoria e Discernimento",
+    description: "Desenvolva sabedoria profunda e discernimento aguçado.",
+    min_points: 8501,
+    max_points: 15000,
     color: "#059669", // Green
-    icon: "👑",
+    icon: "🧠",
     milestones: [
       {
         id: "two_month_streak",
@@ -281,13 +281,13 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 6,
-    name: "Influência",
-    theme: "Impacto e Inspiração",
-    description: "Use sua transformação para inspirar e impactar outros positivamente.",
-    min_points: 1501,
-    max_points: 2500,
+    name: "A Ascensão",
+    theme: "Ascendendo a Novos Patamares",
+    description: "Use sua transformação para ascender e impactar outros positivamente.",
+    min_points: 15001,
+    max_points: 25000,
     color: "#EA580C", // Orange
-    icon: "🌟",
+    icon: "🚀",
     milestones: [
       {
         id: "hundred_day_streak",
@@ -337,10 +337,10 @@ export const TRANSFORMATION_LEVELS: TransformationLevel[] = [
   },
   {
     id: 7,
-    name: "Transcendência",
-    theme: "Sabedoria e Legado",
-    description: "O nível mais alto. Você transcendeu e agora cria um legado duradouro.",
-    min_points: 2501,
+    name: "A Lenda",
+    theme: "Legado Eterno",
+    description: "O nível mais alto. Você se tornou uma lenda e agora cria um legado duradouro.",
+    min_points: 25001,
     max_points: 999999,
     color: "#FBBF24", // Gold
     icon: "🏆",
@@ -480,19 +480,19 @@ export const POINTS_ACTIVITIES = {
   pomodoro_session: { points: 1, description: "Sessão Pomodoro" },
   exercise_logged: { points: 2, description: "Exercício registrado" },
   meal_planned: { points: 1, description: "Refeição planejada" },
-  
+
   // Weekly Activities (5-20 points)
   weekly_streak: { points: 5, description: "Streak semanal mantido" },
   weekly_goals_complete: { points: 10, description: "Metas semanais completas" },
   community_participation: { points: 8, description: "Participação ativa na comunidade" },
   course_lesson: { points: 15, description: "Aula de curso completada" },
-  
+
   // Monthly Activities (20-100 points)
   challenge_complete: { points: 100, description: "Desafio Caverna completado" },
   monthly_streak: { points: 25, description: "Streak mensal mantido" },
   big_goal_achieved: { points: 50, description: "Meta grande alcançada" },
   referral_active: { points: 30, description: "Usuário indicado ativo" },
-  
+
   // Special Milestones (50-500 points)
   first_challenge: { points: 200, description: "Primeiro Desafio Caverna" },
   hundred_day_streak: { points: 300, description: "Streak de 100 dias" },
