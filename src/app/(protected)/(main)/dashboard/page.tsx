@@ -33,16 +33,45 @@ function Content() {
   const [chatModalOpen, setChatModalOpen] = useState(false)
   const { data: user } = useUser()
 
-  useEffect(() => {
-    const doneDashboardTour = localStorage.getItem('doneDashboardTour')
-    if (
-      (startTour === 'true' || doneDashboardTour !== 'true') &&
-      tab === 'central-caverna'
-    ) {
-      setActiveTour(true)
-      localStorage.setItem('doneDashboardTour', 'true')
+  function getTabTour() {
+    switch (tab) {
+      case 'ordem-no-caos':
+        return localStorage.getItem('doneOrderInChaosTour')
+      case 'forja-do-templo':
+        return localStorage.getItem('doneTempleForgeTour')
+      case 'cursos-e-conhecimentos':
+        return localStorage.getItem('doneCoursesTour')
+      case 'area-de-beneficios':
+        return localStorage.getItem('doneBenefitsTour')
+      default:
+        return localStorage.getItem('doneDashboardTour')
     }
-  }, [startTour])
+  }
+
+  function setTabTourDone() {
+    switch (tab) {
+      case 'ordem-no-caos':
+        return localStorage.setItem('doneOrderInChaosTour', 'true')
+      case 'forja-do-templo':
+        return localStorage.setItem('doneTempleForgeTour', 'true')
+      case 'cursos-e-conhecimentos':
+        return localStorage.setItem('doneCoursesTour', 'true')
+      case 'area-de-beneficios':
+        return localStorage.setItem('doneBenefitsTour', 'true')
+      default:
+        return localStorage.setItem('doneDashboardTour', 'true')
+    }
+  }
+
+  useEffect(() => {
+    const doneTour = getTabTour()
+    if (startTour === 'true' || doneTour !== 'true') {
+      setTimeout(() => {
+        setActiveTour(true)
+        setTabTourDone()
+      }, 500)
+    }
+  }, [startTour, tab])
 
   useEffect(() => {
     const opened = localStorage.getItem('chatModalOpened')

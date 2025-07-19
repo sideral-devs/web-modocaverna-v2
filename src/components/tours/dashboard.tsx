@@ -143,9 +143,9 @@ const orderInChaosSteps: TutorialStep[] = [
   },
   {
     id: 8,
-    title: 'Encerramento',
+    title: 'Pronto pra colocar ordem no caos?',
     description:
-      'Pronto pra colocar ordem no caos? Você já tem as ferramentas. Agora é hora de usá-las com propósito. Organize a mente, defina o caminho e transforme confusão em clareza. A revolução começa por dentro. E começa agora.',
+      'Você já tem as ferramentas. Agora é hora de usá-las com propósito. Organize a mente, defina o caminho e transforme confusão em clareza. A revolução começa por dentro. E começa agora.',
     elementId: undefined,
     dialogPosition: 'center',
   },
@@ -213,9 +213,9 @@ const coursesSteps: TutorialStep[] = [
   },
   {
     id: 4,
-    title: 'Encerramento',
+    title: 'O conhecimento abre portas',
     description:
-      'O conhecimento abre portas. A conexão te leva além. Use esse espaço pra aprender com profundidade e caminhar com quem tem sede de evolução.',
+      'A conexão te leva além. Use esse espaço pra aprender com profundidade e caminhar com quem tem sede de evolução.',
     elementId: undefined,
     dialogPosition: 'center',
   },
@@ -248,9 +248,9 @@ const benefitSteps: TutorialStep[] = [
   },
   {
     id: 4,
-    title: 'Encerramento',
+    title: 'Você cresce',
     description:
-      'Você cresce. Você compartilha. Você é recompensado. Use essa área com inteligência e veja o Modo Caverna trabalhar por você, dentro e fora da caverna.',
+      'Você compartilha. Você é recompensado. Use essa área com inteligência e veja o Modo Caverna trabalhar por você, dentro e fora da caverna.',
     elementId: undefined,
     dialogPosition: 'center',
   },
