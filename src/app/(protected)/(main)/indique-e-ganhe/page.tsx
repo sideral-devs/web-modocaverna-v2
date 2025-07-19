@@ -1,6 +1,7 @@
 'use client'
 import { AffiliateChart } from '@/components/charts/affiliate-chart'
 import { ProtectedRoute } from '@/components/protected-route'
+import { AffiliatesTour } from '@/components/tours/affiliates'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -22,6 +23,8 @@ import {
 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
 import { AffiliateCodeDialogTrigger } from './dialogs/affiliate-code'
 import { CommissionPlanDialogTrigger } from './dialogs/commission-plan'
 import { PlateDialogTrigger } from './dialogs/plate'
@@ -38,6 +41,18 @@ const SellStrategyCourses = dynamic(
 )
 
 export default function Page() {
+  return (
+    <Suspense>
+      <Content />
+    </Suspense>
+  )
+}
+
+function Content() {
+  const params = useSearchParams()
+  const startTour = params.get('startTour')
+  const [activeTour, setActiveTour] = useState(false)
+
   const { code: affiliateCode } = useAffiliateStore()
   const { data } = useQuery({
     queryKey: ['indication', affiliateCode],
@@ -48,10 +63,20 @@ export default function Page() {
     enabled: !!affiliateCode,
   })
 
+  useEffect(() => {
+    const doneDashboardTour = localStorage.getItem('doneAffiliatesTour')
+    console.log(startTour)
+    if ((startTour === 'true' || doneDashboardTour !== 'true') && !activeTour) {
+      setActiveTour(true)
+      localStorage.setItem('doneAffiliatesTour', 'true')
+    }
+  }, [startTour])
+
   return (
     <ProtectedRoute level="non-trial">
       <TutorialAffiliateDialogTrigger />
-      <div className="flex flex-col w-full min-h-screen items-center gap-8 md:gap-16 overflow-y-auto scrollbar-minimal">
+      <AffiliatesTour active={activeTour} setIsActive={setActiveTour} />
+      <div className="flex flex-col w-full relative min-h-screen items-center gap-8 md:gap-16 overflow-y-auto scrollbar-minimal">
         <AffiliatesHeader />
         <section className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-8xl gap-6 p-4">
           <div className="flex flex-col gap-3">
@@ -91,7 +116,11 @@ export default function Page() {
                       afiliação.
                     </p>
                     <AffiliateCodeDialogTrigger code={affiliateCode}>
-                      <Button className="mt-5" size="sm">
+                      <Button
+                        className="mt-5"
+                        size="sm"
+                        data-tutorial-id="inserir-codigo"
+                      >
                         Inserir código
                       </Button>
                     </AffiliateCodeDialogTrigger>
@@ -171,7 +200,10 @@ export default function Page() {
           </div>
           <div className="grid grid-cols-2 grid-rows-3 gap-2">
             <CommissionPlanDialogTrigger>
-              <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
+              <Card
+                className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer"
+                data-tutorial-id="solicitar-afiliacao"
+              >
                 <CircleDollarSignIcon className="scale-75 md:scale-100 text-primary" />
                 <p className="text-xs md:text-base font-semibold truncate">
                   Solicite a sua Afiliação
@@ -182,6 +214,7 @@ export default function Page() {
               icon={Users}
               title="Grupo no Whatsapp"
               href="https://chat.whatsapp.com/F7KQFLZUTD59m5D7ou8udY"
+              data-tutorial-id="grupo-whatsapp"
             />
             <PublicMapDialogTrigger>
               <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
@@ -192,7 +225,10 @@ export default function Page() {
               </Card>
             </PublicMapDialogTrigger>
             <ShareMaterialDialogTrigger>
-              <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
+              <Card
+                className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer"
+                data-tutorial-id="materiais-divulgacao"
+              >
                 <FileOutputIcon className="scale-75 md:scale-100 text-primary" />
                 <p className="text-xs md:text-base font-semibold truncate">
                   Materiais de divulgação
@@ -295,16 +331,20 @@ function AffiliateDashLink({
   icon,
   title,
   href,
+  ...props
 }: {
   icon: LucideIcon
   title: string
   href: string
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   const Icon = icon
 
   return (
     <Link href={href} target="_blank">
-      <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
+      <Card
+        className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer"
+        {...props}
+      >
         <Icon className="scale-75 md:scale-100 text-primary" />
         <p className="text-xs md:text-base font-semibold truncate">{title}</p>
 

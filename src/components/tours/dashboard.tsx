@@ -1,33 +1,25 @@
 'use client'
 
-import { GuidedTour } from './guided-tour'
-
-interface TutorialStep {
-  id: number
-  title: string
-  description: string
-  elementId?: string
-  dialogPosition:
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | 'center'
-    | 'bottomLeft'
-    | 'topLeft'
-}
+import { GuidedTour, TutorialStep } from './guided-tour'
 
 const centralCavernaSteps: TutorialStep[] = [
   {
     id: 1,
     title: 'Bem vindo ao Tutorial Caverna',
     description:
-      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com inteligência e propósito.',
+      'Aqui você vai conhecer as principais funções do sistema e aprender a usar cada ferramenta com estratégia e propósito.',
     elementId: undefined,
     dialogPosition: 'center',
   },
   {
     id: 2,
+    title: 'Perfil e configurações',
+    description: 'Personalize sua experiência e acompanhe sua evolução.',
+    elementId: 'perfil',
+    dialogPosition: 'bottomLeft',
+  },
+  {
+    id: 3,
     title: 'HUBS de ferramentas',
     description:
       'Os HUBS organizam suas ferramentas por objetivo. Navegue entre eles para acessar diferentes áreas de desenvolvimento.',
@@ -35,17 +27,10 @@ const centralCavernaSteps: TutorialStep[] = [
     dialogPosition: 'bottom',
   },
   {
-    id: 3,
-    title: 'Perfil e configurações',
-    description: 'Personalize sua experiência e acompanhe seu progresso.',
-    elementId: 'perfil',
-    dialogPosition: 'bottomLeft',
-  },
-  {
     id: 4,
     title: 'Central Caverna',
     description:
-      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e  onde você sempre retorna para evoluir!',
+      'A CENTRAL CAVERNA é o coração do sistema. É onde tudo começa e  onde você sempre retorna para progredir!',
     elementId: 'central-caverna',
     dialogPosition: 'right',
   },
@@ -53,7 +38,7 @@ const centralCavernaSteps: TutorialStep[] = [
     id: 5,
     title: 'Streak',
     description:
-      'Seu streak mostra sua consistência! Manter a chama acesa diariamente é o segredo da transformação.',
+      'Seu streak mostra sua consistência! Manter a chama acesa diariamente é o reflexo da sua transformação diária.',
     elementId: 'streak',
     dialogPosition: 'right',
   },
@@ -171,7 +156,7 @@ const templeForgeSteps: TutorialStep[] = [
     id: 1,
     title: 'Forja do Templo',
     description:
-      'Aqui você fortalece o corpo e molda a mente. Registre treinos, refeições e acompanhe seu progresso físico com disciplina. É na rotina que o templo se constrói — e onde a transformação ganha forma.',
+      'Aqui você fortalece o corpo e molda a mente. Registre treinos, refeições e acompanhe seu progresso físico com disciplina. O templo se constrói na rotina - é nela que a transformação acontece.',
     elementId: 'forja-do-templo',
     dialogPosition: 'bottom',
   },
@@ -179,7 +164,7 @@ const templeForgeSteps: TutorialStep[] = [
     id: 2,
     title: 'Treinos',
     description:
-      'A constância vence o cansaço. Organiza seus treinos da semana e acompanha sua evolução com clareza. Comece hoje… mesmo que devagar, só não permaneça parado.',
+      'A constância vence o cansaço. Organize seus treinos da semana e acompanhe sua evolução com clareza. Comece hoje… mesmo que devagar, só não permaneça parado.',
     elementId: 'treinos',
     dialogPosition: 'right',
   },
@@ -193,9 +178,9 @@ const templeForgeSteps: TutorialStep[] = [
   },
   {
     id: 4,
-    title: 'Encerramento',
+    title: 'Seu corpo é seu templo',
     description:
-      'Seu corpo é seu templo. Agora você tem as ferramentas pra treinar, se alimentar melhor e criar uma rotina física alinhada com sua mente. Construa. Molde. Supere-se.',
+      'Agora você tem as ferramentas pra treinar, se alimentar melhor e criar uma rotina física alinhada com sua mente. Construa. Molde. Supere-se.',
     elementId: undefined,
     dialogPosition: 'center',
   },
