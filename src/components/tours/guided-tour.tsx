@@ -169,7 +169,7 @@ export function GuidedTour({
   if (!active) return null
 
   return (
-    <div className="absolute inset-0 z-50">
+    <div className="hidden md:block absolute inset-0 z-50">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black/60" />
         <div
