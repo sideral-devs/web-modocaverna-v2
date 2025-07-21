@@ -55,7 +55,10 @@ export default function GoalCard({
   }
 
   return (
-    <Card className="flex flex-col w-full h-full min-h-[300px] p-0 gap-4 relative overflow-hidden">
+    <Card
+      className="flex flex-col w-full h-full min-h-[300px] p-0 gap-4 relative overflow-hidden"
+      data-tutorial-id="metas"
+    >
       {hideLabel || (
         <div className="flex flex-col absolute inset-0 p-4 z-10">
           <CardHeader>

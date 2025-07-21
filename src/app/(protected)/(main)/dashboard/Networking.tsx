@@ -8,8 +8,11 @@ export function Networking({ value }: { value: string }) {
   return (
     <TabsContent value={value} className="flex-1">
       <div className="grid grid-cols-1 md:grid-cols-2 w-full min-h-[676px] gap-2">
-        <Card className="flex flex-col w-full h-full min-h-[600px] md:min-h-80 p-6 pb-4 gap-6 relative overflow-hidden">
-          <CardHeader className="justify-between items-center z-50">
+        <Card
+          className="flex flex-col w-full h-full min-h-[600px] md:min-h-80 p-6 pb-4 gap-6 relative overflow-hidden"
+          data-tutorial-id="cursos"
+        >
+          <CardHeader className="justify-between items-center z-20">
             <div className="flex w-fit px-3 py-2 border border-primary z-50 rounded-full">
               <span className="text-[10px] text-primary font-semibold">
                 CURSOS & CONTEÚDOS
@@ -29,7 +32,7 @@ export function Networking({ value }: { value: string }) {
           </div>
 
           {/* ADICIONADO flex-1 AQUI PARA GARANTIR QUE O TEXTO EMPURRE O BOTÃO PARA BAIXO */}
-          <div className="flex flex-col flex-1 justify-end gap-4 z-50">
+          <div className="flex flex-col flex-1 justify-end gap-4 z-20">
             <h2 className="text-2xl font-semibold">Cursos & Conteúdos</h2>
             <p className="text-zinc-400 text-sm">
               Desbrave os segredos do Modo Caverna. Aqui, você encontra
@@ -45,8 +48,11 @@ export function Networking({ value }: { value: string }) {
           </Link>
         </Card>
 
-        <Card className="flex flex-col w-full h-full min-h-[600px] md:min-h-80 p-6 pb-4 gap-6 relative overflow-hidden">
-          <div className="justify-between items-center z-50">
+        <Card
+          className="flex flex-col w-full h-full min-h-[600px] md:min-h-80 p-6 pb-4 gap-6 relative overflow-hidden"
+          data-tutorial-id="comunidade"
+        >
+          <div className="justify-between items-center z-20">
             <div className="flex w-fit px-3 py-2 border border-white rounded-full">
               <span className="text-[10px] text-white font-semibold">
                 COMUNIDADE ALCATEIA

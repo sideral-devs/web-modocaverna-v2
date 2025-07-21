@@ -43,7 +43,10 @@ export default function KnowledgeCard() {
     },
   })
   return (
-    <Card className="flex flex-col w-full h-full min-h-[300px] p-4 gap-6">
+    <Card
+      className="flex flex-col w-full h-full min-h-[300px] p-4 gap-6"
+      data-tutorial-id="fontes-conhecimento"
+    >
       <CardHeader className="h-[34px] justify-between items-center">
         <div className="flex w-fit px-3 py-2 border border-white rounded-full">
           <span className="text-[10px] text-white font-semibold">

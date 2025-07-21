@@ -7,6 +7,7 @@ import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
+import { ChatDialog } from './dialogs/ChatDialog'
 import PageDialogs from './dialogs/PageDialog'
 import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
@@ -29,18 +30,70 @@ function Content() {
 
   const [tab, setTab] = useState(to || 'central-caverna')
   const [activeTour, setActiveTour] = useState(false)
+  const [chatModalOpen, setChatModalOpen] = useState(false)
   const { data: user } = useUser()
 
-  useEffect(() => {
-    // const doneDashboardTour = localStorage.getItem('doneDashboardTour')
-    if (startTour === 'true') {
-      setActiveTour(true)
-      localStorage.setItem('doneDashboardTour', 'true')
+  function getTabTour() {
+    switch (tab) {
+      case 'ordem-no-caos':
+        return localStorage.getItem('doneOrderInChaosTour')
+      case 'forja-do-templo':
+        return localStorage.getItem('doneTempleForgeTour')
+      case 'cursos-e-conhecimentos':
+        return localStorage.getItem('doneCoursesTour')
+      case 'area-de-beneficios':
+        return localStorage.getItem('doneBenefitsTour')
+      default:
+        return localStorage.getItem('doneDashboardTour')
     }
-  }, [startTour])
+  }
+
+  function setTabTourDone() {
+    switch (tab) {
+      case 'ordem-no-caos':
+        return localStorage.setItem('doneOrderInChaosTour', 'true')
+      case 'forja-do-templo':
+        return localStorage.setItem('doneTempleForgeTour', 'true')
+      case 'cursos-e-conhecimentos':
+        return localStorage.setItem('doneCoursesTour', 'true')
+      case 'area-de-beneficios':
+        return localStorage.setItem('doneBenefitsTour', 'true')
+      default:
+        return localStorage.setItem('doneDashboardTour', 'true')
+    }
+  }
+
+  useEffect(() => {
+    const doneTour = getTabTour()
+    if (startTour === 'true' || doneTour !== 'true') {
+      setTimeout(() => {
+        setActiveTour(true)
+        setTabTourDone()
+      }, 500)
+    }
+  }, [startTour, tab])
+
+  useEffect(() => {
+    const opened = localStorage.getItem('chatModalOpened')
+
+    if (
+      !opened &&
+      user &&
+      Number(user.tutorial_complete) &&
+      Number(user.login_streak) > 1 &&
+      !startTour
+    ) {
+      setChatModalOpen(true)
+      localStorage.setItem('chatModalOpened', 'true')
+    }
+  }, [user, startTour])
 
   if (user && !Number(user.tutorial_complete) && !startTour) {
     return redirect('/onboarding')
+  }
+
+  if (user && user.plan === 'DESAFIO') {
+    return redirect('/dashboard/desafio')
   }
 
   return (
@@ -52,6 +105,7 @@ function Content() {
           active={activeTour}
           setIsActive={setActiveTour}
           redirect={tourRedirect === 'true'}
+          tab={tab}
         />
         <div className="flex w-full flex-1 max-w-7xl min-h-0 p-4 pb-24">
           <Tabs
@@ -70,12 +124,28 @@ function Content() {
               >
                 Central Caverna
               </TabsTrigger>
-              <TabsTrigger value="ordem-no-caos">Ordem no Caos</TabsTrigger>
-              <TabsTrigger value="forja-do-templo">Forja do Templo</TabsTrigger>
-              <TabsTrigger value="cursos-e-conhecimentos">
+              <TabsTrigger
+                value="ordem-no-caos"
+                data-tutorial-id="ordem-no-caos"
+              >
+                Ordem no Caos
+              </TabsTrigger>
+              <TabsTrigger
+                value="forja-do-templo"
+                data-tutorial-id="forja-do-templo"
+              >
+                Forja do Templo
+              </TabsTrigger>
+              <TabsTrigger
+                value="cursos-e-conhecimentos"
+                data-tutorial-id="cursos-networking"
+              >
                 Cursos & Networking
               </TabsTrigger>
-              <TabsTrigger value="area-de-beneficios">
+              <TabsTrigger
+                value="area-de-beneficios"
+                data-tutorial-id="area-de-beneficios"
+              >
                 Área de Benefícios
               </TabsTrigger>
             </TabsList>
@@ -87,9 +157,10 @@ function Content() {
           </Tabs>
         </div>
         <div
-          className="w-16 h-16 absolute right-4 bottom-4"
+          className="w-16 h-16 absolute right-5 bottom-4"
           data-tutorial-id="chat"
         />
+        <ChatDialog open={chatModalOpen} setIsOpen={setChatModalOpen} />
       </div>
     </ProtectedRoute>
   )

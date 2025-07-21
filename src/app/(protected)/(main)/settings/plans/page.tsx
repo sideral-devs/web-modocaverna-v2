@@ -26,15 +26,8 @@ export default function Page() {
 
   if (!user) return null
 
-  console.log(user.plan)
-  console.log(user.status_plan)
-
   const isOnTrial = user.plan === 'TRIAL'
   const isExpired = user.status_plan === 'EXPIRADO'
-  const isChallengePlan = user.plan === 'DESAFIO'
-  const challengeTrial =
-    user.plan === 'DESAFIO' &&
-    dayjs(user.data_de_compra).add(8, 'day').isAfter(dayjs())
 
   function getPlanUrl() {
     const indicationCode = user?.codigo_indicacao
@@ -71,38 +64,6 @@ export default function Page() {
       </div>
     </div>
   )
-
-  // Caso 1: Plano Desafio Trial ou Desafio Expirado
-  if (isChallengePlan && challengeTrial) {
-    return (
-      <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        <div className="flex flex-row gap-8 w-full">
-          <PlanDesafio isTrial={challengeTrial} />
-          <PlanCavernaNonOnboarding
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            isUpdatePlan={false}
-            getPlanUrl={getPlanUrl}
-          />
-        </div>
-      </div>
-    )
-  } else if (isChallengePlan && !challengeTrial) {
-    return (
-      <div className="flex flex-col justify-start items-start col-span-3 gap-10">
-        <ExpiredAlert user={user} />
-        <div className="flex flex-col-reverse sm:flex-row gap-8 w-full">
-          <PlanDesafio />
-          <PlanCavernaNonOnboarding
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
-            isUpdatePlan={false}
-            getPlanUrl={getPlanUrl}
-          />
-        </div>
-      </div>
-    )
-  }
 }
 
 function CurrentPlan({

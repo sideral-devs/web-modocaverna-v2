@@ -75,9 +75,13 @@ export default function FinanceCard() {
   if (!transactions) {
     return <Skeleton className="flex flex-col w-full flex-1 min-h-[300px]" />
   }
+
   if (transactions?.length === 0) {
     return (
-      <Card className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden">
+      <Card
+        data-tutorial-id="financas"
+        className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden"
+      >
         <CardHeader className="flex absolute left-0 right-0 px-4 justify-between">
           <div className="flex w-fit items-center px-3 py-2 gap-[6px] border border-emerald-400 rounded-full">
             <DollarSign className="text-emerald-400" size={12} />
@@ -118,7 +122,10 @@ export default function FinanceCard() {
     !totalToPayAmount
   ) {
     return (
-      <Card className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden">
+      <Card
+        data-tutorial-id="financas"
+        className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden"
+      >
         <CardHeader className="flex absolute left-0 right-0 px-4 justify-between">
           <div className="flex w-fit items-center px-3 py-2 gap-[6px] border border-emerald-400 rounded-full">
             <DollarSign className="text-emerald-400" size={12} />
@@ -151,7 +158,10 @@ export default function FinanceCard() {
   }
 
   return (
-    <Card className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden">
+    <Card
+      data-tutorial-id="financas"
+      className="flex flex-col w-full flex-1 min-h-[300px] p-4 gap-4 relative overflow-hidden"
+    >
       <CardHeader className="flex absolute left-0 right-0 px-4 justify-between">
         <div className="flex w-fit items-center px-3 py-2 gap-[6px] border border-emerald-400 rounded-full">
           <DollarSign className="text-emerald-400" size={12} />

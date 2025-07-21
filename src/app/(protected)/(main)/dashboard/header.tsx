@@ -55,7 +55,6 @@ export function CentralHubHeader({
           variant="secondary"
           className="hidden lg:flex h-11 items-center group justify-center px-5 gap-2 rounded-xl transition-all duration-200 hover:bg-white/90"
           onClick={() => {
-            setTab('central-caverna')
             router.replace('/dashboard?startTour=true')
           }}
         >
