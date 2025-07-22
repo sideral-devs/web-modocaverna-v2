@@ -16,7 +16,10 @@ export default function ExpenseCard() {
   const [year, setYear] = useState<null | string>(String(dayjs().year()))
 
   return (
-    <Card className="flex flex-col w-full h-96 p-5 gap-10">
+    <Card
+      className="flex flex-col w-full h-96 p-5 gap-10"
+      data-tutorial-id="graficos-financas"
+    >
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="hidden sm:flex py-2 px-3 border rounded-full text-xs">

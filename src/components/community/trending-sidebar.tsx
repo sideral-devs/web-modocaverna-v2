@@ -97,7 +97,10 @@ export function TrendingSidebar() {
           </CardContent>
         </Card>
 
-        <div className="flex w-full justify-center">
+        <div
+          className="flex w-full justify-center"
+          data-tutorial-id="codigo-conduta"
+        >
           <Button variant="link" onClick={() => setRulesDialogOpen(true)}>
             Regras de Uso
           </Button>

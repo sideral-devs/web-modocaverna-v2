@@ -12,6 +12,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { MailIcon, PlusIcon } from 'lucide-react'
 
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
+import { StartTourButton } from '@/components/start-tour-button'
+import { AttractionLawTour } from '@/components/tours/attraction-law'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NewLockedMessageDialog } from './new-locked-message'
@@ -19,7 +21,7 @@ import { OpenedMessageDialog } from './opened-message-dialog'
 dayjs.locale('pt-br')
 dayjs.extend(customParseFormat)
 
-export default function Page() {
+export default function Content() {
   // eslint-disable-next-line
   const [selectedYear, setSelectedYear] = useState(dayjs().format("YYYY"));
   const [currentGoal, setCurrentGoal] = useState<Goal | null>(null)
@@ -53,17 +55,25 @@ export default function Page() {
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
+        <AttractionLawTour disabled={!goals || !lockedMessages} />
+
         <Header className="border-0">
           <div className="flex w-fit items-center px-3 py-2 gap-1 border border-white rounded-full">
             <span className="uppercase text-[10px] text-white font-semibold">
               Lei da Atração
             </span>
           </div>
-          <HeaderClose to="ordem-no-caos" />
+          <div className="flex gap-2">
+            <StartTourButton origin="/lei-da-atracao" />
+            <HeaderClose to="ordem-no-caos" />
+          </div>
         </Header>
         <section className="flex flex-col items-center w-full  h-full  gap-4">
           <div className="grid grid-1 flex-1 w-full max-w-8xl  min-h-[740px]  md:h-[740px] p-4 gap-4">
-            <div className="flex flex-col col-span-3 gap-6">
+            <div
+              className="flex flex-col col-span-3 gap-6"
+              data-tutorial-id="dreamboard"
+            >
               {currentGoal ? (
                 <DreamboardMaker
                   year={Number(selectedYear)}
@@ -83,7 +93,10 @@ export default function Page() {
             </div>
           </div>
           <div className="w-[75%] h-[1px] bg-border" />
-          <div className="flex flex-col w-full items-center max-w-8xl p-4 gap-6">
+          <div
+            className="flex flex-col w-full items-center max-w-8xl p-4 gap-6"
+            data-tutorial-id="future-cards"
+          >
             <h2 className="flex items-center gap-2 text-xl font-semibold">
               <MailIcon size={20} />
               Cartas para o Futuro

@@ -165,7 +165,10 @@ export function FinanceDashboard() {
               </div>
             </Card>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 w-full gap-4"
+            data-tutorial-id="lancamentos-financeiros"
+          >
             <TableDetailsCard
               transactions={revenueTransactions}
               month={month}

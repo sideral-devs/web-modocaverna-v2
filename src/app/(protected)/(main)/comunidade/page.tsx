@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { CommunityTour } from '@/components/tours/community'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent } from '@/components/ui/card'
 import { env } from '@/lib/env'
@@ -56,7 +57,7 @@ function MockPostCard({ content }: { content: string }) {
   )
 }
 
-export default function HomePage() {
+export default function Page() {
   const queryClient = useQueryClient()
   const [currentTab, setCurrentTab] = useState('Geral')
   const [buttonLoading, setButtonLoading] = useState(false)
@@ -100,6 +101,7 @@ export default function HomePage() {
   return (
     <UpgradeModalTrigger>
       <div className="flex flex-col w-full flex-1 items-center">
+        <CommunityTour disabled={!data} />
         <div className="flex flex-col w-full flex-1 sm:border rounded-lg">
           {data ? <CreatePostForm /> : <Skeleton className="w-full h-12" />}
 
@@ -110,7 +112,10 @@ export default function HomePage() {
                 onValueChange={setCurrentTab}
                 className="md:w-full overflow-x-scroll no-scrollbar"
               >
-                <TabsList className="w-full grid grid-cols-4 rounded-none border-b overflow-x-scroll no-scrollbar">
+                <TabsList
+                  className="w-full grid grid-cols-4 rounded-none border-b overflow-x-scroll no-scrollbar"
+                  data-tutorial-id="categorias-postagem"
+                >
                   <TabsTrigger
                     value="Geral"
                     className="p-4 min-w-24 relative data-[state=active]:bg-transparent group"

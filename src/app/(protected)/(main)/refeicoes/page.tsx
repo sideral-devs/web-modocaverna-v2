@@ -4,6 +4,8 @@ import { Header, HeaderClose } from '@/components/header'
 import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
 import { MealCard } from '@/components/refeicoes/refeicoes-card'
 import { MealFormModal } from '@/components/refeicoes/refeicoes-form-modal'
+import { StartTourButton } from '@/components/start-tour-button'
+import { MealsTour } from '@/components/tours/meals'
 import { Button } from '@/components/ui/button'
 import { useMeals } from '@/hooks/queries/use-meals'
 import type { Supplement } from '@/lib/api/meals'
@@ -135,7 +137,10 @@ export default function Page() {
               Refeições
             </span>
           </div>
-          <HeaderClose to="forja-do-templo" />
+          <div className="flex gap-2">
+            <StartTourButton origin="/refeicoes" />
+            <HeaderClose to="forja-do-templo" />
+          </div>
         </Header>
       </motion.div>
 
@@ -186,7 +191,7 @@ export default function Page() {
             </Button>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4" data-tutorial-id="registro-diario">
             {mealsForDay && mealsForDay.length > 0 ? (
               mealsForDay.map((meal) => (
                 <MealCard
@@ -249,6 +254,8 @@ export default function Page() {
           }
         }}
       />
+
+      <MealsTour />
     </>
   )
 }

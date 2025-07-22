@@ -232,7 +232,10 @@ export default function PomodoroTimer() {
   }, [timeLeft, isRunning])
 
   return (
-    <Card className="flex flex-col w-full h-96 p-5 gap-2">
+    <Card
+      className="flex flex-col w-full h-96 p-5 gap-2"
+      data-tutorial-id="pomodoro-timer"
+    >
       <div className="flex w-full items-center justify-between relative">
         <div className="flex w-fit items-center px-3 h-8 gap-1 border border-white text-white rounded-full">
           <span className="uppercase text-[10px] font-semibold">Pomodoro</span>

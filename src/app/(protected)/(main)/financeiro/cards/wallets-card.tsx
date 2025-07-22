@@ -79,7 +79,10 @@ export default function WalletsCard() {
   }
 
   return (
-    <Card className="flex flex-col w-full h-96 gap-1">
+    <Card
+      className="flex flex-col w-full h-96 gap-1"
+      data-tutorial-id="carteiras-financeiras"
+    >
       <div className="flex w-full items-center justify-between p-5">
         <span className="flex py-2 px-3 border rounded-full text-xs">
           CARTEIRA

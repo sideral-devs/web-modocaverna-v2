@@ -1,4 +1,5 @@
 'use client'
+import { SettingsTour } from '@/components/tours/settings'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Sheet,
@@ -24,11 +25,13 @@ export function Sidebar() {
     {
       name: 'Informações da conta',
       href: '/settings/account',
+      tutorialId: 'settings-user',
       icon: LayoutDashboard,
     },
     {
       name: 'Planos e upgrade',
       href: '/settings/plans',
+      tutorialId: 'settings-subscription',
       icon: DollarSign,
     },
     // {
@@ -71,7 +74,11 @@ export function Sidebar() {
             const active = navItem.href === pathname
             const Icon = navItem.icon
             return (
-              <Link key={index} href={navItem.href}>
+              <Link
+                key={index}
+                href={navItem.href}
+                data-tutorial-id={navItem.tutorialId}
+              >
                 <div
                   className={cn(
                     'flex items-center p-3 gap-3 text-zinc-500 rounded-xl',
@@ -146,6 +153,7 @@ export function Sidebar() {
           </SheetContent>
         </Sheet>
       </div>
+      <SettingsTour />
     </>
   )
 }
