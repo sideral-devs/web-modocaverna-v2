@@ -8,7 +8,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
 import { CentralCaverna } from './CentralCaverna'
 import { ChatDialog } from './dialogs/ChatDialog'
-import PageDialogs from './dialogs/PageDialog'
+import { FirstAppearModal } from './FirstAppearModal'
 import { CentralHubHeader } from './header'
 import { Networking } from './Networking'
 import { OrdemNoCaos } from './OrdemNoCaos'
@@ -98,7 +98,7 @@ function Content() {
 
   return (
     <ProtectedRoute>
-      <PageDialogs />
+      <FirstAppearModal disabled={activeTour} />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12 relative">
         <CentralHubHeader setTab={setTab} />
         <DashboardTour
