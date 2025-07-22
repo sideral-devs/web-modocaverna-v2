@@ -25,10 +25,8 @@ export function LiveDialog({
               o Modo Caverna?
             </p>
             <p className="opacity-90">
-              <strong className="opacity-100">Quinta-feira</strong> teremos uma{' '}
-              <strong className="opacity-100">live fechada</strong> com os
-              afiliados ativos, revelando a estratégia completa que já tá dando
-              resultado real.
+              Não perca a live para afiliados nesta Quinta-feira, com
+              estratégias que já estão dando resultado real.
             </p>
             <strong>Quer fazer parte?</strong>
           </div>
