@@ -167,7 +167,11 @@ export function CreatePostForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border-b">
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 border-b"
+      data-tutorial-id="interacao-estrategica"
+    >
       <div className="flex gap-3">
         {user ? (
           <Avatar>

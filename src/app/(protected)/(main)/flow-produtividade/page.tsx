@@ -4,6 +4,7 @@ import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import PomodoroTimer from '@/components/pomodoro'
 import { ProtectedRoute } from '@/components/protected-route'
+import { FlowTour } from '@/components/tours/flow'
 import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
 import { AlarmClock } from 'lucide-react'
@@ -46,7 +47,10 @@ export default function Page() {
           </Header>
           <section className="grid grid-cols-1 md:grid-cols-2 w-full max-w-8xl gap-6 p-4 py-0">
             <PomodoroTimer />
-            <Card className="flex flex-col w-full h-80 xl:h-96 p-5 gap-10">
+            <Card
+              className="flex flex-col w-full h-80 xl:h-96 p-5 gap-10"
+              data-tutorial-id="foco-analise"
+            >
               <div className="flex w-full items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-primary rounded-[0.1rem]" />
@@ -61,7 +65,10 @@ export default function Page() {
             </Card>
           </section>
           <div className="w-full h-1 bg-zinc-800" />
-          <section className="flex flex-col w-full max-w-8xl gap-6 p-4 pt-0 pb-32">
+          <section
+            className="flex flex-col w-full max-w-8xl gap-6 p-4 pt-0 pb-32"
+            data-tutorial-id="kanban-board"
+          >
             <h2 className="text-xl font-semibold">Quadro de tarefas</h2>
             <div className="position-relative">
               <div className="w-full absolute left-0 h-[2px] bg-zinc-800" />
@@ -69,6 +76,7 @@ export default function Page() {
             <Board isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
           </section>
           <ChecklistDialog open={isOpen} setOpen={setIsOpen} />
+          <FlowTour />
         </div>
       </UpgradeModalTrigger>
     </ProtectedRoute>

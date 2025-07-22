@@ -1,6 +1,7 @@
 import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { ProtectedRoute } from '@/components/protected-route'
+import { FinanceTour } from '@/components/tours/finance'
 import { Skeleton } from '@/components/ui/skeleton'
 import dynamic from 'next/dynamic'
 import { FinanceDashboard } from './dashboard'
@@ -35,6 +36,7 @@ export default function Page() {
           </section>
           <div className="w-full h-1 bg-zinc-800" />
           <FinanceDashboard />
+          <FinanceTour />
         </div>
       </UpgradeModalTrigger>
     </ProtectedRoute>

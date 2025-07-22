@@ -65,7 +65,6 @@ function Content() {
 
   useEffect(() => {
     const doneDashboardTour = localStorage.getItem('doneAffiliatesTour')
-    console.log(startTour)
     if ((startTour === 'true' || doneDashboardTour !== 'true') && !activeTour) {
       setActiveTour(true)
       localStorage.setItem('doneAffiliatesTour', 'true')

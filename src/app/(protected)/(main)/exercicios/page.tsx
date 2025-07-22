@@ -4,6 +4,7 @@ import { ExerciseCard } from '@/components/exercicios/exercicios-card'
 import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
 import { ExerciciosCreateUpdate } from '@/components/exercicios/modals/exercicios-create-update'
 import { Header, HeaderClose } from '@/components/header'
+import { WorkoutsTour } from '@/components/tours/workouts'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -329,7 +330,10 @@ export default function Page() {
           </div>
 
           <div className="flex justify-between mb-16 gap-4">
-            <div className="relative w-1/2 border border-zinc-700 bg-zinc-900 rounded-lg overflow-hidden">
+            <div
+              className="relative w-1/2 border border-zinc-700 bg-zinc-900 rounded-lg overflow-hidden"
+              data-tutorial-id="registro-shape"
+            >
               {lastShapeRegistration?.fotos?.[0] ? (
                 <>
                   <div className="absolute top-0 left-0 right-0 flex justify-between gap-1 p-3 z-50">
@@ -605,43 +609,48 @@ export default function Page() {
 
           {/* Workouts section */}
           <div className="mt-16 w-full">
-            <div className="flex items-center mb-8 justify-between">
-              <h2 className="text-2xl font-medium">Organize seus treinos</h2>
-              <Button
-                variant="secondary"
-                className="text-zinc-500 pl-4 py-0 pr-0 gap-2"
-                onClick={() => {
-                  setEditingWorkout(null)
-                  setisCreateUpdateModal(true)
-                }}
-              >
-                Novo treino
-                <div className="h-full border-l flex items-center justify-center px-4 border-zinc-300">
-                  <Plus className="w-5 h-5 text-red-500" weight="bold" />
-                </div>
-              </Button>
-            </div>
+            <div data-tutorial-id="plano-treino">
+              <div className="flex items-center mb-8 justify-between">
+                <h2 className="text-2xl font-medium">Organize seus treinos</h2>
+                <Button
+                  variant="secondary"
+                  className="text-zinc-500 pl-4 py-0 pr-0 gap-2"
+                  onClick={() => {
+                    setEditingWorkout(null)
+                    setisCreateUpdateModal(true)
+                  }}
+                >
+                  Novo treino
+                  <div className="h-full border-l flex items-center justify-center px-4 border-zinc-300">
+                    <Plus className="w-5 h-5 text-red-500" weight="bold" />
+                  </div>
+                </Button>
+              </div>
 
-            <div className="flex gap-4 w-full justify-between mb-8">
-              {WEEK_DAYS.map((day) => (
-                <button
-                  key={day.short}
-                  onClick={() => setSelectedDay(day.workoutIndex)}
-                  className={`px-6 py-4 w-full rounded-lg text-base font-medium transition-colors
+              <div className="flex gap-4 w-full justify-between mb-8">
+                {WEEK_DAYS.map((day) => (
+                  <button
+                    key={day.short}
+                    onClick={() => setSelectedDay(day.workoutIndex)}
+                    className={`px-6 py-4 w-full rounded-lg text-base font-medium transition-colors
                   ${
                     selectedDay === day.workoutIndex
                       ? 'bg-red-500 text-white'
                       : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-800'
                   }
                 `}
-                >
-                  {day.short}
-                </button>
-              ))}
+                  >
+                    {day.short}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div>
-              <div className="flex flex-col">
+              <div
+                className="flex flex-col"
+                data-tutorial-id="cartoes-exercicio"
+              >
                 {localWorkouts.filter(
                   (workout) => Number(workout.indice) === selectedDay,
                 ).length > 0 ? (
@@ -804,6 +813,8 @@ export default function Page() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <WorkoutsTour />
     </>
   )
 }
