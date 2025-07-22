@@ -1,6 +1,7 @@
 import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { ProtectedRoute } from '@/components/protected-route'
+import { StartTourButton } from '@/components/start-tour-button'
 import { FinanceTour } from '@/components/tours/finance'
 import { Skeleton } from '@/components/ui/skeleton'
 import dynamic from 'next/dynamic'
@@ -25,7 +26,10 @@ export default function Page() {
                 Minhas Finanças
               </span>
             </div>
-            <HeaderClose to="ordem-no-caos" />
+            <div className="flex gap-2">
+              <StartTourButton origin="/financeiro" />
+              <HeaderClose to="ordem-no-caos" />
+            </div>
           </Header>
           <section className="flex flex-col w-full max-w-8xl items-center gap-12 p-4">
             <h1 className="text-xl font-semibold">Minha carteira</h1>

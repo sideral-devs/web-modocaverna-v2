@@ -4,6 +4,7 @@ import { Header, HeaderClose } from '@/components/header'
 import { DeleteMealDialog } from '@/components/refeicoes/delete-meal-dialog'
 import { MealCard } from '@/components/refeicoes/refeicoes-card'
 import { MealFormModal } from '@/components/refeicoes/refeicoes-form-modal'
+import { StartTourButton } from '@/components/start-tour-button'
 import { MealsTour } from '@/components/tours/meals'
 import { Button } from '@/components/ui/button'
 import { useMeals } from '@/hooks/queries/use-meals'
@@ -136,7 +137,10 @@ export default function Page() {
               Refeições
             </span>
           </div>
-          <HeaderClose to="forja-do-templo" />
+          <div className="flex gap-2">
+            <StartTourButton origin="/refeicoes" />
+            <HeaderClose to="forja-do-templo" />
+          </div>
         </Header>
       </motion.div>
 

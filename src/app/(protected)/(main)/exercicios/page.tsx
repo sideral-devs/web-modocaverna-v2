@@ -4,6 +4,7 @@ import { ExerciseCard } from '@/components/exercicios/exercicios-card'
 import { WeightProgressIndicator } from '@/components/exercicios/exercicios-weight-progress-indicator'
 import { ExerciciosCreateUpdate } from '@/components/exercicios/modals/exercicios-create-update'
 import { Header, HeaderClose } from '@/components/header'
+import { StartTourButton } from '@/components/start-tour-button'
 import { WorkoutsTour } from '@/components/tours/workouts'
 import { Button } from '@/components/ui/button'
 import {
@@ -289,7 +290,10 @@ export default function Page() {
               Exercícios
             </span>
           </div>
-          <HeaderClose to="forja-do-templo" />
+          <div className="flex gap-2">
+            <StartTourButton origin="/exercicios" />
+            <HeaderClose to="forja-do-templo" />
+          </div>
         </Header>
       </motion.div>
 

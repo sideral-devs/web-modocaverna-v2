@@ -12,6 +12,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { MailIcon, PlusIcon } from 'lucide-react'
 
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
+import { StartTourButton } from '@/components/start-tour-button'
 import { AttractionLawTour } from '@/components/tours/attraction-law'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -62,7 +63,10 @@ export default function Content() {
               Lei da Atração
             </span>
           </div>
-          <HeaderClose to="ordem-no-caos" />
+          <div className="flex gap-2">
+            <StartTourButton origin="/lei-da-atracao" />
+            <HeaderClose to="ordem-no-caos" />
+          </div>
         </Header>
         <section className="flex flex-col items-center w-full  h-full  gap-4">
           <div className="grid grid-1 flex-1 w-full max-w-8xl  min-h-[740px]  md:h-[740px] p-4 gap-4">

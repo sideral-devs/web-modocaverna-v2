@@ -4,6 +4,7 @@ import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import PomodoroTimer from '@/components/pomodoro'
 import { ProtectedRoute } from '@/components/protected-route'
+import { StartTourButton } from '@/components/start-tour-button'
 import { FlowTour } from '@/components/tours/flow'
 import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
@@ -43,7 +44,10 @@ export default function Page() {
                 Flow Produtividade
               </span>
             </div>
-            <HeaderClose />
+            <div className="flex gap-2">
+              <StartTourButton origin="/flow-produtividade" />
+              <HeaderClose />
+            </div>
           </Header>
           <section className="grid grid-cols-1 md:grid-cols-2 w-full max-w-8xl gap-6 p-4 py-0">
             <PomodoroTimer />
