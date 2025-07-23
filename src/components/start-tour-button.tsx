@@ -5,6 +5,9 @@ import { Button } from './ui/button'
 
 export function StartTourButton({ origin }: { origin: string }) {
   const router = useRouter()
+
+  if (origin !== '/dashboard') return null
+
   return (
     <Button
       variant="secondary"

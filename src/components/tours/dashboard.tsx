@@ -288,6 +288,7 @@ export function DashboardTour({
       active={active}
       setIsActive={setIsActive}
       redirect={redirect}
+      origin="/dashboard"
     />
   )
 }
