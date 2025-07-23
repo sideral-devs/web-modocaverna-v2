@@ -168,6 +168,8 @@ export function GuidedTour({
 
   if (!active) return null
 
+  if (origin !== '/dashboard') return null
+
   return (
     <div className="hidden md:block absolute inset-0 z-50">
       <div className="absolute inset-0">
