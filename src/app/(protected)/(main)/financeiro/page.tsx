@@ -1,25 +1,25 @@
+'use client'
 import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { ProtectedRoute } from '@/components/protected-route'
 import { StartTourButton } from '@/components/start-tour-button'
 import { FinanceTour } from '@/components/tours/finance'
-import { Skeleton } from '@/components/ui/skeleton'
-import dynamic from 'next/dynamic'
+
+import { useRef } from 'react'
+import ExpenseCard from './cards/expense-card'
+import WalletsCard from './cards/wallets-card'
 import { FinanceDashboard } from './dashboard'
 
-const WalletsCard = dynamic(() => import('./cards/wallets-card'), {
-  loading: () => <Skeleton className="w-full h-96" />,
-})
-
-const ExpenseCard = dynamic(() => import('./cards/expense-card'), {
-  loading: () => <Skeleton className="w-full h-96" />,
-})
-
 export default function Page() {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
   return (
     <ProtectedRoute>
       <UpgradeModalTrigger>
-        <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
+        <div
+          className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal relative"
+          ref={containerRef}
+        >
           <Header>
             <div className="flex w-fit items-center px-3 py-2 gap-1 border border-emerald-400 text-emerald-400 rounded-full">
               <span className="uppercase text-[10px] font-semibold">
@@ -40,7 +40,7 @@ export default function Page() {
           </section>
           <div className="w-full h-1 bg-zinc-800" />
           <FinanceDashboard />
-          <FinanceTour />
+          <FinanceTour containerRef={containerRef} />
         </div>
       </UpgradeModalTrigger>
     </ProtectedRoute>

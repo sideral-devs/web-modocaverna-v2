@@ -9,6 +9,7 @@ import {
 import { ChevronUp, Dot, PlusIcon } from 'lucide-react'
 
 import { GoogleAuth } from '@/components/google-auth'
+import { StartTourButton } from '@/components/start-tour-button'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CreateEventDialogTrigger } from './create-event-dialog'
@@ -21,16 +22,22 @@ export default function CalendarHeader() {
         className="border-cyan-400"
         spanClassName="text-cyan-400"
       />
-      <div className="flex items-center gap-3">
+      <div
+        className="flex items-center gap-3"
+        data-tutorial-id="calendar-header"
+      >
         <SelectViewDropdown />
         <CreateEventDialogTrigger>
-          <Button className="h-10">
+          <Button className="h-10" data-tutorial-id="add-event-button">
             Novo compromisso <PlusIcon />
           </Button>
         </CreateEventDialogTrigger>
         <GoogleAuth />
       </div>
-      <HeaderClose />
+      <div className="flex gap-4">
+        <StartTourButton origin="/agenda" />
+        <HeaderClose />
+      </div>
     </Header>
   )
 }
@@ -40,7 +47,10 @@ function SelectViewDropdown() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex h-10 items-center p-4 gap-3 bg-zinc-900 border border-zinc-600 focus:outline-0 rounded-lg text-sm">
+      <DropdownMenuTrigger
+        className="flex h-10 items-center p-4 gap-3 bg-zinc-900 border border-zinc-600 focus:outline-0 rounded-lg text-sm"
+        data-tutorial-id="calendar-views"
+      >
         {pathName.includes('today') ? 'Hoje' : 'Semanal'}{' '}
         <ChevronUp size={16} className="text-zinc-500" />
       </DropdownMenuTrigger>

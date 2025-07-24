@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useState } from 'react'
 import { GuidedTour, TutorialStep } from './guided-tour'
 
 const steps: TutorialStep[] = [
@@ -11,7 +11,7 @@ const steps: TutorialStep[] = [
     description:
       'Visualize o que você quer conquistar. Aqui é onde seus sonhos ganham forma e ficam à vista — pra te lembrar diariamente o porquê da sua luta',
     elementId: 'dreamboard',
-    dialogPosition: 'bottom',
+    dialogPosition: 'inside',
   },
   {
     id: 3,
@@ -23,7 +23,13 @@ const steps: TutorialStep[] = [
   },
 ]
 
-export function AttractionLawTour({ disabled }: { disabled?: boolean }) {
+export function AttractionLawTour({
+  disabled,
+  containerRef,
+}: {
+  disabled?: boolean
+  containerRef?: MutableRefObject<HTMLDivElement | null>
+}) {
   const params = useSearchParams()
   const startTour = params.get('startTour')
   const [active, setActive] = useState(false)
@@ -45,6 +51,7 @@ export function AttractionLawTour({ disabled }: { disabled?: boolean }) {
       data={steps}
       active={active}
       setIsActive={setActive}
+      containerRef={containerRef}
       redirect={false}
       origin="/lei-da-atracao"
     />

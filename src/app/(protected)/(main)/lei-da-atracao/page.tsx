@@ -15,7 +15,7 @@ import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
 import { StartTourButton } from '@/components/start-tour-button'
 import { AttractionLawTour } from '@/components/tours/attraction-law'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NewLockedMessageDialog } from './new-locked-message'
 import { OpenedMessageDialog } from './opened-message-dialog'
 dayjs.locale('pt-br')
@@ -30,6 +30,7 @@ export default function Content() {
   )
   const [newMessageDialogOpen, setNewMessageDialogOpen] = useState(false)
   const [openedMessageDialogOpen, setOpenedMessageDialogOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement | null>(null)
 
   const { data: goals } = useQuery({
     queryKey: ['goals'],
@@ -54,8 +55,14 @@ export default function Content() {
 
   return (
     <UpgradeModalTrigger>
-      <div className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal">
-        <AttractionLawTour disabled={!goals || !lockedMessages} />
+      <div
+        className="flex flex-col w-full min-h-screen items-center gap-10 overflow-y-auto scrollbar-minimal relative"
+        ref={containerRef}
+      >
+        <AttractionLawTour
+          disabled={!goals || !lockedMessages}
+          containerRef={containerRef}
+        />
 
         <Header className="border-0">
           <div className="flex w-fit items-center px-3 py-2 gap-1 border border-white rounded-full">

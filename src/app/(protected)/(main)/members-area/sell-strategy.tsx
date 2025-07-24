@@ -47,6 +47,7 @@ export default function SellStrategy({ desafio }: { desafio?: boolean }) {
       setCourses(mapped)
     }
   }, [data, isFetching])
+
   if (isLoading || isFetching || !courses) {
     return (
       <div className="flex gap-4">

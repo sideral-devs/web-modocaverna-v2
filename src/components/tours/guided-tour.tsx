@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 export interface TutorialStep {
   id: number
@@ -26,6 +26,7 @@ export interface TutorialStep {
     | 'center'
     | 'bottomLeft'
     | 'topLeft'
+    | 'inside' // nova opção
 }
 
 export function GuidedTour({
@@ -34,14 +35,17 @@ export function GuidedTour({
   setIsActive,
   redirect,
   origin,
+  containerRef,
 }: {
   data: TutorialStep[]
   active: boolean
   setIsActive: (arg: boolean) => void
   redirect?: boolean
   origin?: string
+  containerRef?: MutableRefObject<HTMLDivElement | null>
 }) {
   const router = useRouter()
+  const scrollableRef = useRef<HTMLDivElement | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [highlightRect, setHighlightRect] = useState({
     top: 0,
@@ -59,13 +63,26 @@ export function GuidedTour({
       : null
 
     if (el) {
-      const rect = el.getBoundingClientRect()
-      setHighlightRect({
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      })
+      if (containerRef?.current) {
+        const elRect = el.getBoundingClientRect()
+        const containerRect = containerRef.current.getBoundingClientRect()
+
+        setHighlightRect({
+          top: elRect.top - containerRect.top,
+          left: elRect.left - containerRect.left,
+          width: elRect.width,
+          height: elRect.height,
+        })
+      } else {
+        const rect = el.getBoundingClientRect()
+
+        setHighlightRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        })
+      }
     } else {
       setHighlightRect({ top: 0, left: 0, width: 0, height: 0 })
     }
@@ -157,6 +174,13 @@ export function GuidedTour({
           transform: 'translate(-100%, -100%)',
           position: 'absolute' as const,
         }
+      case 'inside':
+        return {
+          top: rect.top + rect.height / 2,
+          left: rect.left + rect.width / 2,
+          transform: 'translate(-50%, -50%)',
+          position: 'absolute' as const,
+        }
       default:
         return {
           top: '50%',
@@ -166,9 +190,29 @@ export function GuidedTour({
     }
   }
 
-  if (!active) return null
+  function scrollToDialog() {
+    if (scrollableRef.current && active) {
+      const dialog = scrollableRef.current
+      if (!dialog) return
 
-  if (origin !== '/dashboard') return null
+      setTimeout(() => {
+        dialog.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center',
+        })
+      }, 50)
+    }
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToDialog()
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [active, currentStep])
+
+  if (!active) return null
 
   return (
     <div className="hidden md:block absolute inset-0 z-50">
@@ -190,6 +234,7 @@ export function GuidedTour({
       <Card
         className="absolute max-w-md z-[52] shadow-2xl border-2"
         style={getDialogPosition()}
+        ref={scrollableRef}
       >
         <CardHeader className="flex flex-col items-start px-6 py-4 gap-4">
           <div className="w-full flex items-center justify-between">
