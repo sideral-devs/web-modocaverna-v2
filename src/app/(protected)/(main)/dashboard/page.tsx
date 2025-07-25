@@ -92,7 +92,7 @@ function Content() {
     return redirect('/onboarding')
   }
 
-  if (user && user.plan === 'DESAFIO' && user.desafio_started_trial === '0') {
+  if (user && user.plan === 'DESAFIO' && !user.desafio_started_trial) {
     return redirect('/dashboard/desafio')
   }
 

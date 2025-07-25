@@ -55,7 +55,7 @@ export function DesafioDashboardHeader() {
           <MenuIcon className="text-primary" />
         </div>
       </SidebarMenuTrigger>
-      {user.desafio_started_trial === '1' ? (
+      {user.desafio_started_trial ? (
         <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
           <Link href="settings/plans" prefetch={false}>
             <div className="flex w-full items-center justify-center text-white">

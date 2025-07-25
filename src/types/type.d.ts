@@ -33,7 +33,7 @@ interface User {
   plan: string
   status_plan: string
   level: string
-  desafio_started_trial: '0' | '1'
+  desafio_started_trial: boolean
   roles: {
     id: number
     name: string
