@@ -32,9 +32,9 @@ export default function Layout({ children }: PropsWithChildren) {
     return redirect('/onboarding')
   }
 
-  // if (user && user.plan !== 'DESAFIO') {
-  //   return redirect('/dashboard')
-  // }
+  if (user && user.plan !== 'DESAFIO') {
+    return redirect('/dashboard')
+  }
 
   return (
     <ProtectedRoute>
