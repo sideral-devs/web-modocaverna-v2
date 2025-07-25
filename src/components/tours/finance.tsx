@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useState } from 'react'
 import { GuidedTour, TutorialStep } from './guided-tour'
 
 const steps: TutorialStep[] = [
@@ -37,17 +37,15 @@ const steps: TutorialStep[] = [
     elementId: 'graficos-financas',
     dialogPosition: 'bottom',
   },
-  {
-    id: 5,
-    title: 'Curso Recomendado',
-    description:
-      'Quer usar essa ferramenta como um verdadeiro provedor? Assista ao curso ‘Finanças com Propósito’ e domine sua realidade financeira com inteligência e firmeza.',
-    elementId: 'curso-financas',
-    dialogPosition: 'center',
-  },
 ]
 
-export function FinanceTour({ disabled }: { disabled?: boolean }) {
+export function FinanceTour({
+  disabled,
+  containerRef,
+}: {
+  disabled?: boolean
+  containerRef?: MutableRefObject<HTMLDivElement | null>
+}) {
   const params = useSearchParams()
   const startTour = params.get('startTour')
   const [active, setActive] = useState(false)
@@ -69,6 +67,7 @@ export function FinanceTour({ disabled }: { disabled?: boolean }) {
       data={steps}
       active={active}
       setIsActive={setActive}
+      containerRef={containerRef}
       redirect={false}
       origin="/financeiro"
     />

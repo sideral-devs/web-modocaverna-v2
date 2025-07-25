@@ -3,24 +3,32 @@ import { cn } from '@/lib/utils'
 import { ChevronLeft, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ReactNode, useEffect, useRef } from 'react'
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  ReactNode,
+  useEffect,
+  useRef,
+} from 'react'
 import { Button } from './ui/button'
 
 export function Header({
   children,
   className,
   containerClassName,
+  ...props
 }: {
   children: ReactNode
   className?: string
   containerClassName?: string
-}) {
+} & DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>) {
   return (
     <header
       className={cn(
         'flex w-full items-center justify-center border-b px-4 py-6',
         className,
       )}
+      {...props}
     >
       <div
         className={cn(
