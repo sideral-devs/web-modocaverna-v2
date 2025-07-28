@@ -10,10 +10,8 @@ import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
 import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { ChallengeStep } from './ChallengeStep'
-import { ConfirmStep } from './ConfirmStep'
 import { ConnectStep } from './ConnectStep'
 import { FortyDaysStep } from './FortyDaysStep'
-import { PlansSystem } from './PlansSystem'
 import { QuizStep } from './QuizStep'
 import { StartQuizStep } from './StartQuizStep'
 import { WelcomeStep } from './WelcomeStep'
@@ -21,7 +19,6 @@ import { WelcomeStep } from './WelcomeStep'
 export default function Page() {
   const router = useRouter()
   const { data: user } = useUser()
-  const [isLoading, setIsLoading] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(0)
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
@@ -34,8 +31,8 @@ export default function Page() {
         <StartQuizStep key={3} onNext={nextPhase} />,
         <QuizStep key={4} onNext={nextPhase} />,
         // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        <PlansSystem key={5} onNext={nextPhase} />,
-        <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
+        // <PlansSystem key={5} onNext={nextPhase} />,
+        // <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
       ]
     : [
         <WelcomeStep key={1} onNext={nextPhase} />,
@@ -53,7 +50,6 @@ export default function Page() {
   }
 
   async function handleFinish() {
-    setIsLoading(true)
     try {
       await api.put('/users/update?save=true', {
         tutorial_complete: true,
@@ -66,8 +62,6 @@ export default function Page() {
       }
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
-    } finally {
-      setIsLoading(false)
     }
   }
 
