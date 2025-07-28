@@ -3,12 +3,7 @@ import { SidebarMenuTrigger } from '@/components/sidebar-menu'
 import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
-import {
-  DollarSign,
-  MenuIcon,
-  MessageCircleQuestion,
-  StoreIcon,
-} from 'lucide-react'
+import { DollarSign, MenuIcon, MessageCircleQuestion } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -68,7 +63,7 @@ export function CentralHubHeader({
             <DollarSign className="text-primary" />
           </Button>
         </AffiliateDialogTrigger>
-        <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
+        {/* <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
           <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
             <StoreIcon
               className="text-red-500 group-hover:text-white"
@@ -76,7 +71,7 @@ export function CentralHubHeader({
             />
             <span className="text-sm">Loja Caverna</span>
           </div>
-        </Link>
+        </Link> */}
         <UserDropdown />
       </div>
     </header>

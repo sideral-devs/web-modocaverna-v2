@@ -36,6 +36,10 @@ export default function Layout({ children }: PropsWithChildren) {
     return redirect('/dashboard')
   }
 
+  if (user && user.desafio_started_trial) {
+    return redirect('/dashboard')
+  }
+
   return (
     <ProtectedRoute>
       <div className="flex flex-col w-full h-screen items-center pt-6 gap-8 relative overflow-y-auto scrollbar-minimal">
