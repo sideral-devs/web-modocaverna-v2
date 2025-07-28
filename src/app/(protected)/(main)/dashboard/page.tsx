@@ -98,7 +98,7 @@ function Content() {
 
   return (
     <ProtectedRoute>
-      <FirstAppearModal disabled={activeTour} />
+      <FirstAppearModal disabled={true} />
       <div className="flex flex-col w-full h-screen items-center py-6 gap-12 relative">
         <CentralHubHeader setTab={setTab} />
         <DashboardTour
