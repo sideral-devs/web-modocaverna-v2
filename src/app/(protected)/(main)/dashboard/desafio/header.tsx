@@ -3,14 +3,28 @@ import { SidebarMenuTrigger } from '@/components/sidebar-menu'
 import { Button } from '@/components/ui/button'
 import { UserDropdown } from '@/components/user-dropdown'
 import { useUser } from '@/hooks/queries/use-user'
-import { DollarSign, MenuIcon, StoreIcon } from 'lucide-react'
+import { api } from '@/lib/api'
+import { CheckIcon, DollarSign, MenuIcon, ZapIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { UpgradeCardHeader } from '../UpgradeCardHeader'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { AffiliateDialogTrigger } from '../dialogs/AffiliateDialog'
+import { UpgradeDialogExpiredTrial } from '../UpgradeDialogExpiredTrial'
 
 export function DesafioDashboardHeader() {
   const { data: user } = useUser()
+  const router = useRouter()
+
+  async function handleUpgradeUser() {
+    try {
+      await api.post('/desafio-start-trial')
+
+      router.replace('/dashboard')
+    } catch {
+      toast.error('Não foi possível fazer isso')
+    }
+  }
 
   if (!user) {
     return null
@@ -35,7 +49,79 @@ export function DesafioDashboardHeader() {
           <MenuIcon className="text-primary" />
         </div>
       </SidebarMenuTrigger>
-      <UpgradeCardHeader />
+      {user.desafio_started_trial ? (
+        <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
+          <Link href="settings/plans" prefetch={false}>
+            <div className="flex w-full items-center justify-center text-white">
+              {/* <div className="pl-2">
+                    <AlarmClock color="#e9b208" />
+                  </div> */}
+              <div className="flex flex-col">
+                <div>
+                  <span className="text-green-600">
+                    Seu acesso ao Desafio Caverna continua ativo.
+                  </span>
+                </div>
+                <p className="text-xs">
+                  O teste do Plano Cavernoso com ferramentas extras terminou.
+                </p>
+                <span className="text-xs text-yellow-500">
+                  Quer manter os recursos avançados? Aproveite o desconto!
+                </span>
+              </div>
+            </div>
+          </Link>
+          <div className="flex">
+            <UpgradeDialogExpiredTrial>
+              <Button
+                className="flex rounded-xl text-[10px] pulsating-shadow lg:max-w-32 gap-1 px-2"
+                size="sm"
+              >
+                <ZapIcon className="fill-white" size={16} />
+                <span className="w-full break-words whitespace-normal text-[10px] uppercase">
+                  Fazer upgrade com desconto
+                </span>
+              </Button>
+            </UpgradeDialogExpiredTrial>
+          </div>
+        </div>
+      ) : (
+        <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
+          <Link href="settings/plans" prefetch={false}>
+            <div className="flex w-full items-center justify-center gap-4">
+              <div className="flex flex-col w-7 h-7 items-center justify-center bg-white rounded-full">
+                <CheckIcon
+                  className="text-primary"
+                  size={16}
+                  strokeWidth={1.5}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-red-600">
+                  Desbloqueie 7 dias grátis na Central Caverna
+                </span>
+                <p className="text-xs opacity-60">
+                  O teste do Plano Cavernoso com ferramentas extras terminou.
+                </p>
+              </div>
+            </div>
+          </Link>
+          <div className="flex">
+            <Button
+              className="flex rounded-xl text-[10px]  text-primary pulsating-shadow lg:max-w-32 gap-1 px-2"
+              size="sm"
+              variant="secondary"
+              onClick={handleUpgradeUser}
+            >
+              <ZapIcon className="fill-primary" strokeWidth={0} size={16} />
+              <span className="w-full break-words whitespace-normal text-[10px] uppercase">
+                Ativar Acesso
+              </span>
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="flex items-center gap-2">
         <AffiliateDialogTrigger>
           <Button
@@ -45,7 +131,7 @@ export function DesafioDashboardHeader() {
             <DollarSign className="text-primary" />
           </Button>
         </AffiliateDialogTrigger>
-        <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
+        {/* <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
           <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
             <StoreIcon
               className="text-red-500 group-hover:text-white"
@@ -53,7 +139,7 @@ export function DesafioDashboardHeader() {
             />
             <span className="text-sm">Loja Caverna</span>
           </div>
-        </Link>
+        </Link> */}
         <UserDropdown />
       </div>
     </header>

@@ -17,8 +17,8 @@ export function UpgradeCardHeader() {
 
   const purchaseDate = dayjs(user.data_de_compra)
   const nextSevenDays = purchaseDate.add(7, 'day')
-  const remainingHours = dayjs(nextSevenDays).diff(dayjs(), 'hour')
-  const remainingDays = Math.ceil(remainingHours / 24)
+  // const remainingHours = dayjs(nextSevenDays).diff(dayjs(), 'hour')
+  // const remainingDays = Math.ceil(remainingHours / 24)
   const remainingHoursTrial = dayjs(user.data_de_renovacao).diff(
     dayjs(),
     'hour',
@@ -143,9 +143,9 @@ export function UpgradeCardHeader() {
                     Durante os primeiros 7 dias, você testa o Plano Cavernoso
                     completo.
                   </p>
-                  <span className="text-[10px] text-yellow-500">
+                  {/* <span className="text-[10px] text-yellow-500">
                     Faltam {remainingDays} dia(s) para decidir
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </Link>
