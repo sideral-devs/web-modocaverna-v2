@@ -1,8 +1,8 @@
 import { GlobalProviders } from '@/components/providers'
+import { env } from '@/lib/env'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import { Rubik } from 'next/font/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { env } from '@/lib/env'
 import './globals.css'
 
 const rubik = Rubik({
@@ -32,6 +32,7 @@ export default function RootLayout({
     <html lang="pt_BR">
       <body className={`${rubik.className} antialiased`}>
         {/* <MobileAlert /> */}
+        <meta name="apple-itunes-app" content="app-id=6544803387" />
         <GlobalProviders>{children}</GlobalProviders>
         <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_METRIC_ID!} />
       </body>
