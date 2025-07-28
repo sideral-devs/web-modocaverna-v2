@@ -192,14 +192,8 @@ export default function Page() {
     }
   }, [])
 
-  const {
-    shapeRegistrations,
-    // hasRegistration,
+  const { shapeRegistrations, isLoading: isLoadingShape } = useShape()
 
-    isLoading: isLoadingShape,
-  } = useShape()
-
-  const firstShapeRegistration = shapeRegistrations?.[0]
   const lastShapeRegistration =
     shapeRegistrations && shapeRegistrations.length > 1
       ? shapeRegistrations[shapeRegistrations.length - 1]
@@ -208,14 +202,6 @@ export default function Page() {
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 0)
   })
-
-  // Redirect to the first step if no photos are uploaded
-  useEffect(() => {
-    if (!firstShapeRegistration && !isLoadingShape) {
-      // No registration at all
-      router.push('/exercicios/steps?step=1')
-    }
-  }, [firstShapeRegistration, isLoadingShape, router])
 
   useEffect(() => {
     if (
