@@ -136,13 +136,13 @@ export function PlanCavernosoExpired({
                 </Badge>
               )}
               <h2 className="text-white flex items-end gap-2 mb-2 font-semibold text-3xl">
-                {selectedPlan === 'yearly' ? '12x de R$30' : 'R$ 49'}
+                {selectedPlan === 'yearly' ? '12x de R$20' : 'R$ 29'}
                 <span className="text-2xl">
                   {selectedPlan === 'yearly' ? '' : '/mês'}
                 </span>
               </h2>
               <span className="text-zinc-400 font-medium text-sm">
-                {selectedPlan === 'yearly' && 'ou R$299 à vista'}
+                {selectedPlan === 'yearly' && 'ou R$199 à vista'}
               </span>
             </div>
             <div className="flex items-center gap-2 flex-col">

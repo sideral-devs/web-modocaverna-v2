@@ -153,15 +153,15 @@ export function PlanCavernosoNonOnboarding({
               )}
               {selectedPlan === 'yearly' ? (
                 <h2 className="text-white flex items-end gap-2 mb-2 font-semibold text-3xl">
-                  12x <span className="text-2xl">de R$30</span>
+                  12x <span className="text-2xl">de R$20</span>
                 </h2>
               ) : (
                 <h2 className="text-white flex items-end gap-2 mb-2 font-semibold text-3xl">
-                  R$ 49 <span className="text-2xl">/mês</span>
+                  R$ 29 <span className="text-2xl">/mês</span>
                 </h2>
               )}
               <span className="text-zinc-400 font-medium text-sm">
-                {selectedPlan === 'yearly' && 'ou R$299 à vista'}
+                {selectedPlan === 'yearly' && 'ou R$199 à vista'}
               </span>
             </div>
             <div className="flex items-center gap-2 flex-col">

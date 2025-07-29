@@ -1,8 +1,8 @@
-import { Lightning } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { RadioGroup } from '@/components/ui/radio-group'
 import { useUser } from '@/hooks/queries/use-user'
+import { Lightning } from '@phosphor-icons/react'
 import { Dayjs } from 'dayjs'
 
 interface PlanUpdateToAnnualProps {
@@ -49,7 +49,7 @@ export function PlanAnnualRenovation({
                       Anual
                     </Label>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl ">R$299</span>
+                      <span className="text-2xl ">R$199</span>
                       <span className="">/ano</span>
                     </div>
                   </div>
