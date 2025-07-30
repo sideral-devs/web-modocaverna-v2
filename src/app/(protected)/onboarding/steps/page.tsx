@@ -29,7 +29,7 @@ export default function Page() {
         <WelcomeStep key={1} onNext={nextPhase} />,
         <ConnectStep key={2} onNext={nextPhase} />,
         <StartQuizStep key={3} onNext={nextPhase} />,
-        <QuizStep key={4} onNext={nextPhase} />,
+        <QuizStep key={4} onNext={handleFinish} />,
         // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
         // <PlansSystem key={5} onNext={nextPhase} />,
         // <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
