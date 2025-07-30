@@ -7,7 +7,6 @@ import { muxVideos } from '@/lib/constants'
 import { cellphoneMask, ddiMask, removeMask } from '@/lib/utils'
 import { useOnboardingStore } from '@/store/onboarding'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -49,7 +48,6 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
     handleSubmit,
     register,
     setValue,
-    setError,
     formState: { errors, isSubmitting },
   } = form
 
@@ -60,14 +58,15 @@ export function WelcomeStep({ onNext }: { onNext: () => void }) {
     try {
       await api.post(`/evolution/check-whatsapp/${number}`)
     } catch (err) {
-      if (err instanceof AxiosError) {
-        if (err?.status !== 500) {
-          setError('cellphone', {
-            message: 'Esse número de WhatsApp não existe',
-          })
-          return
-        }
-      }
+      console.log(err)
+      // if (err instanceof AxiosError) {
+      //   if (err?.status !== 500) {
+      //     setError('cellphone', {
+      //       message: 'Esse número de WhatsApp não existe',
+      //     })
+      //     return
+      //   }
+      // }
     }
 
     onNext()
