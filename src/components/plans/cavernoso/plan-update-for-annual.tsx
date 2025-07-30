@@ -59,12 +59,12 @@ export function PlanCavernosoUpdate({
                 </Label>
                 {!isMonthlyPlan ? (
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold">R$ 49</span>
+                    <span className="text-2xl font-bold">R$ 29</span>
                     <span className="text-zinc-400">/mês</span>
                   </div>
                 ) : (
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold">R$ 299</span>
+                    <span className="text-2xl font-bold">R$ 199</span>
                     <span className="text-zinc-400">/ano</span>
                   </div>
                 )}
@@ -99,8 +99,8 @@ export function PlanCavernosoUpdate({
                       Anual
                     </Label>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold">12x de R$ 30</span>
-                      <span className="text-zinc-400">ou R$299/ano</span>
+                      <span className="text-2xl font-bold">12x de R$ 20</span>
+                      <span className="text-zinc-400">ou R$199/ano</span>
                     </div>
                     <span className="text-yellow-500 absolute right-4 top-4 font-medium text-sm">
                       Assinatura atual
