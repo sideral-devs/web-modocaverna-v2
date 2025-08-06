@@ -128,20 +128,27 @@ export function UpgradeCardHeader() {
         (user.data_de_compra && nextSevenDays.isAfter(dayjs()) ? (
           <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
             <Link href="settings/plans" prefetch={false}>
-              <div className="flex w-full items-center justify-center text-white">
+              <div className="flex w-full items-center justify-center text-white gap-4">
                 {/* <div className="pl-2">
                     <AlarmClock color="#e9b208" />
                   </div> */}
 
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col items-center justify-center w-8 h-8 bg-white rounded-full text-lg">
+                  {/* <Hourglass className="text-black" size={16} /> */}⏳
+                </div>
+
+                <div className="flex flex-col gap-0.5">
                   <div className="flex flex-row text-normal">
-                    <span className="text-green-600">
-                      Seu acesso ao Desafio Caverna está ativo por 1 ano
+                    <span className="text-sm">
+                      Curtindo a experiência? Aproveite a condição especial
                     </span>
                   </div>
-                  <p className="text-[10px]">
-                    Durante os primeiros 7 dias, você testa o Plano Cavernoso
-                    completo.
+                  <p className="text-xs text-yellow-400">
+                    Faltam{' '}
+                    {dayjs(user.desafio_started_trial_at)
+                      .add(7, 'days')
+                      .diff(dayjs(), 'days')}{' '}
+                    dias para decidir
                   </p>
                   {/* <span className="text-[10px] text-yellow-500">
                     Faltam {remainingDays} dia(s) para decidir
@@ -166,22 +173,27 @@ export function UpgradeCardHeader() {
         ) : (
           <div className="flex max-w-sm lg:max-w-[600px] bg-card rounded-lg px-4 py-2 gap-3 items-center justify-center">
             <Link href="settings/plans" prefetch={false}>
-              <div className="flex w-full items-center justify-center text-white">
+              <div className="flex w-full items-center justify-center text-white gap-4">
                 {/* <div className="pl-2">
                     <AlarmClock color="#e9b208" />
                   </div> */}
-                <div className="flex flex-col">
-                  <div>
-                    <span className="text-green-600">
-                      Seu acesso ao Desafio Caverna continua ativo.
+
+                <div className="flex flex-col items-center justify-center w-8 h-8 bg-white rounded-full text-lg">
+                  {/* <Hourglass className="text-black" size={16} /> */}⏳
+                </div>
+
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-row text-normal">
+                    <span className="text-sm">
+                      Seu teste da Central Caverna acabou.
                     </span>
                   </div>
-                  <p className="text-xs">
-                    O teste do Plano Cavernoso com ferramentas extras terminou.
+                  <p className="text-xs text-yellow-400">
+                    Aproveite o desconto para desbloquear tudo novamente.
                   </p>
-                  <span className="text-xs text-yellow-500">
-                    Quer manter os recursos avançados? Aproveite o desconto!
-                  </span>
+                  {/* <span className="text-[10px] text-yellow-500">
+                    Faltam {remainingDays} dia(s) para decidir
+                  </span> */}
                 </div>
               </div>
             </Link>

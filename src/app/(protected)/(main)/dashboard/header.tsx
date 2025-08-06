@@ -27,6 +27,8 @@ export function CentralHubHeader({
     return null
   }
 
+  console.log(user)
+
   return (
     <header className="flex w-full max-w-8xl items-center justify-between px-5">
       <div className="hidden lg:flex items-center gap-2">
