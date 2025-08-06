@@ -62,6 +62,9 @@ export default function Layout({ children }: PropsWithChildren) {
                   Indique e ganhe
                 </Tab>
               </Link>
+              <Link href={'/dashboard/desafio/bonus'}>
+                <Tab active={pathname.includes('/bonus')}>Bônus Exclusivos</Tab>
+              </Link>
             </div>
             {children}
           </div>

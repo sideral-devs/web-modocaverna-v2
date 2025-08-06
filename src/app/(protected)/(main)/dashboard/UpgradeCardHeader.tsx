@@ -15,8 +15,8 @@ export function UpgradeCardHeader() {
     return null
   }
 
-  const purchaseDate = dayjs(user.data_de_compra)
-  const nextSevenDays = purchaseDate.add(7, 'day')
+  // const purchaseDate = dayjs(user.data_de_compra)
+  const nextSevenDays = dayjs(user.desafio_started_trial_at).add(7, 'days')
   // const remainingHours = dayjs(nextSevenDays).diff(dayjs(), 'hour')
   // const remainingDays = Math.ceil(remainingHours / 24)
   const remainingHoursTrial = dayjs(user.data_de_renovacao).diff(
@@ -144,11 +144,8 @@ export function UpgradeCardHeader() {
                     </span>
                   </div>
                   <p className="text-xs text-yellow-400">
-                    Faltam{' '}
-                    {dayjs(user.desafio_started_trial_at)
-                      .add(7, 'days')
-                      .diff(dayjs(), 'days')}{' '}
-                    dias para decidir
+                    Faltam {nextSevenDays.diff(dayjs(), 'days')} dias para
+                    decidir
                   </p>
                   {/* <span className="text-[10px] text-yellow-500">
                     Faltam {remainingDays} dia(s) para decidir
