@@ -2,6 +2,7 @@
 import { ProtectedRoute } from '@/components/protected-route'
 import { useUser } from '@/hooks/queries/use-user'
 import { cn } from '@/lib/utils'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import { redirect, usePathname } from 'next/navigation'
 import { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
@@ -36,7 +37,11 @@ export default function Layout({ children }: PropsWithChildren) {
     return redirect('/dashboard')
   }
 
-  if (user && user.desafio_started_trial) {
+  if (
+    user &&
+    user.desafio_started_trial &&
+    dayjs().isBefore(dayjs(user.desafio_started_trial_at).add(7, 'days'))
+  ) {
     return redirect('/dashboard')
   }
 
@@ -61,6 +66,9 @@ export default function Layout({ children }: PropsWithChildren) {
                 <Tab active={pathname.includes('/indique-e-ganhe')}>
                   Indique e ganhe
                 </Tab>
+              </Link>
+              <Link href={'/dashboard/desafio/bonus'}>
+                <Tab active={pathname.includes('/bonus')}>Bônus Exclusivos</Tab>
               </Link>
             </div>
             {children}

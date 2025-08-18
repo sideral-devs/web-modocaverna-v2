@@ -1,12 +1,12 @@
 'use client'
 
+import { Badge } from '@/components/ui/badge'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Bell, Home, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Badge } from '@/components/ui/badge'
 
 export function MainNav() {
   const pathname = usePathname()

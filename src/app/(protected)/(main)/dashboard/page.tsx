@@ -3,6 +3,7 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { DashboardTour } from '@/components/tours/dashboard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useUser } from '@/hooks/queries/use-user'
+import dayjs from 'dayjs'
 import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
 import { AreaBeneficios } from './AreaBeneficios'
@@ -92,7 +93,13 @@ function Content() {
     return redirect('/onboarding')
   }
 
-  if (user && user.plan === 'DESAFIO' && !user.desafio_started_trial) {
+  if (
+    user &&
+    user.plan === 'DESAFIO' &&
+    (!user.desafio_started_trial ||
+      (user.desafio_started_trial &&
+        dayjs().isAfter(dayjs(user.desafio_started_trial_at).add(7, 'days'))))
+  ) {
     return redirect('/dashboard/desafio')
   }
 

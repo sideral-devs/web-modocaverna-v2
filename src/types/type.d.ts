@@ -34,6 +34,7 @@ interface User {
   status_plan: string
   level: string
   desafio_started_trial: boolean
+  desafio_started_trial_at: string
   roles: {
     id: number
     name: string

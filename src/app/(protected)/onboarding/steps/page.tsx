@@ -3,6 +3,7 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { useUser } from '@/hooks/queries/use-user'
 import { api } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboarding'
+import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -17,6 +18,7 @@ import { StartQuizStep } from './StartQuizStep'
 import { WelcomeStep } from './WelcomeStep'
 
 export default function Page() {
+  const queryClient = useQueryClient()
   const router = useRouter()
   const { data: user } = useUser()
   const [currentPhase, setCurrentPhase] = useState(0)
@@ -55,6 +57,9 @@ export default function Page() {
         tutorial_complete: true,
         telefone: cellphone,
       })
+
+      queryClient.clear()
+
       if (window?.innerWidth < 768) {
         router.replace('/onboarding/concluido')
       } else {
