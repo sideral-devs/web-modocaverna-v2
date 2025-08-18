@@ -108,7 +108,7 @@ export function DesafioDashboardHeader() {
                   Desbloqueie 7 dias grátis na Central Caverna
                 </span>
                 <p className="text-xs opacity-60">
-                  O teste do Plano Cavernoso com ferramentas extras terminou.
+                  Teste a Central Caverna gratuitamente por tempo limitado
                 </p>
               </div>
             </div>
