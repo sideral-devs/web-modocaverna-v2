@@ -27,28 +27,13 @@ export function CommissionPlanDialogTrigger({
           <DialogTitle>Solicite sua afiliação</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col w-full bg-zinc-900 gap-2 px-4 py-2 ">
-          <Card className="flex flex-col w-full h-auto justify-center items-center py-4 border border-red-600 ">
-            <p className="text-white pb-4 text-lg">
-              Cadastro na Plataforma de Vendas
-            </p>
-            <a
-              className=""
-              href="https://redirect.lifs.app/cadastro-ticto"
-              target="_blank"
-            >
-              <Button size={'sm'} className="w-52 text-sm">
-                Clique aqui
-              </Button>
-            </a>
-          </Card>
-
           <span className="text-normal text-primary pt-2 flex">
             PRODUTOS DISPONÍVEIS
           </span>
           <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start gra-4  justify-start">
               <p className="text-white text-bold pb-2 w-full flex justify-center text-2xl uppercase">
-                Desafio Caverna
+                MODO CAVERNA - DESAFIO 40D
               </p>{' '}
               <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
@@ -81,7 +66,7 @@ export function CommissionPlanDialogTrigger({
           <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
               <p className="text-white  text-2xl w-full flex justify-center text text-bold pb-2 uppercase">
-                Modo Caverna
+                APLICATIVO MODO CAVERNA
               </p>{' '}
               <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
@@ -95,10 +80,10 @@ export function CommissionPlanDialogTrigger({
                   Página de vendas:
                   <a
                     className="pl-2 text-primary"
-                    // href="https://desafio.modocaverna.com/up-dc/"
-                    // target="_blank"
+                    href="https://desafio.modocaverna.com/app-af"
+                    target="_blank"
                   >
-                    EM BREVE
+                    CLIQUE AQUI
                   </a>
                 </p>
               </div>

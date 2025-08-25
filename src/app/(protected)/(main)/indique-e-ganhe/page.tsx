@@ -227,7 +227,7 @@ function Content() {
                 <Card className="flex flex-col w-full h-24 md:h-40 items-start justify-center p-4 md:p-8 gap-6 relative cursor-pointer">
                   <MapIcon className="scale-75 md:scale-100 text-primary" />
                   <p className="text-xs md:text-base font-semibold truncate">
-                    Mapa do Público Alvo
+                    Funis, Fluxos e Scripts
                   </p>
                 </Card>
               </PublicMapDialogTrigger>
