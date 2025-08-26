@@ -1,4 +1,6 @@
 'use client'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -6,16 +8,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import Image from 'next/image'
 import { ReactNode } from 'react'
 
-export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
+export function ShareMaterialDialogTrigger({
+  children,
+}: {
+  children: ReactNode
+}) {
+  // const { data: user } = useUser()
+  // const isDesafioPlan = user?.plan === 'DESAFIO'
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-zinc-800 border-zinc-700 overflow-y-auto gap-0 w-[400px] max-h-[75vh] overflow-auto scrollbar-minimal">
-        <DialogHeader className=" bg-zinc-800 w-full" color="inherit">
-          <DialogTitle>Funis, Fluxos e Scripts</DialogTitle>
+      <DialogContent className="w-[400px] 3xl:max-h-max overflow-y-auto scrollbar-minimal h-auto pe-0 rounded-lg">
+        <DialogHeader className=" bg-zinc-800" color="inherit">
+          <DialogTitle>Materiais de divulgação</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col w-full bg-zinc-900 gap-2 px-4 py-2 overflow-y-auto">
           {/* Criativos para tráfego pago */}

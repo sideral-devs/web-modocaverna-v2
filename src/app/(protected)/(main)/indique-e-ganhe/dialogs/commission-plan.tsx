@@ -32,8 +32,8 @@ export function CommissionPlanDialogTrigger({
           </span>
           <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start gra-4  justify-start">
-              <p className="text-white text-bold pb-2 w-full flex justify-center text-2xl uppercase">
-                MODO CAVERNA - DESAFIO 40D
+              <p className="text-white text-bold pb-2 w-full flex justify-center text-xl uppercase">
+                MODO CAVERNA - DESAFIO
               </p>{' '}
               <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
@@ -65,8 +65,8 @@ export function CommissionPlanDialogTrigger({
           </Card>
           <Card className="flex flex-col gap-2 w-full h-full py-4 justify-center items-center bg-[#2a2a2a]">
             <div className="flex w-full flex-col px-3 items-start justify-center">
-              <p className="text-white  text-2xl w-full flex justify-center text text-bold pb-2 uppercase">
-                APLICATIVO MODO CAVERNA
+              <p className="text-white  text-xl w-full flex justify-center text text-bold pb-2 uppercase">
+                APLICATIVO CENTRAL CAVERNA
               </p>{' '}
               <div className="flex flex-row jusfity-between   py-1i text-[#ff3333] rounded-lg py-1 my-1 w-fit">
                 <p className="text-base opacity-100 text-zinc-400">
