@@ -7,13 +7,12 @@ import {
   DollarSign,
   MenuIcon,
   MessageCircleQuestion,
-  StoreIcon,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { UpgradeCardHeader } from './UpgradeCardHeader'
-import { AffiliateDialogTrigger } from './dialogs/AffiliateDialog'
+
 
 export function CentralHubHeader({
   setTab,
@@ -60,21 +59,13 @@ export function CentralHubHeader({
         >
           <MessageCircleQuestion className="text-primary" />
         </Button>
-        <AffiliateDialogTrigger>
-          <Button
-            variant="outline"
-            className="hidden lg:flex h-11 items-center group justify-center px-5 gap-2 rounded-xl transition-all duration-200"
-          >
-            <DollarSign className="text-primary" />
-          </Button>
-        </AffiliateDialogTrigger>
-        <Link href="https://redirect.lifs.app/loja-mc" target="_blank">
-          <div className="hidden lg:flex h-11 items-center group hover:bg-red-500 justify-center bg-card px-5 gap-2 rounded-xl">
-            <StoreIcon
-              className="text-red-500 group-hover:text-white"
+        <Link href="/indique-e-ganhe">
+          <div className="hidden lg:flex h-11 items-center group hover:bg-green-500 justify-center bg-card px-5 gap-2 rounded-xl">
+            <DollarSign
+              className="text-green-500 group-hover:text-white"
               size={20}
             />
-            <span className="text-sm">Loja Caverna</span>
+            <span className="text-sm">Indique e Ganhe</span>
           </div>
         </Link>
         <UserDropdown />
