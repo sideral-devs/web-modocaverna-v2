@@ -1,4 +1,4 @@
-'use client'
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
@@ -15,7 +15,6 @@ export function useBoard() {
     refetchOnWindowFocus: false,
     staleTime: 10_000,
   })
-
 
   function setColumnsCache(next: TaskList[]) {
     queryClient.setQueryData<TaskList[]>(['task-lists'], next)
@@ -42,22 +41,13 @@ export function useBoard() {
       return res.data as TaskList
     },
 
-    onMutate: async (updated) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['task-lists'] })
-
       const previous = queryClient.getQueryData<TaskList[]>(['task-lists'])
-      queryClient.setQueryData<TaskList[]>(['task-lists'], (old) =>
-        old
-          ? old.map((col) =>
-            col.id === updated.id ? { ...col, ...updated } : col,
-          )
-          : old,
-      )
-
       return { previous }
     },
 
-    onError: (_err, updated, ctx) => {
+    onError: (_err, _vars, ctx) => {
       if (ctx?.previous) {
         queryClient.setQueryData(['task-lists'], ctx.previous)
       }
@@ -72,10 +62,6 @@ export function useBoard() {
           )
           : old,
       )
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['task-lists'] })
     },
   })
 
@@ -151,6 +137,7 @@ export function useBoard() {
       queryClient.invalidateQueries({ queryKey: ['task-lists'] })
     },
   })
+
   const reorderTask = useMutation({
     mutationFn: async (d: { tarefa_id: number; position: number; card_id: number }) => {
       await api.patch(`/tarefas/reorder/${d.tarefa_id}`, {
@@ -232,7 +219,6 @@ export function useBoard() {
     },
   })
 
-
   const deleteTask = useMutation({
     mutationFn: (id: number) => api.delete(`/tarefas/destroy/${id}`),
 
@@ -261,7 +247,6 @@ export function useBoard() {
       queryClient.invalidateQueries({ queryKey: ['task-lists'] })
     },
   })
-
 
   function setTasksCache(cardId: number, next: Task[]) {
     queryClient.setQueryData<TaskList[]>(['task-lists'], (old) =>
