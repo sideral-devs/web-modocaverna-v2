@@ -9,6 +9,7 @@ import { useBoard } from '@/hooks/queries/use-board'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { DeleteColumnButton } from './task-delete-column'
 import { RenameColumnInput } from './task-container-rename'
+import DefaultLoading from '../ui/loading'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,73 +93,78 @@ export function ColumnContainer({ column }: ColumnContainerProps) {
 
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="flex flex-col w-72 shrink-0 h-fit max-h-[38rem] p-1 border rounded-2xl bg-zinc-900"
-    >
-      <div className="flex items-center justify-between p-2 gap-2 text-xs text-zinc-400">
-        <div className='flex items-center gap-2'>
-          <span className="truncate">{!editMode && column.title}</span>
-          {editMode && (
-            <RenameColumnInput
-              id={Number(column.id)}
-              initialValue={column.title}
-              position={column.position}
-              onFinish={() => setEditMode(false)}
-            />
-          )}
-          <Popover>
-            <PopoverTrigger asChild>
-              <EllipsisIcon />
-            </PopoverTrigger>
-            <PopoverContent className="w-52 p-1 bg-zinc-800 rounded-lg text-xs">
-              <button
-                onClick={() => setEditMode(true)}
-                className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
-              >
-                Renomear
-              </button>
-              <DeleteColumnButton columnId={Number(column.id)} />
-            </PopoverContent>
-          </Popover>
+    <>
+      <DefaultLoading visible={reorderTask.isPending} />
+
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex flex-col w-72 shrink-0 h-fit max-h-[38rem] p-1 border rounded-2xl bg-zinc-900"
+      >
+        <div className="flex items-center justify-between p-2 gap-2 text-xs text-zinc-400">
+          <div className='flex items-center gap-2'>
+            <span className="truncate">{!editMode && column.title}</span>
+            {editMode && (
+              <RenameColumnInput
+                id={Number(column.id)}
+                initialValue={column.title}
+                position={column.position}
+                onFinish={() => setEditMode(false)}
+              />
+            )}
+            <Popover>
+              <PopoverTrigger asChild>
+                <EllipsisIcon />
+              </PopoverTrigger>
+              <PopoverContent className="w-52 p-1 bg-zinc-800 rounded-lg text-xs">
+                <button
+                  onClick={() => setEditMode(true)}
+                  className="flex w-full justify-start px-4 py-2 rounded text-zinc-400 hover:bg-red-100 hover:text-primary transition-all duration-300"
+                >
+                  Renomear
+                </button>
+                <DeleteColumnButton columnId={Number(column.id)} />
+              </PopoverContent>
+            </Popover>
+
+          </div>
+          <GripHorizontal
+            className="text-zinc-500 hover:text-zinc-400 cursor-grab"
+            {...attributes}
+            {...listeners}
+          />
 
         </div>
-        <GripHorizontal
-          className="text-zinc-500 hover:text-zinc-400 cursor-grab"
-          {...attributes}
-          {...listeners}
-        />
 
+        <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto scrollbar-minimal">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
+          >
+            <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
+              {tasks.map((task) => (
+                <TaskCard key={task.tarefa_id} task={task} />
+              ))}
+            </SortableContext>
+          </DndContext>
+
+        </div>
+
+        <button onClick={() => createTask.mutate({
+          card_id: Number(column.id),
+          item: `Nova Tarefa`,
+          prioridade: 'Prioridade Média',
+          descricao: null,
+          index: 0,
+          position: 0,
+        })} className="flex items-center p-2 gap-2 text-sm text-primary">
+          <PlusIcon />
+          Adicionar um card
+        </button>
       </div>
+    </>
 
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto scrollbar-minimal">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragEnd={handleDragEnd}
-          modifiers={[restrictToVerticalAxis]}
-        >
-          <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
-            {tasks.map((task) => (
-              <TaskCard key={task.tarefa_id} task={task} />
-            ))}
-          </SortableContext>
-        </DndContext>
-
-      </div>
-
-      <button onClick={() => createTask.mutate({
-        card_id: Number(column.id),
-        item: `Nova Tarefa`,
-        prioridade: 'Prioridade Média',
-        descricao: null,
-        index: 0,
-        position: 0,
-      })} className="flex items-center p-2 gap-2 text-sm text-primary">
-        <PlusIcon />
-        Adicionar um card
-      </button>
-    </div>
   )
 }

@@ -18,6 +18,7 @@ import { useBoard } from '@/hooks/queries/use-board'
 import { ColumnContainer } from './task-container'
 import CreateColumnDialog from './create-column-dialog'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
+import DefaultLoading from '../ui/loading'
 
 export default function Board() {
   const { getTasks, setColumnsCache, updateTaskColumn } = useBoard()
@@ -59,23 +60,30 @@ export default function Board() {
     })
   }
 
-  if (getTasks.isPending) return null
+  if (getTasks.isPending) {
+    return;
+  }
+
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragEnd={handleDragEnd}
-      modifiers={[restrictToHorizontalAxis]}
-    >
-      <SortableContext items={itemIds} strategy={horizontalListSortingStrategy}>
-        <div className="flex w-full gap-5 overflow-x-auto overflow-y-hidden scrollbar-minimal">
-          {columns.map((col) => (
-            <ColumnContainer key={col.id} column={col} />
-          ))}
-          <CreateColumnDialog />
-        </div>
-      </SortableContext>
-    </DndContext>
+    <>
+      <DefaultLoading visible={updateTaskColumn.isPending} />
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToHorizontalAxis]}
+      >
+        <SortableContext items={itemIds} strategy={horizontalListSortingStrategy}>
+          <div className="flex w-full gap-5 overflow-x-auto overflow-y-hidden scrollbar-minimal">
+            {columns.map((col) => (
+              <ColumnContainer key={col.id} column={col} />
+            ))}
+            <CreateColumnDialog />
+          </div>
+        </SortableContext>
+      </DndContext>
+    </>
   )
 }
