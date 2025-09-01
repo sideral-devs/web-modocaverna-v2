@@ -1,6 +1,5 @@
 'use client'
 
-import { ConfigPomodoroDialogTrigger } from '@/app/(protected)/(main)/flow-produtividade/config-pomodoro'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -16,7 +15,8 @@ import { ClockIcon, Pause, Play, Settings } from 'lucide-react'
 import { Onest } from 'next/font/google'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { Card } from './ui/card'
+import { Card } from '../ui/card'
+import { ConfigPomodoroDialogTrigger } from './pomodoro-config'
 
 const onest = Onest({
   subsets: ['latin'],
@@ -139,10 +139,10 @@ export default function PomodoroTimer() {
     setTimeLeft(
       pomodoro
         ? Number(
-            mode === 'productivity'
-              ? pomodoro.minutagem_produtividade
-              : pomodoro.minutagem_estudos,
-          )
+          mode === 'productivity'
+            ? pomodoro.minutagem_produtividade
+            : pomodoro.minutagem_estudos,
+        )
         : 0,
     )
     setPhaseCount(0)

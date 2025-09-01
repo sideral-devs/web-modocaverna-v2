@@ -2,7 +2,7 @@
 import { ProductivityChart } from '@/components/charts/productivity'
 import { Header, HeaderClose } from '@/components/header'
 import { UpgradeModalTrigger } from '@/components/modals/UpdateModalTrigger'
-import PomodoroTimer from '@/components/pomodoro'
+import PomodoroTimer from '@/components/flow-produtividade/pomodoro'
 import { ProtectedRoute } from '@/components/protected-route'
 import { StartTourButton } from '@/components/start-tour-button'
 import { FlowTour } from '@/components/tours/flow'
@@ -10,12 +10,11 @@ import { Card } from '@/components/ui/card'
 import dayjs from 'dayjs'
 import { AlarmClock } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { ChecklistDialog } from './checklist-dialog'
-import { Board } from './tasks'
+import { ChecklistDialog } from '@/components/flow-produtividade/checklist-dialog'
+import Board from '@/components/flow-produtividade/board'
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(true)
 
   useEffect(() => {
     const lastOpenedTimestamp = localStorage.getItem('checklistModalLastOpened')
@@ -77,7 +76,7 @@ export default function Page() {
             <div className="position-relative">
               <div className="w-full absolute left-0 h-[2px] bg-zinc-800" />
             </div>
-            <Board isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+            <Board />
           </section>
           <ChecklistDialog open={isOpen} setOpen={setIsOpen} />
           <FlowTour />

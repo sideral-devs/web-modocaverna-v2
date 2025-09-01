@@ -64,6 +64,7 @@ export function GoogleAuth() {
       updateToken(sessionToken)
     }
   }, [session.status, session.data, userConfigs, updateToken])
+
   const handleSignIn = async () => {
     await signIn('google')
   }
