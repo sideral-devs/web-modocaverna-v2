@@ -6,7 +6,7 @@ import { useUser } from '@/hooks/queries/use-user'
 import dayjs from 'dayjs'
 import { redirect, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
-import { AreaBeneficios } from './AreaBeneficios'
+
 import { CentralCaverna } from './CentralCaverna'
 import { ChatDialog } from './dialogs/ChatDialog'
 import { FirstAppearModal } from './FirstAppearModal'
@@ -42,8 +42,7 @@ function Content() {
         return localStorage.getItem('doneTempleForgeTour')
       case 'cursos-e-conhecimentos':
         return localStorage.getItem('doneCoursesTour')
-      case 'area-de-beneficios':
-        return localStorage.getItem('doneBenefitsTour')
+
       default:
         return localStorage.getItem('doneDashboardTour')
     }
@@ -57,8 +56,7 @@ function Content() {
         return localStorage.setItem('doneTempleForgeTour', 'true')
       case 'cursos-e-conhecimentos':
         return localStorage.setItem('doneCoursesTour', 'true')
-      case 'area-de-beneficios':
-        return localStorage.setItem('doneBenefitsTour', 'true')
+
       default:
         return localStorage.setItem('doneDashboardTour', 'true')
     }
@@ -149,18 +147,13 @@ function Content() {
               >
                 Cursos & Networking
               </TabsTrigger>
-              <TabsTrigger
-                value="area-de-beneficios"
-                data-tutorial-id="area-de-beneficios"
-              >
-                Área de Benefícios
-              </TabsTrigger>
+
             </TabsList>
             <CentralCaverna value="central-caverna" />
             <OrdemNoCaos value="ordem-no-caos" />
             <TempleForge value="forja-do-templo" />
             <Networking value="cursos-e-conhecimentos" />
-            <AreaBeneficios value="area-de-beneficios" />
+
           </Tabs>
         </div>
         <div

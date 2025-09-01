@@ -23,7 +23,7 @@ export function AffiliatesHeader() {
         >
           <MessageCircleQuestion className="text-primary" />
         </Button>
-        <HeaderClose to="area-de-beneficios" />
+        <HeaderClose to="central-caverna" />
       </div>
     </Header>
   )
