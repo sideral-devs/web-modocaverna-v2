@@ -30,17 +30,13 @@ export default function Page() {
   const isExpired = user.status_plan === 'EXPIRADO'
 
   function getPlanUrl() {
-    const indicationCode = user?.codigo_indicacao
-      ? `&pid=${user.codigo_indicacao}`
-      : ''
-
     switch (selectedPlan) {
       case 'yearly':
-        return `${env.NEXT_PUBLIC_YEARLY_PLAN}${indicationCode}`
+        return env.NEXT_PUBLIC_YEARLY_PLAN
       case 'monthly':
-        return `${env.NEXT_PUBLIC_MONTHLY_PLAN}${indicationCode}`
+        return env.NEXT_PUBLIC_MONTHLY_PLAN
       default:
-        return `${env.NEXT_PUBLIC_YEARLY_PLAN}${indicationCode}`
+        return env.NEXT_PUBLIC_YEARLY_PLAN
     }
   }
 
