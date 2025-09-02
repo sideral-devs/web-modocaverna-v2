@@ -8,12 +8,12 @@ export default function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const CrispWithNoSSR = dynamic(() => import('../../../components/crisp'))
+  const WhatsAppSupportWithNoSSR = dynamic(() => import('../../../components/whatsapp-support'))
 
   return (
     <MusicPlayerProvider>
       <SessionProvider>
-        <CrispWithNoSSR />
+        <WhatsAppSupportWithNoSSR />
 
         {/* <FormbricksLoader /> */}
         {children}
