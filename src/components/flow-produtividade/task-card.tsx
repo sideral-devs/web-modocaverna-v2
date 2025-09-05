@@ -16,21 +16,11 @@ export default function TaskCard({ task }: TaskProps) {
   const [selectPriorityOpen, setSelectPriorityOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: String(task.tarefa_id),
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: `task-${task.tarefa_id}`,
   })
 
-  const t: Transform | null = transform
-    ? { ...transform, scaleX: 1, scaleY: 1 }
-    : null
-
+  const t: Transform | null = transform ? { ...transform, scaleX: 1, scaleY: 1 } : null
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(t),
@@ -38,13 +28,9 @@ export default function TaskCard({ task }: TaskProps) {
     opacity: isDragging ? 0.3 : 1,
   }
 
-
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="flex flex-col p-3 gap-3 bg-zinc-700 rounded-xl"
-    >
+    <div ref={setNodeRef} style={style} className="flex flex-col p-3 gap-3 bg-zinc-700 rounded-xl">
+
 
       <div className="flex w-full items-center justify-between">
         <div className='flex items-center gap-2'>
