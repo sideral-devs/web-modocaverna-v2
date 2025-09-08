@@ -1,0 +1,13 @@
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "com.iurimeira.centralcaverna",
+			"sha256_cert_fingerprints": [
+				"22:17:DB:27:60:B6:55:16:36:3A:BD:7F:F6:2D:A6:AD:33:8F:C2:73:F0:D8:6B:E4:65:5C:36:4E:51:F2:89:FE",
+				"65:87:D2:AD:DD:57:A0:55:8A:9F:66:B4:6D:7A:83:3D:B5:BE:DF:48:F2:3C:9A:36:00:B8:4C:79:BE:7D:C5:76"
+			]
+		}
+	}
+]
