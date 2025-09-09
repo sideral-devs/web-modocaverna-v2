@@ -5,14 +5,8 @@
 				"appIDs": [
 					"LG89JA3LB4.com.iurimeira.centralcaverna"
 				],
-				"components": [
-					{
-						"/": "*",
-						"comment": "Matches all routes"
-					}
-				],
 				"paths": [
-					"/*"
+					"*"
 				]
 			}
 		]
