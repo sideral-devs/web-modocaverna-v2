@@ -26,11 +26,11 @@ export function NoteEditor({
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
   const [content, setContent] = useState(startingContent)
 
-  async function saveContent() {
+  async function saveContent(newContent: string) {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
     debounceRef.current = setTimeout(async () => {
-      const doc = new DOMParser().parseFromString(content, 'text/html')
+      const doc = new DOMParser().parseFromString(newContent, 'text/html')
       const firstTextElement = doc.body.querySelector(
         'p, h1, h2, h3, h4, h5, h6, div, span',
       )
@@ -38,7 +38,7 @@ export function NoteEditor({
 
       await api.post('/notas/upload/' + documentId, {
         descricao: firstLine,
-        anotacao: content,
+        anotacao: newContent,
       })
 
       queryClient.refetchQueries({ queryKey: ['note-content', documentId] })
@@ -70,8 +70,9 @@ export function NoteEditor({
     ],
     content,
     onUpdate({ editor }) {
-      setContent(editor.getHTML())
-      saveContent()
+      const html = editor.getHTML()
+      setContent(html)
+      saveContent(html)
     },
   })
 
