@@ -10,14 +10,16 @@ import { EditTaskDialog } from './edit-task-dialog'
 
 interface TaskProps {
   task: Task
+  columnId: number
 }
 
-export default function TaskCard({ task }: TaskProps) {
+export default function TaskCard({ task, columnId }: TaskProps) {
   const [selectPriorityOpen, setSelectPriorityOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: `task-${task.tarefa_id}`,
+    data: { type: 'task', columnId },
   })
 
   const t: Transform | null = transform ? { ...transform, scaleX: 1, scaleY: 1 } : null
