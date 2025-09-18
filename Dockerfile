@@ -11,21 +11,24 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # 2) Dependências (cache eficiente)
 ############################################
 FROM base AS deps
-COPY package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund \
- && npm cache clean --force
+# Aproveita cache por arquivo lock
+COPY --link package*.json ./
+RUN --mount=type=cache,id=npm,target=/root/.npm \
+    npm ci --no-audit --no-fund && \
+    npm cache clean --force
 
 ############################################
 # 3) Build (standalone)
 ############################################
 FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Reaproveita node_modules da etapa "deps"
+COPY --link --from=deps /app/node_modules ./node_modules
+# Copia o resto do código
+COPY --link . .
 
-
-# Build Next.js em modo standalone
-RUN npm run build
+# Cache de build do Next (incremental)
+RUN --mount=type=cache,target=/app/.next/cache \
+    npm run build
 
 ############################################
 # 4) Runtime mínimo e não-root
@@ -38,14 +41,14 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Usuário não-root para rodar a app
+# Usuário não-root
 RUN addgroup --system --gid 1001 nodejs \
- && adduser --system --uid 1001 nextjs
+ && adduser --system --uid 1001 --ingroup nodejs nextjs
 
-# Copiar apenas o necessário do build
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# Copia só o necessário do build, já com proprietário correto
+COPY --link --chown=nextjs:nodejs --from=builder /app/public ./public
+COPY --link --chown=nextjs:nodejs --from=builder /app/.next/standalone ./
+COPY --link --chown=nextjs:nodejs --from=builder /app/.next/static ./.next/static
 
 USER nextjs
 EXPOSE 3000
