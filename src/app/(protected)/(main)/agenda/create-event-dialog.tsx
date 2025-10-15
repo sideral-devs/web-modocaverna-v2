@@ -412,9 +412,13 @@ export function CreateEventDialogTrigger({
             <Select
               onValueChange={(val) => {
                 setValue('repeat', val)
-                setRepeat(1)
                 if (val === 'custom') {
                   setEditRepetitionDialogOpen(true)
+                  setRepeat(1)
+                } else if (val === 'none' || !val) {
+                  setRepeat(0)
+                } else {
+                  setRepeat(1)
                 }
               }}
             >
