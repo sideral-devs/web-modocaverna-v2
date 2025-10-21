@@ -5,11 +5,10 @@ import { api } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboarding'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
-import { ActivateCaveModeStep } from './ActivateCaveModeStep'
 import { ConnectStep } from './ConnectStep'
 import { QuizStep } from './QuizStep'
 import { StartQuizStep } from './StartQuizStep'
@@ -41,8 +40,7 @@ export default function Page() {
       <PhoneNumberStep key={3} onNext={nextPhase} />,
       <FirstStep key={4} onNext={nextPhase} />,
       <StartQuizStep key={5} onNext={nextPhase} />,
-      <QuizStep key={6} onNext={nextPhase} />,
-      <ActivateCaveModeStep key={7} onNext={handleFinish} />,
+      <QuizStep key={6} onNext={handleFinish} />,
     ]
 
   function nextPhase() {
