@@ -170,10 +170,7 @@ export default function Page() {
               </Button>
               <span className="mt-auto text-sm items-baseline">
                 O que é o Modo Caverna?{' '}
-                <Link
-                  href={`${env.NEXT_PUBLIC_REGISTER}`}
-                  className="text-primary ml-1 text-sm "
-                >
+                <Link target='_blank' href="https://quiz.modocaverna.com/" className="text-primary ml-1 text-sm ">
                   Ver detalhes
                 </Link>
               </span>
