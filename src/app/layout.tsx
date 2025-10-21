@@ -2,11 +2,19 @@ import { GlobalProviders } from '@/components/providers'
 import { env } from '@/lib/env'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
-import { Rubik } from 'next/font/google'
 import './globals.css'
+import { Geist, Geist_Mono } from 'next/font/google'
 
-const rubik = Rubik({
+const geistSans = Geist({
   subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-geist-sans',
+})
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-geist-mono',
 })
 
 export const metadata: Metadata = {
@@ -30,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt_BR">
-      <body className={`${rubik.className} antialiased`}>
+      <body className={`${geistSans.className} ${geistMono.variable} antialiased`} >
         {/* <MobileAlert /> */}
         <meta name="apple-itunes-app" content="app-id=6544803387" />
         <GlobalProviders>{children}</GlobalProviders>

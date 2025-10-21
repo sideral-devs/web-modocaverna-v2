@@ -15,9 +15,9 @@ export function PhaseCounter({
 }) {
   return (
     <div className="flex w-full items-center gap-2">
-      <div className="flex w-full h-1 bg-zinc-700">
+      <div className="flex w-full h-2 bg-zinc-700 rounded-xl">
         <motion.div
-          className={cn('flex h-1 bg-primary', className)}
+          className={cn('flex h-2 bg-primary rounded-xl', className)}
           animate={{
             width: (Math.min(current, total) / total) * 100 + '%',
             transition: {
