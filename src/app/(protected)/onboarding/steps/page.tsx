@@ -68,9 +68,9 @@ export default function Page() {
     }
   }
 
-  if (user && !!Number(user.tutorial_complete)) {
-    return redirect('/dashboard')
-  }
+  /*   if (user && !!Number(user.tutorial_complete)) {
+      return redirect('/dashboard')
+    } */
 
   return (
     <ProtectedRoute>
