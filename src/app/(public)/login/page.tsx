@@ -20,11 +20,9 @@ import { z } from 'zod'
 
 const loginSchema = z.object({
   email: z
-    .string({ required_error: 'Campo obrigatório ' })
-    .regex(
-      /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-      'Por favor, insira um e-mail válido',
-    ),
+    .string({ required_error: 'Campo obrigatório' })
+    .email('Por favor, insira um e-mail válido'),
+
   password: z
     .string()
     .min(8, { message: 'A senha deve ter no mínimo 8 caracteres' }),
