@@ -20,7 +20,7 @@ export default function Page() {
   const router = useRouter()
   const { data: user } = useUser()
   const [currentPhase, setCurrentPhase] = useState(0)
-  const isDesafioPlan = /* user?.plan === 'DESAFIO' */ true
+  const isDesafioPlan = user?.plan === 'DESAFIO'
   const isLastStep = currentPhase === (isDesafioPlan ? 3 : 4)
   const hideMetaText = isLastStep
 
