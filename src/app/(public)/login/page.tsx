@@ -20,11 +20,9 @@ import { z } from 'zod'
 
 const loginSchema = z.object({
   email: z
-    .string({ required_error: 'Campo obrigatório ' })
-    .regex(
-      /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-      'Por favor, insira um e-mail válido',
-    ),
+    .string({ required_error: 'Campo obrigatório' })
+    .email('Por favor, insira um e-mail válido'),
+
   password: z
     .string()
     .min(8, { message: 'A senha deve ter no mínimo 8 caracteres' }),
@@ -74,7 +72,7 @@ export default function Page() {
     try {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       await mutateAsync({ timezone, ...data })
-      await signOut({ redirect: false }).catch(() => {})
+      await signOut({ redirect: false }).catch(() => { })
       // queryClient.invalidateQueries({ queryKey: ['user'] })
 
       // toast.success('Login realizado com sucesso.')
@@ -104,7 +102,7 @@ export default function Page() {
       <div className="w-[402px] p-[1px] pb-0 rounded-t-xl bg-gradient-to-b from-[#FF414161] to-[#D01D1D33] overflow-hidden">
         <FormProvider {...form}>
           <form
-            className="flex flex-col w-full h-full items-center px-5 py-10 gap-12 bg-gradient-to-b from-[#161617] to-black rounded-t-xl"
+            className="flex flex-col w-full h-full items-center px-5 py-10 gap-12 bg-[#171719] rounded-t-xl"
             onSubmit={handleSubmit(handleLogin)}
           >
             <Image
@@ -113,7 +111,7 @@ export default function Page() {
               alt="Logo"
               src={'/images/logo.svg'}
             />
-            <div className="flex flex-col w-full gap-6">
+            <div className="flex flex-col w-full gap-5">
               <div className="flex flex-col w-full gap-3">
                 <label htmlFor="email" className="text-sm font-medium">
                   E-mail
@@ -147,13 +145,13 @@ export default function Page() {
                   )}
                 </div>
               </div>
-              <div className="flex w-full items-center justify-between mt-2">
+              <div className="flex w-full items-center justify-between">
                 <span className="flex items-center gap-2 text-muted-foreground text-xs font-medium">
                   <Checkbox onCheckedChange={handleRememberChange} />
                   Mantenha-me conectado
                 </span>
                 <Link href={'/forgot-password'}>
-                  <span className="text-sm font-medium text-primary">
+                  <span className="text-sm text-red-500 text-primary">
                     Esqueci a senha
                   </span>
                 </Link>
@@ -168,21 +166,19 @@ export default function Page() {
               >
                 Acessar
               </Button>
-              <Link href={'/terms'}>
-                <span className="text-xs text-muted-foreground font-medium">
-                  Termos de uso & Políticas de Privacidade
-                </span>
-              </Link>
+              <span className="mt-auto text-sm items-baseline">
+                O que é o Modo Caverna?{' '}
+                <Link target='_blank' href="https://quiz.modocaverna.com/" className="text-primary ml-1 text-sm ">
+                  Ver detalhes
+                </Link>
+              </span>
+
+
             </div>
-            <span className="mt-auto text-sm font-medium items-baseline">
-              Não possui uma conta?{' '}
-              <Link
-                href={`${env.NEXT_PUBLIC_REGISTER}`}
-                className="text-primary text-sm font-medium"
-              >
-                Cadastrar
-              </Link>
-            </span>
+
+            <Link className="mt-auto underline text-xs text-muted-foreground items-baseline mb-6" href={'/terms'}>
+              Termos de uso & Políticas de Privacidade
+            </Link>
           </form>
         </FormProvider>
       </div>

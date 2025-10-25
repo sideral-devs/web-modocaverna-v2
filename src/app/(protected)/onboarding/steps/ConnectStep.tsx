@@ -1,36 +1,33 @@
 import { Button } from '@/components/ui/button'
-import { VideoPlayerMux } from '@/components/video-player-mux'
-import { muxVideos } from '@/lib/constants'
-import { useState } from 'react'
+import { LockKeyholeIcon, ShieldAlert } from 'lucide-react'
+import Image from 'next/image'
 
 export function ConnectStep({ onNext }: { onNext: () => void }) {
-  const [videoEnded, setVideoEnded] = useState(false)
-
   return (
-    <div className="flex flex-col items-center p-4 gap-8">
-      <div className="flex flex-col items-center gap-6">
-        <h1 className="font-bold text-2xl lg:text-3xl">
-          A Caverna <span className="text-primary">Interior</span>
+    <div className="flex flex-1 justify-between flex-col w-full">
+
+      <div>
+        <h1 className="font-semibold leading-tight text-center text-2xl mb-12 lg:text-3xl">
+          <span className="text-primary">Seja bem-vindo(a) ao</span>
+          <br />
+          <span>Desafio Caverna</span>
+          <span className='text-xl relative -top-2'>®</span>
         </h1>
-        <p className="lg:text-lg opacity-80">
-          A jornada começa na escuridão da sua mente.
-        </p>
-      </div>
 
-      <div className="w-full rounded-xl overflow-hidden relative">
-        <VideoPlayerMux
-          id={muxVideos.connect}
-          onEnded={() => setVideoEnded(true)}
-        />
-      </div>
-
-      {videoEnded && (
-        <div className="flex justify-center">
-          <Button onClick={onNext} size="lg" className="uppercase">
-            ENTENDIDO, CAPITÃO!
-          </Button>
+        <div className='flex items-center p-6 w-full mb-5 rounded-xl text-red-500 backdrop-blur-sm gap-6 border border-[#7C1111] bg-[#3F080880]'>
+          <ShieldAlert className='size-5' />
+          <h3 className='text-sm w-fit'><span className='font-bold'>Atenção:</span> cada etapa será crucial para sua jornada. Avance apenas depois de ler e entender as intruções</h3>
         </div>
-      )}
+
+
+        <div className='flex w-full justify-end mb-5'>
+          <Button onClick={() => onNext()} size="lg">Entendido!</Button>
+        </div>
+      </div>
+
+      <div className='flex justify-center mb-10'>
+        <Image className='h-64 w-auto' alt='' width={250} height={250} src="/images/onboarding/connectStep.svg" />
+      </div>
     </div>
   )
 }

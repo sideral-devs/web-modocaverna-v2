@@ -9,13 +9,11 @@ import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
-import { ActivateCaveModeStep } from './ActivateCaveModeStep'
-import { ChallengeStep } from './ChallengeStep'
-import { ConnectStep } from './ConnectStep'
-import { FortyDaysStep } from './FortyDaysStep'
-import { QuizStep } from './QuizStep'
-import { StartQuizStep } from './StartQuizStep'
 import { WelcomeStep } from './WelcomeStep'
+import StartQuizStep from './StartQuizStep'
+import QuizStep from './QuizStep'
+import JourneyStartWeb from './JourneyStartStep'
+import CaptainCaveWelcome from './CaptainCaveWelcomeStep'
 
 export default function Page() {
   const queryClient = useQueryClient()
@@ -23,29 +21,25 @@ export default function Page() {
   const { data: user } = useUser()
   const [currentPhase, setCurrentPhase] = useState(0)
   const isDesafioPlan = user?.plan === 'DESAFIO'
+  const isLastStep = currentPhase === (isDesafioPlan ? 3 : 4)
+  const hideMetaText = isLastStep
 
   const { cellphone } = useOnboardingStore()
 
   const STEPS = isDesafioPlan
     ? [
-        <WelcomeStep key={1} onNext={nextPhase} />,
-        <ConnectStep key={2} onNext={nextPhase} />,
-        <StartQuizStep key={3} onNext={nextPhase} />,
-        <QuizStep key={4} onNext={handleFinish} />,
-        // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        // <PlansSystem key={5} onNext={nextPhase} />,
-        // <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
-      ]
+      <WelcomeStep key={1} onNext={nextPhase} />,
+      <StartQuizStep key={2} onNext={nextPhase} />,
+      <QuizStep key={3} onNext={nextPhase} />,
+      <JourneyStartWeb key={4} onActivate={handleFinish} />,
+    ]
     : [
-        <WelcomeStep key={1} onNext={nextPhase} />,
-        <ConnectStep key={2} onNext={nextPhase} />,
-        <StartQuizStep key={3} onNext={nextPhase} />,
-        <QuizStep key={4} onNext={nextPhase} />,
-        <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        <ChallengeStep key={6} onNext={nextPhase} />,
-        // <CheckPointStep key={7} onNext={nextPhase} />,
-        <FortyDaysStep key={7} onNext={handleFinish} />,
-      ]
+      <WelcomeStep key={1} onNext={nextPhase} />,
+      <CaptainCaveWelcome key={2} onNext={nextPhase} />,
+      <StartQuizStep key={3} onNext={nextPhase} />,
+      <QuizStep key={4} onNext={nextPhase} />,
+      <JourneyStartWeb key={5} onActivate={handleFinish} />,
+    ]
 
   function nextPhase() {
     setCurrentPhase((curr) => curr + 1)
@@ -60,11 +54,10 @@ export default function Page() {
 
       queryClient.clear()
 
-      if (window?.innerWidth < 768) {
-        router.replace('/onboarding/concluido')
-      } else {
-        router.replace('/dashboard?startTour=true&tourRedirect=true')
-      }
+
+
+      router.replace('/dashboard?startTour=true&tourRedirect=true')
+
     } catch {
       toast.error('Algo deu errado. Tente novamente.')
     }
@@ -76,34 +69,46 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col w-full min-h-dvh items-center gap-0 bg-zinc-950 overflow-hidden relative">
-        <header className="flex w-full max-w-8xl items-center justify-between p-6 z-10">
-          <span className="text-[10px] md:text-xs lg:text-sm text-muted-foreground">
-            Onboarding
-          </span>
-          <div className="flex flex-col flex-1 w-full max-w-xl items-center gap-6">
-            <Image
-              src={'/images/logo-icon.svg'}
-              alt="Logo"
-              width={32}
-              height={27}
-            />
-            <PhaseCounter current={currentPhase + 1} total={STEPS.length} />
-          </div>
-          <span className="text-[10px] md:text-xs lg:text-sm text-right text-muted-foreground">
-            Passo {currentPhase + 1} de {STEPS.length}
-          </span>
-        </header>
-        <div className="w-full flex flex-1 flex-col items-center z-10">
-          <div className="flex flex-col w-full max-w-[700px] px-2">
+
+      <div className="relative min-h-screen flex flex-col">
+        <div className="w-full flex justify-center">
+          {!hideMetaText && (
+            <header className="flex flex-col gap-4 w-full max-w-2xl px-4 pt-4 z-10">
+
+              <div className='flex items-center justify-between'>
+
+                <span className="text-[10px] md:text-xs lg:text-sm text-muted-foreground">
+                  Onboarding
+                </span>
+
+                <Image
+                  src={'/images/logo-icon.svg'}
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                />
+
+                <span className="text-[10px] md:text-xs lg:text-sm text-right text-muted-foreground">
+                  Passo {currentPhase + 1} de {STEPS.length - 1}
+                </span>
+
+              </div>
+
+              <PhaseCounter current={currentPhase + 1} total={STEPS.length - 1} />
+
+            </header>
+          )}
+        </div>
+
+        <div className="flex justify-center w-full px-4 flex-1">
+          <div className="flex justify-center w-full max-w-2xl flex-1">
             {STEPS[currentPhase]}
           </div>
         </div>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute bottom-[400px] md:-bottom-[800px] -left-[400px] md:-left-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
-          <div className="absolute -top-[400px] md:-top-[800px] -right-[400px] md:-right-[800px] size-[800px] md:size-[1600px] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]" />
-        </div>
+
       </div>
+
+
     </ProtectedRoute>
   )
 }
