@@ -19,14 +19,14 @@ export interface TutorialStep {
   description: string
   elementId?: string
   dialogPosition:
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | 'center'
-    | 'bottomLeft'
-    | 'topLeft'
-    | 'inside' // nova opção
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | 'center'
+  | 'bottomLeft'
+  | 'topLeft'
+  | 'inside' // nova opção
 }
 
 export function GuidedTour({
@@ -96,7 +96,7 @@ export function GuidedTour({
   }
 
   const handleFinish = () => {
-    redirect ? router.replace('/onboarding/concluido') : closeTutorial()
+    closeTutorial()
   }
 
   const nextStep = () => {
@@ -262,13 +262,12 @@ export function GuidedTour({
               <button
                 key={index}
                 onClick={() => goToStep(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentStep
+                className={`w-2 h-2 rounded-full transition-colors ${index === currentStep
                     ? 'bg-primary'
                     : index < currentStep
                       ? 'bg-red-700'
                       : 'bg-gray-400'
-                }`}
+                  }`}
               />
             ))}
           </div>

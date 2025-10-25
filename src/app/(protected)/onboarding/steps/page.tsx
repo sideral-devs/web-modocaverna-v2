@@ -5,7 +5,7 @@ import { api } from '@/lib/api'
 import { useOnboardingStore } from '@/store/onboarding'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { PhaseCounter } from '../../../(public)/trial/sign-up/PhaseCounter'
@@ -63,10 +63,10 @@ export default function Page() {
     }
   }
 
-  /*   if (user && !!Number(user.tutorial_complete)) {
-      return redirect('/dashboard')
-    }
-   */
+  if (user && !!Number(user.tutorial_complete)) {
+    return redirect('/dashboard')
+  }
+
   return (
     <ProtectedRoute>
 

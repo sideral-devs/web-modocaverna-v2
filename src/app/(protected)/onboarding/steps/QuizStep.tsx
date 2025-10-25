@@ -234,7 +234,6 @@ export default function QuizStep({ onNext }: QuizStepProps) {
                   <p className="text-xs md:text-sm text-white/60">Selecione uma das opções abaixo</p>
                 </div>
 
-                {/* LISTA DE RESPOSTAS – agora com cara de botão */}
                 <motion.div
                   className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
                   initial="hidden"
