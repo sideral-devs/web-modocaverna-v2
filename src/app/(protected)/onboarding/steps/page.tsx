@@ -24,28 +24,27 @@ export default function Page() {
   const [currentPhase, setCurrentPhase] = useState(0)
   const isDesafioPlan = user?.plan === 'DESAFIO'
 
-  const { cellphone } = useOnboardingStore()
 
   const STEPS = isDesafioPlan
     ? [
-        <WelcomeStep key={1} onNext={nextPhase} />,
-        <ConnectStep key={2} onNext={nextPhase} />,
-        <StartQuizStep key={3} onNext={nextPhase} />,
-        <QuizStep key={4} onNext={handleFinish} />,
-        // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        // <PlansSystem key={5} onNext={nextPhase} />,
-        // <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
-      ]
+      <WelcomeStep key={1} onNext={nextPhase} />,
+      <ConnectStep key={2} onNext={nextPhase} />,
+      <StartQuizStep key={3} onNext={nextPhase} />,
+      <QuizStep key={4} onNext={handleFinish} />,
+      // <ActivateCaveModeStep key={5} onNext={nextPhase} />,
+      // <PlansSystem key={5} onNext={nextPhase} />,
+      // <ConfirmStep key={6} onNext={handleFinish} isLoading={isLoading} />,
+    ]
     : [
-        <WelcomeStep key={1} onNext={nextPhase} />,
-        <ConnectStep key={2} onNext={nextPhase} />,
-        <StartQuizStep key={3} onNext={nextPhase} />,
-        <QuizStep key={4} onNext={nextPhase} />,
-        <ActivateCaveModeStep key={5} onNext={nextPhase} />,
-        <ChallengeStep key={6} onNext={nextPhase} />,
-        // <CheckPointStep key={7} onNext={nextPhase} />,
-        <FortyDaysStep key={7} onNext={handleFinish} />,
-      ]
+      <WelcomeStep key={1} onNext={nextPhase} />,
+      <ConnectStep key={2} onNext={nextPhase} />,
+      <StartQuizStep key={3} onNext={nextPhase} />,
+      <QuizStep key={4} onNext={nextPhase} />,
+      <ActivateCaveModeStep key={5} onNext={nextPhase} />,
+      <ChallengeStep key={6} onNext={nextPhase} />,
+      // <CheckPointStep key={7} onNext={nextPhase} />,
+      <FortyDaysStep key={7} onNext={handleFinish} />,
+    ]
 
   function nextPhase() {
     setCurrentPhase((curr) => curr + 1)
@@ -55,7 +54,6 @@ export default function Page() {
     try {
       await api.put('/users/update?save=true', {
         tutorial_complete: true,
-        telefone: cellphone,
       })
 
       queryClient.clear()
