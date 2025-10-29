@@ -21,7 +21,6 @@ export default function CaptainCaveWelcome({ onNext }: { onNext: () => void }) {
       animate="show"
       className="relative isolate min-h-[86vh] w-full overflow-hidden flex items-center justify-center px-4 lg:px-10"
     >
-      {/* Background */}
       <motion.div
         aria-hidden
         className="fixed inset-0 -z-10"
@@ -32,11 +31,8 @@ export default function CaptainCaveWelcome({ onNext }: { onNext: () => void }) {
         <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.06),transparent)] opacity-30" />
       </motion.div>
 
-      {/* Layout: Mascote | Conteúdo */}
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-5 md:gap-10 md:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)]">
-        {/* Mascote (menor) */}
         <motion.div variants={item} className="flex justify-center md:justify-start">
-          {/* wrapper com aspect ratio para evitar layout shift no mobile */}
           <div className="relative aspect-[3/4] w-[44vw] max-w-[220px] sm:max-w-[240px] md:max-w-[260px] lg:max-w-[280px] select-none pointer-events-none">
             <Image
               src="/images/lobo/apresentando.png"
@@ -50,7 +46,6 @@ export default function CaptainCaveWelcome({ onNext }: { onNext: () => void }) {
         </motion.div>
 
 
-        {/* Texto + Card */}
         <motion.div variants={item} className="flex flex-col items-center md:items-start gap-6">
           <motion.h1
             variants={item}
@@ -66,7 +61,6 @@ export default function CaptainCaveWelcome({ onNext }: { onNext: () => void }) {
             Serei o seu guia e assistente virtual. Vamos começar a sua jornada agora.
           </motion.p>
 
-          {/* Card com apenas o CTA */}
           <motion.div
             variants={item}
             className="relative w-full max-w-xl rounded-3xl p-[1px] bg-[linear-gradient(180deg,rgba(255,51,51,0.45)_0%,rgba(255,51,51,0.15)_55%,transparent_100%)] shadow-[0_25px_80px_-30px_rgba(255,51,51,0.45)]"
@@ -82,7 +76,6 @@ export default function CaptainCaveWelcome({ onNext }: { onNext: () => void }) {
               </Button>
             </div>
 
-            {/* brilho interno */}
             <motion.span
               aria-hidden
               className="pointer-events-none absolute inset-0 rounded-[calc(theme(borderRadius.3xl))]"

@@ -5,19 +5,10 @@ import { Card } from "@/components/ui/card";
 import { ClipboardList, Lightbulb, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
-/**
- * JourneyStartWeb – versão refinada
- * Mudanças principais:
- * - Tipografia e espaçamentos reduzidos (melhor densidade para desktop)
- * - Largura máxima controlada (max-w-2xl) e grid simples
- * - CTA "Ativar Modo Caverna" com destaque (borda em gradiente + glow + pulso sutil)
- * - Cards mais compactos; ícones menores
- * - Banner de dica enxuto
- */
+
 export default function JourneyStartWeb({ onActivate }: { onActivate: () => void }) {
   return (
     <div className="relative isolate min-h-screen w-full grid place-items-center md:px-6 -mt-16 overflow-hidden overflow-x-hidden">
-      {/* BACKGROUND */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_50%_0%,#130808,transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#211010] via-[#140a0a] to-black" />
@@ -31,12 +22,11 @@ export default function JourneyStartWeb({ onActivate }: { onActivate: () => void
         transition={{ duration: 0.35 }}
         className="w-full"
       >
-        {/* LOGO */}
+
         <div className="flex items-center justify-center mb-4 md:mb-6">
           <Image src="/images/logo-icon.svg" alt="Logo" width={48} height={48} />
         </div>
 
-        {/* HEADER */}
         <div className="text-center mb-6 md:mb-8">
           <h1 className="text-[22px] md:text-[28px] font-extrabold tracking-tight leading-tight">
             Sua Jornada no <span className="text-primary">Modo Caverna</span> Começou!
@@ -46,7 +36,6 @@ export default function JourneyStartWeb({ onActivate }: { onActivate: () => void
           </p>
         </div>
 
-        {/* CONTEÚDO */}
         <div className="mx-auto w-full max-w-2xl space-y-5 md:space-y-6">
           <Card className="relative overflow-hidden rounded-2xl border-white/10 bg-white/[0.04] backdrop-blur-sm">
             <div className="absolute inset-px rounded-[calc(theme(borderRadius.2xl)-1px)] bg-gradient-to-b from-white/[0.06] to-transparent pointer-events-none" />
@@ -76,7 +65,6 @@ export default function JourneyStartWeb({ onActivate }: { onActivate: () => void
 
           <TipBanner />
 
-          {/* CTA DESTACADA */}
           <CallToAction onActivate={onActivate} />
         </div>
       </motion.div>
@@ -129,7 +117,6 @@ function CallToAction({ onActivate }: { onActivate: () => void }) {
       transition={{ duration: 0.3 }}
       className="flex w-full justify-center"
     >
-      {/* Wrapper com borda em gradiente e glow */}
       <motion.div
         className="relative rounded-2xl p-[1px] bg-[linear-gradient(180deg,rgba(255,51,51,0.7)_0%,rgba(255,51,51,0.25)_50%,transparent_100%)] shadow-[0_18px_55px_-20px_rgba(255,51,51,0.6)] overflow-hidden"
         whileHover={{ scale: 1.01 }}
@@ -143,7 +130,6 @@ function CallToAction({ onActivate }: { onActivate: () => void }) {
           <span className="pr-1">Ativar Modo Caverna</span>
           <ArrowRight />
 
-          {/* Glow animado interno */}
           <motion.span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-2xl"
@@ -153,7 +139,6 @@ function CallToAction({ onActivate }: { onActivate: () => void }) {
           />
         </Button>
 
-        {/* Halo externo sutil */}
         <motion.span
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-[22px] opacity-40 blur-xl"

@@ -23,14 +23,12 @@ const features = [
 export default function StartQuizStep({ onNext }: Props) {
   return (
     <div className="relative isolate w-full flex flex-col items-center justify-center px-4 lg:px-16 py-10 gap-8">
-      {/* BACKGROUND GLOWS (full-viewport) */}
       <motion.div
         className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Glow 1 */}
         <motion.div
           className="absolute bottom-[20%] -left-[30%] h-[75vmax] w-[75vmax] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]"
           animate={{
@@ -42,7 +40,6 @@ export default function StartQuizStep({ onNext }: Props) {
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Glow 2 */}
         <motion.div
           className="absolute -top-[25%] -right-[30%] h-[75vmax] w-[75vmax] rounded-full opacity-20 blur-3xl bg-[radial-gradient(circle,_#ff3333_0%,_transparent_70%)]"
           animate={{
@@ -55,7 +52,6 @@ export default function StartQuizStep({ onNext }: Props) {
           transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
         />
 
-        {/* Subtle radial texture */}
         <motion.div
           className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.05),transparent)]"
           animate={{ opacity: [0.04, 0.08, 0.04] }}
@@ -63,7 +59,6 @@ export default function StartQuizStep({ onNext }: Props) {
         />
       </motion.div>
 
-      {/* HEADER */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,7 +71,6 @@ export default function StartQuizStep({ onNext }: Props) {
 
       </motion.div>
 
-      {/* ALERT STRIP */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -98,7 +92,6 @@ export default function StartQuizStep({ onNext }: Props) {
         </div>
       </motion.div>
 
-      {/* FEATURES GRID */}
       <motion.div
         initial="hidden"
         animate="show"
@@ -131,7 +124,6 @@ export default function StartQuizStep({ onNext }: Props) {
         ))}
       </motion.div>
 
-      {/* CTA */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

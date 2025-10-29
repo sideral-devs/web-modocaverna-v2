@@ -156,14 +156,11 @@ export default function QuizStep({ onNext }: QuizStepProps) {
                   Seu perfil no <span className="text-primary opacity-90">Modo Caverna</span>
                 </h1>
 
-                {/* Gradiente de borda + glass */}
                 <div className="relative rounded-3xl p-[1px] bg-[linear-gradient(180deg,rgba(255,51,51,0.55)_0%,rgba(255,51,51,0.15)_50%,transparent_100%)] shadow-[0_20px_60px_-20px_rgba(255,51,51,0.35)]">
                   <Card className="relative overflow-hidden rounded-[calc(theme(borderRadius.3xl))] bg-white/5 backdrop-blur-md border-white/10">
-                    {/* Aura discreta atrás do emblema */}
                     <ResultAura />
 
                     <div className="flex flex-col items-center gap-6 px-8 py-12 md:py-14 text-center">
-                      {/* Ícone/emblema com pulso */}
                       <div className="relative">
                         <div className="flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-2xl ring-1 ring-white/15 bg-black/30">
                           <span aria-hidden className="text-2xl">🐺</span>
@@ -177,17 +174,14 @@ export default function QuizStep({ onNext }: QuizStepProps) {
                         />
                       </div>
 
-                      {/* Título / subtítulo / descrição */}
                       <div className="space-y-3">
                         <p className="text-2xl md:text-3xl font-black tracking-tight">{result?.title}</p>
                         <p className="text-sm md:text-base text-white/85">{result?.subtitle}</p>
                         <p className="mx-auto max-w-2xl text-sm md:text-base leading-relaxed text-white/75">{result?.description}</p>
                       </div>
 
-                      {/* Divider sutil */}
                       <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
-                      {/* CTA */}
                       <div className="flex w-full justify-center">
                         <Button
                           size="lg"
@@ -199,7 +193,6 @@ export default function QuizStep({ onNext }: QuizStepProps) {
                       </div>
                     </div>
 
-                    {/* Shine suave no topo do card */}
                     <motion.div
                       aria-hidden
                       className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[120%] -translate-x-1/2 rounded-[100%] opacity-30 blur-3xl bg-[radial-gradient(closest-side,rgba(255,51,51,0.35),transparent)]"
@@ -207,7 +200,6 @@ export default function QuizStep({ onNext }: QuizStepProps) {
                       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                     />
 
-                    {/* Borda interna sutil */}
                     <div className="pointer-events-none absolute inset-px rounded-[calc(theme(borderRadius.3xl)-1px)] bg-gradient-to-b from-white/6 to-transparent" />
                   </Card>
                 </div>
@@ -271,12 +263,10 @@ function AnswerButton({ option, onClick }: { option: Option; onClick: () => void
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.985 }}
-      className="group relative w-full rounded-2xl isolate" // isolate evita efeitos vazarem p/ fora
+      className="group relative w-full rounded-2xl isolate"
     >
-      {/* wrapper com borda + CLIP do shine */}
       <div className="relative rounded-2xl p-[1px] overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.28)_0%,rgba(255,255,255,0.12)_100%)]">
         <div className="relative flex items-center gap-4 h-[96px] rounded-[calc(theme(borderRadius.2xl)-1px)] border border-white/10 bg-black/50 px-5 md:px-6 shadow-[0_8px_30px_-18px_rgba(0,0,0,0.6)] backdrop-blur-sm transition-colors duration-200 group-hover:border-primary/40 group-focus-within:border-primary/60">
-          {/* Ícone + label */}
           <div className="flex items-center gap-3 flex-1 text-left">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl ring-1 ring-white/15 bg-black/30">
               <Icon className="h-5 w-5" aria-hidden />
@@ -286,7 +276,6 @@ function AnswerButton({ option, onClick }: { option: Option; onClick: () => void
             </span>
           </div>
 
-          {/* Seta de ação */}
           <motion.span
             aria-hidden
             className="flex items-center justify-center h-8 w-8 rounded-full border border-white/10 bg-white/5"
@@ -297,21 +286,18 @@ function AnswerButton({ option, onClick }: { option: Option; onClick: () => void
             <ArrowRight className="h-4 w-4" />
           </motion.span>
 
-          {/* Shine CLIPADO ao botão (não vaza no grid) */}
           <span className="pointer-events-none absolute inset-0">
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-out bg-gradient-to-r from-transparent via-white/10 to-transparent [mask-image:linear-gradient(90deg,transparent,black,transparent)]" />
           </span>
         </div>
       </div>
 
-      {/* Focus ring acessível e contido */}
       <span className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-focus-visible:ring-primary/60 transition" />
     </motion.button>
   );
 }
 
 
-/** Fundo: dois glows vermelhos sutis (sem grid/feixe) */
 function SoftGlowBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
