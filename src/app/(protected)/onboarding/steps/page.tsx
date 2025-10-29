@@ -24,8 +24,6 @@ export default function Page() {
   const isLastStep = currentPhase === (isDesafioPlan ? 3 : 4)
   const hideMetaText = isLastStep
 
-  const { cellphone } = useOnboardingStore()
-
   const STEPS = isDesafioPlan
     ? [
       <WelcomeStep key={1} onNext={nextPhase} />,
@@ -49,7 +47,6 @@ export default function Page() {
     try {
       await api.put('/users/update?save=true', {
         tutorial_complete: true,
-        telefone: cellphone,
       })
 
       queryClient.clear()
