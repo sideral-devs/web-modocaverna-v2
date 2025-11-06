@@ -81,7 +81,7 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
               <p className="text-white text-bold pb-4 w-full flex justify-center text-xl uppercase text-center">
                 Funil de Quiz
               </p>
-              <Link href="https://app.modocaverna.com/members-area/watch/10/37/114">
+              <Link href="https://app.modocaverna.com/members-area/watch/10/29/114">
                 <Button size={'sm'} className="w-32 text-sm bg-red-600 hover:bg-red-700">
                   Acessar
                 </Button>
