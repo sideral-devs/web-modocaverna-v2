@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ReactNode } from 'react'
 
 export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
@@ -80,23 +81,15 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
               <p className="text-white text-bold pb-4 w-full flex justify-center text-xl uppercase text-center">
                 Funil de Quiz
               </p>
-              <Button size={'sm'} className="w-32 text-sm bg-orange-500 hover:bg-orange-600" disabled>
-                Em breve
-              </Button>
+              <Link href="https://app.modocaverna.com/members-area/watch/10/37/114">
+                <Button size={'sm'} className="w-32 text-sm bg-red-600 hover:bg-red-700">
+                  Acessar
+                </Button>
+              </Link>
             </div>
           </Card>
 
-          {/* Funil de Whatsapp */}
-          <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
-            <div className="flex w-full flex-col px-3 items-center justify-center">
-              <p className="text-white text-bold pb-4 w-full flex justify-center text-xl uppercase text-center">
-                Funil de Whatsapp
-              </p>
-              <Button size={'sm'} className="w-32 text-sm bg-orange-500 hover:bg-orange-600" disabled>
-                Em breve
-              </Button>
-            </div>
-          </Card>
+
 
           {/* Scripts Vendas X1 */}
           <Card className="flex flex-col w-full h-full py-4 gap-2 justify-center items-center bg-[#2a2a2a]">
@@ -104,9 +97,11 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
               <p className="text-white text-bold pb-4 w-full flex justify-center text-xl uppercase text-center">
                 Scripts Vendas X1
               </p>
-              <Button size={'sm'} className="w-32 text-sm bg-orange-500 hover:bg-orange-600" disabled>
-                Em breve
-              </Button>
+              <Link href="https://redirect.lifs.app/script-x1">
+                <Button size={'sm'} className="w-32 text-sm bg-red-600 hover:bg-red-700">
+                  Acessar
+                </Button>
+              </Link>
             </div>
           </Card>
 
