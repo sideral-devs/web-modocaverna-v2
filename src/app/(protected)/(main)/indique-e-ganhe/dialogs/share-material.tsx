@@ -97,7 +97,7 @@ export function PublicMapDialogTrigger({ children }: { children: ReactNode }) {
               <p className="text-white text-bold pb-4 w-full flex justify-center text-xl uppercase text-center">
                 Scripts Vendas X1
               </p>
-              <Link href="https://redirect.lifs.app/script-x1">
+              <Link target='_blank' href="https://redirect.lifs.app/script-x1">
                 <Button size={'sm'} className="w-32 text-sm bg-red-600 hover:bg-red-700">
                   Acessar
                 </Button>
