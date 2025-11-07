@@ -11,7 +11,13 @@ import {
 } from '@/components/ui/card'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 export interface TutorialStep {
   id: number
@@ -19,31 +25,27 @@ export interface TutorialStep {
   description: string
   elementId?: string
   dialogPosition:
-  | 'top'
-  | 'bottom'
-  | 'left'
-  | 'right'
-  | 'center'
-  | 'bottomLeft'
-  | 'topLeft'
-  | 'inside' // nova opção
+    | 'top'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'center'
+    | 'bottomLeft'
+    | 'topLeft'
+    | 'inside' // nova opção
 }
 
-export function GuidedTour({
-  data,
-  active,
-  setIsActive,
-  redirect,
-  origin,
-  containerRef,
-}: {
+type GuidedTourProps = {
   data: TutorialStep[]
   active: boolean
   setIsActive: (arg: boolean) => void
   redirect?: boolean
   origin?: string
   containerRef?: MutableRefObject<HTMLDivElement | null>
-}) {
+}
+
+export function GuidedTour(props: GuidedTourProps) {
+  const { data, active, setIsActive, origin, containerRef } = props
   const router = useRouter()
   const scrollableRef = useRef<HTMLDivElement | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
@@ -86,7 +88,7 @@ export function GuidedTour({
     } else {
       setHighlightRect({ top: 0, left: 0, width: 0, height: 0 })
     }
-  }, [active, currentStep])
+  }, [active, containerRef, currentStep, data])
 
   const closeTutorial = () => {
     setIsActive(false)
@@ -119,6 +121,34 @@ export function GuidedTour({
 
   const currentStepData = data[currentStep]
 
+  const CLAMP_MARGIN = 16
+  const CARD_WIDTH = 360
+  const CARD_HEIGHT = 260
+
+  const clampStyle = (
+    style: Record<string, number | string>,
+  ): Record<string, number | string> => {
+    if (typeof window === 'undefined') return style
+
+    const clamped = { ...style }
+
+    if (typeof clamped.left === 'number') {
+      clamped.left = Math.min(
+        Math.max(clamped.left, CLAMP_MARGIN),
+        window.innerWidth - CARD_WIDTH - CLAMP_MARGIN,
+      )
+    }
+
+    if (typeof clamped.top === 'number') {
+      clamped.top = Math.min(
+        Math.max(clamped.top, CLAMP_MARGIN),
+        window.innerHeight - CARD_HEIGHT - CLAMP_MARGIN,
+      )
+    }
+
+    return clamped
+  }
+
   const getDialogPosition = () => {
     const rect = highlightRect
     const dialogPosition = currentStepData.dialogPosition
@@ -133,54 +163,54 @@ export function GuidedTour({
 
     switch (dialogPosition) {
       case 'top':
-        return {
+        return clampStyle({
           top: rect.top - 10,
           left: rect.left + rect.width / 2,
           transform: 'translate(-50%, -100%)',
           position: 'absolute' as const,
-        }
+        })
       case 'bottom':
-        return {
+        return clampStyle({
           top: rect.top + rect.height + 10,
           left: rect.left + rect.width / 2,
           transform: 'translate(-50%, 0)',
           position: 'absolute' as const,
-        }
+        })
       case 'left':
-        return {
+        return clampStyle({
           top: rect.top + rect.height / 2,
           left: rect.left - 10,
           transform: 'translate(-100%, -50%)',
           position: 'absolute' as const,
-        }
+        })
       case 'right':
-        return {
+        return clampStyle({
           top: rect.top + rect.height / 2,
           left: rect.left + rect.width + 10,
           transform: 'translate(0, -50%)',
           position: 'absolute' as const,
-        }
+        })
       case 'bottomLeft':
-        return {
+        return clampStyle({
           top: rect.top + rect.height + 10,
           left: rect.left - 10,
           transform: 'translate(-100%, 0)',
           position: 'absolute' as const,
-        }
+        })
       case 'topLeft':
-        return {
+        return clampStyle({
           top: rect.top - 10,
           left: rect.left - 10,
           transform: 'translate(-100%, -100%)',
           position: 'absolute' as const,
-        }
+        })
       case 'inside':
-        return {
+        return clampStyle({
           top: rect.top + rect.height / 2,
           left: rect.left + rect.width / 2,
           transform: 'translate(-50%, -50%)',
           position: 'absolute' as const,
-        }
+        })
       default:
         return {
           top: '50%',
@@ -190,27 +220,25 @@ export function GuidedTour({
     }
   }
 
-  function scrollToDialog() {
-    if (scrollableRef.current && active) {
-      const dialog = scrollableRef.current
-      if (!dialog) return
+  const scrollToDialog = useCallback(() => {
+    if (!scrollableRef.current || !active) return
 
-      setTimeout(() => {
-        dialog.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'center',
-        })
-      }, 50)
-    }
-  }
+    const dialog = scrollableRef.current
+    setTimeout(() => {
+      dialog.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      })
+    }, 50)
+  }, [active])
 
   useEffect(() => {
     const timer = setTimeout(() => {
       scrollToDialog()
     }, 100)
     return () => clearTimeout(timer)
-  }, [active, currentStep])
+  }, [scrollToDialog])
 
   if (!active) return null
 
@@ -262,12 +290,13 @@ export function GuidedTour({
               <button
                 key={index}
                 onClick={() => goToStep(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${index === currentStep
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentStep
                     ? 'bg-primary'
                     : index < currentStep
                       ? 'bg-red-700'
                       : 'bg-gray-400'
-                  }`}
+                }`}
               />
             ))}
           </div>

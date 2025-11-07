@@ -34,7 +34,7 @@ export function UpgradeDialogDuringSevenDays({
               Imagino que você esteja curtindo sua
             </AlertTitle>
             <h1 className="text-2xl  text-primary">
-              Avaliação gratuita do Plano Cavernoso! 🚀
+              Avaliação gratuita da Central Caverna! 🚀
             </h1>
           </div>
           <p className="text-normal pt-4 text-[#A0A0A9]">
@@ -48,7 +48,7 @@ export function UpgradeDialogDuringSevenDays({
             <div className="w-[80%] ">
               <p className="text-normal text-white ">
                 Garanta agora 50% de desconto ao fazer o upgrade e continue
-                aproveitando o Modo Caverna completo!
+                aproveitando o   completo!
               </p>
             </div>
           </div>
@@ -58,13 +58,13 @@ export function UpgradeDialogDuringSevenDays({
               href="/settings/plans"
             >
               <Button>
-                Eu quero ser Cavernoso
+                Eu quero a Central Caverna
                 <Zap color="#FFF" fill="#fff"></Zap>
               </Button>
             </Link>
             <div className=" flex py-2 items-center justify-center rounded">
               <AlertDialogCancel className="bg-black text-[#A0A0A9] rounded-xl w-[80%]">
-                Quero continuar com o Plano Caverna
+                Quero continuar com o Modo Caverna
               </AlertDialogCancel>
             </div>
           </div>

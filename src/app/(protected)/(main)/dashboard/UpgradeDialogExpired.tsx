@@ -26,9 +26,8 @@ export function UpgradeDialogExpired({ children }: { children: ReactNode }) {
         </div>
         <div className="flex flex-col w-[490px] h-[500px] pt-7">
           <div className="flex flex-row ">
-            <AlertTitle className="text-2xl font-semibold text-white">
-              Parece que a sua avaliação gratuita de 7 dias ao Plano
-              Cavernoso&nbsp;
+            <AlertTitle className="text-xl font-semibold text-white">
+              Parece que a sua avaliação gratuita de 7 dias a Central Caverna&nbsp;
               <span className="text-primary">expirou...</span>
             </AlertTitle>
           </div>
@@ -51,8 +50,7 @@ export function UpgradeDialogExpired({ children }: { children: ReactNode }) {
             </li>
             <p className="text-base pt-4 text-[#A0A0A9]">
               Gostaria de continuar utilizando todas as ferramentas do sistema?
-              Clique no botão abaixo e assine o Plano Cavernoso com 50% de
-              desconto!
+              Clique no botão abaixo e assine com 50% dedesconto!
             </p>
           </ul>
 
@@ -62,7 +60,7 @@ export function UpgradeDialogExpired({ children }: { children: ReactNode }) {
               href="/settings/plans"
             >
               <Button>
-                Eu quero ser Cavernoso
+                Eu quero a Central Caverna
                 <Zap color="#FFF" fill="#fff"></Zap>
               </Button>
             </Link>
@@ -72,7 +70,7 @@ export function UpgradeDialogExpired({ children }: { children: ReactNode }) {
             >
               <div className=" flex py-2 items-center justify-center rounded">
                 <AlertDialogCancel className="bg-[#121215] text-[#A0A0A9] rounded-lg w-[80%] h-[41px]">
-                  Continuar com o Plano atual
+                  Continuar com o Modo Caverna
                 </AlertDialogCancel>
               </div>
             </Link>

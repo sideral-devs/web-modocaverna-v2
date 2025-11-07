@@ -5,11 +5,19 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import AutoSubmitButton from '@/components/ui/autoSubmitButton'
+import { CHALLENGE_CHECKLIST_ID } from '@/constants/storageKeys'
+import { markChecklistItem } from '@/lib/members-area-checklist'
 import Image from 'next/image'
 import { useState } from 'react'
 
 export function ChallengeStartsTomorrow() {
   const [isOpen, setIsOpen] = useState(true)
+
+  function handleClose() {
+    markChecklistItem(CHALLENGE_CHECKLIST_ID)
+    setIsOpen(false)
+  }
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent className="bg-zinc-800 border-zinc-700 gap-4">
@@ -40,7 +48,7 @@ export function ChallengeStartsTomorrow() {
           </div>
         </div>
         <AlertDialogFooter>
-          <AutoSubmitButton onClick={() => setIsOpen(false)}>
+          <AutoSubmitButton onClick={handleClose}>
             Entendido, Capitão!
           </AutoSubmitButton>
         </AlertDialogFooter>

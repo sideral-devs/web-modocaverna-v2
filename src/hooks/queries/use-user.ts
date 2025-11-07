@@ -11,7 +11,7 @@ export function useUser() {
       const response = await api.get('/auth/user', {
         headers: { Authorization: 'Bearer ' + token },
       })
-      return response.data as User
+      return response.data
     },
     refetchInterval: 15 * 60 * 1000, // 15 minutes
     retry: 1,

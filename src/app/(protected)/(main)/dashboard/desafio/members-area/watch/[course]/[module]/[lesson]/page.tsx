@@ -19,6 +19,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { use, useEffect, useState } from 'react'
+
+import { WATCH_COURSE_CHECKLIST_ID } from '@/constants/storageKeys'
+import { markChecklistItem } from '@/lib/members-area-checklist'
 import { toast } from 'sonner'
 import { LikeButton } from './LikeButton'
 import { CommentField } from './comment-field'
@@ -30,6 +33,23 @@ export default function Page({
   params: Promise<{ course: string; module: string; lesson: string }>
 }) {
   const { course, module: moduloId, lesson: lessonId } = use(params)
+
+  useEffect(() => {
+    const isTargetLesson =
+      course === '1' && moduloId === '1' && lessonId === '1'
+
+    if (!isTargetLesson || typeof window === 'undefined') {
+      return
+    }
+
+    const timer = window.setTimeout(() => {
+      markChecklistItem(WATCH_COURSE_CHECKLIST_ID)
+    }, 60_000)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+  }, [course, lessonId, moduloId])
   const queryClient = useQueryClient()
   const router = useRouter()
   const { data: user } = useUser()

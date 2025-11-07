@@ -52,22 +52,34 @@ export default function Layout({ children }: PropsWithChildren) {
         <div className="flex w-full flex-1 max-w-8xl min-h-0 p-4 pb-0">
           <div className="flex flex-col flex-1 w-full h-full gap-5">
             <div className="flex overflow-x-auto min-h-8 data-[tutorial-id=hubs] scrollbar-minimal">
-              <Link href={'/dashboard/desafio/members-area'}>
+              <Link
+                href={'/dashboard/desafio/members-area'}
+                data-tutorial-id="tab-members"
+              >
                 <Tab active={pathname.includes('/members-area')}>
                   Comece por aqui
                 </Tab>
               </Link>
-              <Link href={'/dashboard/desafio/desafio-caverna'}>
+              <Link
+                href={'/dashboard/desafio/desafio-caverna'}
+                data-tutorial-id="tab-desafio"
+              >
                 <Tab active={pathname.includes('/desafio-caverna')}>
                   Desafio caverna
                 </Tab>
               </Link>
-              <Link href={'/dashboard/desafio/indique-e-ganhe'}>
+              <Link
+                href={'/dashboard/desafio/indique-e-ganhe'}
+                data-tutorial-id="tab-indique"
+              >
                 <Tab active={pathname.includes('/indique-e-ganhe')}>
                   Indique e ganhe
                 </Tab>
               </Link>
-              <Link href={'/dashboard/desafio/bonus'}>
+              <Link
+                href={'/dashboard/desafio/bonus'}
+                data-tutorial-id="tab-bonus"
+              >
                 <Tab active={pathname.includes('/bonus')}>Bônus Exclusivos</Tab>
               </Link>
             </div>
